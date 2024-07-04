@@ -1,0 +1,35 @@
+{
+    "authors": [
+        {
+            "maintainer": true,
+            "name": "rblb",
+            "url": "https://github.com/riccardobl/nostrduino"
+        },
+        {
+            "maintainer": false,
+            "name": "BlackCoffee",
+            "url": "https://github.com/blackcoffeexbt"
+        }
+    ],
+    "description": "Nostr Client for Arduino",
+    "export": {
+        "exclude": [
+            "tests"
+        ]
+    },
+    "frameworks": "arduino",
+    "keywords": "web, client, websocket, nostr, nwc",
+    "license": "MIT",
+    "name": "Nostrduino",
+    "platforms": "espressif32",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/riccardobl/nostrduino"
+    },
+    "version": "1.2.0",
+    "dependencies": {
+        "ArduinoJson": "^6.21.1",
+        "uBitcoin": "^0.2.0",
+        "WebSockets": "^2.4.1"
+    }
+}
