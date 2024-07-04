@@ -28,13 +28,8 @@ unsigned long getUnixTimestamp()
     struct tm timeinfo;
     if (!getLocalTime(&timeinfo))
     {
-        Serial.println("Failed to obtain time");
         return 0;
-    }
-    else
-    {
-        Serial.println("Got timestamp of " + String(now));
-    }
+    }  
     time(&now);
     return now;
 }
