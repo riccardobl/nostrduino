@@ -127,8 +127,6 @@ void loop(){
     for(nostr::NostrPool* pool:pools){
         // Run internal loop: refresh relays, complete pending connections, send pending messages
         pool->loop();
-        // Commit (optional): will commit the current state of the pool
-        pool->commit();
     }
 }
 

@@ -69,16 +69,19 @@ void NostrPool::onEvent(NostrRelay *relay, WStype_t type, uint8_t *payload, size
                 bool success=doc[2].as<bool>();
                 NostrString message =
                     doc.size() > 3 ? doc[3].as<NostrString>() : "";
-                if(this->sentEventsStatus.find(eventId)!=this->sentEventsStatus.end()){
-                    std::shared_ptr<SentNostrEventStatus> status = this->sentEventsStatus[eventId].lock();
-                    if(status!=nullptr){
-                        status->statusXrelay[relay->url].accepted=success;
-                        status->statusXrelay[relay->url].message=message;
-                        if(!success){
-                            status->statusXrelay[relay->url].error = message;
+                for(int i=0;i<this->eventStatusCallbackEntries.size();i++){
+                    EventStatusCallbackEntry entry = this->eventStatusCallbackEntries[i];
+                    if (entry.eventId == eventId){
+                        if (entry.statusCallback != nullptr){
+                            entry.statusCallback(eventId, success, message);
                         }
+                        this->eventStatusCallbackEntries.erase(this->eventStatusCallbackEntries.begin()+i);
+                        
+                        break;
                     }
                 }
+                
+
             }else if (doc[0] == "NOTICE"){
                 NostrString message = doc[1].as<NostrString>();
                 if(this->noticeCallback!=nullptr){
@@ -89,7 +92,6 @@ void NostrPool::onEvent(NostrRelay *relay, WStype_t type, uint8_t *payload, size
                 NostrSubscription sub = this->subscriptions[subId];        
                 SignedNostrEvent event(doc.as<JsonArray>());
                 event.stored=!sub.eose;
-                this->enqueueEvent(event.getSubId(), event);
                 if (sub.eventCallback != nullptr){
                     sub.eventCallback(subId, &event);
                 }
@@ -104,28 +106,6 @@ void NostrPool::onEvent(NostrRelay *relay, WStype_t type, uint8_t *payload, size
     }
 }
 
-void NostrPool::enqueueEvent(NostrString subId, SignedNostrEvent &event) {
-    if (this->subscriptions.find(subId) == this->subscriptions.end())
-    {
-        // if subscription does not exist, ignore
-        return;
-    }
-    NostrSubscription sub=this->subscriptions[subId];
-    std::vector<SignedNostrEvent> *events=&sub.events;
-    for (auto &e : *events)
-    {
-        if (e.getId() == event.getId())
-        {
-            return;
-        }
-    }
-
-    events->push_back(event);
-    if (this->maxPendingEvents > 0 && events->size() > this->maxPendingEvents)
-    {
-        events->erase(events->begin());
-    }
-}
 
 NostrString NostrPool::subscribeMany(
     std::initializer_list<NostrString> urls,
@@ -172,10 +152,7 @@ NostrString NostrPool::subscribeMany(
         this->subscriptions[subId].closeCallback = closeCallback;
         this->subscriptions[subId].eoseCallback = eoseCallback;
         this->subscriptions[subId].eventCallback = eventCallback;
-        if (this->maxPendingEvents > 0)
-        {
-            this->subscriptions[subId].events.reserve(this->maxPendingEvents);
-        }
+    
     }
 
     for (auto url : urls)
@@ -200,8 +177,7 @@ void NostrPool::closeSubscription(NostrString subId) {
     req.add(subId);
     NostrString json;
     serializeJson(req, json);
-    for (NostrRelay &r : this->relays)
-    {
+    for (NostrRelay &r : this->relays) {
         r.send(json);
     }
     doc.clear();
@@ -209,17 +185,8 @@ void NostrPool::closeSubscription(NostrString subId) {
     this->subscriptions.erase(subId);
 }
 
-std::vector<SignedNostrEvent> *NostrPool::getEvents(NostrString subId) {
-    return &this->subscriptions[subId].events;
-}
 
-void NostrPool::clearEvents()
-{
-    for (auto &subscription : this->subscriptions)
-    {
-        subscription.second.events.clear();
-    }
-}
+
 
 NostrRelay *NostrPool::ensureRelay(NostrString url) {
     NostrRelay *relay = NULL;
@@ -296,11 +263,9 @@ void NostrPool::close()
     relays.clear();
 }
 
-std::shared_ptr<SentNostrEventStatus> NostrPool::publish(
-    std::initializer_list<NostrString> rs, SignedNostrEvent *event) {
-    std::shared_ptr<SentNostrEventStatus> status = std::make_shared<SentNostrEventStatus>();
-    this->sentEventsStatus[event->getId()]=status;
-
+void NostrPool::publish(std::initializer_list<NostrString> rs,
+                        SignedNostrEvent *event,
+                        NostrEventStatusCallback statusCallback) {
     DynamicJsonDocument doc(2048);
     JsonArray ev = doc.createNestedArray();
     event->toSendableEvent(ev);
@@ -312,10 +277,14 @@ std::shared_ptr<SentNostrEventStatus> NostrPool::publish(
         NostrRelay *relay = this->ensureRelay(r);
         Utils::log("Sending event to relay: " + r + " with payload: " + evJson);
         relay->send(evJson);
-        status->statusXrelay[relay->url].accepted=false;
     }
-
-    return status;
+    if (statusCallback){
+        EventStatusCallbackEntry entry;
+        entry.statusCallback = statusCallback;
+        entry.timestampSeconds = Utils::unixTimeSeconds();
+        entry.eventId = event->getId();
+        this->eventStatusCallbackEntries.push_back(entry);
+    }
 }
 void NostrPool::loop()
 {
@@ -332,30 +301,15 @@ void NostrPool::loop()
 
         relay.processQueue();
     }
-}
 
-void NostrPool::commit()
-{
-    // Serial.println("commit");
-
-    if (WiFi.status() != WL_CONNECTED)
-        return;
-    for (auto &relay : relays)
-    {
-        relay.processQueue();
-    }
-    this->clearEvents();
-
-    // remove unused sent events pointers
-    for (auto it = this->sentEventsStatus.begin(); it != this->sentEventsStatus.end();)
-    {
-        if (it->second.expired())
-        {
-            it = this->sentEventsStatus.erase(it);
+    // remove expired callback entries
+    long long now = Utils::unixTimeSeconds();
+    for(int i=0;i<this->eventStatusCallbackEntries.size();i++){
+        EventStatusCallbackEntry entry = this->eventStatusCallbackEntries[i];
+        if (now - entry.timestampSeconds > this->eventStatusTimeoutSeconds){
+            this->eventStatusCallbackEntries.erase(this->eventStatusCallbackEntries.begin()+i);
         }
-        else
-        {
-            ++it;
-        }
+        i--;
     }
 }
+

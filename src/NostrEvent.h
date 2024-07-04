@@ -184,24 +184,6 @@ namespace nostr {
               stored(false){};
     };
 
-    class NostrEventStatus {
-       public:
-        bool accepted = false;
-        NostrString error = "";
-        NostrString message = "";
-    };
 
-    class SentNostrEventStatus {
-        friend class NostrPool;
-
-       public:
-        bool waitAll(bool fireException = false,
-                     EventSubmissionFailureCallback callback = nullptr);
-        bool waitSome(unsigned int n = 1,
-                      EventSubmissionFailureCallback callback = nullptr);
-
-       private:
-        std::map<NostrString, NostrEventStatus> statusXrelay;
-    };
 }  // namespace nostr
 #endif

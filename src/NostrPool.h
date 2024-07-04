@@ -20,15 +20,22 @@ namespace nostr {
     using NostrEOSECallback = std::function<void(const NostrString &)>;
     using NostrEventCallback =
         std::function<void(const NostrString &, SignedNostrEvent *event)>;
-
+    using NostrEventStatusCallback =
+        std::function<void(const NostrString &, bool, const NostrString& )>;
     class NostrSubscription {
        public:
         bool eose = false;
-        std::vector<SignedNostrEvent> events;
         NostrCloseCallback closeCallback = nullptr;
         NostrEOSECallback eoseCallback = nullptr;
         NostrEventCallback eventCallback = nullptr;
+        NostrEventStatusCallback statusCallback = nullptr;
     };
+
+    typedef struct s_EventStatusCallbackEntry {
+        NostrEventStatusCallback statusCallback;
+        long long timestampSeconds;
+        NostrString eventId;
+    } EventStatusCallbackEntry;
 
     class NostrRelay {
         friend class NostrPool;
@@ -49,24 +56,20 @@ namespace nostr {
 
     class NostrPool {
        private:
-        std::map<NostrString, std::weak_ptr<SentNostrEventStatus>>
-            sentEventsStatus;
-
+      
         NostrNoticeCallback noticeCallback = nullptr;
 
-        long subs = 0;
-        int maxPendingEvents;
+        long long subs = 0;
         std::map<NostrString, NostrSubscription> subscriptions;
         std::vector<NostrRelay> relays;
         void onEvent(NostrRelay *relay, WStype_t type, uint8_t *payload,
                      size_t length);
-        void enqueueEvent(NostrString subId, SignedNostrEvent &event);
-
+        int eventStatusTimeoutSeconds = 60*10;
+        std::vector<EventStatusCallbackEntry>    eventStatusCallbackEntries;
        public:
-        NostrPool(int maxPendingEvents) : maxPendingEvents(maxPendingEvents){};
-        NostrPool() : maxPendingEvents(-1){};
-        std::vector<SignedNostrEvent> *getEvents(NostrString subId);
-        void clearEvents();
+        NostrPool(int eventStatusTimeoutSeconds=60*10) {
+            this->eventStatusTimeoutSeconds = eventStatusTimeoutSeconds;
+        };
         NostrString subscribeMany(
             std::initializer_list<NostrString> urls,
             std::initializer_list<
@@ -74,16 +77,18 @@ namespace nostr {
                 filters,
             NostrEventCallback eventCallback = nullptr,
             NostrCloseCallback closeCallback = nullptr,
-            NostrEOSECallback eoseCallback = nullptr);
+            NostrEOSECallback eoseCallback = nullptr
+      
+        );
         void closeSubscription(NostrString subId);
         NostrRelay *ensureRelay(NostrString url);
 
         void disconnectRelay(NostrString url);
         void close();
-        std::shared_ptr<SentNostrEventStatus> publish(
-            std::initializer_list<NostrString> rs, SignedNostrEvent *event);
+        void publish(std::initializer_list<NostrString> rs,
+                     SignedNostrEvent *event,
+                     NostrEventStatusCallback statusCallback = nullptr);
         void loop();
-        void commit();
     };
 }  // namespace nostr
 #endif
