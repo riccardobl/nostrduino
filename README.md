@@ -12,7 +12,7 @@ But it can be ported to other microcontrollers by reimplementing the platform sp
 
 + [Nip01](https://github.com/nostr-protocol/nips/blob/master/01.md) : Basic protocol flow
 + [Nip04](https://github.com/nostr-protocol/nips/blob/master/04.md) : Encrypted messages
-+ [Nip47](https://github.com/nostr-protocol/nips/blob/master/04.md) : Nostr Wallet Connect
++ [Nip47](https://github.com/nostr-protocol/nips/blob/master/47.md) : Nostr Wallet Connect
 + [(bonus) Lightning Address](https://lightningaddress.com/) : Can request invoices from lightning addresses
 + [NWC managed service](src/services/NWC.h) : A managed service to interact with NWC 
 
