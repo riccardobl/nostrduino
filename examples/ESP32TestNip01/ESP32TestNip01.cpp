@@ -1,106 +1,43 @@
-/*
-  NWC.ino - Arduino library for Nostr.
-  Created by Riccardo Balbo <nostr@rblb.it>, July 2th 2024
-  Released under MIT License
-*/
-#include <WebSocketsClient.h>
-#include <WiFi.h>
-#include <memory>
-
 #include "ArduinoJson.h"
 #include "NostrEvent.h"
 #include "NostrPool.h"
 #include "Utils.h"
-#include "bootloader_random.h"
-#include "esp_random.h"
-#include "esp_wifi.h"
+#include "esp32/ESP32Platform.h"
+#include "Transport.h"
 #include "time.h"
-#include "Nip04.h"
 
+#define WIFI_SSID "Wokwi-GUEST"
+#define WIFI_PASS ""
+#define WIFI_CHANNEL 6
 
-////////////////////////
-/// PLATFORM SPECIFIC HELPERS
-///  Note: see initialization code in setup()
-//////////////////////// 
-unsigned long getUnixTimestamp()
-{
-    time_t now;
-    struct tm timeinfo;
-    if (!getLocalTime(&timeinfo))
-    {
-        return 0;
-    }  
-    time(&now);
-    return now;
-}
-
-
-long int getRealRandom(long int min, long int max){
-    uint32_t rand =  esp_random();
-    return (rand % (max - min + 1)) + min;
-}
-
-void serialLogger(const NostrString& str){
-    Serial.println(str.c_str());
-}
-////////////////////////
-/// END OF PLATFORM SPECIFIC HELPERS
-////////////////////////
-
+#define RELAY "wss://nostr.rblb.it:7777"
+#define PRIVKEY "1558dadfae151555818a6aa6cf046ca3dfbb196c419efc18482479a74b74009a"
 
 std::vector<nostr::NostrPool*> pools;
 void testNIP01();
-void testNIP04();
-void testNIP47();
 
 void setup()
 {
-
     ////////////////////////
     /// INITIALIZATION
     ///   Note: you need some form of this code in your sketch
     ///         or the library will not work properly.
-    ///         If you don't know what to do, just copy this code
+    ///         If you don't know what to do, just copy this code.
+    ///         If you are initializing time and wifi somewhere else in your
+    ///         code, you can just omit the related lines here and call only
+    ///         initNostr
     ////////////////////////
-    // Init serial console
-    Serial.begin(115200);  
+    Serial.begin(115200);
 
-    // Init platform
-    // This is the init code for ESP32.
-    // Unless you are porting the code to a different platform you should probably copy
-    // it as it is in your sketch with all the referenced functions (getUnixTimestamp, serialLogger, getRealRandom) 
-    Serial.println("Init platform");
-    esp_wifi_start();
-    bootloader_random_enable();
-    nostr::Utils::setUnixTimeSecondsProvider(getUnixTimestamp);
-    nostr::Utils::setLogger(serialLogger);
-    nostr::Utils::setRealRandom(getRealRandom);
-    
+    Serial.println("Init wifi");
+    nostr::esp32::ESP32Platform::initWifi(WIFI_SSID, WIFI_PASS, WIFI_CHANNEL);
 
-    // Connect to wifi
-    // Set your wifi ssid and password here
-    String ssid="Wokwi-GUEST";
-    String password="";
-    WiFi.begin(ssid, password, 6);
-    Serial.println("Connecting to "+ssid);
-    while (WiFi.status() != WL_CONNECTED)
-    {
-        delay(500);
-        Serial.print(".");
-    }
-    Serial.println("");
-    Serial.println("WiFi connected");
-    Serial.println("IP address: ");
-    Serial.println(WiFi.localIP());
+    Serial.println("Init time");
+    nostr::esp32::ESP32Platform::initTime("pool.ntp.org");
 
-    // Configure NTP
-    Serial.println("Configuring NTP");
-    const char *ntpServer = "pool.ntp.org";
-    const long gmtOffset_sec = 0;
-    const int daylightOffset_sec = 3600;
-    configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+    Serial.println("Init Nostr");
+    nostr::esp32::ESP32Platform::initNostr(true);
 
-    // Initialization is complete
     Serial.println("Ready!");
 
     ////////////////////////
@@ -108,8 +45,6 @@ void setup()
     ////////////////////////
 
     testNIP01();
-    testNIP04();
-    // testNIP47();
 }
 
 
@@ -125,16 +60,18 @@ void loop(){
     }
 }
 
+nostr::Transport* transport;
+
 // Just a test for basic
 // nostr functionality
 void testNIP01() {
-    String relay = "wss://nostr.rblb.it:7777";
+    String relay = RELAY;
     // nostr private key
-    String privKey =
-        "1558dadfae151555818a6aa6cf046ca3dfbb196c419efc18482479a74b74009a";
+    String privKey = PRIVKEY;
+    transport = nostr::esp32::ESP32Platform::getTransport();
 
     // We need a NostrPool instance that will handle all the communication
-    nostr::NostrPool *pool = new nostr::NostrPool();
+    nostr::NostrPool *pool = new nostr::NostrPool(transport);
     pools.push_back(
         pool);  // NB. we are adding it to this vector since we need to call
                 // pool->loop() in the main loop to make it work properly
@@ -158,8 +95,8 @@ void testNIP01() {
 
             // Here you should handle the event, for this test we will just
             // serialize it and print to console
-            DynamicJsonDocument doc(2048);
-            JsonArray arr = doc.createNestedArray("data");
+            JsonDocument doc;
+            JsonArray arr = doc["data"].to<JsonArray>();
             event->toSendableEvent(arr);
             String json;
             serializeJson(arr, json);
@@ -189,7 +126,7 @@ void testNIP01() {
     nostr::UnsignedNostrEvent ev(1, "Hello, World!",
                                  nostr::Utils::unixTimeSeconds());
     // we can add some tags
-    ev.getTags().addTag("t", {"arduinoTest"});
+    ev.getTags()->addTag("t", {"arduinoTest"});
     // then we sign it with our private key and we will get a SignedNostrEvent
     // as result
     nostr::SignedNostrEvent signEv = ev.sign(privKey);
@@ -207,31 +144,3 @@ void testNIP01() {
 }
 
 
-
-void testNIP04(){
-    // Test encryption used in dms and other things
-
-    
-    String privKeyA = "1558dadfae151555818a6aa6cf046ca3dfbb196c419efc18482479a74b74009a";
-    String pubKeyA = nostr::Utils::getPublicKey(privKeyA);
-    String privKeyB = "4ba55ee68773c243f9bc714fac149b623e3a583f92738a0c633d38535110f6f2";
-    String pubKeyB = nostr::Utils::getPublicKey(privKeyB);
-
-    String text = "Hello world 123";
-    Serial.println("Text: \"" + text+"\"");
-    String encryptedText = nostr::Nip04::encrypt(privKeyA, pubKeyB, text);
-    Serial.println("Encrypted text: \"" + encryptedText+"\"");
-    String decryptedText = nostr::Nip04::decrypt(privKeyB, pubKeyA, encryptedText);
-    Serial.println("Decrypted text: \"" + decryptedText+"\"");
-    
-    if(text.equals(decryptedText)){
-        Serial.println("NIP04 test passed");
-    }else{
-        Serial.println("NIP04 test failed");
-    }
-
-}
-
-void testNIP47(){
-
-}

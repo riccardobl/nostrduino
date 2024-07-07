@@ -1,11 +1,7 @@
 docs/html
 docs/xml_output
 venv
-platformio.ini
 .pio
-wokwi.toml
-diagram.json
 .vscode
-examples
 docs
 bin
