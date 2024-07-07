@@ -1,14 +1,17 @@
-#ifndef NOSTRPOOL_H
-#define NOSTRPOOL_H
- 
-#include <WebSocketsClient.h>
+#ifndef _NOSTR_POOL_H
+#define _NOSTR_POOL_H
+
+#include <Transport.h>
 #include <iostream>
 #include <map>
 #include <memory>
 #include <vector>
+
 #include "ArduinoJson.h"
 #include "NostrEvent.h"
 #include "NostrString.h"
+
+
 
 namespace nostr {
     class NostrRelay;
@@ -45,11 +48,11 @@ namespace nostr {
          * Send a message to the relay
          */
         void send(NostrString message);
-        NostrRelay(WebSocketsClient ws, NostrString url) : ws(ws), url(url){};
+        NostrRelay(Connection *conn, NostrString url) : conn(conn), url(url){};
 
        protected:
         std::vector<NostrString> messageQueue;
-        WebSocketsClient ws;
+        Connection *conn;
         NostrString url;
         void processQueue();
     };
@@ -61,13 +64,14 @@ namespace nostr {
 
         long long subs = 0;
         std::map<NostrString, NostrSubscription> subscriptions;
-        std::vector<NostrRelay> relays;
-        void onEvent(NostrRelay *relay, WStype_t type, uint8_t *payload,
-                     size_t length);
+        std::vector<NostrRelay*> relays;
+        void onEvent(NostrRelay *relay, NostrString message);
         int eventStatusTimeoutSeconds = 60*10;
         std::vector<EventStatusCallbackEntry>    eventStatusCallbackEntries;
+        Transport* transport;
        public:
-        NostrPool(int eventStatusTimeoutSeconds=60*10) {
+        NostrPool(Transport* transport,int eventStatusTimeoutSeconds=60*10) {
+            this->transport = transport;
             this->eventStatusTimeoutSeconds = eventStatusTimeoutSeconds;
         };
         NostrString subscribeMany(
@@ -82,6 +86,7 @@ namespace nostr {
         );
         void closeSubscription(NostrString subId);
         NostrRelay *ensureRelay(NostrString url);
+        std::vector<NostrString> getRelays();
 
         void disconnectRelay(NostrString url);
         void close();
