@@ -1,9 +1,9 @@
 #include "ArduinoJson.h"
 #include "NostrEvent.h"
 #include "NostrPool.h"
+#include "Transport.h"
 #include "Utils.h"
 #include "esp32/ESP32Platform.h"
-#include "Transport.h"
 #include "time.h"
 
 #define WIFI_SSID "Wokwi-GUEST"
@@ -13,11 +13,10 @@
 #define RELAY "wss://nostr.rblb.it:7777"
 #define PRIVKEY "1558dadfae151555818a6aa6cf046ca3dfbb196c419efc18482479a74b74009a"
 
-std::vector<nostr::NostrPool*> pools;
+std::vector<nostr::NostrPool *> pools;
 void testNIP01();
 
-void setup()
-{
+void setup() {
     ////////////////////////
     /// INITIALIZATION
     ///   Note: you need some form of this code in your sketch
@@ -47,34 +46,29 @@ void setup()
     testNIP01();
 }
 
-
-
-void loop(){
-
-    // We need to call some pool methods in the main loop to make its internal loop work properly
-    // it is not very important how it is done, here we keep a reference of every pool in a vector
-    // but you can do it in a different way
-    for(nostr::NostrPool* pool:pools){
-        // Run internal loop: refresh relays, complete pending connections, send pending messages
+void loop() {
+    // We need to call some pool methods in the main loop to make its internal
+    // loop work properly it is not very important how it is done, here we keep
+    // a reference of every pool in a vector but you can do it in a different
+    // way
+    for (nostr::NostrPool *pool : pools) {
+        // Run internal loop: refresh relays, complete pending connections, send
+        // pending messages
         pool->loop();
     }
 }
 
-nostr::Transport* transport;
+nostr::Transport *transport;
 
-// Just a test for basic
-// nostr functionality
 void testNIP01() {
     String relay = RELAY;
-    // nostr private key
     String privKey = PRIVKEY;
     transport = nostr::esp32::ESP32Platform::getTransport();
 
     // We need a NostrPool instance that will handle all the communication
     nostr::NostrPool *pool = new nostr::NostrPool(transport);
-    pools.push_back(
-        pool);  // NB. we are adding it to this vector since we need to call
-                // pool->loop() in the main loop to make it work properly
+    pools.push_back(pool); // NB. we are adding it to this vector since we need to call
+                           // pool->loop() in the main loop to make it work properly
 
     // Lets subscribe to the relay
     String subId = pool->subscribeMany(
@@ -86,15 +80,13 @@ void testNIP01() {
              // {"since",{"1234567890"}},
              // {"until",{"1234567890"}},
              // {"limit",{"10"}},
-             {"#t", {"arduinoTest"}}}  //,
+             {"#t", {"arduinoTest"}}} //,
             // You can add another filter here
         },
         [&](const String &subId, nostr::SignedNostrEvent *event) {
-            // This is the callback that will be called when an event is
-            // received We can access the event content with event->getContent()
-
-            // Here you should handle the event, for this test we will just
-            // serialize it and print to console
+            // Received events callback, we can access the event content with
+            // event->getContent() Here you should handle the event, for this
+            // test we will just serialize it and print to console
             JsonDocument doc;
             JsonArray arr = doc["data"].to<JsonArray>();
             event->toSendableEvent(arr);
@@ -112,8 +104,7 @@ void testNIP01() {
             // This is the callback that will be called when the subscription is
             // EOSE
             Serial.println("Subscription EOSE: " + subId);
-        }
-    );
+        });
 
     // NB. you might want to save the subId somewhere since you are going to
     // need it to close the subscription like so: pool.closeSubscription(subId);
@@ -123,8 +114,7 @@ void testNIP01() {
 
     // Lets try to send an event
     // First we create an unsigned event
-    nostr::UnsignedNostrEvent ev(1, "Hello, World!",
-                                 nostr::Utils::unixTimeSeconds());
+    nostr::UnsignedNostrEvent ev(1, "Hello, World!", nostr::Utils::unixTimeSeconds());
     // we can add some tags
     ev.getTags()->addTag("t", {"arduinoTest"});
     // then we sign it with our private key and we will get a SignedNostrEvent
@@ -142,5 +132,3 @@ void testNIP01() {
     pool->publish({relay}, &signEv);
     // The event will be sent in the next loop() call
 }
-
-

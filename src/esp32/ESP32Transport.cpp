@@ -1,11 +1,8 @@
 #include "ESP32Transport.h"
 
-
 using namespace nostr;
 
-NostrString esp32::ESP32Transport::getInvoiceFromLNAddr(NostrString addr,
-                                             unsigned long long amount,
-                                             NostrString comment) {
+NostrString esp32::ESP32Transport::getInvoiceFromLNAddr(NostrString addr, unsigned long long amount, NostrString comment) {
     // username@domain.com
     // becomes https://domain.com/.well-known/lnurlp/username
     unsigned int atpos = NostrString_indexOf(addr, "@");
@@ -14,13 +11,13 @@ NostrString esp32::ESP32Transport::getInvoiceFromLNAddr(NostrString addr,
     }
     NostrString username = NostrString_substring(addr, 0, atpos);
     NostrString domain = NostrString_substring(addr, atpos + 1);
-    NostrString url = "https://" + domain + "/.well-known/lnurlp/" +
-                      NostrString_urlEncode(username);
+    NostrString url = "https://" + domain + "/.well-known/lnurlp/" + NostrString_urlEncode(username);
 
     HTTPClient http;
     http.begin(url.c_str());
     int httpCode = http.GET();
-    if (httpCode <= 0 || httpCode != HTTP_CODE_OK) return "";
+    if (httpCode <= 0 || httpCode != HTTP_CODE_OK)
+        return "";
     NostrString json = http.getString();
     JsonDocument doc;
     DeserializationError error = deserializeJson(doc, json);
@@ -52,11 +49,12 @@ NostrString esp32::ESP32Transport::getInvoiceFromLNAddr(NostrString addr,
     http.end();
     http.begin(lnurlp.c_str());
     httpCode = http.GET();
-    if (httpCode <= 0 || httpCode != HTTP_CODE_OK) return "";
-    json=http.getString();
+    if (httpCode <= 0 || httpCode != HTTP_CODE_OK)
+        return "";
+    json = http.getString();
     error = deserializeJson(doc, json);
     if (error) {
-        Utils::log("Failed to parse lnurlp JSON "+json);
+        Utils::log("Failed to parse lnurlp JSON " + json);
         return "";
     }
     NostrString callbackStatus = doc["status"];
@@ -74,7 +72,7 @@ NostrString esp32::ESP32Transport::getInvoiceFromLNAddr(NostrString addr,
 }
 
 Connection *esp32::ESP32Transport::connect(NostrString url) {
-    ESP32Connection *conn = new ESP32Connection(this,url);
+    ESP32Connection *conn = new ESP32Connection(this, url);
     connections.push_back(conn);
     return conn;
 }
@@ -98,54 +96,49 @@ void esp32::ESP32Transport::disconnect(Connection *conn) {
     }
 }
 
-esp32::ESP32Connection::ESP32Connection(ESP32Transport *transport,
-                                        NostrString url) {
-    this->transport=transport;
+esp32::ESP32Connection::ESP32Connection(ESP32Transport *transport, NostrString url) {
+    this->transport = transport;
     bool ssl = NostrString_startsWith(url, "wss://");
     url = NostrString_substring(url, ssl ? 6 : 5);
-    NostrString host =
-        NostrString_substring(url, 0, NostrString_indexOf(url, "/"));
-    NostrString path =
-        NostrString_substring(url, NostrString_indexOf(url, "/"));
-    if (path.equals("")) path = "/";
+    NostrString host = NostrString_substring(url, 0, NostrString_indexOf(url, "/"));
+    NostrString path = NostrString_substring(url, NostrString_indexOf(url, "/"));
+    if (path.equals(""))
+        path = "/";
     int port = ssl ? 443 : 80;
     if (NostrString_indexOf(host, ":") != -1) {
-        NostrString portStr =
-            NostrString_substring(host, NostrString_indexOf(host, ":") + 1);
+        NostrString portStr = NostrString_substring(host, NostrString_indexOf(host, ":") + 1);
         port = NostrString_toInt(portStr);
         host = NostrString_substring(host, 0, NostrString_indexOf(host, ":"));
     }
     if (ssl) {
-        Utils::log("Connecting to " + host + " : " + port + " with path " +
-                   path + " using SSL...");
+        Utils::log("Connecting to " + host + " : " + port + " with path " + path + " using SSL...");
         ws.beginSSL(host, port, path);
     } else {
-        Utils::log("Connecting to " + host + " : " + port + " with path " +
-                   path + "...");
+        Utils::log("Connecting to " + host + " : " + port + " with path " + path + "...");
         ws.begin(host, port, path);
     }
     ws.setReconnectInterval(5000);
     ws.onEvent([this](WStype_t type, uint8_t *payload, size_t length) {
         switch (type) {
-            case WStype_DISCONNECTED:
-                Utils::log("ESP32Connection disconnected.");
-                break;
-            case WStype_CONNECTED:
-                Utils::log("ESP32Connection connected.");
-                break;
-            case WStype_TEXT: {
-                NostrString message = NostrString_fromChars((char *)payload);
-                for (auto &listener : messageListeners) {
-                    listener(message);
-                }             
-                
-                break;
+        case WStype_DISCONNECTED:
+            Utils::log("ESP32Connection disconnected.");
+            break;
+        case WStype_CONNECTED:
+            Utils::log("ESP32Connection connected.");
+            break;
+        case WStype_TEXT: {
+            NostrString message = NostrString_fromChars((char *)payload);
+            for (auto &listener : messageListeners) {
+                listener(message);
             }
-            case WStype_ERROR:
-                Utils::log("ESP32Connection error.");
-                break;
-            default:
-                break;
+
+            break;
+        }
+        case WStype_ERROR:
+            Utils::log("ESP32Connection error.");
+            break;
+        default:
+            break;
         }
     });
 }
@@ -164,18 +157,23 @@ bool esp32::ESP32Transport::isReady() {
 }
 
 void esp32::ESP32Connection::loop() {
-     ws.loop(); 
+    ws.loop();
 }
 
-bool esp32::ESP32Connection::isReady() { return ws.isConnected(); }
+bool esp32::ESP32Connection::isReady() {
+    return ws.isConnected();
+}
 
-void esp32::ESP32Connection::addMessageListener(
-    std::function<void(NostrString)> listener) {
+void esp32::ESP32Connection::addMessageListener(std::function<void(NostrString)> listener) {
     messageListeners.push_back(listener);
 }
 
-esp32::ESP32Transport::~ESP32Transport() { close(); }
+esp32::ESP32Transport::~ESP32Transport() {
+    close();
+}
 
-esp32::ESP32Connection::~ESP32Connection() { ws.disconnect(); }
+esp32::ESP32Connection::~ESP32Connection() {
+    ws.disconnect();
+}
 
 esp32::ESP32Transport::ESP32Transport() {}

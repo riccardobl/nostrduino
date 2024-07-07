@@ -6,12 +6,10 @@ std::function<void(const NostrString &)> Utils::logger = nullptr;
 unsigned long long Utils::subs = 0;
 std::function<long int(long int min, long int max)> Utils::realRandom = nullptr;
 std::function<unsigned long long()> Utils::timeSecondsProvider = nullptr;
-void Utils::setUnixTimeSecondsProvider(
-    std::function<unsigned long long()> timeSecondsProvider) {
+void Utils::setUnixTimeSecondsProvider(std::function<unsigned long long()> timeSecondsProvider) {
     Utils::timeSecondsProvider = timeSecondsProvider;
 }
-void Utils::setRealRandom(
-    std::function<long int(long int min, long int max)> realRandom) {
+void Utils::setRealRandom(std::function<long int(long int min, long int max)> realRandom) {
     Utils::realRandom = realRandom;
 }
 void Utils::setLogger(std::function<void(const NostrString &)> logger) {
@@ -31,9 +29,8 @@ long long Utils::unixTimeSeconds() {
 }
 
 NostrString Utils::getNewSubscriptionId() {
-    NostrString chars =
-        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345"
-        "6789";
+    NostrString chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345"
+                        "6789";
     NostrString result = "";
     result += NostrString_intToString(subs++);
     int maxLength = 64;
@@ -43,7 +40,6 @@ NostrString Utils::getNewSubscriptionId() {
     }
     return result;
 }
-
 
 long int Utils::randomInt(long int min, long int max) {
     if (!realRandom) {

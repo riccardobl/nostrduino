@@ -1,75 +1,60 @@
 
 #include "NostrEvent.h"
- 
-
-
 
 using namespace nostr;
 
-
-const std::vector<NostrEventTag> &NostrEventTags::getTags() const
-{
+const std::vector<NostrEventTag> &NostrEventTags::getTags() const {
     return tags;
 }
 const std::vector<NostrString> NostrEventTags::emptyTags;
 
 const std::vector<NostrString> &NostrEventTags::getTag(NostrString key) const {
-    for (auto &tag : tags)
-    {
-        if (NostrString_equals(tag.key , key)) {
+    for (auto &tag : tags) {
+        if (NostrString_equals(tag.key, key)) {
             return tag.value;
         }
     }
     return this->emptyTags;
 }
 
-unsigned int NostrEventTags::addTag(NostrString key,
-                                    std::initializer_list<NostrString> values) {
+unsigned int NostrEventTags::addTag(NostrString key, std::initializer_list<NostrString> values) {
     NostrEventTag tag;
     tag.key = key;
-    for (auto &value : values)
-    {
+    for (auto &value : values) {
         tag.value.push_back(value);
     }
     tags.push_back(tag);
     return tags.size();
 }
 
-unsigned int NostrEventTags::addTag(NostrString key,
-                                    std::vector<NostrString> values) {
+unsigned int NostrEventTags::addTag(NostrString key, std::vector<NostrString> values) {
     NostrEventTag tag;
     tag.key = key;
-    for (auto &value : values)
-    {
+    for (auto &value : values) {
         tag.value.push_back(value);
     }
     tags.push_back(tag);
     return tags.size();
 }
 
-void NostrEventTags::removeTag(unsigned int index)
-{
+void NostrEventTags::removeTag(unsigned int index) {
     tags.erase(tags.begin() + index);
 }
 
 void NostrEventTags::removeTags(NostrString key) {
-    for (int i = 0; i < tags.size(); i++)
-    {
-        if (NostrString_equals(tags[i].key ,key))
-        {
+    for (int i = 0; i < tags.size(); i++) {
+        if (NostrString_equals(tags[i].key, key)) {
             tags.erase(tags.begin() + i);
             i--;
         }
     }
 }
 
-void NostrEventTags::clearTags()
-{
+void NostrEventTags::clearTags() {
     tags.clear();
 }
 
-void NostrEventTags::toJson(JsonArray arr) const
-{
+void NostrEventTags::toJson(JsonArray arr) const {
     for (int i = 0; i < tags.size(); i++) {
         JsonArray arr2 = arr.add<JsonArray>();
         arr2.add(tags[i].key);
@@ -106,15 +91,15 @@ SignedNostrEvent UnsignedNostrEvent::sign(NostrString privateKeyHex) {
     serializeJson(doc["data"], message);
     doc.clear();
 
-    Utils::log("Compute signature of: "+message);
+    Utils::log("Compute signature of: " + message);
 
     // sha256 of message converted to hex, assign to msghash
-    byte hash[64] = {0}; 
+    byte hash[64] = {0};
     int hashLen = 0;
     hashLen = sha256(message, hash);
     NostrString msgHash = NostrString_bytesToHex(hash, hashLen);
 
-    Utils::log("Message hash: "+msgHash);
+    Utils::log("Message hash: " + msgHash);
 
     // Generate the schnorr sig of the messageHash
     byte messageBytes[NOSTR_DIGEST_SIZE];
@@ -122,34 +107,25 @@ SignedNostrEvent UnsignedNostrEvent::sign(NostrString privateKeyHex) {
     SchnorrSignature signature = privateKey.schnorr_sign(messageBytes);
     NostrString signatureHex = NostrString(signature);
 
-    SignedNostrEvent signedEvent(
-        msgHash, 
-        pubKeyHex, 
-        this->created_at, 
-        this->kind, 
-        this->tags, 
-        this->content, 
-        signatureHex
-    );
+    SignedNostrEvent signedEvent(msgHash, pubKeyHex, this->created_at, this->kind, this->tags, this->content, signatureHex);
     Utils::log("Signature hash " + signatureHex);
-
 
     return signedEvent;
 }
 
-bool SignedNostrEvent::verify() const{
+bool SignedNostrEvent::verify() const {
     Serial.println("Verifying event signature");
     byte messageBytes[32];
     // fromHex(this->id, messageBytes, 32);
     NostrString_hexToBytes(this->id, messageBytes, 32);
     // Serial.println("Message hash: "+this->id);
-    Utils::log("Message hash: "+this->id);
+    Utils::log("Message hash: " + this->id);
 
     byte pubeyBytes[32];
-    NostrString_hexToBytes("02"+this->pubkey, pubeyBytes, 32);
+    NostrString_hexToBytes("02" + this->pubkey, pubeyBytes, 32);
     // fromHex("02"+this->pubkey, pubeyBytes, 32);
     // Serial.println("Pubkey: "+this->pubkey);
-    Utils::log("Pubkey: "+this->pubkey);
+    Utils::log("Pubkey: " + this->pubkey);
 
     PublicKey pub(pubeyBytes);
 
@@ -159,12 +135,10 @@ bool SignedNostrEvent::verify() const{
     SchnorrSignature signature(signatureBytes);
     // Serial.println("Signature: " + this->signature);
     Utils::log("Signature: " + this->signature);
-    return pub.schnorr_verify(signature, messageBytes);    
-
+    return pub.schnorr_verify(signature, messageBytes);
 }
 
-void SignedNostrEvent::toJson(JsonObject doc) const
-{
+void SignedNostrEvent::toJson(JsonObject doc) const {
     doc["id"] = this->id;
     doc["pubkey"] = this->pubkey;
     doc["created_at"] = this->created_at;
@@ -172,27 +146,25 @@ void SignedNostrEvent::toJson(JsonObject doc) const
     JsonArray tags = doc["tags"].to<JsonArray>();
     this->tags.toJson(tags);
     doc["content"] = this->content;
-    doc["sig"] = this->signature;    
-
+    doc["sig"] = this->signature;
 }
 
-void SignedNostrEvent::toSendableEvent(JsonArray doc) const
-{
+void SignedNostrEvent::toSendableEvent(JsonArray doc) const {
     doc.add("EVENT");
     JsonObject obj = doc.add<JsonObject>();
     this->toJson(obj);
 }
 
-SignedNostrEvent::SignedNostrEvent(JsonArray arr){
-    if(arr[0] != "EVENT"){
+SignedNostrEvent::SignedNostrEvent(JsonArray arr) {
+    if (arr[0] != "EVENT") {
         throw std::runtime_error("Invalid event type");
     }
-    
+
     JsonObject obj;
-    if(arr.size()>2){
+    if (arr.size() > 2) {
         obj = arr[2];
         this->subid = arr[1].as<NostrString>();
-    }else{
+    } else {
         obj = arr[1];
     }
 

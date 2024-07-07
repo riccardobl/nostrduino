@@ -1,17 +1,14 @@
 #include "Nip04.h"
 using namespace nostr;
-NostrString Nip04::decrypt(NostrString& privateKeyHex,
-                           NostrString& senderPubKeyHex, NostrString content) {
-    
+NostrString Nip04::decrypt(NostrString &privateKeyHex, NostrString &senderPubKeyHex, NostrString content) {
+
     int ivParamIndex = NostrString_indexOf(content, "?iv=");
-    NostrString encryptedMessage =
-        NostrString_substring(content, 0, ivParamIndex);
+    NostrString encryptedMessage = NostrString_substring(content, 0, ivParamIndex);
 
     NostrString encryptedMessageHex = NostrString_base64ToHex(encryptedMessage);
     int encryptedMessageSize = NostrString_length(encryptedMessageHex) / 2;
     byte encryptedMessageBin[encryptedMessageSize];
-    NostrString_hexToBytes(encryptedMessageHex, encryptedMessageBin,
-                           encryptedMessageSize);
+    NostrString_hexToBytes(encryptedMessageHex, encryptedMessageBin, encryptedMessageSize);
     // fromHex(encryptedMessageHex, encryptedMessageBin,
     //         encryptedMessageSize);
 
@@ -40,13 +37,11 @@ NostrString Nip04::decrypt(NostrString& privateKeyHex,
     NostrString sharedPointXHex = NostrString_bytesToHex(sharedPointX, 32);
 
     NostrString message = decryptData(sharedPointX, ivBin, encryptedMessageHex);
-    message= NostrString_trim(message);
+    message = NostrString_trim(message);
 
-    
     return message;
 }
-NostrString Nip04::encrypt(NostrString& privateKeyHex,
-                           NostrString& recipientPubKeyHex, NostrString content) {
+NostrString Nip04::encrypt(NostrString &privateKeyHex, NostrString &recipientPubKeyHex, NostrString content) {
     // Get shared point
     // Create the private key object
     int byteSize = 32;
@@ -57,8 +52,7 @@ NostrString Nip04::encrypt(NostrString& privateKeyHex,
 
     byte publicKeyBin[64];
     // fromHex("02" + NostrString(recipientPubKeyHex), publicKeyBin, 64);
-    NostrString_hexToBytes("02" + NostrString(recipientPubKeyHex), publicKeyBin,
-                           64);
+    NostrString_hexToBytes("02" + NostrString(recipientPubKeyHex), publicKeyBin, 64);
     PublicKey otherDhPublicKey(publicKeyBin);
 
     byte sharedPointX[32];
@@ -83,8 +77,7 @@ NostrString Nip04::encrypt(NostrString& privateKeyHex,
     uint8_t encryptedMessage[encryptedMessageSize];
     // fromHex(encryptedMessageHex, encryptedMessage,
     //         encryptedMessageSize);
-    NostrString_hexToBytes(encryptedMessageHex, encryptedMessage,
-                           encryptedMessageSize);
+    NostrString_hexToBytes(encryptedMessageHex, encryptedMessage, encryptedMessageSize);
 
     String encryptedMessageBase64 = hexToBase64(encryptedMessageHex);
 
@@ -95,9 +88,7 @@ NostrString Nip04::encrypt(NostrString& privateKeyHex,
 
 NostrString Nip04::encryptData(byte key[32], byte iv[16], NostrString msg) {
     // message has to be padded at the end so it is a multiple of 16
-    int padding_diff = NostrString_length(msg) % 16 == 0
-                           ? 16
-                           : 16 - (NostrString_length(msg) % 16);
+    int padding_diff = NostrString_length(msg) % 16 == 0 ? 16 : 16 - (NostrString_length(msg) % 16);
 
     int byteSize = NostrString_length(msg) + padding_diff;
     byte messageBin[byteSize];
@@ -111,8 +102,7 @@ NostrString Nip04::encryptData(byte key[32], byte iv[16], NostrString msg) {
     return toHex(messageBin, sizeof(messageBin));
 }
 
-void Nip04::stringToByteArray(const char *input, int padding_diff,
-                              byte *output) {
+void Nip04::stringToByteArray(const char *input, int padding_diff, byte *output) {
     int i = 0;
     // remove end-of-string char
     while (input[i] != '\0') {
@@ -126,8 +116,7 @@ void Nip04::stringToByteArray(const char *input, int padding_diff,
     }
 }
 
-NostrString Nip04::decryptData(byte key[32], byte iv[16],
-                               NostrString messageHex) {
+NostrString Nip04::decryptData(byte key[32], byte iv[16], NostrString messageHex) {
     int byteSize = NostrString_length(messageHex) / 2;
     byte messageBin[byteSize];
     NostrString_hexToBytes(messageHex, messageBin, byteSize);
