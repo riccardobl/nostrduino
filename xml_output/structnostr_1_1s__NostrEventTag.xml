@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="structnostr_1_1s__NostrEventTag" kind="struct" language="C++" prot="public">
+    <compoundname>nostr::s_NostrEventTag</compoundname>
+    <includes refid="NostrEvent_8h" local="no">NostrEvent.h</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structnostr_1_1s__NostrEventTag_1a95e8590f64380a02483b6f459be3c3ad" prot="public" static="no" mutable="no">
+        <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+        <definition>NostrString nostr::s_NostrEventTag::key</definition>
+        <argsstring></argsstring>
+        <name>key</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrEvent.h" line="27" column="17" bodyfile="src/NostrEvent.h" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structnostr_1_1s__NostrEventTag_1a7be407635f4384230bf90d628dc74148" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref> &gt;</type>
+        <definition>std::vector&lt;NostrString&gt; nostr::s_NostrEventTag::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrEvent.h" line="28" column="17" bodyfile="src/NostrEvent.h" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/NostrEvent.h" line="26" column="1" bodyfile="src/NostrEvent.h" bodystart="26" bodyend="29"/>
+    <listofallmembers>
+      <member refid="structnostr_1_1s__NostrEventTag_1a95e8590f64380a02483b6f459be3c3ad" prot="public" virt="non-virtual"><scope>nostr::s_NostrEventTag</scope><name>key</name></member>
+      <member refid="structnostr_1_1s__NostrEventTag_1a7be407635f4384230bf90d628dc74148" prot="public" virt="non-virtual"><scope>nostr::s_NostrEventTag</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,578 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="classnostr_1_1Nip47" kind="class" language="C++" prot="public">
+    <compoundname>nostr::Nip47</compoundname>
+    <includes refid="Nip47_8h" local="no">Nip47.h</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classnostr_1_1Nip47_1a84641e6c669d4ce236b246c5bd1feba5" prot="private" static="no" mutable="no">
+        <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+        <definition>NostrString nostr::Nip47::servicePubKey</definition>
+        <argsstring></argsstring>
+        <name>servicePubKey</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="153" column="17" bodyfile="src/Nip47.h" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classnostr_1_1Nip47_1a34a3d4cfca4ca07b1d7d488d81f337a4" prot="private" static="no" mutable="no">
+        <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+        <definition>NostrString nostr::Nip47::userPrivKey</definition>
+        <argsstring></argsstring>
+        <name>userPrivKey</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="154" column="17" bodyfile="src/Nip47.h" bodystart="154" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classnostr_1_1Nip47_1a02dceddd9f492329ed1b2a5668a912b4" prot="private" static="no" mutable="no">
+        <type><ref refid="classnostr_1_1Nip04" kindref="compound">Nip04</ref></type>
+        <definition>Nip04 nostr::Nip47::nip04</definition>
+        <argsstring></argsstring>
+        <name>nip04</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="155" column="11" bodyfile="src/Nip47.h" bodystart="155" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classnostr_1_1Nip47_1a832db110f750bae323891fc3113dc483" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>nostr::Nip47::Nip47</definition>
+        <argsstring>()</argsstring>
+        <name>Nip47</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="128" column="5" bodyfile="src/Nip47.h" bodystart="128" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Nip47_1afa506b09ad4df68c72e088336d408429" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>nostr::Nip47::Nip47</definition>
+        <argsstring>(Nip04 nip04, NostrString servicePubKey, NostrString userPrivKey)</argsstring>
+        <name>Nip47</name>
+        <param>
+          <type><ref refid="classnostr_1_1Nip04" kindref="compound">Nip04</ref></type>
+          <declname>nip04</declname>
+        </param>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>servicePubKey</declname>
+        </param>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>userPrivKey</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="129" column="5" bodyfile="src/Nip47.h" bodystart="129" bodyend="129"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Nip47_1a4126792accc0be87b3b209918d1f903d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref></type>
+        <definition>SignedNostrEvent Nip47::payInvoice</definition>
+        <argsstring>(NostrString invoice, unsigned long amount=-1)</argsstring>
+        <name>payInvoice</name>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>invoice</declname>
+        </param>
+        <param>
+          <type>unsigned long</type>
+          <declname>amount</declname>
+          <defval>-1</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="130" column="22" bodyfile="src/Nip47.cpp" bodystart="20" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Nip47_1a6aa7e03b79ab36063c9dbbb95dd5a07c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref></type>
+        <definition>SignedNostrEvent Nip47::multiPayInvoice</definition>
+        <argsstring>(std::initializer_list&lt; Invoice &gt; invoices)</argsstring>
+        <name>multiPayInvoice</name>
+        <param>
+          <type>std::initializer_list&lt; <ref refid="namespacenostr_1ac0f491ca12edeaa060bf89f8349d1c94" kindref="member">Invoice</ref> &gt;</type>
+          <declname>invoices</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="131" column="22" bodyfile="src/Nip47.cpp" bodystart="71" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Nip47_1af6c9c30bfcf1f9cab0fbac77e67eb9c9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref></type>
+        <definition>SignedNostrEvent Nip47::payKeySend</definition>
+        <argsstring>(NostrString pubkey, unsigned long amount, NostrString preimage=&quot;&quot;, std::initializer_list&lt; TLVRecords &gt; tlv={})</argsstring>
+        <name>payKeySend</name>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>pubkey</declname>
+        </param>
+        <param>
+          <type>unsigned long</type>
+          <declname>amount</declname>
+        </param>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>preimage</declname>
+          <defval>&quot;&quot;</defval>
+        </param>
+        <param>
+          <type>std::initializer_list&lt; <ref refid="namespacenostr_1ad0f4687c761ee6988b42826d3ea717f6" kindref="member">TLVRecords</ref> &gt;</type>
+          <declname>tlv</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="132" column="22" bodyfile="src/Nip47.cpp" bodystart="83" bodyend="101"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Nip47_1a3b82c08c5d19006e22d7f027829b6002" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref></type>
+        <definition>SignedNostrEvent Nip47::multiPayKeySend</definition>
+        <argsstring>(std::initializer_list&lt; KeySend &gt; keySends)</argsstring>
+        <name>multiPayKeySend</name>
+        <param>
+          <type>std::initializer_list&lt; <ref refid="namespacenostr_1a2f0adf8fb06541c0734900f1f37c6a77" kindref="member">KeySend</ref> &gt;</type>
+          <declname>keySends</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="133" column="22" bodyfile="src/Nip47.cpp" bodystart="103" bodyend="125"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Nip47_1aa567dc8ea8b24bbac721724f79c156ec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref></type>
+        <definition>SignedNostrEvent Nip47::makeInvoice</definition>
+        <argsstring>(unsigned long amount, NostrString description=&quot;&quot;, NostrString descriptionHash=&quot;&quot;, unsigned long expiry=0)</argsstring>
+        <name>makeInvoice</name>
+        <param>
+          <type>unsigned long</type>
+          <declname>amount</declname>
+        </param>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>description</declname>
+          <defval>&quot;&quot;</defval>
+        </param>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>descriptionHash</declname>
+          <defval>&quot;&quot;</defval>
+        </param>
+        <param>
+          <type>unsigned long</type>
+          <declname>expiry</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="134" column="22" bodyfile="src/Nip47.cpp" bodystart="30" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Nip47_1a500ce5a6edd53194e6ddc035d0f4c50d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref></type>
+        <definition>SignedNostrEvent Nip47::lookUpPaymentHash</definition>
+        <argsstring>(NostrString paymentHash)</argsstring>
+        <name>lookUpPaymentHash</name>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>paymentHash</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="135" column="22" bodyfile="src/Nip47.cpp" bodystart="46" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Nip47_1a74760efce0406b4ca35811112c4cf1dd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref></type>
+        <definition>SignedNostrEvent Nip47::lookUpInvoice</definition>
+        <argsstring>(NostrString invoice)</argsstring>
+        <name>lookUpInvoice</name>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>invoice</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="136" column="22" bodyfile="src/Nip47.cpp" bodystart="53" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Nip47_1aa4f00696a8b58ae43ea7582d915147d4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref></type>
+        <definition>SignedNostrEvent Nip47::listTransactions</definition>
+        <argsstring>(unsigned long from=0, unsigned long until=0, int limit=0, int offset=0, bool unpaid=false, NostrString type=&quot;&quot;)</argsstring>
+        <name>listTransactions</name>
+        <param>
+          <type>unsigned long</type>
+          <declname>from</declname>
+          <defval>0</defval>
+        </param>
+        <param>
+          <type>unsigned long</type>
+          <declname>until</declname>
+          <defval>0</defval>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>limit</declname>
+          <defval>0</defval>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>offset</declname>
+          <defval>0</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>unpaid</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>type</declname>
+          <defval>&quot;&quot;</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="137" column="22" bodyfile="src/Nip47.cpp" bodystart="127" bodyend="148"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Nip47_1a086e38d7ee42d8d98f9e439b515f9cbb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref></type>
+        <definition>SignedNostrEvent Nip47::getBalance</definition>
+        <argsstring>()</argsstring>
+        <name>getBalance</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="138" column="22" bodyfile="src/Nip47.cpp" bodystart="60" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Nip47_1ad3598c721308e98893c1af2526b6ca98" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref></type>
+        <definition>SignedNostrEvent Nip47::getInfo</definition>
+        <argsstring>()</argsstring>
+        <name>getInfo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="139" column="22" bodyfile="src/Nip47.cpp" bodystart="66" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Nip47_1a227c93d1f00eef2dc26964d5960fa870" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Nip47::parseResponse</definition>
+        <argsstring>(SignedNostrEvent *response, Nip47Response&lt; PayInvoiceResponse &gt; &amp;out)</argsstring>
+        <name>parseResponse</name>
+        <param>
+          <type><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref> *</type>
+          <declname>response</declname>
+        </param>
+        <param>
+          <type><ref refid="classnostr_1_1Nip47Response" kindref="compound">Nip47Response</ref>&lt; <ref refid="namespacenostr_1aabe8d230016fd5f70285adbcbe77fe23" kindref="member">PayInvoiceResponse</ref> &gt; &amp;</type>
+          <declname>out</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="141" column="10" bodyfile="src/Nip47.cpp" bodystart="150" bodyend="180"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Nip47_1ac4de81240475645085b1b4da58ecb727" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Nip47::parseResponse</definition>
+        <argsstring>(SignedNostrEvent *response, Nip47Response&lt; MultiPayInvoiceResponse &gt; &amp;out)</argsstring>
+        <name>parseResponse</name>
+        <param>
+          <type><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref> *</type>
+          <declname>response</declname>
+        </param>
+        <param>
+          <type><ref refid="classnostr_1_1Nip47Response" kindref="compound">Nip47Response</ref>&lt; <ref refid="namespacenostr_1a0fb78e894360c3b4167124456e18cc1b" kindref="member">MultiPayInvoiceResponse</ref> &gt; &amp;</type>
+          <declname>out</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="142" column="10" bodyfile="src/Nip47.cpp" bodystart="181" bodyend="211"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Nip47_1a8d1c779b4af12e4bb8963dc3ebdeecab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Nip47::parseResponse</definition>
+        <argsstring>(SignedNostrEvent *response, Nip47Response&lt; PayKeySendResponse &gt; &amp;out)</argsstring>
+        <name>parseResponse</name>
+        <param>
+          <type><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref> *</type>
+          <declname>response</declname>
+        </param>
+        <param>
+          <type><ref refid="classnostr_1_1Nip47Response" kindref="compound">Nip47Response</ref>&lt; <ref refid="namespacenostr_1a70810c5e5dbfe96e16ae12fd2990e6d6" kindref="member">PayKeySendResponse</ref> &gt; &amp;</type>
+          <declname>out</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="143" column="10" bodyfile="src/Nip47.cpp" bodystart="212" bodyend="243"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Nip47_1a6585a69c98e19c9969d8bfa012b62fda" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Nip47::parseResponse</definition>
+        <argsstring>(SignedNostrEvent *response, Nip47Response&lt; MultiPayKeySendResponse &gt; &amp;out)</argsstring>
+        <name>parseResponse</name>
+        <param>
+          <type><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref> *</type>
+          <declname>response</declname>
+        </param>
+        <param>
+          <type><ref refid="classnostr_1_1Nip47Response" kindref="compound">Nip47Response</ref>&lt; <ref refid="namespacenostr_1af6e0f43f7f982a4b4fe1a1c097cf9de3" kindref="member">MultiPayKeySendResponse</ref> &gt; &amp;</type>
+          <declname>out</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="144" column="10" bodyfile="src/Nip47.cpp" bodystart="244" bodyend="275"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Nip47_1ad0c8190ae14427ec5b1522b661e07f75" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Nip47::parseResponse</definition>
+        <argsstring>(SignedNostrEvent *response, Nip47Response&lt; MakeInvoiceResponse &gt; &amp;out)</argsstring>
+        <name>parseResponse</name>
+        <param>
+          <type><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref> *</type>
+          <declname>response</declname>
+        </param>
+        <param>
+          <type><ref refid="classnostr_1_1Nip47Response" kindref="compound">Nip47Response</ref>&lt; <ref refid="namespacenostr_1a784f3d1260b727625d00d370c0ac9e9f" kindref="member">MakeInvoiceResponse</ref> &gt; &amp;</type>
+          <declname>out</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="145" column="10" bodyfile="src/Nip47.cpp" bodystart="276" bodyend="323"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Nip47_1a1787418bb1c82a2af95e0b0a5cecb215" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Nip47::parseResponse</definition>
+        <argsstring>(SignedNostrEvent *response, Nip47Response&lt; LookUpInvoiceResponse &gt; &amp;out)</argsstring>
+        <name>parseResponse</name>
+        <param>
+          <type><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref> *</type>
+          <declname>response</declname>
+        </param>
+        <param>
+          <type><ref refid="classnostr_1_1Nip47Response" kindref="compound">Nip47Response</ref>&lt; <ref refid="namespacenostr_1a9357541c46480c78b10dbd47531ce2d7" kindref="member">LookUpInvoiceResponse</ref> &gt; &amp;</type>
+          <declname>out</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="146" column="10" bodyfile="src/Nip47.cpp" bodystart="324" bodyend="372"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Nip47_1ab17e76dcb6ebb9ff02385db61dcf2177" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Nip47::parseResponse</definition>
+        <argsstring>(SignedNostrEvent *response, Nip47Response&lt; ListTransactionsResponse &gt; &amp;out)</argsstring>
+        <name>parseResponse</name>
+        <param>
+          <type><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref> *</type>
+          <declname>response</declname>
+        </param>
+        <param>
+          <type><ref refid="classnostr_1_1Nip47Response" kindref="compound">Nip47Response</ref>&lt; <ref refid="namespacenostr_1a5fd7239e7510091c73ba2602f4a6bc3d" kindref="member">ListTransactionsResponse</ref> &gt; &amp;</type>
+          <declname>out</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="147" column="10" bodyfile="src/Nip47.cpp" bodystart="373" bodyend="425"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Nip47_1a91fc31e78d9bc639c249547d7ae83524" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Nip47::parseResponse</definition>
+        <argsstring>(SignedNostrEvent *response, Nip47Response&lt; GetBalanceResponse &gt; &amp;out)</argsstring>
+        <name>parseResponse</name>
+        <param>
+          <type><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref> *</type>
+          <declname>response</declname>
+        </param>
+        <param>
+          <type><ref refid="classnostr_1_1Nip47Response" kindref="compound">Nip47Response</ref>&lt; <ref refid="namespacenostr_1a42570ba6e2e70160a34b1746331f5bff" kindref="member">GetBalanceResponse</ref> &gt; &amp;</type>
+          <declname>out</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="148" column="10" bodyfile="src/Nip47.cpp" bodystart="426" bodyend="455"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Nip47_1a592690a536b36a84b1d35b8d1cbc6bbc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Nip47::parseResponse</definition>
+        <argsstring>(SignedNostrEvent *response, Nip47Response&lt; GetInfoResponse &gt; &amp;out)</argsstring>
+        <name>parseResponse</name>
+        <param>
+          <type><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref> *</type>
+          <declname>response</declname>
+        </param>
+        <param>
+          <type><ref refid="classnostr_1_1Nip47Response" kindref="compound">Nip47Response</ref>&lt; <ref refid="namespacenostr_1af3dc0dbf7fa69605d5ad971a37c5fe7f" kindref="member">GetInfoResponse</ref> &gt; &amp;</type>
+          <declname>out</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="149" column="10" bodyfile="src/Nip47.cpp" bodystart="456" bodyend="495"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="classnostr_1_1Nip47_1a47754ec23d3b156bcb94b132612d0147" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Nip47::parseNWC</definition>
+        <argsstring>(NostrString, NWCData &amp;)</argsstring>
+        <name>parseNWC</name>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <defname>nwc</defname>
+        </param>
+        <param>
+          <type><ref refid="namespacenostr_1acd41d0899a1d0f921c44a1a91b6c0eed" kindref="member">NWCData</ref> &amp;</type>
+          <defname>data</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="150" column="17" bodyfile="src/Nip47.cpp" bodystart="497" bodyend="521"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="classnostr_1_1Nip47_1a9d680ebc0be2da3dad7fd46aa0cc5917" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref></type>
+        <definition>SignedNostrEvent Nip47::createEvent</definition>
+        <argsstring>(NostrString method, JsonDocument doc)</argsstring>
+        <name>createEvent</name>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>method</declname>
+        </param>
+        <param>
+          <type>JsonDocument</type>
+          <declname>doc</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="156" column="22" bodyfile="src/Nip47.cpp" bodystart="5" bodyend="18"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/Nip47.h" line="126" column="1" bodyfile="src/Nip47.h" bodystart="126" bodyend="157"/>
+    <listofallmembers>
+      <member refid="classnostr_1_1Nip47_1a9d680ebc0be2da3dad7fd46aa0cc5917" prot="private" virt="non-virtual"><scope>nostr::Nip47</scope><name>createEvent</name></member>
+      <member refid="classnostr_1_1Nip47_1a086e38d7ee42d8d98f9e439b515f9cbb" prot="public" virt="non-virtual"><scope>nostr::Nip47</scope><name>getBalance</name></member>
+      <member refid="classnostr_1_1Nip47_1ad3598c721308e98893c1af2526b6ca98" prot="public" virt="non-virtual"><scope>nostr::Nip47</scope><name>getInfo</name></member>
+      <member refid="classnostr_1_1Nip47_1aa4f00696a8b58ae43ea7582d915147d4" prot="public" virt="non-virtual"><scope>nostr::Nip47</scope><name>listTransactions</name></member>
+      <member refid="classnostr_1_1Nip47_1a74760efce0406b4ca35811112c4cf1dd" prot="public" virt="non-virtual"><scope>nostr::Nip47</scope><name>lookUpInvoice</name></member>
+      <member refid="classnostr_1_1Nip47_1a500ce5a6edd53194e6ddc035d0f4c50d" prot="public" virt="non-virtual"><scope>nostr::Nip47</scope><name>lookUpPaymentHash</name></member>
+      <member refid="classnostr_1_1Nip47_1aa567dc8ea8b24bbac721724f79c156ec" prot="public" virt="non-virtual"><scope>nostr::Nip47</scope><name>makeInvoice</name></member>
+      <member refid="classnostr_1_1Nip47_1a6aa7e03b79ab36063c9dbbb95dd5a07c" prot="public" virt="non-virtual"><scope>nostr::Nip47</scope><name>multiPayInvoice</name></member>
+      <member refid="classnostr_1_1Nip47_1a3b82c08c5d19006e22d7f027829b6002" prot="public" virt="non-virtual"><scope>nostr::Nip47</scope><name>multiPayKeySend</name></member>
+      <member refid="classnostr_1_1Nip47_1a02dceddd9f492329ed1b2a5668a912b4" prot="private" virt="non-virtual"><scope>nostr::Nip47</scope><name>nip04</name></member>
+      <member refid="classnostr_1_1Nip47_1a832db110f750bae323891fc3113dc483" prot="public" virt="non-virtual"><scope>nostr::Nip47</scope><name>Nip47</name></member>
+      <member refid="classnostr_1_1Nip47_1afa506b09ad4df68c72e088336d408429" prot="public" virt="non-virtual"><scope>nostr::Nip47</scope><name>Nip47</name></member>
+      <member refid="classnostr_1_1Nip47_1a47754ec23d3b156bcb94b132612d0147" prot="public" virt="non-virtual"><scope>nostr::Nip47</scope><name>parseNWC</name></member>
+      <member refid="classnostr_1_1Nip47_1a227c93d1f00eef2dc26964d5960fa870" prot="public" virt="non-virtual"><scope>nostr::Nip47</scope><name>parseResponse</name></member>
+      <member refid="classnostr_1_1Nip47_1ac4de81240475645085b1b4da58ecb727" prot="public" virt="non-virtual"><scope>nostr::Nip47</scope><name>parseResponse</name></member>
+      <member refid="classnostr_1_1Nip47_1a8d1c779b4af12e4bb8963dc3ebdeecab" prot="public" virt="non-virtual"><scope>nostr::Nip47</scope><name>parseResponse</name></member>
+      <member refid="classnostr_1_1Nip47_1a6585a69c98e19c9969d8bfa012b62fda" prot="public" virt="non-virtual"><scope>nostr::Nip47</scope><name>parseResponse</name></member>
+      <member refid="classnostr_1_1Nip47_1ad0c8190ae14427ec5b1522b661e07f75" prot="public" virt="non-virtual"><scope>nostr::Nip47</scope><name>parseResponse</name></member>
+      <member refid="classnostr_1_1Nip47_1a1787418bb1c82a2af95e0b0a5cecb215" prot="public" virt="non-virtual"><scope>nostr::Nip47</scope><name>parseResponse</name></member>
+      <member refid="classnostr_1_1Nip47_1ab17e76dcb6ebb9ff02385db61dcf2177" prot="public" virt="non-virtual"><scope>nostr::Nip47</scope><name>parseResponse</name></member>
+      <member refid="classnostr_1_1Nip47_1a91fc31e78d9bc639c249547d7ae83524" prot="public" virt="non-virtual"><scope>nostr::Nip47</scope><name>parseResponse</name></member>
+      <member refid="classnostr_1_1Nip47_1a592690a536b36a84b1d35b8d1cbc6bbc" prot="public" virt="non-virtual"><scope>nostr::Nip47</scope><name>parseResponse</name></member>
+      <member refid="classnostr_1_1Nip47_1a4126792accc0be87b3b209918d1f903d" prot="public" virt="non-virtual"><scope>nostr::Nip47</scope><name>payInvoice</name></member>
+      <member refid="classnostr_1_1Nip47_1af6c9c30bfcf1f9cab0fbac77e67eb9c9" prot="public" virt="non-virtual"><scope>nostr::Nip47</scope><name>payKeySend</name></member>
+      <member refid="classnostr_1_1Nip47_1a84641e6c669d4ce236b246c5bd1feba5" prot="private" virt="non-virtual"><scope>nostr::Nip47</scope><name>servicePubKey</name></member>
+      <member refid="classnostr_1_1Nip47_1a34a3d4cfca4ca07b1d7d488d81f337a4" prot="private" virt="non-virtual"><scope>nostr::Nip47</scope><name>userPrivKey</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

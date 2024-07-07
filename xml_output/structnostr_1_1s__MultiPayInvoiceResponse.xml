@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="structnostr_1_1s__MultiPayInvoiceResponse" kind="struct" language="C++" prot="public">
+    <compoundname>nostr::s_MultiPayInvoiceResponse</compoundname>
+    <includes refid="Nip47_8h" local="no">Nip47.h</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structnostr_1_1s__MultiPayInvoiceResponse_1afb1495a862c7d5322d8a630c5ff54df6" prot="public" static="no" mutable="no">
+        <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+        <definition>NostrString nostr::s_MultiPayInvoiceResponse::preimage</definition>
+        <argsstring></argsstring>
+        <name>preimage</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="41" column="17" bodyfile="src/Nip47.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structnostr_1_1s__MultiPayInvoiceResponse_1a512ff06432c3810adbf31889d031d98e" prot="public" static="no" mutable="no">
+        <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+        <definition>NostrString nostr::s_MultiPayInvoiceResponse::d</definition>
+        <argsstring></argsstring>
+        <name>d</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="42" column="17" bodyfile="src/Nip47.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/Nip47.h" line="40" column="1" bodyfile="src/Nip47.h" bodystart="40" bodyend="43"/>
+    <listofallmembers>
+      <member refid="structnostr_1_1s__MultiPayInvoiceResponse_1a512ff06432c3810adbf31889d031d98e" prot="public" virt="non-virtual"><scope>nostr::s_MultiPayInvoiceResponse</scope><name>d</name></member>
+      <member refid="structnostr_1_1s__MultiPayInvoiceResponse_1afb1495a862c7d5322d8a630c5ff54df6" prot="public" virt="non-virtual"><scope>nostr::s_MultiPayInvoiceResponse</scope><name>preimage</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

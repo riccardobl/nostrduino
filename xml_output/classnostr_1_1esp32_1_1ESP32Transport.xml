@@ -1,0 +1,183 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="classnostr_1_1esp32_1_1ESP32Transport" kind="class" language="C++" prot="public">
+    <compoundname>nostr::esp32::ESP32Transport</compoundname>
+    <basecompoundref refid="classnostr_1_1Transport" prot="public" virt="non-virtual">nostr::Transport</basecompoundref>
+    <includes refid="ESP32Transport_8h" local="no">ESP32Transport.h</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classnostr_1_1esp32_1_1ESP32Transport_1ad7c84ec7a9db1183b28f138a33dfd5dd" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classnostr_1_1Connection" kindref="compound">Connection</ref> * &gt;</type>
+        <definition>std::vector&lt;Connection *&gt; nostr::esp32::ESP32Transport::connections</definition>
+        <argsstring></argsstring>
+        <name>connections</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/esp32/ESP32Transport.h" line="44" column="17" bodyfile="src/esp32/ESP32Transport.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classnostr_1_1esp32_1_1ESP32Transport_1a4adb02ec58bdf74733f6b4cc812b99cc" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+        <definition>NostrString esp32::ESP32Transport::getInvoiceFromLNAddr</definition>
+        <argsstring>(NostrString addr, unsigned long long amount, NostrString comment=&quot;&quot;) override</argsstring>
+        <name>getInvoiceFromLNAddr</name>
+        <reimplements refid="classnostr_1_1Transport_1a42bedd0b5a19ddfc1ae5c02cd14edf14">getInvoiceFromLNAddr</reimplements>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>addr</declname>
+        </param>
+        <param>
+          <type>unsigned long long</type>
+          <declname>amount</declname>
+        </param>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>comment</declname>
+          <defval>&quot;&quot;</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/esp32/ESP32Transport.h" line="35" column="17" bodyfile="src/esp32/ESP32Transport.cpp" bodystart="5" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1esp32_1_1ESP32Transport_1aa0375d4e6040153c0aab9a02f20d3512" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="classnostr_1_1Connection" kindref="compound">Connection</ref> *</type>
+        <definition>Connection * esp32::ESP32Transport::connect</definition>
+        <argsstring>(NostrString url) override</argsstring>
+        <name>connect</name>
+        <reimplements refid="classnostr_1_1Transport_1a0c5e942cdc1befc66aae956d94469efd">connect</reimplements>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>url</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/esp32/ESP32Transport.h" line="36" column="16" bodyfile="src/esp32/ESP32Transport.cpp" bodystart="74" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1esp32_1_1ESP32Transport_1aca0ad35cfb8de39700eb79177f9b485b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void esp32::ESP32Transport::close</definition>
+        <argsstring>()</argsstring>
+        <name>close</name>
+        <reimplements refid="classnostr_1_1Transport_1a0afe71e02773d9a026474372442e674a">close</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/esp32/ESP32Transport.h" line="37" column="10" bodyfile="src/esp32/ESP32Transport.cpp" bodystart="80" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1esp32_1_1ESP32Transport_1a32171ade3f194e9c868d8b4e0bd5654c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void esp32::ESP32Transport::disconnect</definition>
+        <argsstring>(Connection *conn) override</argsstring>
+        <name>disconnect</name>
+        <reimplements refid="classnostr_1_1Transport_1a574027b0ae5f5d1f67c64396ec8febc0">disconnect</reimplements>
+        <param>
+          <type><ref refid="classnostr_1_1Connection" kindref="compound">Connection</ref> *</type>
+          <declname>conn</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/esp32/ESP32Transport.h" line="38" column="10" bodyfile="src/esp32/ESP32Transport.cpp" bodystart="88" bodyend="97"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1esp32_1_1ESP32Transport_1a69dbdfebd4d87498d90a8816294acd0b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>esp32::ESP32Transport::~ESP32Transport</definition>
+        <argsstring>() override</argsstring>
+        <name>~ESP32Transport</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/esp32/ESP32Transport.h" line="39" column="5" bodyfile="src/esp32/ESP32Transport.cpp" bodystart="171" bodyend="173"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1esp32_1_1ESP32Transport_1a442863628a576f577e34f102ad5bb966" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>esp32::ESP32Transport::ESP32Transport</definition>
+        <argsstring>()</argsstring>
+        <name>ESP32Transport</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/esp32/ESP32Transport.h" line="40" column="5" bodyfile="src/esp32/ESP32Transport.cpp" bodystart="179" bodyend="179"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1esp32_1_1ESP32Transport_1a23d9f1794ca60bbfa1102947081cfcc2" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool esp32::ESP32Transport::isReady</definition>
+        <argsstring>() override</argsstring>
+        <name>isReady</name>
+        <reimplements refid="classnostr_1_1Transport_1a277eac950191c1f87450d712c5bf6ec9">isReady</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/esp32/ESP32Transport.h" line="41" column="10" bodyfile="src/esp32/ESP32Transport.cpp" bodystart="155" bodyend="157"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>nostr::Transport</label>
+        <link refid="classnostr_1_1Transport"/>
+      </node>
+      <node id="1">
+        <label>nostr::esp32::ESP32Transport</label>
+        <link refid="classnostr_1_1esp32_1_1ESP32Transport"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>nostr::Transport</label>
+        <link refid="classnostr_1_1Transport"/>
+      </node>
+      <node id="1">
+        <label>nostr::esp32::ESP32Transport</label>
+        <link refid="classnostr_1_1esp32_1_1ESP32Transport"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/esp32/ESP32Transport.h" line="33" column="1" bodyfile="src/esp32/ESP32Transport.h" bodystart="33" bodyend="45"/>
+    <listofallmembers>
+      <member refid="classnostr_1_1esp32_1_1ESP32Transport_1aca0ad35cfb8de39700eb79177f9b485b" prot="public" virt="virtual"><scope>nostr::esp32::ESP32Transport</scope><name>close</name></member>
+      <member refid="classnostr_1_1esp32_1_1ESP32Transport_1aa0375d4e6040153c0aab9a02f20d3512" prot="public" virt="virtual"><scope>nostr::esp32::ESP32Transport</scope><name>connect</name></member>
+      <member refid="classnostr_1_1esp32_1_1ESP32Transport_1ad7c84ec7a9db1183b28f138a33dfd5dd" prot="private" virt="non-virtual"><scope>nostr::esp32::ESP32Transport</scope><name>connections</name></member>
+      <member refid="classnostr_1_1esp32_1_1ESP32Transport_1a32171ade3f194e9c868d8b4e0bd5654c" prot="public" virt="virtual"><scope>nostr::esp32::ESP32Transport</scope><name>disconnect</name></member>
+      <member refid="classnostr_1_1esp32_1_1ESP32Transport_1a442863628a576f577e34f102ad5bb966" prot="public" virt="non-virtual"><scope>nostr::esp32::ESP32Transport</scope><name>ESP32Transport</name></member>
+      <member refid="classnostr_1_1esp32_1_1ESP32Transport_1a4adb02ec58bdf74733f6b4cc812b99cc" prot="public" virt="virtual"><scope>nostr::esp32::ESP32Transport</scope><name>getInvoiceFromLNAddr</name></member>
+      <member refid="classnostr_1_1esp32_1_1ESP32Transport_1a23d9f1794ca60bbfa1102947081cfcc2" prot="public" virt="virtual"><scope>nostr::esp32::ESP32Transport</scope><name>isReady</name></member>
+      <member refid="classnostr_1_1Transport_1a87434e88eff5bc156ce6ef4a0f9e4d41" prot="public" virt="non-virtual"><scope>nostr::esp32::ESP32Transport</scope><name>Transport</name></member>
+      <member refid="classnostr_1_1esp32_1_1ESP32Transport_1a69dbdfebd4d87498d90a8816294acd0b" prot="public" virt="non-virtual"><scope>nostr::esp32::ESP32Transport</scope><name>~ESP32Transport</name></member>
+      <member refid="classnostr_1_1Transport_1af063ade88c53338ad4d7489c59b39625" prot="public" virt="virtual"><scope>nostr::esp32::ESP32Transport</scope><name>~Transport</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

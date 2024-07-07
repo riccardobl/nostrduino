@@ -1,0 +1,219 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="Nip04_8cpp" kind="file" language="C++">
+    <compoundname>Nip04.cpp</compoundname>
+    <includes refid="Nip04_8h" local="yes">Nip04.h</includes>
+    <incdepgraph>
+      <node id="12">
+        <label>functional</label>
+      </node>
+      <node id="3">
+        <label>aes.h</label>
+        <link refid="aes_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>NostrString.h</label>
+        <link refid="NostrString_8h"/>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>stdint.h</label>
+      </node>
+      <node id="11">
+        <label>stdlib.h</label>
+      </node>
+      <node id="9">
+        <label>string</label>
+      </node>
+      <node id="5">
+        <label>stddef.h</label>
+      </node>
+      <node id="7">
+        <label>Hash.h</label>
+      </node>
+      <node id="1">
+        <label>src/Nip04.cpp</label>
+        <link refid="Nip04_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>vector</label>
+      </node>
+      <node id="2">
+        <label>Nip04.h</label>
+        <link refid="Nip04_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>Utils.h</label>
+        <link refid="Utils_8h"/>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>Bitcoin.h</label>
+      </node>
+    </incdepgraph>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;<ref refid="Nip04_8h" kindref="compound">Nip04.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacenostr" kindref="compound">nostr</ref>;</highlight></codeline>
+<codeline lineno="3"><highlight class="normal"><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="classnostr_1_1Nip04_1a61cff1c4cb447c825520003e8ef9448f" kindref="member">Nip04::decrypt</ref>(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>&amp;privateKeyHex,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>&amp;senderPubKeyHex,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>content)<sp/>{</highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>ivParamIndex<sp/>=<sp/><ref refid="NostrString_8cpp_1a407e73ae21365c45a6218a0931acc352" kindref="member">NostrString_indexOf</ref>(content,<sp/></highlight><highlight class="stringliteral">&quot;?iv=&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="6"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>encryptedMessage<sp/>=<sp/><ref refid="NostrString_8cpp_1a81ec406c3051526110d2ebc3b158a15e" kindref="member">NostrString_substring</ref>(content,<sp/>0,<sp/>ivParamIndex);</highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>encryptedMessageHex<sp/>=<sp/><ref refid="NostrString_8cpp_1af842440c472941f7df78b8a4cb4b0934" kindref="member">NostrString_base64ToHex</ref>(encryptedMessage);</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>encryptedMessageSize<sp/>=<sp/><ref refid="NostrString_8cpp_1a28295d150d85f3d9c4392381331d4870" kindref="member">NostrString_length</ref>(encryptedMessageHex)<sp/>/<sp/>2;</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">byte</highlight><highlight class="normal"><sp/>encryptedMessageBin[encryptedMessageSize];</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a528c8b1a69be70e58f1aa9288f79ff45" kindref="member">NostrString_hexToBytes</ref>(encryptedMessageHex,<sp/>encryptedMessageBin,<sp/>encryptedMessageSize);</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>fromHex(encryptedMessageHex,<sp/>encryptedMessageBin,</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>encryptedMessageSize);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>iv<sp/>=<sp/><ref refid="NostrString_8cpp_1a81ec406c3051526110d2ebc3b158a15e" kindref="member">NostrString_substring</ref>(content,<sp/>ivParamIndex<sp/>+<sp/>4);</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>String<sp/>iv<sp/>=<sp/>content.substring(content.indexOf(&quot;?iv=&quot;)<sp/>+<sp/>4);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>String<sp/>ivHex<sp/>=<sp/>base64ToHex(iv);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>ivHex<sp/>=<sp/><ref refid="NostrString_8cpp_1af842440c472941f7df78b8a4cb4b0934" kindref="member">NostrString_base64ToHex</ref>(iv);</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>ivSize<sp/>=<sp/>16;</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">byte</highlight><highlight class="normal"><sp/>ivBin[ivSize];</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a528c8b1a69be70e58f1aa9288f79ff45" kindref="member">NostrString_hexToBytes</ref>(ivHex,<sp/>ivBin,<sp/>ivSize);</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>fromHex(ivHex,<sp/>ivBin,<sp/>ivSize);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>byteSize<sp/>=<sp/>32;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">byte</highlight><highlight class="normal"><sp/>privateKeyBytes[byteSize];</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>fromHex(privateKeyHex,<sp/>privateKeyBytes,<sp/>byteSize);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a528c8b1a69be70e58f1aa9288f79ff45" kindref="member">NostrString_hexToBytes</ref>(privateKeyHex,<sp/>privateKeyBytes,<sp/>byteSize);</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/>PrivateKey<sp/>privateKey(privateKeyBytes);</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">byte</highlight><highlight class="normal"><sp/>senderPublicKeyBin[64];</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>fromHex(&quot;02&quot;<sp/>+<sp/>String(senderPubKeyHex),<sp/>senderPublicKeyBin,<sp/>64);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a528c8b1a69be70e58f1aa9288f79ff45" kindref="member">NostrString_hexToBytes</ref>(</highlight><highlight class="stringliteral">&quot;02&quot;</highlight><highlight class="normal"><sp/>+<sp/>senderPubKeyHex,<sp/>senderPublicKeyBin,<sp/>64);</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/>PublicKey<sp/>senderPublicKey(senderPublicKeyBin);</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">byte</highlight><highlight class="normal"><sp/>sharedPointX[32];</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/>privateKey.ecdh(senderPublicKey,<sp/>sharedPointX,<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>sharedPointXHex<sp/>=<sp/><ref refid="NostrString_8cpp_1a6131d0cf238d6082199c6757bf76790b" kindref="member">NostrString_bytesToHex</ref>(sharedPointX,<sp/>32);</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>message<sp/>=<sp/>decryptData(sharedPointX,<sp/>ivBin,<sp/>encryptedMessageHex);</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/>message<sp/>=<sp/><ref refid="NostrString_8cpp_1a0f947772a27c7fd986f84246f4a75aaf" kindref="member">NostrString_trim</ref>(message);</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>message;</highlight></codeline>
+<codeline lineno="43"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="classnostr_1_1Nip04_1a5bc588240576cf44d6a0664b4d205595" kindref="member">Nip04::encrypt</ref>(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>&amp;privateKeyHex,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>&amp;recipientPubKeyHex,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>content)<sp/>{</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Get<sp/>shared<sp/>point</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Create<sp/>the<sp/>private<sp/>key<sp/>object</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>byteSize<sp/>=<sp/>32;</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">byte</highlight><highlight class="normal"><sp/>privateKeyBytes[byteSize];</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>fromHex(privateKeyHex,<sp/>privateKeyBytes,<sp/>byteSize);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a528c8b1a69be70e58f1aa9288f79ff45" kindref="member">NostrString_hexToBytes</ref>(privateKeyHex,<sp/>privateKeyBytes,<sp/>byteSize);</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/>PrivateKey<sp/>privateKey(privateKeyBytes);</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">byte</highlight><highlight class="normal"><sp/>publicKeyBin[64];</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>fromHex(&quot;02&quot;<sp/>+<sp/>NostrString(recipientPubKeyHex),<sp/>publicKeyBin,<sp/>64);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a528c8b1a69be70e58f1aa9288f79ff45" kindref="member">NostrString_hexToBytes</ref>(</highlight><highlight class="stringliteral">&quot;02&quot;</highlight><highlight class="normal"><sp/>+<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>(recipientPubKeyHex),<sp/>publicKeyBin,<sp/>64);</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/>PublicKey<sp/>otherDhPublicKey(publicKeyBin);</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">byte</highlight><highlight class="normal"><sp/>sharedPointX[32];</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/>privateKey.ecdh(otherDhPublicKey,<sp/>sharedPointX,<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>sharedPointXHex<sp/>=<sp/><ref refid="NostrString_8cpp_1a6131d0cf238d6082199c6757bf76790b" kindref="member">NostrString_bytesToHex</ref>(sharedPointX,<sp/>32);</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Create<sp/>the<sp/>initialization<sp/>vector</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/>uint8_t<sp/>iv[16];</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(iv);<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>iv[i]<sp/>=<sp/>(uint8_t)<ref refid="classnostr_1_1Utils_1a83898b2e9aa65a0cf05813f327d55f45" kindref="member">Utils::randomInt</ref>(0,<sp/>255);</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>ivHex<sp/>=<sp/>toHex(iv,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(iv));</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/>String<sp/>ivBase64<sp/>=<sp/>hexToBase64(ivHex);</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>encryptedMessageHex<sp/>=<sp/>encryptData(sharedPointX,<sp/>iv,<sp/>content);</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"></highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>divide<sp/>the<sp/>length<sp/>of<sp/>the<sp/>hex<sp/>string<sp/>2<sp/>to<sp/>get<sp/>the<sp/>size<sp/>of<sp/>the<sp/>byte</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>array,<sp/>since<sp/>each<sp/>byte<sp/>consists<sp/>of<sp/>2<sp/>hexadecimal<sp/>characters.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>encryptedMessageSize<sp/>=<sp/><ref refid="NostrString_8cpp_1a28295d150d85f3d9c4392381331d4870" kindref="member">NostrString_length</ref>(encryptedMessageHex)<sp/>/<sp/>2;</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/>uint8_t<sp/>encryptedMessage[encryptedMessageSize];</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>fromHex(encryptedMessageHex,<sp/>encryptedMessage,</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>encryptedMessageSize);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a528c8b1a69be70e58f1aa9288f79ff45" kindref="member">NostrString_hexToBytes</ref>(encryptedMessageHex,<sp/>encryptedMessage,<sp/>encryptedMessageSize);</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"></highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/>String<sp/>encryptedMessageBase64<sp/>=<sp/>hexToBase64(encryptedMessageHex);</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"></highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/>encryptedMessageBase64<sp/>+=<sp/></highlight><highlight class="stringliteral">&quot;?iv=&quot;</highlight><highlight class="normal"><sp/>+<sp/>ivBase64;</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>encryptedMessageBase64;</highlight></codeline>
+<codeline lineno="87"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"></highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>Nip04::encryptData(</highlight><highlight class="keywordtype">byte</highlight><highlight class="normal"><sp/>key[32],<sp/></highlight><highlight class="keywordtype">byte</highlight><highlight class="normal"><sp/>iv[16],<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>msg)<sp/>{</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>message<sp/>has<sp/>to<sp/>be<sp/>padded<sp/>at<sp/>the<sp/>end<sp/>so<sp/>it<sp/>is<sp/>a<sp/>multiple<sp/>of<sp/>16</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>padding_diff<sp/>=<sp/><ref refid="NostrString_8cpp_1a28295d150d85f3d9c4392381331d4870" kindref="member">NostrString_length</ref>(msg)<sp/>%<sp/>16<sp/>==<sp/>0<sp/>?<sp/>16<sp/>:<sp/>16<sp/>-<sp/>(<ref refid="NostrString_8cpp_1a28295d150d85f3d9c4392381331d4870" kindref="member">NostrString_length</ref>(msg)<sp/>%<sp/>16);</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"></highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>byteSize<sp/>=<sp/><ref refid="NostrString_8cpp_1a28295d150d85f3d9c4392381331d4870" kindref="member">NostrString_length</ref>(msg)<sp/>+<sp/>padding_diff;</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">byte</highlight><highlight class="normal"><sp/>messageBin[byteSize];</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/>stringToByteArray(<ref refid="NostrString_8cpp_1a8abe35d695b42e5d20ff27b74695a9ad" kindref="member">NostrString_toChars</ref>(msg),<sp/>padding_diff,<sp/>messageBin);</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"></highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structAES__ctx" kindref="compound">AES_ctx</ref><sp/>ctx;</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="aes_8cpp_1a99d17d22ed909bd155007cdece29263a" kindref="member">AES_init_ctx_iv</ref>(&amp;ctx,<sp/>key,<sp/>iv);</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="aes_8cpp_1a296bd30323044b07d69e0e3b5f676281" kindref="member">AES_CBC_encrypt_buffer</ref>(&amp;ctx,<sp/>messageBin,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(messageBin));</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"></highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>toHex(messageBin,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(messageBin));</highlight></codeline>
+<codeline lineno="103"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"></highlight></codeline>
+<codeline lineno="105"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Nip04::stringToByteArray(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*input,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>padding_diff,<sp/></highlight><highlight class="keywordtype">byte</highlight><highlight class="normal"><sp/>*output)<sp/>{</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>remove<sp/>end-of-string<sp/>char</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(input[i]<sp/>!=<sp/></highlight><highlight class="charliteral">&apos;\0&apos;</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>output[i]<sp/>=<sp/>input[i];</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>i++;</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"></highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>pad<sp/>between<sp/>1<sp/>and<sp/>16<sp/>bytes</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;<sp/>padding_diff;<sp/>j++)<sp/>{</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>output[i<sp/>+<sp/>j]<sp/>=<sp/>padding_diff;</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="117"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"></highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>Nip04::decryptData(</highlight><highlight class="keywordtype">byte</highlight><highlight class="normal"><sp/>key[32],<sp/></highlight><highlight class="keywordtype">byte</highlight><highlight class="normal"><sp/>iv[16],<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>messageHex)<sp/>{</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>byteSize<sp/>=<sp/><ref refid="NostrString_8cpp_1a28295d150d85f3d9c4392381331d4870" kindref="member">NostrString_length</ref>(messageHex)<sp/>/<sp/>2;</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">byte</highlight><highlight class="normal"><sp/>messageBin[byteSize];</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a528c8b1a69be70e58f1aa9288f79ff45" kindref="member">NostrString_hexToBytes</ref>(messageHex,<sp/>messageBin,<sp/>byteSize);</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structAES__ctx" kindref="compound">AES_ctx</ref><sp/>ctx;</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="aes_8cpp_1a99d17d22ed909bd155007cdece29263a" kindref="member">AES_init_ctx_iv</ref>(&amp;ctx,<sp/>key,<sp/>iv);</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="aes_8cpp_1a0672c442747b26b691202c493a08a104" kindref="member">AES_CBC_decrypt_buffer</ref>(&amp;ctx,<sp/>messageBin,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(messageBin));</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"></highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>((</highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*)messageBin).substring(0,<sp/>byteSize);</highlight></codeline>
+<codeline lineno="129"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="src/Nip04.cpp"/>
+  </compounddef>
+</doxygen>

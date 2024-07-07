@@ -1,0 +1,603 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="NostrString_8h" kind="file" language="C++">
+    <compoundname>NostrString.h</compoundname>
+    <includes local="no">string</includes>
+    <includes local="no">vector</includes>
+    <includedby refid="ESP32Platform_8h" local="yes">src/esp32/ESP32Platform.h</includedby>
+    <includedby refid="ESP32Transport_8h" local="yes">src/esp32/ESP32Transport.h</includedby>
+    <includedby refid="Nip04_8h" local="yes">src/Nip04.h</includedby>
+    <includedby refid="Nip47_8h" local="yes">src/Nip47.h</includedby>
+    <includedby refid="NostrEvent_8h" local="yes">src/NostrEvent.h</includedby>
+    <includedby refid="NostrPool_8h" local="yes">src/NostrPool.h</includedby>
+    <includedby refid="NWC_8h" local="yes">src/services/NWC.h</includedby>
+    <includedby refid="Transport_8h" local="yes">src/Transport.h</includedby>
+    <includedby refid="Utils_8h" local="yes">src/Utils.h</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>src/NostrString.h</label>
+        <link refid="NostrString_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>string</label>
+      </node>
+      <node id="3">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="7">
+        <label>src/Nip47.h</label>
+        <link refid="Nip47_8h"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/NostrString.h</label>
+        <link refid="NostrString_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>src/NostrEvent.h</label>
+        <link refid="NostrEvent_8h"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>src/Utils.cpp</label>
+        <link refid="Utils_8cpp"/>
+      </node>
+      <node id="4">
+        <label>src/esp32/ESP32Transport.cpp</label>
+        <link refid="ESP32Transport_8cpp"/>
+      </node>
+      <node id="3">
+        <label>src/esp32/ESP32Transport.h</label>
+        <link refid="ESP32Transport_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>src/services/NWC.cpp</label>
+        <link refid="NWC_8cpp"/>
+      </node>
+      <node id="6">
+        <label>src/Nip04.cpp</label>
+        <link refid="Nip04_8cpp"/>
+      </node>
+      <node id="5">
+        <label>src/Nip04.h</label>
+        <link refid="Nip04_8h"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>src/services/NWC.h</label>
+        <link refid="NWC_8h"/>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>src/Utils.h</label>
+        <link refid="Utils_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>src/NostrPool.h</label>
+        <link refid="NostrPool_8h"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>src/NostrEvent.cpp</label>
+        <link refid="NostrEvent_8cpp"/>
+      </node>
+      <node id="2">
+        <label>src/esp32/ESP32Platform.h</label>
+        <link refid="ESP32Platform_8h"/>
+      </node>
+      <node id="14">
+        <label>src/NostrPool.cpp</label>
+        <link refid="NostrPool_8cpp"/>
+      </node>
+      <node id="15">
+        <label>src/Transport.h</label>
+        <link refid="Transport_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>src/Nip47.cpp</label>
+        <link refid="Nip47_8cpp"/>
+      </node>
+    </invincdepgraph>
+      <sectiondef kind="define">
+      <memberdef kind="define" id="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" prot="public" static="no">
+        <name>NostrString</name>
+        <initializer>std::string</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrString.h" line="33" column="12" bodyfile="src/NostrString.h" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="NostrString_8h_1a3601961133b29733de310240c5054e23" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>long</type>
+        <definition>long NostrString_toInt</definition>
+        <argsstring>(const std::string &amp;str)</argsstring>
+        <name>NostrString_toInt</name>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>str</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrString.h" line="34" column="6" bodyfile="src/NostrString.cpp" bodystart="117" bodyend="119" declfile="src/NostrString.h" declline="34" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="NostrString_8h_1aabf2c99bb9529aee18b26f94a87170ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string NostrString_fromChars</definition>
+        <argsstring>(char *chars)</argsstring>
+        <name>NostrString_fromChars</name>
+        <param>
+          <type>char *</type>
+          <declname>chars</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrString.h" line="35" column="13" bodyfile="src/NostrString.cpp" bodystart="120" bodyend="122" declfile="src/NostrString.h" declline="35" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="NostrString_8h_1a5037c7ee5549e19e5995aaa5c2af139e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool NostrString_startsWith</definition>
+        <argsstring>(const std::string &amp;str, const char *prefix)</argsstring>
+        <name>NostrString_startsWith</name>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>prefix</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrString.h" line="36" column="6" bodyfile="src/NostrString.cpp" bodystart="123" bodyend="125" declfile="src/NostrString.h" declline="36" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="NostrString_8h_1a81ec406c3051526110d2ebc3b158a15e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string NostrString_substring</definition>
+        <argsstring>(const std::string &amp;str, int start, int end)</argsstring>
+        <name>NostrString_substring</name>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>start</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>end</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrString.h" line="38" column="13" bodyfile="src/NostrString.cpp" bodystart="127" bodyend="129" declfile="src/NostrString.h" declline="38" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="NostrString_8h_1a09cc3b16db038e89590599190af7dca3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string NostrString_substring</definition>
+        <argsstring>(const std::string &amp;str, int start)</argsstring>
+        <name>NostrString_substring</name>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>start</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrString.h" line="40" column="13" bodyfile="src/NostrString.cpp" bodystart="131" bodyend="133" declfile="src/NostrString.h" declline="40" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="NostrString_8h_1a6d17546b312f1d7b2488ad6c81f63e6e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string NostrString_intToString</definition>
+        <argsstring>(long int i)</argsstring>
+        <name>NostrString_intToString</name>
+        <param>
+          <type>long int</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrString.h" line="42" column="13" bodyfile="src/NostrString.cpp" bodystart="135" bodyend="137" declfile="src/NostrString.h" declline="42" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="NostrString_8h_1a407e73ae21365c45a6218a0931acc352" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int NostrString_indexOf</definition>
+        <argsstring>(const std::string &amp;str1, const char *str2)</argsstring>
+        <name>NostrString_indexOf</name>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>str1</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>str2</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrString.h" line="44" column="5" bodyfile="src/NostrString.cpp" bodystart="139" bodyend="141" declfile="src/NostrString.h" declline="44" declcolumn="5"/>
+      </memberdef>
+      <memberdef kind="function" id="NostrString_8h_1a528c8b1a69be70e58f1aa9288f79ff45" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void NostrString_hexToBytes</definition>
+        <argsstring>(const std::string &amp;hex, uint8_t *array, size_t arraySize)</argsstring>
+        <name>NostrString_hexToBytes</name>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>hex</declname>
+        </param>
+        <param>
+          <type>uint8_t *</type>
+          <declname>array</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>arraySize</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrString.h" line="46" column="6" bodyfile="src/NostrString.cpp" bodystart="143" bodyend="146" declfile="src/NostrString.h" declline="46" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="NostrString_8h_1a6131d0cf238d6082199c6757bf76790b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string NostrString_bytesToHex</definition>
+        <argsstring>(uint8_t *array, size_t arraySize)</argsstring>
+        <name>NostrString_bytesToHex</name>
+        <param>
+          <type>uint8_t *</type>
+          <declname>array</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>arraySize</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrString.h" line="48" column="13" bodyfile="src/NostrString.cpp" bodystart="148" bodyend="165" declfile="src/NostrString.h" declline="48" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="NostrString_8h_1a28295d150d85f3d9c4392381331d4870" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>long int</type>
+        <definition>long int NostrString_length</definition>
+        <argsstring>(const std::string &amp;str)</argsstring>
+        <name>NostrString_length</name>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>str</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrString.h" line="49" column="10" bodyfile="src/NostrString.cpp" bodystart="166" bodyend="168" declfile="src/NostrString.h" declline="49" declcolumn="10"/>
+      </memberdef>
+      <memberdef kind="function" id="NostrString_8h_1a8abe35d695b42e5d20ff27b74695a9ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>const char *</type>
+        <definition>const char* NostrString_toChars</definition>
+        <argsstring>(const std::string &amp;str)</argsstring>
+        <name>NostrString_toChars</name>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>str</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrString.h" line="50" column="12" bodyfile="src/NostrString.cpp" bodystart="177" bodyend="179" declfile="src/NostrString.h" declline="50" declcolumn="12"/>
+      </memberdef>
+      <memberdef kind="function" id="NostrString_8h_1af842440c472941f7df78b8a4cb4b0934" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string NostrString_base64ToHex</definition>
+        <argsstring>(const std::string &amp;b64)</argsstring>
+        <name>NostrString_base64ToHex</name>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>b64</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrString.h" line="52" column="13" bodyfile="src/NostrString.cpp" bodystart="181" bodyend="183" declfile="src/NostrString.h" declline="52" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="NostrString_8h_1a0f947772a27c7fd986f84246f4a75aaf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string NostrString_trim</definition>
+        <argsstring>(const std::string &amp;s)</argsstring>
+        <name>NostrString_trim</name>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrString.h" line="53" column="13" bodyfile="src/NostrString.cpp" bodystart="185" bodyend="189" declfile="src/NostrString.h" declline="53" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="NostrString_8h_1a12050bc97503b20861e8c5cf4123a522" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void NostrString_split</definition>
+        <argsstring>(const std::string &amp;str, const char separator, std::vector&lt; std::string &gt; &amp;result)</argsstring>
+        <name>NostrString_split</name>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>const char</type>
+          <declname>separator</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; std::string &gt; &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrString.h" line="54" column="6" bodyfile="src/NostrString.cpp" bodystart="191" bodyend="197" declfile="src/NostrString.h" declline="54" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="NostrString_8h_1ac841dbf95c50a467a5eb703929f44c3d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string NostrString_urlDecode</definition>
+        <argsstring>(const std::string &amp;encoded)</argsstring>
+        <name>NostrString_urlDecode</name>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>encoded</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrString.h" line="55" column="13" bodyfile="src/NostrString.cpp" bodystart="199" bodyend="215" declfile="src/NostrString.h" declline="55" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="NostrString_8h_1a85ae5d4bec40327bb0516a4fe73157d3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool NostrString_equals</definition>
+        <argsstring>(const std::string &amp;str1, const std::string &amp;str2)</argsstring>
+        <name>NostrString_equals</name>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>str1</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>str2</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrString.h" line="57" column="6" bodyfile="src/NostrString.cpp" bodystart="170" bodyend="175" declfile="src/NostrString.h" declline="57" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="NostrString_8h_1accc0ef4e3f552087b0258bb29b32ec7c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string NostrString_fromUInt</definition>
+        <argsstring>(unsigned long long i)</argsstring>
+        <name>NostrString_fromUInt</name>
+        <param>
+          <type>unsigned long long</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrString.h" line="58" column="13" bodyfile="src/NostrString.cpp" bodystart="216" bodyend="218" declfile="src/NostrString.h" declline="58" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="NostrString_8h_1a60ee1251d0db15fb2f301a182aa9f6b1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string NostrString_urlEncode</definition>
+        <argsstring>(const std::string &amp;str)</argsstring>
+        <name>NostrString_urlEncode</name>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>str</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrString.h" line="59" column="13" bodyfile="src/NostrString.cpp" bodystart="219" bodyend="231" declfile="src/NostrString.h" declline="59" declcolumn="13"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>_NOSTR_STRING_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>_NOSTR_STRING_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;string&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;vector&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>ARDUINO</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;Arduino.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;Bitcoin.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NostrString<sp/>String</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="NostrString_8h_1a3601961133b29733de310240c5054e23" kindref="member">NostrString_toInt</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;str);</highlight></codeline>
+<codeline lineno="11"><highlight class="normal">String<sp/><ref refid="NostrString_8h_1aabf2c99bb9529aee18b26f94a87170ad" kindref="member">NostrString_fromChars</ref>(</highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*chars);</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="NostrString_8h_1a5037c7ee5549e19e5995aaa5c2af139e" kindref="member">NostrString_startsWith</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;str,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*prefix);</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal">String<sp/><ref refid="NostrString_8h_1a81ec406c3051526110d2ebc3b158a15e" kindref="member">NostrString_substring</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;str,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>start,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>end);</highlight></codeline>
+<codeline lineno="15"><highlight class="normal">String<sp/><ref refid="NostrString_8h_1a81ec406c3051526110d2ebc3b158a15e" kindref="member">NostrString_substring</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;str,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>start);</highlight></codeline>
+<codeline lineno="16"><highlight class="normal">String<sp/><ref refid="NostrString_8h_1a6d17546b312f1d7b2488ad6c81f63e6e" kindref="member">NostrString_intToString</ref>(</highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i);</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="NostrString_8h_1a407e73ae21365c45a6218a0931acc352" kindref="member">NostrString_indexOf</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;str1,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*str2);</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="NostrString_8h_1a528c8b1a69be70e58f1aa9288f79ff45" kindref="member">NostrString_hexToBytes</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;hex,<sp/>uint8_t<sp/>*array,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>arraySize);</highlight></codeline>
+<codeline lineno="19"><highlight class="normal">String<sp/><ref refid="NostrString_8h_1a6131d0cf238d6082199c6757bf76790b" kindref="member">NostrString_bytesToHex</ref>(uint8_t<sp/>*array,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>arraySize);</highlight></codeline>
+<codeline lineno="20"><highlight class="normal">String<sp/><ref refid="NostrString_8h_1ac841dbf95c50a467a5eb703929f44c3d" kindref="member">NostrString_urlDecode</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;encoded);</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="NostrString_8h_1a28295d150d85f3d9c4392381331d4870" kindref="member">NostrString_length</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;str);</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="NostrString_8h_1a85ae5d4bec40327bb0516a4fe73157d3" kindref="member">NostrString_equals</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;str1,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;str2);</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*<ref refid="NostrString_8h_1a8abe35d695b42e5d20ff27b74695a9ad" kindref="member">NostrString_toChars</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;str);</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal">String<sp/><ref refid="NostrString_8h_1af842440c472941f7df78b8a4cb4b0934" kindref="member">NostrString_base64ToHex</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;b64);</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal">String<sp/><ref refid="NostrString_8h_1a0f947772a27c7fd986f84246f4a75aaf" kindref="member">NostrString_trim</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;s);</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="NostrString_8h_1a12050bc97503b20861e8c5cf4123a522" kindref="member">NostrString_split</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;str,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>separator,<sp/>std::vector&lt;String&gt;<sp/>&amp;result);</highlight></codeline>
+<codeline lineno="30"><highlight class="normal">String<sp/><ref refid="NostrString_8h_1accc0ef4e3f552087b0258bb29b32ec7c" kindref="member">NostrString_fromUInt</ref>(</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>i);</highlight></codeline>
+<codeline lineno="31"><highlight class="normal">String<sp/><ref refid="NostrString_8h_1a60ee1251d0db15fb2f301a182aa9f6b1" kindref="member">NostrString_urlEncode</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;str);</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33" refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" refkind="member"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NostrString<sp/>std::string</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="NostrString_8h_1a3601961133b29733de310240c5054e23" kindref="member">NostrString_toInt</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;str);</highlight></codeline>
+<codeline lineno="35"><highlight class="normal">std::string<sp/><ref refid="NostrString_8h_1aabf2c99bb9529aee18b26f94a87170ad" kindref="member">NostrString_fromChars</ref>(</highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*chars);</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="NostrString_8h_1a5037c7ee5549e19e5995aaa5c2af139e" kindref="member">NostrString_startsWith</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;str,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*prefix);</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal">std::string<sp/><ref refid="NostrString_8h_1a81ec406c3051526110d2ebc3b158a15e" kindref="member">NostrString_substring</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;str,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>start,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>end);</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal">std::string<sp/><ref refid="NostrString_8h_1a81ec406c3051526110d2ebc3b158a15e" kindref="member">NostrString_substring</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;str,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>start);</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal">std::string<sp/><ref refid="NostrString_8h_1a6d17546b312f1d7b2488ad6c81f63e6e" kindref="member">NostrString_intToString</ref>(</highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i);</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="NostrString_8h_1a407e73ae21365c45a6218a0931acc352" kindref="member">NostrString_indexOf</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;str1,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*str2);</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="NostrString_8h_1a528c8b1a69be70e58f1aa9288f79ff45" kindref="member">NostrString_hexToBytes</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;hex,<sp/>uint8_t<sp/>*array,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>arraySize);</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal">std::string<sp/><ref refid="NostrString_8h_1a6131d0cf238d6082199c6757bf76790b" kindref="member">NostrString_bytesToHex</ref>(uint8_t<sp/>*array,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>arraySize);</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="NostrString_8h_1a28295d150d85f3d9c4392381331d4870" kindref="member">NostrString_length</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;str);</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*<ref refid="NostrString_8h_1a8abe35d695b42e5d20ff27b74695a9ad" kindref="member">NostrString_toChars</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;str);</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal">std::string<sp/><ref refid="NostrString_8h_1af842440c472941f7df78b8a4cb4b0934" kindref="member">NostrString_base64ToHex</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;b64);</highlight></codeline>
+<codeline lineno="53"><highlight class="normal">std::string<sp/><ref refid="NostrString_8h_1a0f947772a27c7fd986f84246f4a75aaf" kindref="member">NostrString_trim</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;s);</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="NostrString_8h_1a12050bc97503b20861e8c5cf4123a522" kindref="member">NostrString_split</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;str,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>separator,<sp/>std::vector&lt;std::string&gt;<sp/>&amp;result);</highlight></codeline>
+<codeline lineno="55"><highlight class="normal">std::string<sp/><ref refid="NostrString_8h_1ac841dbf95c50a467a5eb703929f44c3d" kindref="member">NostrString_urlDecode</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;encoded);</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="NostrString_8h_1a85ae5d4bec40327bb0516a4fe73157d3" kindref="member">NostrString_equals</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;str1,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;str2);</highlight></codeline>
+<codeline lineno="58"><highlight class="normal">std::string<sp/><ref refid="NostrString_8h_1accc0ef4e3f552087b0258bb29b32ec7c" kindref="member">NostrString_fromUInt</ref>(</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>i);</highlight></codeline>
+<codeline lineno="59"><highlight class="normal">std::string<sp/><ref refid="NostrString_8h_1a60ee1251d0db15fb2f301a182aa9f6b1" kindref="member">NostrString_urlEncode</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::string<sp/>&amp;str);</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="src/NostrString.h"/>
+  </compounddef>
+</doxygen>

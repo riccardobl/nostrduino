@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="dir_d35e8d9c847c512a0480f8070ffef7ed" kind="dir">
+    <compoundname>src/esp32</compoundname>
+    <innerfile refid="ESP32Platform_8h">ESP32Platform.h</innerfile>
+    <innerfile refid="ESP32Transport_8cpp">ESP32Transport.cpp</innerfile>
+    <innerfile refid="ESP32Transport_8h">ESP32Transport.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/esp32/"/>
+  </compounddef>
+</doxygen>

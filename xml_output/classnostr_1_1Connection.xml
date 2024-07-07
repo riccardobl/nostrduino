@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="classnostr_1_1Connection" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>nostr::Connection</compoundname>
+    <derivedcompoundref refid="classnostr_1_1esp32_1_1ESP32Connection" prot="public" virt="non-virtual">nostr::esp32::ESP32Connection</derivedcompoundref>
+    <includes refid="Transport_8h" local="no">Transport.h</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classnostr_1_1Connection_1a09f2f3d42f8b4143dc616207afa7cab3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>virtual void nostr::Connection::addMessageListener</definition>
+        <argsstring>(std::function&lt; void(NostrString)&gt; listener)</argsstring>
+        <name>addMessageListener</name>
+        <reimplementedby refid="classnostr_1_1esp32_1_1ESP32Connection_1a70bfc236b0189524d7d5965cba18cfc1">addMessageListener</reimplementedby>
+        <param>
+          <type>std::function&lt; void(<ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>)&gt;</type>
+          <declname>listener</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Transport.h" line="9" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Connection_1ac5de060192a611ec634b1123c6ce7787" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void nostr::Connection::send</definition>
+        <argsstring>(NostrString message)=0</argsstring>
+        <name>send</name>
+        <reimplementedby refid="classnostr_1_1esp32_1_1ESP32Connection_1a57eb5e58ef7218c13b79f08b6bb87a86">send</reimplementedby>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>message</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Transport.h" line="10" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Connection_1a0de18a7197c81db8ac43036f6dcfc4ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void nostr::Connection::disconnect</definition>
+        <argsstring>()=0</argsstring>
+        <name>disconnect</name>
+        <reimplementedby refid="classnostr_1_1esp32_1_1ESP32Connection_1a8a21ab9c9baabe361305c97f5d7b7253">disconnect</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Transport.h" line="11" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Connection_1a8b3ae539c84b9de24c5db2071885b2c9" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual nostr::Connection::~Connection</definition>
+        <argsstring>()=default</argsstring>
+        <name>~Connection</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Transport.h" line="12" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Connection_1aee2be02ce75a3bb2a15306212e77b382" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void nostr::Connection::loop</definition>
+        <argsstring>()=0</argsstring>
+        <name>loop</name>
+        <reimplementedby refid="classnostr_1_1esp32_1_1ESP32Connection_1ac0bcd94ae63bdb92da45f8fee3b55ac2">loop</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Transport.h" line="13" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Connection_1af780de347728124fc0664614f100c604" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>bool</type>
+        <definition>virtual bool nostr::Connection::isReady</definition>
+        <argsstring>()=0</argsstring>
+        <name>isReady</name>
+        <reimplementedby refid="classnostr_1_1esp32_1_1ESP32Connection_1a69db2e6817533bffc6879915b6d8c87e">isReady</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Transport.h" line="14" column="18"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>nostr::Connection</label>
+        <link refid="classnostr_1_1Connection"/>
+      </node>
+      <node id="2">
+        <label>nostr::esp32::ESP32Connection</label>
+        <link refid="classnostr_1_1esp32_1_1ESP32Connection"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="src/Transport.h" line="7" column="1" bodyfile="src/Transport.h" bodystart="7" bodyend="15"/>
+    <listofallmembers>
+      <member refid="classnostr_1_1Connection_1a09f2f3d42f8b4143dc616207afa7cab3" prot="public" virt="virtual"><scope>nostr::Connection</scope><name>addMessageListener</name></member>
+      <member refid="classnostr_1_1Connection_1a0de18a7197c81db8ac43036f6dcfc4ff" prot="public" virt="pure-virtual"><scope>nostr::Connection</scope><name>disconnect</name></member>
+      <member refid="classnostr_1_1Connection_1af780de347728124fc0664614f100c604" prot="public" virt="pure-virtual"><scope>nostr::Connection</scope><name>isReady</name></member>
+      <member refid="classnostr_1_1Connection_1aee2be02ce75a3bb2a15306212e77b382" prot="public" virt="pure-virtual"><scope>nostr::Connection</scope><name>loop</name></member>
+      <member refid="classnostr_1_1Connection_1ac5de060192a611ec634b1123c6ce7787" prot="public" virt="pure-virtual"><scope>nostr::Connection</scope><name>send</name></member>
+      <member refid="classnostr_1_1Connection_1a8b3ae539c84b9de24c5db2071885b2c9" prot="public" virt="virtual"><scope>nostr::Connection</scope><name>~Connection</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

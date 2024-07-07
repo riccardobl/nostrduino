@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="classnostr_1_1NostrRelay" kind="class" language="C++" prot="public">
+    <compoundname>nostr::NostrRelay</compoundname>
+    <includes refid="NostrPool_8h" local="no">NostrPool.h</includes>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="classnostr_1_1NostrRelay_1a3956946748e4bf9d207bf29ccde7b3b2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class NostrPool</definition>
+        <argsstring></argsstring>
+        <name>NostrPool</name>
+        <param>
+          <type><ref refid="classnostr_1_1NostrPool" kindref="compound">NostrPool</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="44" column="9" bodyfile="src/NostrPool.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="classnostr_1_1NostrRelay_1a0c9e582eb5dc99a49ae4bf496052f89c" prot="protected" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref> &gt;</type>
+        <definition>std::vector&lt;NostrString&gt; nostr::NostrRelay::messageQueue</definition>
+        <argsstring></argsstring>
+        <name>messageQueue</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="54" column="21" bodyfile="src/NostrPool.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classnostr_1_1NostrRelay_1ae456a4d62f0ede9c1dc6fc6e65f97679" prot="protected" static="no" mutable="no">
+        <type><ref refid="classnostr_1_1Connection" kindref="compound">Connection</ref> *</type>
+        <definition>Connection* nostr::NostrRelay::conn</definition>
+        <argsstring></argsstring>
+        <name>conn</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="55" column="20" bodyfile="src/NostrPool.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classnostr_1_1NostrRelay_1a36f2d542488906bf120ad44190c9c0d4" prot="protected" static="no" mutable="no">
+        <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+        <definition>NostrString nostr::NostrRelay::url</definition>
+        <argsstring></argsstring>
+        <name>url</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="56" column="21" bodyfile="src/NostrPool.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classnostr_1_1NostrRelay_1aa52e9aac579b822a255080cbc12e6367" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void NostrRelay::send</definition>
+        <argsstring>(NostrString message)</argsstring>
+        <name>send</name>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>message</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Send a message to the relay </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="50" column="14" bodyfile="src/NostrPool.cpp" bodystart="5" bodyend="7"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1NostrRelay_1af668c3c57d9e84b398aac9ea481114e6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>nostr::NostrRelay::NostrRelay</definition>
+        <argsstring>(Connection *conn, NostrString url)</argsstring>
+        <name>NostrRelay</name>
+        <param>
+          <type><ref refid="classnostr_1_1Connection" kindref="compound">Connection</ref> *</type>
+          <declname>conn</declname>
+        </param>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>url</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="51" column="9" bodyfile="src/NostrPool.h" bodystart="51" bodyend="51"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classnostr_1_1NostrRelay_1aa03ceeb2e171b89412fbdab332205c0a" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void NostrRelay::processQueue</definition>
+        <argsstring>()</argsstring>
+        <name>processQueue</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="57" column="14" bodyfile="src/NostrPool.cpp" bodystart="9" bodyend="19"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>nostr::Connection</label>
+        <link refid="classnostr_1_1Connection"/>
+      </node>
+      <node id="1">
+        <label>nostr::NostrRelay</label>
+        <link refid="classnostr_1_1NostrRelay"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>conn</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/NostrPool.h" line="43" column="5" bodyfile="src/NostrPool.h" bodystart="43" bodyend="58"/>
+    <listofallmembers>
+      <member refid="classnostr_1_1NostrRelay_1ae456a4d62f0ede9c1dc6fc6e65f97679" prot="protected" virt="non-virtual"><scope>nostr::NostrRelay</scope><name>conn</name></member>
+      <member refid="classnostr_1_1NostrRelay_1a0c9e582eb5dc99a49ae4bf496052f89c" prot="protected" virt="non-virtual"><scope>nostr::NostrRelay</scope><name>messageQueue</name></member>
+      <member refid="classnostr_1_1NostrRelay_1a3956946748e4bf9d207bf29ccde7b3b2" prot="private" virt="non-virtual"><scope>nostr::NostrRelay</scope><name>NostrPool</name></member>
+      <member refid="classnostr_1_1NostrRelay_1af668c3c57d9e84b398aac9ea481114e6" prot="public" virt="non-virtual"><scope>nostr::NostrRelay</scope><name>NostrRelay</name></member>
+      <member refid="classnostr_1_1NostrRelay_1aa03ceeb2e171b89412fbdab332205c0a" prot="protected" virt="non-virtual"><scope>nostr::NostrRelay</scope><name>processQueue</name></member>
+      <member refid="classnostr_1_1NostrRelay_1aa52e9aac579b822a255080cbc12e6367" prot="public" virt="non-virtual"><scope>nostr::NostrRelay</scope><name>send</name></member>
+      <member refid="classnostr_1_1NostrRelay_1a36f2d542488906bf120ad44190c9c0d4" prot="protected" virt="non-virtual"><scope>nostr::NostrRelay</scope><name>url</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

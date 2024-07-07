@@ -1,0 +1,184 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="structnostr_1_1s__LookUpInvoiceResponse" kind="struct" language="C++" prot="public">
+    <compoundname>nostr::s_LookUpInvoiceResponse</compoundname>
+    <includes refid="Nip47_8h" local="no">Nip47.h</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structnostr_1_1s__LookUpInvoiceResponse_1a2f09c87cb594d572f34c586b2df46cc6" prot="public" static="no" mutable="no">
+        <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+        <definition>NostrString nostr::s_LookUpInvoiceResponse::type</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="70" column="17" bodyfile="src/Nip47.h" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structnostr_1_1s__LookUpInvoiceResponse_1afdb026a867244c8242f76a77634e68d8" prot="public" static="no" mutable="no">
+        <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+        <definition>NostrString nostr::s_LookUpInvoiceResponse::invoice</definition>
+        <argsstring></argsstring>
+        <name>invoice</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="71" column="17" bodyfile="src/Nip47.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structnostr_1_1s__LookUpInvoiceResponse_1a4718ebc0fa29823f23eec1d8ee258e31" prot="public" static="no" mutable="no">
+        <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+        <definition>NostrString nostr::s_LookUpInvoiceResponse::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="72" column="17" bodyfile="src/Nip47.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structnostr_1_1s__LookUpInvoiceResponse_1aa14473941cfc6ebeb53581d595cfd077" prot="public" static="no" mutable="no">
+        <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+        <definition>NostrString nostr::s_LookUpInvoiceResponse::descriptionHash</definition>
+        <argsstring></argsstring>
+        <name>descriptionHash</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="73" column="17" bodyfile="src/Nip47.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structnostr_1_1s__LookUpInvoiceResponse_1aa2e248d0bf689bd66fec41e665518356" prot="public" static="no" mutable="no">
+        <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+        <definition>NostrString nostr::s_LookUpInvoiceResponse::preimage</definition>
+        <argsstring></argsstring>
+        <name>preimage</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="74" column="17" bodyfile="src/Nip47.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structnostr_1_1s__LookUpInvoiceResponse_1a22f4d51e2a556934ae3172c333fbfa29" prot="public" static="no" mutable="no">
+        <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+        <definition>NostrString nostr::s_LookUpInvoiceResponse::paymentHash</definition>
+        <argsstring></argsstring>
+        <name>paymentHash</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="75" column="17" bodyfile="src/Nip47.h" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structnostr_1_1s__LookUpInvoiceResponse_1aadf7a1605324725038c6d2bfd7db6959" prot="public" static="no" mutable="no">
+        <type>unsigned long long</type>
+        <definition>unsigned long long nostr::s_LookUpInvoiceResponse::amount</definition>
+        <argsstring></argsstring>
+        <name>amount</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="76" column="24" bodyfile="src/Nip47.h" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structnostr_1_1s__LookUpInvoiceResponse_1acb4d6268a52b5d8262688156fd7c6232" prot="public" static="no" mutable="no">
+        <type>unsigned long long</type>
+        <definition>unsigned long long nostr::s_LookUpInvoiceResponse::feesPaid</definition>
+        <argsstring></argsstring>
+        <name>feesPaid</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="77" column="24" bodyfile="src/Nip47.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structnostr_1_1s__LookUpInvoiceResponse_1a1d9c0ef9a426afa1c861118d65851d3d" prot="public" static="no" mutable="no">
+        <type>unsigned long long</type>
+        <definition>unsigned long long nostr::s_LookUpInvoiceResponse::createdAt</definition>
+        <argsstring></argsstring>
+        <name>createdAt</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="78" column="24" bodyfile="src/Nip47.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structnostr_1_1s__LookUpInvoiceResponse_1a765e80a64313dee017711bfbb680a45b" prot="public" static="no" mutable="no">
+        <type>unsigned long long</type>
+        <definition>unsigned long long nostr::s_LookUpInvoiceResponse::expiresAt</definition>
+        <argsstring></argsstring>
+        <name>expiresAt</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="79" column="24" bodyfile="src/Nip47.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structnostr_1_1s__LookUpInvoiceResponse_1a1db3d3727b086a8a531177747fd55bc8" prot="public" static="no" mutable="no">
+        <type>unsigned long long</type>
+        <definition>unsigned long long nostr::s_LookUpInvoiceResponse::settledAt</definition>
+        <argsstring></argsstring>
+        <name>settledAt</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="80" column="24" bodyfile="src/Nip47.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structnostr_1_1s__LookUpInvoiceResponse_1ac8cf33fd35ffefc4be14e44d18eef87e" prot="public" static="no" mutable="no">
+        <type>JsonObject</type>
+        <definition>JsonObject nostr::s_LookUpInvoiceResponse::metadata</definition>
+        <argsstring></argsstring>
+        <name>metadata</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="82" column="16" bodyfile="src/Nip47.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/Nip47.h" line="69" column="1" bodyfile="src/Nip47.h" bodystart="69" bodyend="83"/>
+    <listofallmembers>
+      <member refid="structnostr_1_1s__LookUpInvoiceResponse_1aadf7a1605324725038c6d2bfd7db6959" prot="public" virt="non-virtual"><scope>nostr::s_LookUpInvoiceResponse</scope><name>amount</name></member>
+      <member refid="structnostr_1_1s__LookUpInvoiceResponse_1a1d9c0ef9a426afa1c861118d65851d3d" prot="public" virt="non-virtual"><scope>nostr::s_LookUpInvoiceResponse</scope><name>createdAt</name></member>
+      <member refid="structnostr_1_1s__LookUpInvoiceResponse_1a4718ebc0fa29823f23eec1d8ee258e31" prot="public" virt="non-virtual"><scope>nostr::s_LookUpInvoiceResponse</scope><name>description</name></member>
+      <member refid="structnostr_1_1s__LookUpInvoiceResponse_1aa14473941cfc6ebeb53581d595cfd077" prot="public" virt="non-virtual"><scope>nostr::s_LookUpInvoiceResponse</scope><name>descriptionHash</name></member>
+      <member refid="structnostr_1_1s__LookUpInvoiceResponse_1a765e80a64313dee017711bfbb680a45b" prot="public" virt="non-virtual"><scope>nostr::s_LookUpInvoiceResponse</scope><name>expiresAt</name></member>
+      <member refid="structnostr_1_1s__LookUpInvoiceResponse_1acb4d6268a52b5d8262688156fd7c6232" prot="public" virt="non-virtual"><scope>nostr::s_LookUpInvoiceResponse</scope><name>feesPaid</name></member>
+      <member refid="structnostr_1_1s__LookUpInvoiceResponse_1afdb026a867244c8242f76a77634e68d8" prot="public" virt="non-virtual"><scope>nostr::s_LookUpInvoiceResponse</scope><name>invoice</name></member>
+      <member refid="structnostr_1_1s__LookUpInvoiceResponse_1ac8cf33fd35ffefc4be14e44d18eef87e" prot="public" virt="non-virtual"><scope>nostr::s_LookUpInvoiceResponse</scope><name>metadata</name></member>
+      <member refid="structnostr_1_1s__LookUpInvoiceResponse_1a22f4d51e2a556934ae3172c333fbfa29" prot="public" virt="non-virtual"><scope>nostr::s_LookUpInvoiceResponse</scope><name>paymentHash</name></member>
+      <member refid="structnostr_1_1s__LookUpInvoiceResponse_1aa2e248d0bf689bd66fec41e665518356" prot="public" virt="non-virtual"><scope>nostr::s_LookUpInvoiceResponse</scope><name>preimage</name></member>
+      <member refid="structnostr_1_1s__LookUpInvoiceResponse_1a1db3d3727b086a8a531177747fd55bc8" prot="public" virt="non-virtual"><scope>nostr::s_LookUpInvoiceResponse</scope><name>settledAt</name></member>
+      <member refid="structnostr_1_1s__LookUpInvoiceResponse_1a2f09c87cb594d572f34c586b2df46cc6" prot="public" virt="non-virtual"><scope>nostr::s_LookUpInvoiceResponse</scope><name>type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

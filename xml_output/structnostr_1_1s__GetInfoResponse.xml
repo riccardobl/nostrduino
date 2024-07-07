@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="structnostr_1_1s__GetInfoResponse" kind="struct" language="C++" prot="public">
+    <compoundname>nostr::s_GetInfoResponse</compoundname>
+    <includes refid="Nip47_8h" local="no">Nip47.h</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structnostr_1_1s__GetInfoResponse_1a754539daf350acbc6a2dd836f398330a" prot="public" static="no" mutable="no">
+        <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+        <definition>NostrString nostr::s_GetInfoResponse::alias</definition>
+        <argsstring></argsstring>
+        <name>alias</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="111" column="17" bodyfile="src/Nip47.h" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structnostr_1_1s__GetInfoResponse_1a8953b5c92c1a5691dbad1cc3c9619734" prot="public" static="no" mutable="no">
+        <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+        <definition>NostrString nostr::s_GetInfoResponse::color</definition>
+        <argsstring></argsstring>
+        <name>color</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="112" column="17" bodyfile="src/Nip47.h" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structnostr_1_1s__GetInfoResponse_1a7fa2f8a9c91f209567ffe1d7549ac16b" prot="public" static="no" mutable="no">
+        <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+        <definition>NostrString nostr::s_GetInfoResponse::pubkey</definition>
+        <argsstring></argsstring>
+        <name>pubkey</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="113" column="17" bodyfile="src/Nip47.h" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structnostr_1_1s__GetInfoResponse_1ab731456e15cf89796232608fd69d81ec" prot="public" static="no" mutable="no">
+        <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+        <definition>NostrString nostr::s_GetInfoResponse::network</definition>
+        <argsstring></argsstring>
+        <name>network</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="114" column="17" bodyfile="src/Nip47.h" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structnostr_1_1s__GetInfoResponse_1a67d48a9483d8d5e7a57bce58bdad19d0" prot="public" static="no" mutable="no">
+        <type>unsigned long long</type>
+        <definition>unsigned long long nostr::s_GetInfoResponse::blockHeight</definition>
+        <argsstring></argsstring>
+        <name>blockHeight</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="115" column="24" bodyfile="src/Nip47.h" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structnostr_1_1s__GetInfoResponse_1a2cad02f859361db1c0c96044429a6c7d" prot="public" static="no" mutable="no">
+        <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+        <definition>NostrString nostr::s_GetInfoResponse::blockHash</definition>
+        <argsstring></argsstring>
+        <name>blockHash</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="116" column="17" bodyfile="src/Nip47.h" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structnostr_1_1s__GetInfoResponse_1a8d8341c772deb30a61202afbd19b6e1d" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref> &gt;</type>
+        <definition>std::vector&lt;NostrString&gt; nostr::s_GetInfoResponse::methods</definition>
+        <argsstring></argsstring>
+        <name>methods</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="117" column="17" bodyfile="src/Nip47.h" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/Nip47.h" line="110" column="1" bodyfile="src/Nip47.h" bodystart="110" bodyend="118"/>
+    <listofallmembers>
+      <member refid="structnostr_1_1s__GetInfoResponse_1a754539daf350acbc6a2dd836f398330a" prot="public" virt="non-virtual"><scope>nostr::s_GetInfoResponse</scope><name>alias</name></member>
+      <member refid="structnostr_1_1s__GetInfoResponse_1a2cad02f859361db1c0c96044429a6c7d" prot="public" virt="non-virtual"><scope>nostr::s_GetInfoResponse</scope><name>blockHash</name></member>
+      <member refid="structnostr_1_1s__GetInfoResponse_1a67d48a9483d8d5e7a57bce58bdad19d0" prot="public" virt="non-virtual"><scope>nostr::s_GetInfoResponse</scope><name>blockHeight</name></member>
+      <member refid="structnostr_1_1s__GetInfoResponse_1a8953b5c92c1a5691dbad1cc3c9619734" prot="public" virt="non-virtual"><scope>nostr::s_GetInfoResponse</scope><name>color</name></member>
+      <member refid="structnostr_1_1s__GetInfoResponse_1a8d8341c772deb30a61202afbd19b6e1d" prot="public" virt="non-virtual"><scope>nostr::s_GetInfoResponse</scope><name>methods</name></member>
+      <member refid="structnostr_1_1s__GetInfoResponse_1ab731456e15cf89796232608fd69d81ec" prot="public" virt="non-virtual"><scope>nostr::s_GetInfoResponse</scope><name>network</name></member>
+      <member refid="structnostr_1_1s__GetInfoResponse_1a7fa2f8a9c91f209567ffe1d7549ac16b" prot="public" virt="non-virtual"><scope>nostr::s_GetInfoResponse</scope><name>pubkey</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,332 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="namespacenostr" kind="namespace" language="C++">
+    <compoundname>nostr</compoundname>
+    <innerclass refid="classnostr_1_1Nip04" prot="public">nostr::Nip04</innerclass>
+    <innerclass refid="structnostr_1_1s__Invoice" prot="public">nostr::s_Invoice</innerclass>
+    <innerclass refid="structnostr_1_1s__TLVRecords" prot="public">nostr::s_TLVRecords</innerclass>
+    <innerclass refid="structnostr_1_1s__KeySend" prot="public">nostr::s_KeySend</innerclass>
+    <innerclass refid="classnostr_1_1Nip47Response" prot="public">nostr::Nip47Response</innerclass>
+    <innerclass refid="structnostr_1_1s__PayInvoiceResponse" prot="public">nostr::s_PayInvoiceResponse</innerclass>
+    <innerclass refid="structnostr_1_1s__MultiPayInvoiceResponse" prot="public">nostr::s_MultiPayInvoiceResponse</innerclass>
+    <innerclass refid="structnostr_1_1s__PayKeySendResponse" prot="public">nostr::s_PayKeySendResponse</innerclass>
+    <innerclass refid="structnostr_1_1s__MultiPayKeySendResponse" prot="public">nostr::s_MultiPayKeySendResponse</innerclass>
+    <innerclass refid="structnostr_1_1s__MakeInvoiceResponse" prot="public">nostr::s_MakeInvoiceResponse</innerclass>
+    <innerclass refid="structnostr_1_1s__LookUpInvoiceResponse" prot="public">nostr::s_LookUpInvoiceResponse</innerclass>
+    <innerclass refid="structnostr_1_1s__Transaction" prot="public">nostr::s_Transaction</innerclass>
+    <innerclass refid="structnostr_1_1s__ListTransactionsResponse" prot="public">nostr::s_ListTransactionsResponse</innerclass>
+    <innerclass refid="structnostr_1_1s__GetBalanceResponse" prot="public">nostr::s_GetBalanceResponse</innerclass>
+    <innerclass refid="structnostr_1_1s__GetInfoResponse" prot="public">nostr::s_GetInfoResponse</innerclass>
+    <innerclass refid="structnostr_1_1s__NWCData" prot="public">nostr::s_NWCData</innerclass>
+    <innerclass refid="classnostr_1_1Nip47" prot="public">nostr::Nip47</innerclass>
+    <innerclass refid="structnostr_1_1s__NostrEventTag" prot="public">nostr::s_NostrEventTag</innerclass>
+    <innerclass refid="classnostr_1_1NostrEventTags" prot="public">nostr::NostrEventTags</innerclass>
+    <innerclass refid="classnostr_1_1NostrEvent" prot="public">nostr::NostrEvent</innerclass>
+    <innerclass refid="classnostr_1_1UnsignedNostrEvent" prot="public">nostr::UnsignedNostrEvent</innerclass>
+    <innerclass refid="classnostr_1_1SignedNostrEvent" prot="public">nostr::SignedNostrEvent</innerclass>
+    <innerclass refid="classnostr_1_1NostrSubscription" prot="public">nostr::NostrSubscription</innerclass>
+    <innerclass refid="structnostr_1_1s__EventStatusCallbackEntry" prot="public">nostr::s_EventStatusCallbackEntry</innerclass>
+    <innerclass refid="classnostr_1_1NostrRelay" prot="public">nostr::NostrRelay</innerclass>
+    <innerclass refid="classnostr_1_1NostrPool" prot="public">nostr::NostrPool</innerclass>
+    <innerclass refid="classnostr_1_1NWCResponseCallbackBase" prot="public">nostr::NWCResponseCallbackBase</innerclass>
+    <innerclass refid="classnostr_1_1NWCResponseCallback" prot="public">nostr::NWCResponseCallback</innerclass>
+    <innerclass refid="classnostr_1_1NWC" prot="public">nostr::NWC</innerclass>
+    <innerclass refid="classnostr_1_1Connection" prot="public">nostr::Connection</innerclass>
+    <innerclass refid="classnostr_1_1Transport" prot="public">nostr::Transport</innerclass>
+    <innerclass refid="classnostr_1_1Utils" prot="public">nostr::Utils</innerclass>
+    <innernamespace refid="namespacenostr_1_1esp32">nostr::esp32</innernamespace>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="namespacenostr_1ac0f491ca12edeaa060bf89f8349d1c94" prot="public" static="no">
+        <type>struct <ref refid="structnostr_1_1s__Invoice" kindref="compound">nostr::s_Invoice</ref></type>
+        <definition>typedef struct nostr::s_Invoice nostr::Invoice</definition>
+        <argsstring></argsstring>
+        <name>Invoice</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="13" column="9"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacenostr_1ad0f4687c761ee6988b42826d3ea717f6" prot="public" static="no">
+        <type>struct <ref refid="structnostr_1_1s__TLVRecords" kindref="compound">nostr::s_TLVRecords</ref></type>
+        <definition>typedef struct nostr::s_TLVRecords nostr::TLVRecords</definition>
+        <argsstring></argsstring>
+        <name>TLVRecords</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="17" column="12"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacenostr_1a2f0adf8fb06541c0734900f1f37c6a77" prot="public" static="no">
+        <type>struct <ref refid="structnostr_1_1s__KeySend" kindref="compound">nostr::s_KeySend</ref></type>
+        <definition>typedef struct nostr::s_KeySend nostr::KeySend</definition>
+        <argsstring></argsstring>
+        <name>KeySend</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="23" column="9"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacenostr_1aabe8d230016fd5f70285adbcbe77fe23" prot="public" static="no">
+        <type>struct <ref refid="structnostr_1_1s__PayInvoiceResponse" kindref="compound">nostr::s_PayInvoiceResponse</ref></type>
+        <definition>typedef struct nostr::s_PayInvoiceResponse nostr::PayInvoiceResponse</definition>
+        <argsstring></argsstring>
+        <name>PayInvoiceResponse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="38" column="20"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacenostr_1a0fb78e894360c3b4167124456e18cc1b" prot="public" static="no">
+        <type>struct <ref refid="structnostr_1_1s__MultiPayInvoiceResponse" kindref="compound">nostr::s_MultiPayInvoiceResponse</ref></type>
+        <definition>typedef struct nostr::s_MultiPayInvoiceResponse nostr::MultiPayInvoiceResponse</definition>
+        <argsstring></argsstring>
+        <name>MultiPayInvoiceResponse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="43" column="25"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacenostr_1a70810c5e5dbfe96e16ae12fd2990e6d6" prot="public" static="no">
+        <type>struct <ref refid="structnostr_1_1s__PayKeySendResponse" kindref="compound">nostr::s_PayKeySendResponse</ref></type>
+        <definition>typedef struct nostr::s_PayKeySendResponse nostr::PayKeySendResponse</definition>
+        <argsstring></argsstring>
+        <name>PayKeySendResponse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="47" column="20"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacenostr_1af6e0f43f7f982a4b4fe1a1c097cf9de3" prot="public" static="no">
+        <type>struct <ref refid="structnostr_1_1s__MultiPayKeySendResponse" kindref="compound">nostr::s_MultiPayKeySendResponse</ref></type>
+        <definition>typedef struct nostr::s_MultiPayKeySendResponse nostr::MultiPayKeySendResponse</definition>
+        <argsstring></argsstring>
+        <name>MultiPayKeySendResponse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="53" column="25"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacenostr_1a784f3d1260b727625d00d370c0ac9e9f" prot="public" static="no">
+        <type>struct <ref refid="structnostr_1_1s__MakeInvoiceResponse" kindref="compound">nostr::s_MakeInvoiceResponse</ref></type>
+        <definition>typedef struct nostr::s_MakeInvoiceResponse nostr::MakeInvoiceResponse</definition>
+        <argsstring></argsstring>
+        <name>MakeInvoiceResponse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="67" column="21"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacenostr_1a9357541c46480c78b10dbd47531ce2d7" prot="public" static="no">
+        <type>struct <ref refid="structnostr_1_1s__LookUpInvoiceResponse" kindref="compound">nostr::s_LookUpInvoiceResponse</ref></type>
+        <definition>typedef struct nostr::s_LookUpInvoiceResponse nostr::LookUpInvoiceResponse</definition>
+        <argsstring></argsstring>
+        <name>LookUpInvoiceResponse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="83" column="23"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacenostr_1a324c9ccba9c6ebcc1753c63eaa7dca47" prot="public" static="no">
+        <type>struct <ref refid="structnostr_1_1s__Transaction" kindref="compound">nostr::s_Transaction</ref></type>
+        <definition>typedef struct nostr::s_Transaction nostr::Transaction</definition>
+        <argsstring></argsstring>
+        <name>Transaction</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="100" column="13"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacenostr_1a5fd7239e7510091c73ba2602f4a6bc3d" prot="public" static="no">
+        <type>struct <ref refid="structnostr_1_1s__ListTransactionsResponse" kindref="compound">nostr::s_ListTransactionsResponse</ref></type>
+        <definition>typedef struct nostr::s_ListTransactionsResponse nostr::ListTransactionsResponse</definition>
+        <argsstring></argsstring>
+        <name>ListTransactionsResponse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="104" column="26"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacenostr_1a42570ba6e2e70160a34b1746331f5bff" prot="public" static="no">
+        <type>struct <ref refid="structnostr_1_1s__GetBalanceResponse" kindref="compound">nostr::s_GetBalanceResponse</ref></type>
+        <definition>typedef struct nostr::s_GetBalanceResponse nostr::GetBalanceResponse</definition>
+        <argsstring></argsstring>
+        <name>GetBalanceResponse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="108" column="20"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacenostr_1af3dc0dbf7fa69605d5ad971a37c5fe7f" prot="public" static="no">
+        <type>struct <ref refid="structnostr_1_1s__GetInfoResponse" kindref="compound">nostr::s_GetInfoResponse</ref></type>
+        <definition>typedef struct nostr::s_GetInfoResponse nostr::GetInfoResponse</definition>
+        <argsstring></argsstring>
+        <name>GetInfoResponse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="118" column="17"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacenostr_1acd41d0899a1d0f921c44a1a91b6c0eed" prot="public" static="no">
+        <type>struct <ref refid="structnostr_1_1s__NWCData" kindref="compound">nostr::s_NWCData</ref></type>
+        <definition>typedef struct nostr::s_NWCData nostr::NWCData</definition>
+        <argsstring></argsstring>
+        <name>NWCData</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="124" column="9"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacenostr_1abfa31b2fae2c95fff12c3826848d2629" prot="public" static="no">
+        <type>std::function&lt; void(const String &amp;)&gt;</type>
+        <definition>using nostr::EventSubmissionFailureCallback = typedef std::function&lt;void(const String &amp;)&gt;</definition>
+        <argsstring></argsstring>
+        <name>EventSubmissionFailureCallback</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrEvent.h" line="22" column="1" bodyfile="src/NostrEvent.h" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacenostr_1ab1b5a1ecddfc940a74946e6dd11d8c53" prot="public" static="no">
+        <type>struct <ref refid="structnostr_1_1s__NostrEventTag" kindref="compound">nostr::s_NostrEventTag</ref></type>
+        <definition>typedef struct nostr::s_NostrEventTag nostr::NostrEventTag</definition>
+        <argsstring></argsstring>
+        <name>NostrEventTag</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrEvent.h" line="29" column="15"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacenostr_1a6247e694a00e0a5cb14ddf0929408fb5" prot="public" static="no">
+        <type>std::function&lt; void(const <ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref> &amp;, const <ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref> &amp;)&gt;</type>
+        <definition>using nostr::NostrCloseCallback = typedef std::function&lt;void(const NostrString &amp;, const NostrString &amp;)&gt;</definition>
+        <argsstring></argsstring>
+        <name>NostrCloseCallback</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="19" column="5" bodyfile="src/NostrPool.h" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacenostr_1aa33fbe158a46ab4fc7d840c432df7227" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="classnostr_1_1NostrRelay" kindref="compound">NostrRelay</ref> *, const <ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref> &amp;)&gt;</type>
+        <definition>using nostr::NostrNoticeCallback = typedef std::function&lt;void(NostrRelay *, const NostrString &amp;)&gt;</definition>
+        <argsstring></argsstring>
+        <name>NostrNoticeCallback</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="21" column="5" bodyfile="src/NostrPool.h" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacenostr_1a7a3b6e8f71428b2bf4195b93d35756ed" prot="public" static="no">
+        <type>std::function&lt; void(const <ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref> &amp;)&gt;</type>
+        <definition>using nostr::NostrEOSECallback = typedef std::function&lt;void(const NostrString &amp;)&gt;</definition>
+        <argsstring></argsstring>
+        <name>NostrEOSECallback</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="23" column="5" bodyfile="src/NostrPool.h" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacenostr_1ab0da4b375d4d7eda0bb0bf1010f381bc" prot="public" static="no">
+        <type>std::function&lt; void(const <ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref> &amp;, <ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref> *event)&gt;</type>
+        <definition>using nostr::NostrEventCallback = typedef std::function&lt;void(const NostrString &amp;, SignedNostrEvent *event)&gt;</definition>
+        <argsstring></argsstring>
+        <name>NostrEventCallback</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="24" column="5" bodyfile="src/NostrPool.h" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacenostr_1a83396304773c199d3c6613e50113ac71" prot="public" static="no">
+        <type>std::function&lt; void(const <ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref> &amp;, bool, const <ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref> &amp;)&gt;</type>
+        <definition>using nostr::NostrEventStatusCallback = typedef std::function&lt;void(const NostrString &amp;, bool, const NostrString&amp; )&gt;</definition>
+        <argsstring></argsstring>
+        <name>NostrEventStatusCallback</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="26" column="5" bodyfile="src/NostrPool.h" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="namespacenostr_1a1039ef652375f3083d4a016df66a906c" prot="public" static="no">
+        <type>struct <ref refid="structnostr_1_1s__EventStatusCallbackEntry" kindref="compound">nostr::s_EventStatusCallbackEntry</ref></type>
+        <definition>typedef struct nostr::s_EventStatusCallbackEntry nostr::EventStatusCallbackEntry</definition>
+        <argsstring></argsstring>
+        <name>EventStatusCallbackEntry</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="41" column="30"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/esp32/ESP32Platform.h" line="10" column="1"/>
+  </compounddef>
+</doxygen>

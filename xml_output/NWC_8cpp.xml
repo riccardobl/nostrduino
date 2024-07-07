@@ -1,0 +1,415 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="NWC_8cpp" kind="file" language="C++">
+    <compoundname>NWC.cpp</compoundname>
+    <includes refid="NWC_8h" local="yes">NWC.h</includes>
+    <includes refid="Nip47_8h" local="yes">Nip47.h</includes>
+    <incdepgraph>
+      <node id="3">
+        <label>functional</label>
+      </node>
+      <node id="6">
+        <label>Nip47.h</label>
+        <link refid="Nip47_8h"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>aes.h</label>
+        <link refid="aes_8h"/>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>base64.h</label>
+      </node>
+      <node id="13">
+        <label>NostrString.h</label>
+        <link refid="NostrString_8h"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>stdint.h</label>
+      </node>
+      <node id="16">
+        <label>stdlib.h</label>
+      </node>
+      <node id="14">
+        <label>string</label>
+      </node>
+      <node id="21">
+        <label>map</label>
+      </node>
+      <node id="18">
+        <label>NostrEvent.h</label>
+        <link refid="NostrEvent_8h"/>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>stddef.h</label>
+      </node>
+      <node id="12">
+        <label>Hash.h</label>
+      </node>
+      <node id="1">
+        <label>src/services/NWC.cpp</label>
+        <link refid="NWC_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>vector</label>
+      </node>
+      <node id="7">
+        <label>Nip04.h</label>
+        <link refid="Nip04_8h"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>ArduinoJson.h</label>
+      </node>
+      <node id="2">
+        <label>NWC.h</label>
+        <link refid="NWC_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>Utils.h</label>
+        <link refid="Utils_8h"/>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>NostrPool.h</label>
+        <link refid="NostrPool_8h"/>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>iostream</label>
+      </node>
+      <node id="4">
+        <label>memory</label>
+      </node>
+      <node id="17">
+        <label>Bitcoin.h</label>
+      </node>
+      <node id="23">
+        <label>Transport.h</label>
+        <link refid="Transport_8h"/>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;<ref refid="NWC_8h" kindref="compound">NWC.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="Nip47_8h" kindref="compound">Nip47.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacenostr" kindref="compound">nostr</ref>;</highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"><ref refid="classnostr_1_1NWC_1aa776fd16b22ee081a1ba837f7498edd2" kindref="member">NWC::~NWC</ref>()<sp/>{</highlight></codeline>
+<codeline lineno="7"><highlight class="normal"><sp/><sp/><sp/><sp/>this-&gt;<ref refid="classnostr_1_1NWC_1aa549023b05bdf32ecb43bf6587db9428" kindref="member">close</ref>();</highlight></codeline>
+<codeline lineno="8"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"><ref refid="classnostr_1_1NWC_1a7ce0d1f12d37b1f1217fd16240137e3b" kindref="member">NWC::NWC</ref>(<ref refid="classnostr_1_1Transport" kindref="compound">Transport</ref><sp/>*transport,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>nwcUrl)<sp/>{</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"><sp/><sp/><sp/><sp/>this-&gt;pool<sp/>=<sp/>std::unique_ptr&lt;NostrPool&gt;(</highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NostrPool" kindref="compound">NostrPool</ref>(transport));</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1Nip47_1a47754ec23d3b156bcb94b132612d0147" kindref="member">Nip47::parseNWC</ref>(nwcUrl,<sp/>this-&gt;nwc);</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1Utils_1a8d9559590001eff8072c190915a53771" kindref="member">Utils::log</ref>(</highlight><highlight class="stringliteral">&quot;NWC<sp/>RELAY:<sp/>&quot;</highlight><highlight class="normal"><sp/>+<sp/>this-&gt;nwc.<ref refid="structnostr_1_1s__NWCData_1a70082c745e79ea268c3c64c327887460" kindref="member">relay</ref>);</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1Utils_1a8d9559590001eff8072c190915a53771" kindref="member">Utils::log</ref>(</highlight><highlight class="stringliteral">&quot;NWC<sp/>PUBKEY:<sp/>&quot;</highlight><highlight class="normal"><sp/>+<sp/>this-&gt;nwc.<ref refid="structnostr_1_1s__NWCData_1a33f9e8b8f85c7f6e54be23d4fd4a3b36" kindref="member">pubkey</ref>);</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1Utils_1a8d9559590001eff8072c190915a53771" kindref="member">Utils::log</ref>(</highlight><highlight class="stringliteral">&quot;NWC<sp/>PRIVKEY:<sp/>******&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>accountSecret<sp/>=<sp/>this-&gt;nwc.<ref refid="structnostr_1_1s__NWCData_1af3225681a304d0b769be2298817dd4bf" kindref="member">secret</ref>;</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/>this-&gt;nip47<sp/>=<sp/><ref refid="classnostr_1_1Nip47" kindref="compound">Nip47</ref>(<ref refid="classnostr_1_1Nip04" kindref="compound">Nip04</ref>(),<sp/>this-&gt;nwc.<ref refid="structnostr_1_1s__NWCData_1a33f9e8b8f85c7f6e54be23d4fd4a3b36" kindref="member">pubkey</ref>,<sp/>accountSecret);</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/>this-&gt;accountPubKey<sp/>=<sp/><ref refid="classnostr_1_1Utils_1a4dc29d30dfbdb8d035310cad80f42605" kindref="member">Utils::getPublicKey</ref>(accountSecret);</highlight></codeline>
+<codeline lineno="22"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NWC_1aa549023b05bdf32ecb43bf6587db9428" kindref="member">NWC::close</ref>()<sp/>{</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/>this-&gt;pool-&gt;close();</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/>this-&gt;callbacks.clear();</highlight></codeline>
+<codeline lineno="27"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NWC_1a986c7fa8b9480303f19be584b575e611" kindref="member">NWC::loop</ref>()<sp/>{</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/>this-&gt;pool-&gt;loop();</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>maintain<sp/>callbacks</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>it<sp/>=<sp/>this-&gt;callbacks.begin();<sp/>it<sp/>!=<sp/>this-&gt;callbacks.end();)<sp/>{</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(it-&gt;get()-&gt;n<sp/>==<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>subId<sp/>=<sp/>it-&gt;get()-&gt;subId;</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>this-&gt;pool-&gt;closeSubscription(subId);</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>it<sp/>=<sp/>this-&gt;callbacks.erase(it);</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">continue</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="classnostr_1_1Utils_1ac3406b5afa052bec36e3fed2d95e33f8" kindref="member">Utils::unixTimeSeconds</ref>()<sp/>-<sp/>it-&gt;get()-&gt;timestampSeconds<sp/>&gt;<sp/>60<sp/>*<sp/>10)<sp/>{</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>subId<sp/>=<sp/>it-&gt;get()-&gt;subId;</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>this-&gt;pool-&gt;closeSubscription(subId);</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>it-&gt;get()-&gt;onErr(</highlight><highlight class="stringliteral">&quot;OTHER&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;timeout&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>it<sp/>=<sp/>this-&gt;callbacks.erase(it);</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>it++;</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="48"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>NWC::sendEvent(<ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref><sp/>*event)<sp/>{</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>subId<sp/>=<sp/>this-&gt;pool-&gt;subscribeMany(</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{this-&gt;nwc.<ref refid="structnostr_1_1s__NWCData_1a70082c745e79ea268c3c64c327887460" kindref="member">relay</ref>},<sp/>{{{</highlight><highlight class="stringliteral">&quot;kinds&quot;</highlight><highlight class="normal">,<sp/>{</highlight><highlight class="stringliteral">&quot;23195&quot;</highlight><highlight class="normal">}},<sp/>{</highlight><highlight class="stringliteral">&quot;#p&quot;</highlight><highlight class="normal">,<sp/>{this-&gt;accountPubKey}},<sp/>{</highlight><highlight class="stringliteral">&quot;#e&quot;</highlight><highlight class="normal">,<sp/>{</highlight><highlight class="keyword">event</highlight><highlight class="normal">-&gt;getId()}}}},</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[&amp;](</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;subId,<sp/><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">nostr::SignedNostrEvent</ref><sp/>*event)<sp/>{</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>eventRef<sp/>=<sp/></highlight><highlight class="keyword">event</highlight><highlight class="normal">-&gt;getTags()-&gt;getTag(</highlight><highlight class="stringliteral">&quot;e&quot;</highlight><highlight class="normal">)[0];</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>it<sp/>=<sp/>this-&gt;callbacks.begin();<sp/>it<sp/>!=<sp/>this-&gt;callbacks.end();<sp/>it++)<sp/>{</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="NostrString_8cpp_1a85ae5d4bec40327bb0516a4fe73157d3" kindref="member">NostrString_equals</ref>(it-&gt;get()-&gt;eventId,<sp/>eventRef))<sp/>{</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(it-&gt;get()-&gt;n<sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>it-&gt;get()-&gt;call(&amp;this-&gt;nip47,<sp/>event);</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Utils::log(&quot;NWC:<sp/>got<sp/>event<sp/>but<sp/>expired&quot;);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>it-&gt;get()-&gt;n--;</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>},</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[&amp;](</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;subId,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;reason)<sp/>{<sp/><ref refid="classnostr_1_1Utils_1a8d9559590001eff8072c190915a53771" kindref="member">Utils::log</ref>(</highlight><highlight class="stringliteral">&quot;NWC:<sp/>closed<sp/>subscription:<sp/>&quot;</highlight><highlight class="normal"><sp/>+<sp/>reason);<sp/>},<sp/>[&amp;](</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;subId)<sp/>{<sp/><ref refid="classnostr_1_1Utils_1a8d9559590001eff8072c190915a53771" kindref="member">Utils::log</ref>(</highlight><highlight class="stringliteral">&quot;NWC:<sp/>EOS&quot;</highlight><highlight class="normal">);<sp/>});</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/>this-&gt;pool-&gt;publish({this-&gt;nwc.<ref refid="structnostr_1_1s__NWCData_1a70082c745e79ea268c3c64c327887460" kindref="member">relay</ref>},<sp/>event,<sp/>[&amp;](</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>&amp;eventId,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>status,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>&amp;msg)<sp/>{</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!status)<sp/>{</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1Utils_1a8d9559590001eff8072c190915a53771" kindref="member">Utils::log</ref>(</highlight><highlight class="stringliteral">&quot;NWC:<sp/>error<sp/>sending<sp/>event:<sp/>&quot;</highlight><highlight class="normal"><sp/>+<sp/>msg);</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1Utils_1a8d9559590001eff8072c190915a53771" kindref="member">Utils::log</ref>(</highlight><highlight class="stringliteral">&quot;NWC:<sp/>event<sp/>sent:<sp/>&quot;</highlight><highlight class="normal"><sp/>+<sp/>eventId);</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/>});</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>subId;</highlight></codeline>
+<codeline lineno="76"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"></highlight></codeline>
+<codeline lineno="78"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NWC_1ad1273a9db63479d103ede6af0657c1c9" kindref="member">NWC::payInvoice</ref>(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>invoice,<sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>amount,<sp/>std::function&lt;</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">(<ref refid="structnostr_1_1s__PayInvoiceResponse" kindref="compound">PayInvoiceResponse</ref>)&gt;<sp/>onRes,<sp/>std::function&lt;</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>)&gt;<sp/>onErr)<sp/>{</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref><sp/>ev<sp/>=<sp/>this-&gt;nip47.<ref refid="classnostr_1_1Nip47_1a4126792accc0be87b3b209918d1f903d" kindref="member">payInvoice</ref>(invoice,<sp/>amount);</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>NWCResponseCallback&lt;PayInvoiceResponse&gt;<sp/>callback;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/>std::unique_ptr&lt;NWCResponseCallback&lt;PayInvoiceResponse&gt;&gt;<sp/>callback(</highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NWCResponseCallback" kindref="compound">NWCResponseCallback&lt;PayInvoiceResponse&gt;</ref>());</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;onRes<sp/>=<sp/>onRes;</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;onErr<sp/>=<sp/>onErr;</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;timestampSeconds<sp/>=<sp/><ref refid="classnostr_1_1Utils_1ac3406b5afa052bec36e3fed2d95e33f8" kindref="member">Utils::unixTimeSeconds</ref>();</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;eventId<sp/>=<sp/>ev.<ref refid="classnostr_1_1SignedNostrEvent_1a960a678a356d36a951f8758a3609725f" kindref="member">getId</ref>();</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;n<sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;subId<sp/>=<sp/>this-&gt;sendEvent(&amp;ev);</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/>this-&gt;callbacks.push_back(std::move(callback));</highlight></codeline>
+<codeline lineno="89"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"></highlight></codeline>
+<codeline lineno="91"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NWC_1aba3161e7f5badbc631e7c861c4557107" kindref="member">NWC::multiPayInvoice</ref>(std::initializer_list&lt;Invoice&gt;<sp/>invoices,<sp/>std::function&lt;</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">(<ref refid="structnostr_1_1s__MultiPayInvoiceResponse" kindref="compound">MultiPayInvoiceResponse</ref>)&gt;<sp/>onRes,<sp/>std::function&lt;</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>)&gt;<sp/>onErr)<sp/>{</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref><sp/>ev<sp/>=<sp/>this-&gt;nip47.<ref refid="classnostr_1_1Nip47_1a6aa7e03b79ab36063c9dbbb95dd5a07c" kindref="member">multiPayInvoice</ref>(invoices);</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/>std::unique_ptr&lt;NWCResponseCallback&lt;MultiPayInvoiceResponse&gt;&gt;<sp/>callback(</highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NWCResponseCallback" kindref="compound">NWCResponseCallback&lt;MultiPayInvoiceResponse&gt;</ref>());</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"></highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;onRes<sp/>=<sp/>onRes;</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;onErr<sp/>=<sp/>onErr;</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;timestampSeconds<sp/>=<sp/><ref refid="classnostr_1_1Utils_1ac3406b5afa052bec36e3fed2d95e33f8" kindref="member">Utils::unixTimeSeconds</ref>();</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;eventId<sp/>=<sp/>ev.<ref refid="classnostr_1_1SignedNostrEvent_1a960a678a356d36a951f8758a3609725f" kindref="member">getId</ref>();</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;n<sp/>=<sp/>invoices.size();</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;subId<sp/>=<sp/>this-&gt;sendEvent(&amp;ev);</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/>this-&gt;callbacks.push_back(std::move(callback));</highlight></codeline>
+<codeline lineno="102"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"></highlight></codeline>
+<codeline lineno="104"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NWC_1a3838a879e0864c482285f4883fea997f" kindref="member">NWC::payKeySend</ref>(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>pubkey,<sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>amount,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>preimage,<sp/>std::initializer_list&lt;TLVRecords&gt;<sp/>tlv,<sp/>std::function&lt;</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">(<ref refid="structnostr_1_1s__PayKeySendResponse" kindref="compound">PayKeySendResponse</ref>)&gt;<sp/>onRes,</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::function&lt;</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>)&gt;<sp/>onErr)<sp/>{</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref><sp/>ev<sp/>=<sp/>this-&gt;nip47.<ref refid="classnostr_1_1Nip47_1af6c9c30bfcf1f9cab0fbac77e67eb9c9" kindref="member">payKeySend</ref>(pubkey,<sp/>amount,<sp/>preimage,<sp/>tlv);</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>NWCResponseCallback&lt;PayKeySendResponse&gt;<sp/>callback;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/>std::unique_ptr&lt;NWCResponseCallback&lt;PayKeySendResponse&gt;&gt;<sp/>callback(</highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NWCResponseCallback" kindref="compound">NWCResponseCallback&lt;PayKeySendResponse&gt;</ref>());</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;onRes<sp/>=<sp/>onRes;</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;onErr<sp/>=<sp/>onErr;</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;timestampSeconds<sp/>=<sp/><ref refid="classnostr_1_1Utils_1ac3406b5afa052bec36e3fed2d95e33f8" kindref="member">Utils::unixTimeSeconds</ref>();</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;eventId<sp/>=<sp/>ev.<ref refid="classnostr_1_1SignedNostrEvent_1a960a678a356d36a951f8758a3609725f" kindref="member">getId</ref>();</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;n<sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;subId<sp/>=<sp/>this-&gt;sendEvent(&amp;ev);</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>this-&gt;callbacks.push_back(callback);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/>this-&gt;callbacks.push_back(std::move(callback));</highlight></codeline>
+<codeline lineno="117"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"></highlight></codeline>
+<codeline lineno="119"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NWC_1a334c69af60cc76d8c32ba4f8fa3d621a" kindref="member">NWC::multiPayKeySend</ref>(std::initializer_list&lt;KeySend&gt;<sp/>keySends,<sp/>std::function&lt;</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">(<ref refid="structnostr_1_1s__MultiPayKeySendResponse" kindref="compound">MultiPayKeySendResponse</ref>)&gt;<sp/>onRes,<sp/>std::function&lt;</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>)&gt;<sp/>onErr)<sp/>{</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref><sp/>ev<sp/>=<sp/>this-&gt;nip47.<ref refid="classnostr_1_1Nip47_1a3b82c08c5d19006e22d7f027829b6002" kindref="member">multiPayKeySend</ref>(keySends);</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>NWCResponseCallback&lt;MultiPayKeySendResponse&gt;<sp/>callback;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/>std::unique_ptr&lt;NWCResponseCallback&lt;MultiPayKeySendResponse&gt;&gt;<sp/>callback(</highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NWCResponseCallback" kindref="compound">NWCResponseCallback&lt;MultiPayKeySendResponse&gt;</ref>());</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;onRes<sp/>=<sp/>onRes;</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;onErr<sp/>=<sp/>onErr;</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;timestampSeconds<sp/>=<sp/><ref refid="classnostr_1_1Utils_1ac3406b5afa052bec36e3fed2d95e33f8" kindref="member">Utils::unixTimeSeconds</ref>();</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;eventId<sp/>=<sp/>ev.<ref refid="classnostr_1_1SignedNostrEvent_1a960a678a356d36a951f8758a3609725f" kindref="member">getId</ref>();</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;n<sp/>=<sp/>keySends.size();</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;subId<sp/>=<sp/>this-&gt;sendEvent(&amp;ev);</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>this-&gt;callbacks.push_back(callback);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="130"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"></highlight></codeline>
+<codeline lineno="132"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NWC_1a54556399de8c19c5a3c72b3262616b9c" kindref="member">NWC::makeInvoice</ref>(</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>amount,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>description,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>descriptionHash,<sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>expiry,<sp/>std::function&lt;</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">(<ref refid="structnostr_1_1s__MakeInvoiceResponse" kindref="compound">MakeInvoiceResponse</ref>)&gt;<sp/>onRes,</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::function&lt;</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>)&gt;<sp/>onErr)<sp/>{</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref><sp/>ev<sp/>=<sp/>this-&gt;nip47.<ref refid="classnostr_1_1Nip47_1aa567dc8ea8b24bbac721724f79c156ec" kindref="member">makeInvoice</ref>(amount,<sp/>description,<sp/>descriptionHash,<sp/>expiry);</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/>std::unique_ptr&lt;NWCResponseCallback&lt;MakeInvoiceResponse&gt;&gt;<sp/>callback(</highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NWCResponseCallback" kindref="compound">NWCResponseCallback&lt;MakeInvoiceResponse&gt;</ref>());</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;onRes<sp/>=<sp/>onRes;</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;onErr<sp/>=<sp/>onErr;</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;timestampSeconds<sp/>=<sp/><ref refid="classnostr_1_1Utils_1ac3406b5afa052bec36e3fed2d95e33f8" kindref="member">Utils::unixTimeSeconds</ref>();</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;eventId<sp/>=<sp/>ev.<ref refid="classnostr_1_1SignedNostrEvent_1a960a678a356d36a951f8758a3609725f" kindref="member">getId</ref>();</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;n<sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;subId<sp/>=<sp/>this-&gt;sendEvent(&amp;ev);</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>this-&gt;callbacks.push_back(callback);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/>this-&gt;callbacks.push_back(std::move(callback));</highlight></codeline>
+<codeline lineno="144"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"></highlight></codeline>
+<codeline lineno="146"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NWC_1a8c34f915eae08833ca38ca62f0811cdc" kindref="member">NWC::lookUpPaymentHash</ref>(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>paymentHash,<sp/>std::function&lt;</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">(<ref refid="structnostr_1_1s__LookUpInvoiceResponse" kindref="compound">LookUpInvoiceResponse</ref>)&gt;<sp/>onRes,<sp/>std::function&lt;</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>)&gt;<sp/>onErr)<sp/>{</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref><sp/>ev<sp/>=<sp/>this-&gt;nip47.<ref refid="classnostr_1_1Nip47_1a500ce5a6edd53194e6ddc035d0f4c50d" kindref="member">lookUpPaymentHash</ref>(paymentHash);</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>NWCResponseCallback&lt;LookUpInvoiceResponse&gt;<sp/>callback;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/>std::unique_ptr&lt;NWCResponseCallback&lt;LookUpInvoiceResponse&gt;&gt;<sp/>callback(</highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NWCResponseCallback" kindref="compound">NWCResponseCallback&lt;LookUpInvoiceResponse&gt;</ref>());</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;onRes<sp/>=<sp/>onRes;</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;onErr<sp/>=<sp/>onErr;</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;timestampSeconds<sp/>=<sp/><ref refid="classnostr_1_1Utils_1ac3406b5afa052bec36e3fed2d95e33f8" kindref="member">Utils::unixTimeSeconds</ref>();</highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;eventId<sp/>=<sp/>ev.<ref refid="classnostr_1_1SignedNostrEvent_1a960a678a356d36a951f8758a3609725f" kindref="member">getId</ref>();</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;n<sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;subId<sp/>=<sp/>this-&gt;sendEvent(&amp;ev);</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>this-&gt;callbacks.push_back(callback);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/>this-&gt;callbacks.push_back(std::move(callback));</highlight></codeline>
+<codeline lineno="158"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"></highlight></codeline>
+<codeline lineno="160"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NWC_1a3e6bf85d69624a302cdce0db89f942b6" kindref="member">NWC::lookUpInvoice</ref>(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>invoice,<sp/>std::function&lt;</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">(<ref refid="structnostr_1_1s__LookUpInvoiceResponse" kindref="compound">LookUpInvoiceResponse</ref>)&gt;<sp/>onRes,<sp/>std::function&lt;</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>)&gt;<sp/>onErr)<sp/>{</highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref><sp/>ev<sp/>=<sp/>this-&gt;nip47.<ref refid="classnostr_1_1Nip47_1a74760efce0406b4ca35811112c4cf1dd" kindref="member">lookUpInvoice</ref>(invoice);</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>NWCResponseCallback&lt;LookUpInvoiceResponse&gt;<sp/>callback;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="163"><highlight class="normal"><sp/><sp/><sp/><sp/>std::unique_ptr&lt;NWCResponseCallback&lt;LookUpInvoiceResponse&gt;&gt;<sp/>callback(</highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NWCResponseCallback" kindref="compound">NWCResponseCallback&lt;LookUpInvoiceResponse&gt;</ref>());</highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;onRes<sp/>=<sp/>onRes;</highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;onErr<sp/>=<sp/>onErr;</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;timestampSeconds<sp/>=<sp/><ref refid="classnostr_1_1Utils_1ac3406b5afa052bec36e3fed2d95e33f8" kindref="member">Utils::unixTimeSeconds</ref>();</highlight></codeline>
+<codeline lineno="167"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;eventId<sp/>=<sp/>ev.<ref refid="classnostr_1_1SignedNostrEvent_1a960a678a356d36a951f8758a3609725f" kindref="member">getId</ref>();</highlight></codeline>
+<codeline lineno="168"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;n<sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="169"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;subId<sp/>=<sp/>this-&gt;sendEvent(&amp;ev);</highlight></codeline>
+<codeline lineno="170"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>this-&gt;callbacks.push_back(callback);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="171"><highlight class="normal"><sp/><sp/><sp/><sp/>this-&gt;callbacks.push_back(std::move(callback));</highlight></codeline>
+<codeline lineno="172"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="173"><highlight class="normal"></highlight></codeline>
+<codeline lineno="174"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NWC_1a77246d9ec254155500dfd35a3ed46f87" kindref="member">NWC::listTransactions</ref>(</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>from,<sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>until,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>limit,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>offset,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>unpaid,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>type,<sp/>std::function&lt;</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">(<ref refid="structnostr_1_1s__ListTransactionsResponse" kindref="compound">ListTransactionsResponse</ref>)&gt;<sp/>onRes,</highlight></codeline>
+<codeline lineno="175"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::function&lt;</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>)&gt;<sp/>onErr)<sp/>{</highlight></codeline>
+<codeline lineno="176"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref><sp/>ev<sp/>=<sp/>this-&gt;nip47.<ref refid="classnostr_1_1Nip47_1aa4f00696a8b58ae43ea7582d915147d4" kindref="member">listTransactions</ref>(from,<sp/>until);</highlight></codeline>
+<codeline lineno="177"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>NWCResponseCallback&lt;ListTransactionsResponse&gt;<sp/>callback;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="178"><highlight class="normal"><sp/><sp/><sp/><sp/>std::unique_ptr&lt;NWCResponseCallback&lt;ListTransactionsResponse&gt;&gt;<sp/>callback(</highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NWCResponseCallback" kindref="compound">NWCResponseCallback&lt;ListTransactionsResponse&gt;</ref>());</highlight></codeline>
+<codeline lineno="179"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;onRes<sp/>=<sp/>onRes;</highlight></codeline>
+<codeline lineno="180"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;onErr<sp/>=<sp/>onErr;</highlight></codeline>
+<codeline lineno="181"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;timestampSeconds<sp/>=<sp/><ref refid="classnostr_1_1Utils_1ac3406b5afa052bec36e3fed2d95e33f8" kindref="member">Utils::unixTimeSeconds</ref>();</highlight></codeline>
+<codeline lineno="182"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;eventId<sp/>=<sp/>ev.<ref refid="classnostr_1_1SignedNostrEvent_1a960a678a356d36a951f8758a3609725f" kindref="member">getId</ref>();</highlight></codeline>
+<codeline lineno="183"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;n<sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;subId<sp/>=<sp/>this-&gt;sendEvent(&amp;ev);</highlight></codeline>
+<codeline lineno="185"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>this-&gt;callbacks.push_back(callback);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="186"><highlight class="normal"><sp/><sp/><sp/><sp/>this-&gt;callbacks.push_back(std::move(callback));</highlight></codeline>
+<codeline lineno="187"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="188"><highlight class="normal"></highlight></codeline>
+<codeline lineno="189"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NWC_1a55874260c4af288a620e0b19d62ea949" kindref="member">NWC::getBalance</ref>(std::function&lt;</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">(<ref refid="structnostr_1_1s__GetBalanceResponse" kindref="compound">GetBalanceResponse</ref>)&gt;<sp/>onRes,<sp/>std::function&lt;</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>)&gt;<sp/>onErr)<sp/>{</highlight></codeline>
+<codeline lineno="190"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref><sp/>ev<sp/>=<sp/>this-&gt;nip47.<ref refid="classnostr_1_1Nip47_1a086e38d7ee42d8d98f9e439b515f9cbb" kindref="member">getBalance</ref>();</highlight></codeline>
+<codeline lineno="191"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>NWCResponseCallback&lt;GetBalanceResponse&gt;<sp/>callback;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="192"><highlight class="normal"><sp/><sp/><sp/><sp/>std::unique_ptr&lt;NWCResponseCallback&lt;GetBalanceResponse&gt;&gt;<sp/>callback(</highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NWCResponseCallback" kindref="compound">NWCResponseCallback&lt;GetBalanceResponse&gt;</ref>());</highlight></codeline>
+<codeline lineno="193"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;onRes<sp/>=<sp/>onRes;</highlight></codeline>
+<codeline lineno="194"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;onErr<sp/>=<sp/>onErr;</highlight></codeline>
+<codeline lineno="195"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;timestampSeconds<sp/>=<sp/><ref refid="classnostr_1_1Utils_1ac3406b5afa052bec36e3fed2d95e33f8" kindref="member">Utils::unixTimeSeconds</ref>();</highlight></codeline>
+<codeline lineno="196"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;eventId<sp/>=<sp/>ev.<ref refid="classnostr_1_1SignedNostrEvent_1a960a678a356d36a951f8758a3609725f" kindref="member">getId</ref>();</highlight></codeline>
+<codeline lineno="197"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;n<sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="198"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;subId<sp/>=<sp/>this-&gt;sendEvent(&amp;ev);</highlight></codeline>
+<codeline lineno="199"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>this-&gt;callbacks.push_back(callback);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="200"><highlight class="normal"><sp/><sp/><sp/><sp/>this-&gt;callbacks.push_back(std::move(callback));</highlight></codeline>
+<codeline lineno="201"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="202"><highlight class="normal"></highlight></codeline>
+<codeline lineno="203"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NWC_1ad646581995f7b719a14d46f26e000896" kindref="member">NWC::getInfo</ref>(std::function&lt;</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">(<ref refid="structnostr_1_1s__GetInfoResponse" kindref="compound">GetInfoResponse</ref>)&gt;<sp/>onRes,<sp/>std::function&lt;</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>)&gt;<sp/>onErr)<sp/>{</highlight></codeline>
+<codeline lineno="204"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref><sp/>ev<sp/>=<sp/>this-&gt;nip47.<ref refid="classnostr_1_1Nip47_1ad3598c721308e98893c1af2526b6ca98" kindref="member">getInfo</ref>();</highlight></codeline>
+<codeline lineno="205"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>NWCResponseCallback&lt;GetInfoResponse&gt;<sp/>callback;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="206"><highlight class="normal"><sp/><sp/><sp/><sp/>std::unique_ptr&lt;NWCResponseCallback&lt;GetInfoResponse&gt;&gt;<sp/>callback(</highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1NWCResponseCallback" kindref="compound">NWCResponseCallback&lt;GetInfoResponse&gt;</ref>());</highlight></codeline>
+<codeline lineno="207"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;onRes<sp/>=<sp/>onRes;</highlight></codeline>
+<codeline lineno="208"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;onErr<sp/>=<sp/>onErr;</highlight></codeline>
+<codeline lineno="209"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;timestampSeconds<sp/>=<sp/><ref refid="classnostr_1_1Utils_1ac3406b5afa052bec36e3fed2d95e33f8" kindref="member">Utils::unixTimeSeconds</ref>();</highlight></codeline>
+<codeline lineno="210"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;eventId<sp/>=<sp/>ev.<ref refid="classnostr_1_1SignedNostrEvent_1a960a678a356d36a951f8758a3609725f" kindref="member">getId</ref>();</highlight></codeline>
+<codeline lineno="211"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;n<sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="212"><highlight class="normal"><sp/><sp/><sp/><sp/>callback-&gt;subId<sp/>=<sp/>this-&gt;sendEvent(&amp;ev);</highlight></codeline>
+<codeline lineno="213"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>this-&gt;callbacks.push_back(callback);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="214"><highlight class="normal"><sp/><sp/><sp/><sp/>this-&gt;callbacks.push_back(std::move(callback));</highlight></codeline>
+<codeline lineno="215"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="src/services/NWC.cpp"/>
+  </compounddef>
+</doxygen>

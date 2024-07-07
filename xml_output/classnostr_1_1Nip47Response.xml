@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="classnostr_1_1Nip47Response" kind="class" language="C++" prot="public">
+    <compoundname>nostr::Nip47Response</compoundname>
+    <includes refid="Nip47_8h" local="no">Nip47.h</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="classnostr_1_1Nip47Response_1adc416a01e02ac121f5e8e655bc1d5b08" prot="public" static="no" mutable="no">
+        <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+        <definition>NostrString nostr::Nip47Response&lt; T &gt;::errorCode</definition>
+        <argsstring></argsstring>
+        <name>errorCode</name>
+        <initializer>= &quot;&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="30" column="17" bodyfile="src/Nip47.h" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classnostr_1_1Nip47Response_1a04f327c91a1aade410f342b6efc7a451" prot="public" static="no" mutable="no">
+        <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+        <definition>NostrString nostr::Nip47Response&lt; T &gt;::errorMessage</definition>
+        <argsstring></argsstring>
+        <name>errorMessage</name>
+        <initializer>= &quot;&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="31" column="17" bodyfile="src/Nip47.h" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classnostr_1_1Nip47Response_1aee914909ea62c8ddd6f18e93aa6adb30" prot="public" static="no" mutable="no">
+        <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+        <definition>NostrString nostr::Nip47Response&lt; T &gt;::resultType</definition>
+        <argsstring></argsstring>
+        <name>resultType</name>
+        <initializer>= &quot;&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="32" column="17" bodyfile="src/Nip47.h" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classnostr_1_1Nip47Response_1a4a1f71e17c1e175256f4927a8294bfe8" prot="public" static="no" mutable="no">
+        <type>T</type>
+        <definition>T nostr::Nip47Response&lt; T &gt;::result</definition>
+        <argsstring></argsstring>
+        <name>result</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="33" column="7" bodyfile="src/Nip47.h" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classnostr_1_1Nip47Response_1ab81bd783b170fa8287fa93ae6a5614e9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>nostr::Nip47Response&lt; T &gt;::Nip47Response</definition>
+        <argsstring>()</argsstring>
+        <name>Nip47Response</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="27" column="5" bodyfile="src/Nip47.h" bodystart="27" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1Nip47Response_1a0f57334b55cc736954dcdea618857734" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>nostr::Nip47Response&lt; T &gt;::Nip47Response</definition>
+        <argsstring>(NostrString errorCode, NostrString errorMessage, NostrString resultType, T result)</argsstring>
+        <name>Nip47Response</name>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>errorCode</declname>
+        </param>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>errorMessage</declname>
+        </param>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>resultType</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Nip47.h" line="29" column="5" bodyfile="src/Nip47.h" bodystart="29" bodyend="29"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/Nip47.h" line="25" column="12" bodyfile="src/Nip47.h" bodystart="25" bodyend="34"/>
+    <listofallmembers>
+      <member refid="classnostr_1_1Nip47Response_1adc416a01e02ac121f5e8e655bc1d5b08" prot="public" virt="non-virtual"><scope>nostr::Nip47Response</scope><name>errorCode</name></member>
+      <member refid="classnostr_1_1Nip47Response_1a04f327c91a1aade410f342b6efc7a451" prot="public" virt="non-virtual"><scope>nostr::Nip47Response</scope><name>errorMessage</name></member>
+      <member refid="classnostr_1_1Nip47Response_1ab81bd783b170fa8287fa93ae6a5614e9" prot="public" virt="non-virtual"><scope>nostr::Nip47Response</scope><name>Nip47Response</name></member>
+      <member refid="classnostr_1_1Nip47Response_1a0f57334b55cc736954dcdea618857734" prot="public" virt="non-virtual"><scope>nostr::Nip47Response</scope><name>Nip47Response</name></member>
+      <member refid="classnostr_1_1Nip47Response_1a4a1f71e17c1e175256f4927a8294bfe8" prot="public" virt="non-virtual"><scope>nostr::Nip47Response</scope><name>result</name></member>
+      <member refid="classnostr_1_1Nip47Response_1aee914909ea62c8ddd6f18e93aa6adb30" prot="public" virt="non-virtual"><scope>nostr::Nip47Response</scope><name>resultType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

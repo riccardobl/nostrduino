@@ -1,0 +1,350 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="Nip47_8h" kind="file" language="C++">
+    <compoundname>Nip47.h</compoundname>
+    <includes local="yes">ArduinoJson.h</includes>
+    <includes refid="Nip04_8h" local="yes">Nip04.h</includes>
+    <includes refid="NostrEvent_8h" local="yes">NostrEvent.h</includes>
+    <includes refid="NostrString_8h" local="yes">NostrString.h</includes>
+    <includes refid="Utils_8h" local="yes">Utils.h</includes>
+    <includedby refid="Nip47_8cpp" local="yes">src/Nip47.cpp</includedby>
+    <includedby refid="NWC_8cpp" local="yes">src/services/NWC.cpp</includedby>
+    <includedby refid="NWC_8h" local="yes">src/services/NWC.h</includedby>
+    <incdepgraph>
+      <node id="13">
+        <label>functional</label>
+      </node>
+      <node id="1">
+        <label>src/Nip47.h</label>
+        <link refid="Nip47_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>aes.h</label>
+        <link refid="aes_8h"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>base64.h</label>
+      </node>
+      <node id="9">
+        <label>NostrString.h</label>
+        <link refid="NostrString_8h"/>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>stdint.h</label>
+      </node>
+      <node id="12">
+        <label>stdlib.h</label>
+      </node>
+      <node id="10">
+        <label>string</label>
+      </node>
+      <node id="18">
+        <label>map</label>
+      </node>
+      <node id="15">
+        <label>NostrEvent.h</label>
+        <link refid="NostrEvent_8h"/>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>stddef.h</label>
+      </node>
+      <node id="8">
+        <label>Hash.h</label>
+      </node>
+      <node id="7">
+        <label>vector</label>
+      </node>
+      <node id="3">
+        <label>Nip04.h</label>
+        <link refid="Nip04_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>ArduinoJson.h</label>
+      </node>
+      <node id="11">
+        <label>Utils.h</label>
+        <link refid="Utils_8h"/>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>iostream</label>
+      </node>
+      <node id="14">
+        <label>Bitcoin.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>src/Nip47.h</label>
+        <link refid="Nip47_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>src/services/NWC.cpp</label>
+        <link refid="NWC_8cpp"/>
+      </node>
+      <node id="4">
+        <label>src/services/NWC.h</label>
+        <link refid="NWC_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>src/Nip47.cpp</label>
+        <link refid="Nip47_8cpp"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structnostr_1_1s__Invoice" prot="public">nostr::s_Invoice</innerclass>
+    <innerclass refid="structnostr_1_1s__TLVRecords" prot="public">nostr::s_TLVRecords</innerclass>
+    <innerclass refid="structnostr_1_1s__KeySend" prot="public">nostr::s_KeySend</innerclass>
+    <innerclass refid="classnostr_1_1Nip47Response" prot="public">nostr::Nip47Response</innerclass>
+    <innerclass refid="structnostr_1_1s__PayInvoiceResponse" prot="public">nostr::s_PayInvoiceResponse</innerclass>
+    <innerclass refid="structnostr_1_1s__MultiPayInvoiceResponse" prot="public">nostr::s_MultiPayInvoiceResponse</innerclass>
+    <innerclass refid="structnostr_1_1s__PayKeySendResponse" prot="public">nostr::s_PayKeySendResponse</innerclass>
+    <innerclass refid="structnostr_1_1s__MultiPayKeySendResponse" prot="public">nostr::s_MultiPayKeySendResponse</innerclass>
+    <innerclass refid="structnostr_1_1s__MakeInvoiceResponse" prot="public">nostr::s_MakeInvoiceResponse</innerclass>
+    <innerclass refid="structnostr_1_1s__LookUpInvoiceResponse" prot="public">nostr::s_LookUpInvoiceResponse</innerclass>
+    <innerclass refid="structnostr_1_1s__Transaction" prot="public">nostr::s_Transaction</innerclass>
+    <innerclass refid="structnostr_1_1s__ListTransactionsResponse" prot="public">nostr::s_ListTransactionsResponse</innerclass>
+    <innerclass refid="structnostr_1_1s__GetBalanceResponse" prot="public">nostr::s_GetBalanceResponse</innerclass>
+    <innerclass refid="structnostr_1_1s__GetInfoResponse" prot="public">nostr::s_GetInfoResponse</innerclass>
+    <innerclass refid="structnostr_1_1s__NWCData" prot="public">nostr::s_NWCData</innerclass>
+    <innerclass refid="classnostr_1_1Nip47" prot="public">nostr::Nip47</innerclass>
+    <innernamespace refid="namespacenostr">nostr</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>_NIP47_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>_NIP47_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;ArduinoJson.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="Nip04_8h" kindref="compound">Nip04.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="NostrEvent_8h" kindref="compound">NostrEvent.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="NostrString_8h" kindref="compound">NostrString.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="Utils_8h" kindref="compound">Utils.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacenostr" kindref="compound">nostr</ref><sp/>{</highlight></codeline>
+<codeline lineno="10" refid="structnostr_1_1s__Invoice" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structnostr_1_1s__Invoice" kindref="compound">s_Invoice</ref><sp/>{</highlight></codeline>
+<codeline lineno="11" refid="structnostr_1_1s__Invoice_1a0cf0cb757c30335450f87487fd8f0d4c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__Invoice_1a0cf0cb757c30335450f87487fd8f0d4c" kindref="member">invoice</ref>;</highlight></codeline>
+<codeline lineno="12" refid="structnostr_1_1s__Invoice_1a570f5370ade3dffa6e686e4b834810cf" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structnostr_1_1s__Invoice_1a570f5370ade3dffa6e686e4b834810cf" kindref="member">amount</ref>;</highlight></codeline>
+<codeline lineno="13" refid="namespacenostr_1ac0f491ca12edeaa060bf89f8349d1c94" refkind="member"><highlight class="normal">}<sp/><ref refid="namespacenostr_1ac0f491ca12edeaa060bf89f8349d1c94" kindref="member">Invoice</ref>;</highlight></codeline>
+<codeline lineno="14" refid="structnostr_1_1s__TLVRecords" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structnostr_1_1s__TLVRecords" kindref="compound">s_TLVRecords</ref><sp/>{</highlight></codeline>
+<codeline lineno="15" refid="structnostr_1_1s__TLVRecords_1ae70d4a2a9a54e2e241d72216664dcd9c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__TLVRecords_1ae70d4a2a9a54e2e241d72216664dcd9c" kindref="member">type</ref>;</highlight></codeline>
+<codeline lineno="16" refid="structnostr_1_1s__TLVRecords_1a76997f69bae788ce62355110121c3cca" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__TLVRecords_1a76997f69bae788ce62355110121c3cca" kindref="member">value</ref>;</highlight></codeline>
+<codeline lineno="17" refid="namespacenostr_1ad0f4687c761ee6988b42826d3ea717f6" refkind="member"><highlight class="normal">}<sp/><ref refid="namespacenostr_1ad0f4687c761ee6988b42826d3ea717f6" kindref="member">TLVRecords</ref>;</highlight></codeline>
+<codeline lineno="18" refid="structnostr_1_1s__KeySend" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structnostr_1_1s__KeySend" kindref="compound">s_KeySend</ref><sp/>{</highlight></codeline>
+<codeline lineno="19" refid="structnostr_1_1s__KeySend_1a885a1dc2902876ccf61b2023a416e51c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__KeySend_1a885a1dc2902876ccf61b2023a416e51c" kindref="member">pubkey</ref>;</highlight></codeline>
+<codeline lineno="20" refid="structnostr_1_1s__KeySend_1a579d6e66f6b605aec6c65357c58c0c3b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structnostr_1_1s__KeySend_1a579d6e66f6b605aec6c65357c58c0c3b" kindref="member">amount</ref>;</highlight></codeline>
+<codeline lineno="21" refid="structnostr_1_1s__KeySend_1a063d8accd6247e37795607e320c65896" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__KeySend_1a063d8accd6247e37795607e320c65896" kindref="member">preimage</ref>;</highlight></codeline>
+<codeline lineno="22" refid="structnostr_1_1s__KeySend_1a3a8b4e86ea8de97c704e9ed2b0df2c54" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::initializer_list&lt;TLVRecords&gt;<sp/><ref refid="structnostr_1_1s__KeySend_1a3a8b4e86ea8de97c704e9ed2b0df2c54" kindref="member">tlv</ref>;</highlight></codeline>
+<codeline lineno="23" refid="namespacenostr_1a2f0adf8fb06541c0734900f1f37c6a77" refkind="member"><highlight class="normal">}<sp/><ref refid="namespacenostr_1a2f0adf8fb06541c0734900f1f37c6a77" kindref="member">KeySend</ref>;</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight></codeline>
+<codeline lineno="25" refid="classnostr_1_1Nip47Response" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>T&gt;<sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classnostr_1_1Nip47Response" kindref="compound">Nip47Response</ref><sp/>{</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="27" refid="classnostr_1_1Nip47Response_1ab81bd783b170fa8287fa93ae6a5614e9" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1Nip47Response_1ab81bd783b170fa8287fa93ae6a5614e9" kindref="member">Nip47Response</ref>()<sp/>{}</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29" refid="classnostr_1_1Nip47Response_1a0f57334b55cc736954dcdea618857734" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1Nip47Response_1a0f57334b55cc736954dcdea618857734" kindref="member">Nip47Response</ref>(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="classnostr_1_1Nip47Response_1adc416a01e02ac121f5e8e655bc1d5b08" kindref="member">errorCode</ref>,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="classnostr_1_1Nip47Response_1a04f327c91a1aade410f342b6efc7a451" kindref="member">errorMessage</ref>,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="classnostr_1_1Nip47Response_1aee914909ea62c8ddd6f18e93aa6adb30" kindref="member">resultType</ref>,<sp/>T<sp/><ref refid="classnostr_1_1Nip47Response_1a4a1f71e17c1e175256f4927a8294bfe8" kindref="member">result</ref>)<sp/>:<sp/><ref refid="classnostr_1_1Nip47Response_1adc416a01e02ac121f5e8e655bc1d5b08" kindref="member">errorCode</ref>(<ref refid="classnostr_1_1Nip47Response_1adc416a01e02ac121f5e8e655bc1d5b08" kindref="member">errorCode</ref>),<sp/><ref refid="classnostr_1_1Nip47Response_1a04f327c91a1aade410f342b6efc7a451" kindref="member">errorMessage</ref>(<ref refid="classnostr_1_1Nip47Response_1a04f327c91a1aade410f342b6efc7a451" kindref="member">errorMessage</ref>),<sp/><ref refid="classnostr_1_1Nip47Response_1aee914909ea62c8ddd6f18e93aa6adb30" kindref="member">resultType</ref>(<ref refid="classnostr_1_1Nip47Response_1aee914909ea62c8ddd6f18e93aa6adb30" kindref="member">resultType</ref>),<sp/><ref refid="classnostr_1_1Nip47Response_1a4a1f71e17c1e175256f4927a8294bfe8" kindref="member">result</ref>(<ref refid="classnostr_1_1Nip47Response_1a4a1f71e17c1e175256f4927a8294bfe8" kindref="member">result</ref>)<sp/>{}</highlight></codeline>
+<codeline lineno="30" refid="classnostr_1_1Nip47Response_1adc416a01e02ac121f5e8e655bc1d5b08" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="classnostr_1_1Nip47Response_1adc416a01e02ac121f5e8e655bc1d5b08" kindref="member">errorCode</ref><sp/>=<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="31" refid="classnostr_1_1Nip47Response_1a04f327c91a1aade410f342b6efc7a451" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="classnostr_1_1Nip47Response_1a04f327c91a1aade410f342b6efc7a451" kindref="member">errorMessage</ref><sp/>=<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="32" refid="classnostr_1_1Nip47Response_1aee914909ea62c8ddd6f18e93aa6adb30" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="classnostr_1_1Nip47Response_1aee914909ea62c8ddd6f18e93aa6adb30" kindref="member">resultType</ref><sp/>=<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="33" refid="classnostr_1_1Nip47Response_1a4a1f71e17c1e175256f4927a8294bfe8" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>T<sp/><ref refid="classnostr_1_1Nip47Response_1a4a1f71e17c1e175256f4927a8294bfe8" kindref="member">result</ref>;</highlight></codeline>
+<codeline lineno="34"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36" refid="structnostr_1_1s__PayInvoiceResponse" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structnostr_1_1s__PayInvoiceResponse" kindref="compound">s_PayInvoiceResponse</ref><sp/>{</highlight></codeline>
+<codeline lineno="37" refid="structnostr_1_1s__PayInvoiceResponse_1a8e8e2ad8e7dd44c1ba197c555efa0742" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__PayInvoiceResponse_1a8e8e2ad8e7dd44c1ba197c555efa0742" kindref="member">preimage</ref>;</highlight></codeline>
+<codeline lineno="38" refid="namespacenostr_1aabe8d230016fd5f70285adbcbe77fe23" refkind="member"><highlight class="normal">}<sp/><ref refid="namespacenostr_1aabe8d230016fd5f70285adbcbe77fe23" kindref="member">PayInvoiceResponse</ref>;</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight></codeline>
+<codeline lineno="40" refid="structnostr_1_1s__MultiPayInvoiceResponse" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structnostr_1_1s__MultiPayInvoiceResponse" kindref="compound">s_MultiPayInvoiceResponse</ref><sp/>{</highlight></codeline>
+<codeline lineno="41" refid="structnostr_1_1s__MultiPayInvoiceResponse_1afb1495a862c7d5322d8a630c5ff54df6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__MultiPayInvoiceResponse_1afb1495a862c7d5322d8a630c5ff54df6" kindref="member">preimage</ref>;</highlight></codeline>
+<codeline lineno="42" refid="structnostr_1_1s__MultiPayInvoiceResponse_1a512ff06432c3810adbf31889d031d98e" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__MultiPayInvoiceResponse_1a512ff06432c3810adbf31889d031d98e" kindref="member">d</ref>;</highlight></codeline>
+<codeline lineno="43" refid="namespacenostr_1a0fb78e894360c3b4167124456e18cc1b" refkind="member"><highlight class="normal">}<sp/><ref refid="namespacenostr_1a0fb78e894360c3b4167124456e18cc1b" kindref="member">MultiPayInvoiceResponse</ref>;</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45" refid="structnostr_1_1s__PayKeySendResponse" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structnostr_1_1s__PayKeySendResponse" kindref="compound">s_PayKeySendResponse</ref><sp/>{</highlight></codeline>
+<codeline lineno="46" refid="structnostr_1_1s__PayKeySendResponse_1a480aef63eec69818a9135b08150e6285" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__PayKeySendResponse_1a480aef63eec69818a9135b08150e6285" kindref="member">preimage</ref>;</highlight></codeline>
+<codeline lineno="47" refid="namespacenostr_1a70810c5e5dbfe96e16ae12fd2990e6d6" refkind="member"><highlight class="normal">}<sp/><ref refid="namespacenostr_1a70810c5e5dbfe96e16ae12fd2990e6d6" kindref="member">PayKeySendResponse</ref>;</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight></codeline>
+<codeline lineno="49" refid="structnostr_1_1s__MultiPayKeySendResponse" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structnostr_1_1s__MultiPayKeySendResponse" kindref="compound">s_MultiPayKeySendResponse</ref><sp/>{</highlight></codeline>
+<codeline lineno="50" refid="structnostr_1_1s__MultiPayKeySendResponse_1acb8859c0a2c2ddffa22258513c26837b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__MultiPayKeySendResponse_1acb8859c0a2c2ddffa22258513c26837b" kindref="member">preimage</ref>;</highlight></codeline>
+<codeline lineno="51" refid="structnostr_1_1s__MultiPayKeySendResponse_1aa4a2a52842a2987b436b24afa6efd018" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__MultiPayKeySendResponse_1aa4a2a52842a2987b436b24afa6efd018" kindref="member">d</ref>;</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53" refid="namespacenostr_1af6e0f43f7f982a4b4fe1a1c097cf9de3" refkind="member"><highlight class="normal">}<sp/><ref refid="namespacenostr_1af6e0f43f7f982a4b4fe1a1c097cf9de3" kindref="member">MultiPayKeySendResponse</ref>;</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight></codeline>
+<codeline lineno="55" refid="structnostr_1_1s__MakeInvoiceResponse" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structnostr_1_1s__MakeInvoiceResponse" kindref="compound">s_MakeInvoiceResponse</ref><sp/>{</highlight></codeline>
+<codeline lineno="56" refid="structnostr_1_1s__MakeInvoiceResponse_1a1c2af5e4a031832157918c116d282573" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__MakeInvoiceResponse_1a1c2af5e4a031832157918c116d282573" kindref="member">type</ref>;</highlight></codeline>
+<codeline lineno="57" refid="structnostr_1_1s__MakeInvoiceResponse_1a75edbc8251ce0d65c03af38b47926f55" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__MakeInvoiceResponse_1a75edbc8251ce0d65c03af38b47926f55" kindref="member">invoice</ref>;</highlight></codeline>
+<codeline lineno="58" refid="structnostr_1_1s__MakeInvoiceResponse_1aae625065fb44b02e5883e5297a065bee" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__MakeInvoiceResponse_1aae625065fb44b02e5883e5297a065bee" kindref="member">description</ref>;</highlight></codeline>
+<codeline lineno="59" refid="structnostr_1_1s__MakeInvoiceResponse_1ab01309d75ed6af2acfddffa7c184e36f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__MakeInvoiceResponse_1ab01309d75ed6af2acfddffa7c184e36f" kindref="member">descriptionHash</ref>;</highlight></codeline>
+<codeline lineno="60" refid="structnostr_1_1s__MakeInvoiceResponse_1a1c6266a0cac33e3e0ea0c9996c2f4119" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__MakeInvoiceResponse_1a1c6266a0cac33e3e0ea0c9996c2f4119" kindref="member">preimage</ref>;</highlight></codeline>
+<codeline lineno="61" refid="structnostr_1_1s__MakeInvoiceResponse_1a6e43d10fb27320b4d619608ec1c4b5f3" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__MakeInvoiceResponse_1a6e43d10fb27320b4d619608ec1c4b5f3" kindref="member">paymentHash</ref>;</highlight></codeline>
+<codeline lineno="62" refid="structnostr_1_1s__MakeInvoiceResponse_1ae219cf962ee5d75b28553f2d4738aaa0" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structnostr_1_1s__MakeInvoiceResponse_1ae219cf962ee5d75b28553f2d4738aaa0" kindref="member">amount</ref>;</highlight></codeline>
+<codeline lineno="63" refid="structnostr_1_1s__MakeInvoiceResponse_1a8a605d9c39fb32cbe4eb788a349a8956" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structnostr_1_1s__MakeInvoiceResponse_1a8a605d9c39fb32cbe4eb788a349a8956" kindref="member">feesPaid</ref>;</highlight></codeline>
+<codeline lineno="64" refid="structnostr_1_1s__MakeInvoiceResponse_1ad19ebeaedf39995483e4017b9bab3a0f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structnostr_1_1s__MakeInvoiceResponse_1ad19ebeaedf39995483e4017b9bab3a0f" kindref="member">createdAt</ref>;</highlight></codeline>
+<codeline lineno="65" refid="structnostr_1_1s__MakeInvoiceResponse_1a05a1a18f8513810f4be524f7492989a6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structnostr_1_1s__MakeInvoiceResponse_1a05a1a18f8513810f4be524f7492989a6" kindref="member">expiresAt</ref>;</highlight></codeline>
+<codeline lineno="66" refid="structnostr_1_1s__MakeInvoiceResponse_1ac16c2e27e0f00331c28f7221340570ff" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>JsonObject<sp/><ref refid="structnostr_1_1s__MakeInvoiceResponse_1ac16c2e27e0f00331c28f7221340570ff" kindref="member">metadata</ref>;</highlight></codeline>
+<codeline lineno="67" refid="namespacenostr_1a784f3d1260b727625d00d370c0ac9e9f" refkind="member"><highlight class="normal">}<sp/><ref refid="namespacenostr_1a784f3d1260b727625d00d370c0ac9e9f" kindref="member">MakeInvoiceResponse</ref>;</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight></codeline>
+<codeline lineno="69" refid="structnostr_1_1s__LookUpInvoiceResponse" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structnostr_1_1s__LookUpInvoiceResponse" kindref="compound">s_LookUpInvoiceResponse</ref><sp/>{</highlight></codeline>
+<codeline lineno="70" refid="structnostr_1_1s__LookUpInvoiceResponse_1a2f09c87cb594d572f34c586b2df46cc6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__LookUpInvoiceResponse_1a2f09c87cb594d572f34c586b2df46cc6" kindref="member">type</ref>;</highlight></codeline>
+<codeline lineno="71" refid="structnostr_1_1s__LookUpInvoiceResponse_1afdb026a867244c8242f76a77634e68d8" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__LookUpInvoiceResponse_1afdb026a867244c8242f76a77634e68d8" kindref="member">invoice</ref>;</highlight></codeline>
+<codeline lineno="72" refid="structnostr_1_1s__LookUpInvoiceResponse_1a4718ebc0fa29823f23eec1d8ee258e31" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__LookUpInvoiceResponse_1a4718ebc0fa29823f23eec1d8ee258e31" kindref="member">description</ref>;</highlight></codeline>
+<codeline lineno="73" refid="structnostr_1_1s__LookUpInvoiceResponse_1aa14473941cfc6ebeb53581d595cfd077" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__LookUpInvoiceResponse_1aa14473941cfc6ebeb53581d595cfd077" kindref="member">descriptionHash</ref>;</highlight></codeline>
+<codeline lineno="74" refid="structnostr_1_1s__LookUpInvoiceResponse_1aa2e248d0bf689bd66fec41e665518356" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__LookUpInvoiceResponse_1aa2e248d0bf689bd66fec41e665518356" kindref="member">preimage</ref>;</highlight></codeline>
+<codeline lineno="75" refid="structnostr_1_1s__LookUpInvoiceResponse_1a22f4d51e2a556934ae3172c333fbfa29" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__LookUpInvoiceResponse_1a22f4d51e2a556934ae3172c333fbfa29" kindref="member">paymentHash</ref>;</highlight></codeline>
+<codeline lineno="76" refid="structnostr_1_1s__LookUpInvoiceResponse_1aadf7a1605324725038c6d2bfd7db6959" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structnostr_1_1s__LookUpInvoiceResponse_1aadf7a1605324725038c6d2bfd7db6959" kindref="member">amount</ref>;</highlight></codeline>
+<codeline lineno="77" refid="structnostr_1_1s__LookUpInvoiceResponse_1acb4d6268a52b5d8262688156fd7c6232" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structnostr_1_1s__LookUpInvoiceResponse_1acb4d6268a52b5d8262688156fd7c6232" kindref="member">feesPaid</ref>;</highlight></codeline>
+<codeline lineno="78" refid="structnostr_1_1s__LookUpInvoiceResponse_1a1d9c0ef9a426afa1c861118d65851d3d" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structnostr_1_1s__LookUpInvoiceResponse_1a1d9c0ef9a426afa1c861118d65851d3d" kindref="member">createdAt</ref>;</highlight></codeline>
+<codeline lineno="79" refid="structnostr_1_1s__LookUpInvoiceResponse_1a765e80a64313dee017711bfbb680a45b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structnostr_1_1s__LookUpInvoiceResponse_1a765e80a64313dee017711bfbb680a45b" kindref="member">expiresAt</ref>;</highlight></codeline>
+<codeline lineno="80" refid="structnostr_1_1s__LookUpInvoiceResponse_1a1db3d3727b086a8a531177747fd55bc8" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structnostr_1_1s__LookUpInvoiceResponse_1a1db3d3727b086a8a531177747fd55bc8" kindref="member">settledAt</ref>;</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"></highlight></codeline>
+<codeline lineno="82" refid="structnostr_1_1s__LookUpInvoiceResponse_1ac8cf33fd35ffefc4be14e44d18eef87e" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>JsonObject<sp/><ref refid="structnostr_1_1s__LookUpInvoiceResponse_1ac8cf33fd35ffefc4be14e44d18eef87e" kindref="member">metadata</ref>;</highlight></codeline>
+<codeline lineno="83" refid="namespacenostr_1a9357541c46480c78b10dbd47531ce2d7" refkind="member"><highlight class="normal">}<sp/><ref refid="namespacenostr_1a9357541c46480c78b10dbd47531ce2d7" kindref="member">LookUpInvoiceResponse</ref>;</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"></highlight></codeline>
+<codeline lineno="85" refid="structnostr_1_1s__Transaction" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structnostr_1_1s__Transaction" kindref="compound">s_Transaction</ref><sp/>{</highlight></codeline>
+<codeline lineno="86" refid="structnostr_1_1s__Transaction_1a4d7ee082010c57d95e5916f4b0de0c65" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__Transaction_1a4d7ee082010c57d95e5916f4b0de0c65" kindref="member">type</ref>;</highlight></codeline>
+<codeline lineno="87" refid="structnostr_1_1s__Transaction_1aecfced2e600a9c5ab15c8522ae48599f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__Transaction_1aecfced2e600a9c5ab15c8522ae48599f" kindref="member">invoice</ref>;</highlight></codeline>
+<codeline lineno="88" refid="structnostr_1_1s__Transaction_1a549be99869016e36a2a52eeae213c8b6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__Transaction_1a549be99869016e36a2a52eeae213c8b6" kindref="member">description</ref>;</highlight></codeline>
+<codeline lineno="89" refid="structnostr_1_1s__Transaction_1a5ad99841dd85b5b19d29e1f86a07c1b6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__Transaction_1a5ad99841dd85b5b19d29e1f86a07c1b6" kindref="member">descriptionHash</ref>;</highlight></codeline>
+<codeline lineno="90" refid="structnostr_1_1s__Transaction_1adfe56e48af5a808da3d450968f089427" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__Transaction_1adfe56e48af5a808da3d450968f089427" kindref="member">preimage</ref>;</highlight></codeline>
+<codeline lineno="91" refid="structnostr_1_1s__Transaction_1a70d6b59067a9b3586e62da14415f5345" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__Transaction_1a70d6b59067a9b3586e62da14415f5345" kindref="member">paymentHash</ref>;</highlight></codeline>
+<codeline lineno="92" refid="structnostr_1_1s__Transaction_1a85f76ec98f03492272430c5b918bcbfc" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structnostr_1_1s__Transaction_1a85f76ec98f03492272430c5b918bcbfc" kindref="member">amount</ref>;</highlight></codeline>
+<codeline lineno="93" refid="structnostr_1_1s__Transaction_1ab2ca96696990f5ca3d1cfc020ac85663" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structnostr_1_1s__Transaction_1ab2ca96696990f5ca3d1cfc020ac85663" kindref="member">feesPaid</ref>;</highlight></codeline>
+<codeline lineno="94" refid="structnostr_1_1s__Transaction_1ac4520e36db73ca34ffbef5cfd1f5112c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structnostr_1_1s__Transaction_1ac4520e36db73ca34ffbef5cfd1f5112c" kindref="member">createdAt</ref>;</highlight></codeline>
+<codeline lineno="95" refid="structnostr_1_1s__Transaction_1a1d0cacb6699476e43f736c9f5c08493e" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structnostr_1_1s__Transaction_1a1d0cacb6699476e43f736c9f5c08493e" kindref="member">expiresAt</ref>;</highlight></codeline>
+<codeline lineno="96" refid="structnostr_1_1s__Transaction_1aec0504cc1a5f83f73086e636de478637" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structnostr_1_1s__Transaction_1aec0504cc1a5f83f73086e636de478637" kindref="member">settledAt</ref>;</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"></highlight></codeline>
+<codeline lineno="98" refid="structnostr_1_1s__Transaction_1a084822125bb2c2622a7af6eb2dc4d7df" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>JsonObject<sp/><ref refid="structnostr_1_1s__Transaction_1a084822125bb2c2622a7af6eb2dc4d7df" kindref="member">metadata</ref>;</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"></highlight></codeline>
+<codeline lineno="100" refid="namespacenostr_1a324c9ccba9c6ebcc1753c63eaa7dca47" refkind="member"><highlight class="normal">}<sp/><ref refid="namespacenostr_1a324c9ccba9c6ebcc1753c63eaa7dca47" kindref="member">Transaction</ref>;</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"></highlight></codeline>
+<codeline lineno="102" refid="structnostr_1_1s__ListTransactionsResponse" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structnostr_1_1s__ListTransactionsResponse" kindref="compound">s_ListTransactionsResponse</ref><sp/>{</highlight></codeline>
+<codeline lineno="103" refid="structnostr_1_1s__ListTransactionsResponse_1a7fd6e179ba28b6f24b589921083e9697" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;Transaction&gt;<sp/><ref refid="structnostr_1_1s__ListTransactionsResponse_1a7fd6e179ba28b6f24b589921083e9697" kindref="member">transactions</ref>;</highlight></codeline>
+<codeline lineno="104" refid="namespacenostr_1a5fd7239e7510091c73ba2602f4a6bc3d" refkind="member"><highlight class="normal">}<sp/><ref refid="namespacenostr_1a5fd7239e7510091c73ba2602f4a6bc3d" kindref="member">ListTransactionsResponse</ref>;</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"></highlight></codeline>
+<codeline lineno="106" refid="structnostr_1_1s__GetBalanceResponse" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structnostr_1_1s__GetBalanceResponse" kindref="compound">s_GetBalanceResponse</ref><sp/>{</highlight></codeline>
+<codeline lineno="107" refid="structnostr_1_1s__GetBalanceResponse_1a2c8b0f2daac74e6d92a9948489c762e5" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structnostr_1_1s__GetBalanceResponse_1a2c8b0f2daac74e6d92a9948489c762e5" kindref="member">balance</ref>;</highlight></codeline>
+<codeline lineno="108" refid="namespacenostr_1a42570ba6e2e70160a34b1746331f5bff" refkind="member"><highlight class="normal">}<sp/><ref refid="namespacenostr_1a42570ba6e2e70160a34b1746331f5bff" kindref="member">GetBalanceResponse</ref>;</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"></highlight></codeline>
+<codeline lineno="110" refid="structnostr_1_1s__GetInfoResponse" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structnostr_1_1s__GetInfoResponse" kindref="compound">s_GetInfoResponse</ref><sp/>{</highlight></codeline>
+<codeline lineno="111" refid="structnostr_1_1s__GetInfoResponse_1a754539daf350acbc6a2dd836f398330a" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__GetInfoResponse_1a754539daf350acbc6a2dd836f398330a" kindref="member">alias</ref>;</highlight></codeline>
+<codeline lineno="112" refid="structnostr_1_1s__GetInfoResponse_1a8953b5c92c1a5691dbad1cc3c9619734" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__GetInfoResponse_1a8953b5c92c1a5691dbad1cc3c9619734" kindref="member">color</ref>;</highlight></codeline>
+<codeline lineno="113" refid="structnostr_1_1s__GetInfoResponse_1a7fa2f8a9c91f209567ffe1d7549ac16b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__GetInfoResponse_1a7fa2f8a9c91f209567ffe1d7549ac16b" kindref="member">pubkey</ref>;</highlight></codeline>
+<codeline lineno="114" refid="structnostr_1_1s__GetInfoResponse_1ab731456e15cf89796232608fd69d81ec" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__GetInfoResponse_1ab731456e15cf89796232608fd69d81ec" kindref="member">network</ref>;</highlight></codeline>
+<codeline lineno="115" refid="structnostr_1_1s__GetInfoResponse_1a67d48a9483d8d5e7a57bce58bdad19d0" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="structnostr_1_1s__GetInfoResponse_1a67d48a9483d8d5e7a57bce58bdad19d0" kindref="member">blockHeight</ref>;</highlight></codeline>
+<codeline lineno="116" refid="structnostr_1_1s__GetInfoResponse_1a2cad02f859361db1c0c96044429a6c7d" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__GetInfoResponse_1a2cad02f859361db1c0c96044429a6c7d" kindref="member">blockHash</ref>;</highlight></codeline>
+<codeline lineno="117" refid="structnostr_1_1s__GetInfoResponse_1a8d8341c772deb30a61202afbd19b6e1d" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;NostrString&gt;<sp/><ref refid="structnostr_1_1s__GetInfoResponse_1a8d8341c772deb30a61202afbd19b6e1d" kindref="member">methods</ref>;</highlight></codeline>
+<codeline lineno="118" refid="namespacenostr_1af3dc0dbf7fa69605d5ad971a37c5fe7f" refkind="member"><highlight class="normal">}<sp/><ref refid="namespacenostr_1af3dc0dbf7fa69605d5ad971a37c5fe7f" kindref="member">GetInfoResponse</ref>;</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"></highlight></codeline>
+<codeline lineno="120" refid="structnostr_1_1s__NWCData" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structnostr_1_1s__NWCData" kindref="compound">s_NWCData</ref><sp/>{</highlight></codeline>
+<codeline lineno="121" refid="structnostr_1_1s__NWCData_1a70082c745e79ea268c3c64c327887460" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__NWCData_1a70082c745e79ea268c3c64c327887460" kindref="member">relay</ref>;</highlight></codeline>
+<codeline lineno="122" refid="structnostr_1_1s__NWCData_1a33f9e8b8f85c7f6e54be23d4fd4a3b36" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__NWCData_1a33f9e8b8f85c7f6e54be23d4fd4a3b36" kindref="member">pubkey</ref>;</highlight></codeline>
+<codeline lineno="123" refid="structnostr_1_1s__NWCData_1af3225681a304d0b769be2298817dd4bf" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/><ref refid="structnostr_1_1s__NWCData_1af3225681a304d0b769be2298817dd4bf" kindref="member">secret</ref>;</highlight></codeline>
+<codeline lineno="124" refid="namespacenostr_1acd41d0899a1d0f921c44a1a91b6c0eed" refkind="member"><highlight class="normal">}<sp/><ref refid="namespacenostr_1acd41d0899a1d0f921c44a1a91b6c0eed" kindref="member">NWCData</ref>;</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"></highlight></codeline>
+<codeline lineno="126" refid="classnostr_1_1Nip47" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classnostr_1_1Nip47" kindref="compound">Nip47</ref><sp/>{</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="128" refid="classnostr_1_1Nip47_1a832db110f750bae323891fc3113dc483" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1Nip47_1a832db110f750bae323891fc3113dc483" kindref="member">Nip47</ref>(){};</highlight></codeline>
+<codeline lineno="129" refid="classnostr_1_1Nip47_1afa506b09ad4df68c72e088336d408429" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1Nip47_1afa506b09ad4df68c72e088336d408429" kindref="member">Nip47</ref>(<ref refid="classnostr_1_1Nip04" kindref="compound">Nip04</ref><sp/>nip04,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>servicePubKey,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>userPrivKey)<sp/>:<sp/>servicePubKey(servicePubKey),<sp/>userPrivKey(userPrivKey),<sp/>nip04(nip04)<sp/>{}</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref><sp/><ref refid="classnostr_1_1Nip47_1a4126792accc0be87b3b209918d1f903d" kindref="member">payInvoice</ref>(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>invoice,<sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>amount<sp/>=<sp/>-1);</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref><sp/><ref refid="classnostr_1_1Nip47_1a6aa7e03b79ab36063c9dbbb95dd5a07c" kindref="member">multiPayInvoice</ref>(std::initializer_list&lt;Invoice&gt;<sp/>invoices);</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref><sp/><ref refid="classnostr_1_1Nip47_1af6c9c30bfcf1f9cab0fbac77e67eb9c9" kindref="member">payKeySend</ref>(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>pubkey,<sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>amount,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>preimage<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">,<sp/>std::initializer_list&lt;TLVRecords&gt;<sp/>tlv<sp/>=<sp/>{});</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/>SignedNostrEvent<sp/><ref refid="classnostr_1_1Nip47_1a3b82c08c5d19006e22d7f027829b6002" kindref="member">multiPayKeySend</ref>(std::initializer_list&lt;KeySend&gt;<sp/>keySends);</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/>SignedNostrEvent<sp/><ref refid="classnostr_1_1Nip47_1aa567dc8ea8b24bbac721724f79c156ec" kindref="member">makeInvoice</ref>(</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>amount,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>description<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>descriptionHash<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>expiry<sp/>=<sp/>0);</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/>SignedNostrEvent<sp/><ref refid="classnostr_1_1Nip47_1a500ce5a6edd53194e6ddc035d0f4c50d" kindref="member">lookUpPaymentHash</ref>(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>paymentHash);</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/>SignedNostrEvent<sp/><ref refid="classnostr_1_1Nip47_1a74760efce0406b4ca35811112c4cf1dd" kindref="member">lookUpInvoice</ref>(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>invoice);</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/>SignedNostrEvent<sp/><ref refid="classnostr_1_1Nip47_1aa4f00696a8b58ae43ea7582d915147d4" kindref="member">listTransactions</ref>(</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>from<sp/>=<sp/>0,<sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>until<sp/>=<sp/>0,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>limit<sp/>=<sp/>0,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>offset<sp/>=<sp/>0,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>unpaid<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">,<sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>type<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/>SignedNostrEvent<sp/><ref refid="classnostr_1_1Nip47_1a086e38d7ee42d8d98f9e439b515f9cbb" kindref="member">getBalance</ref>();</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/>SignedNostrEvent<sp/><ref refid="classnostr_1_1Nip47_1ad3598c721308e98893c1af2526b6ca98" kindref="member">getInfo</ref>();</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"></highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1Nip47_1a227c93d1f00eef2dc26964d5960fa870" kindref="member">parseResponse</ref>(SignedNostrEvent<sp/>*response,<sp/>Nip47Response&lt;PayInvoiceResponse&gt;<sp/>&amp;out);</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1Nip47_1a227c93d1f00eef2dc26964d5960fa870" kindref="member">parseResponse</ref>(SignedNostrEvent<sp/>*response,<sp/>Nip47Response&lt;MultiPayInvoiceResponse&gt;<sp/>&amp;out);</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1Nip47_1a227c93d1f00eef2dc26964d5960fa870" kindref="member">parseResponse</ref>(SignedNostrEvent<sp/>*response,<sp/>Nip47Response&lt;PayKeySendResponse&gt;<sp/>&amp;out);</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1Nip47_1a227c93d1f00eef2dc26964d5960fa870" kindref="member">parseResponse</ref>(SignedNostrEvent<sp/>*response,<sp/>Nip47Response&lt;MultiPayKeySendResponse&gt;<sp/>&amp;out);</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1Nip47_1a227c93d1f00eef2dc26964d5960fa870" kindref="member">parseResponse</ref>(SignedNostrEvent<sp/>*response,<sp/>Nip47Response&lt;MakeInvoiceResponse&gt;<sp/>&amp;out);</highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1Nip47_1a227c93d1f00eef2dc26964d5960fa870" kindref="member">parseResponse</ref>(SignedNostrEvent<sp/>*response,<sp/>Nip47Response&lt;LookUpInvoiceResponse&gt;<sp/>&amp;out);</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1Nip47_1a227c93d1f00eef2dc26964d5960fa870" kindref="member">parseResponse</ref>(SignedNostrEvent<sp/>*response,<sp/>Nip47Response&lt;ListTransactionsResponse&gt;<sp/>&amp;out);</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1Nip47_1a227c93d1f00eef2dc26964d5960fa870" kindref="member">parseResponse</ref>(SignedNostrEvent<sp/>*response,<sp/>Nip47Response&lt;GetBalanceResponse&gt;<sp/>&amp;out);</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1Nip47_1a227c93d1f00eef2dc26964d5960fa870" kindref="member">parseResponse</ref>(SignedNostrEvent<sp/>*response,<sp/>Nip47Response&lt;GetInfoResponse&gt;<sp/>&amp;out);</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classnostr_1_1Nip47_1a47754ec23d3b156bcb94b132612d0147" kindref="member">parseNWC</ref>(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>,<sp/><ref refid="namespacenostr_1acd41d0899a1d0f921c44a1a91b6c0eed" kindref="member">NWCData</ref><sp/>&amp;);</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"></highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>servicePubKey;</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>userPrivKey;</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/>Nip04<sp/>nip04;</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/>SignedNostrEvent<sp/>createEvent(<ref refid="NostrString_8cpp_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref><sp/>method,<sp/>JsonDocument<sp/>doc);</highlight></codeline>
+<codeline lineno="157"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="158"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>nostr</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="159"><highlight class="normal"></highlight></codeline>
+<codeline lineno="160"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">//<sp/>NIP47_H</highlight></codeline>
+    </programlisting>
+    <location file="src/Nip47.h"/>
+  </compounddef>
+</doxygen>

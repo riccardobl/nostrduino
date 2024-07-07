@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="namespacenostr_1_1esp32" kind="namespace" language="C++">
+    <compoundname>nostr::esp32</compoundname>
+    <innerclass refid="classnostr_1_1esp32_1_1ESP32Connection" prot="public">nostr::esp32::ESP32Connection</innerclass>
+    <innerclass refid="classnostr_1_1esp32_1_1ESP32Transport" prot="public">nostr::esp32::ESP32Transport</innerclass>
+    <innernamespace refid="namespacenostr_1_1esp32_1_1ESP32Platform">nostr::esp32::ESP32Platform</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/esp32/ESP32Platform.h" line="11" column="5"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,452 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="classnostr_1_1NostrPool" kind="class" language="C++" prot="public">
+    <compoundname>nostr::NostrPool</compoundname>
+    <includes refid="NostrPool_8h" local="no">NostrPool.h</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classnostr_1_1NostrPool_1abf91db61eff5d667b42d4f8ee41fe205" prot="private" static="no" mutable="no">
+        <type><ref refid="namespacenostr_1aa33fbe158a46ab4fc7d840c432df7227" kindref="member">NostrNoticeCallback</ref></type>
+        <definition>NostrNoticeCallback nostr::NostrPool::noticeCallback</definition>
+        <argsstring></argsstring>
+        <name>noticeCallback</name>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="145" column="29" bodyfile="src/NostrPool.h" bodystart="145" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classnostr_1_1NostrPool_1a4196c7e948ad728d2b587f8e00a0b221" prot="private" static="no" mutable="no">
+        <type>long long</type>
+        <definition>long long nostr::NostrPool::subs</definition>
+        <argsstring></argsstring>
+        <name>subs</name>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="146" column="19" bodyfile="src/NostrPool.h" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classnostr_1_1NostrPool_1af2d8c5ec3eb954fb4c4c9c2921d062a8" prot="private" static="no" mutable="no">
+        <type>std::map&lt; <ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>, <ref refid="classnostr_1_1NostrSubscription" kindref="compound">NostrSubscription</ref> &gt;</type>
+        <definition>std::map&lt;NostrString, NostrSubscription&gt; nostr::NostrPool::subscriptions</definition>
+        <argsstring></argsstring>
+        <name>subscriptions</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="147" column="18" bodyfile="src/NostrPool.h" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classnostr_1_1NostrPool_1afbc6d152e452422817dddbd7e430d0f7" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="classnostr_1_1NostrRelay" kindref="compound">NostrRelay</ref> * &gt;</type>
+        <definition>std::vector&lt;NostrRelay *&gt; nostr::NostrPool::relays</definition>
+        <argsstring></argsstring>
+        <name>relays</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="148" column="21" bodyfile="src/NostrPool.h" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classnostr_1_1NostrPool_1abd60cb1f7ebfc6aa8bdc09abe2a074fb" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int nostr::NostrPool::eventStatusTimeoutSeconds</definition>
+        <argsstring></argsstring>
+        <name>eventStatusTimeoutSeconds</name>
+        <initializer>= 60 * 10</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="150" column="13" bodyfile="src/NostrPool.h" bodystart="150" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classnostr_1_1NostrPool_1aa236bbbe369bfb3e4fbf2067d86ca4d6" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="namespacenostr_1a1039ef652375f3083d4a016df66a906c" kindref="member">EventStatusCallbackEntry</ref> &gt;</type>
+        <definition>std::vector&lt;EventStatusCallbackEntry&gt; nostr::NostrPool::eventStatusCallbackEntries</definition>
+        <argsstring></argsstring>
+        <name>eventStatusCallbackEntries</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="151" column="21" bodyfile="src/NostrPool.h" bodystart="151" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classnostr_1_1NostrPool_1abc0444f924fe6bacba46aec404ee90ad" prot="private" static="no" mutable="no">
+        <type><ref refid="classnostr_1_1Transport" kindref="compound">Transport</ref> *</type>
+        <definition>Transport* nostr::NostrPool::transport</definition>
+        <argsstring></argsstring>
+        <name>transport</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="152" column="19" bodyfile="src/NostrPool.h" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classnostr_1_1NostrPool_1aa169631cafd52ff3640edc32582ffd0f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>nostr::NostrPool::NostrPool</definition>
+        <argsstring>(Transport *transport, int eventStatusTimeoutSeconds=60 *10)</argsstring>
+        <name>NostrPool</name>
+        <param>
+          <type><ref refid="classnostr_1_1Transport" kindref="compound">Transport</ref> *</type>
+          <declname>transport</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>eventStatusTimeoutSeconds</declname>
+          <defval>60 *10</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Create a new <ref refid="classnostr_1_1NostrPool" kindref="compound">NostrPool</ref> <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>transport</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A transport object, you can get one for the <ref refid="namespacenostr_1_1esp32" kindref="compound">esp32</ref> platform using <ref refid="namespacenostr_1_1esp32_1_1ESP32Platform_1abe46d31af712a8dc70582da944ce1229" kindref="member">nostr::esp32::ESP32Platform::getTransport()</ref> , for other platforms you need to implement the <ref refid="classnostr_1_1Transport" kindref="compound">Transport</ref> interface </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>eventStatusTimeoutSeconds</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of seconds to wait for an event status before timing out (optional) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="73" column="10" bodyfile="src/NostrPool.h" bodystart="73" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1NostrPool_1ac7234da5ae1a2b83564b1fed26cf1932" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+        <definition>NostrString NostrPool::subscribeMany</definition>
+        <argsstring>(std::initializer_list&lt; NostrString &gt; urls, std::initializer_list&lt; std::map&lt; NostrString, std::initializer_list&lt; NostrString &gt;&gt;&gt; filters, NostrEventCallback eventCallback=nullptr, NostrCloseCallback closeCallback=nullptr, NostrEOSECallback eoseCallback=nullptr)</argsstring>
+        <name>subscribeMany</name>
+        <param>
+          <type>std::initializer_list&lt; <ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref> &gt;</type>
+          <declname>urls</declname>
+        </param>
+        <param>
+          <type>std::initializer_list&lt; std::map&lt; <ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref>, std::initializer_list&lt; <ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref> &gt;&gt;&gt;</type>
+          <declname>filters</declname>
+        </param>
+        <param>
+          <type><ref refid="namespacenostr_1ab0da4b375d4d7eda0bb0bf1010f381bc" kindref="member">NostrEventCallback</ref></type>
+          <declname>eventCallback</declname>
+          <defval>nullptr</defval>
+        </param>
+        <param>
+          <type><ref refid="namespacenostr_1a6247e694a00e0a5cb14ddf0929408fb5" kindref="member">NostrCloseCallback</ref></type>
+          <declname>closeCallback</declname>
+          <defval>nullptr</defval>
+        </param>
+        <param>
+          <type><ref refid="namespacenostr_1a7a3b6e8f71428b2bf4195b93d35756ed" kindref="member">NostrEOSECallback</ref></type>
+          <declname>eoseCallback</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Subscribe to events from one or more relays <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>urls</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The relays to subscribe to </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>filters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A list of filters for each relay </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>eventCallback</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A callback to be called when an event is received (optional) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>closeCallback</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A callback to be called when the subscription is closed (optional) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>eoseCallback</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A callback to be called when the stored events are exhausted (optional) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The subscription ID </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="87" column="21" bodyfile="src/NostrPool.cpp" bodystart="80" bodyend="122"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1NostrPool_1ae3a75055cdf933a6ec0dbea4e4dcbc49" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void NostrPool::publish</definition>
+        <argsstring>(std::initializer_list&lt; NostrString &gt; rs, SignedNostrEvent *event, NostrEventStatusCallback statusCallback=nullptr)</argsstring>
+        <name>publish</name>
+        <param>
+          <type>std::initializer_list&lt; <ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref> &gt;</type>
+          <declname>rs</declname>
+        </param>
+        <param>
+          <type><ref refid="classnostr_1_1SignedNostrEvent" kindref="compound">SignedNostrEvent</ref> *</type>
+          <declname>event</declname>
+        </param>
+        <param>
+          <type><ref refid="namespacenostr_1a83396304773c199d3c6613e50113ac71" kindref="member">NostrEventStatusCallback</ref></type>
+          <declname>statusCallback</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Publish a signed event to one or more relays. The pool will automatically start listening to the specified relays after publishing. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>rs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The relays to publish to </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The event to publish </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>statusCallback</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A callback to be called when the event status is known (optional) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="105" column="14" bodyfile="src/NostrPool.cpp" bodystart="186" bodyend="205"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1NostrPool_1ab396fdccb8964a50e88dc71357682e99" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void NostrPool::loop</definition>
+        <argsstring>()</argsstring>
+        <name>loop</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Tick the <ref refid="classnostr_1_1NostrPool" kindref="compound">NostrPool</ref>. This should be called in the main loop of your sketch </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="112" column="14" bodyfile="src/NostrPool.cpp" bodystart="206" bodyend="224"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1NostrPool_1ab862d897213cbb3a7c39387253b2122b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void NostrPool::closeSubscription</definition>
+        <argsstring>(NostrString subId)</argsstring>
+        <name>closeSubscription</name>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>subId</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Close the subscription with the given ID <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>subId</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subscription ID </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="118" column="14" bodyfile="src/NostrPool.cpp" bodystart="124" bodyend="143"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1NostrPool_1a9f6686275d59a1556b30c58737d45c0b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classnostr_1_1NostrRelay" kindref="compound">NostrRelay</ref> *</type>
+        <definition>NostrRelay * NostrPool::ensureRelay</definition>
+        <argsstring>(NostrString url)</argsstring>
+        <name>ensureRelay</name>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>url</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Ensure the connection to the specified relay is open <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>url</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The relay URL </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The relay object </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="125" column="20" bodyfile="src/NostrPool.cpp" bodystart="145" bodyend="163"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1NostrPool_1a87aacd8a79d84fa8a798f824ab21e16c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref> &gt;</type>
+        <definition>std::vector&lt; NostrString &gt; NostrPool::getRelays</definition>
+        <argsstring>()</argsstring>
+        <name>getRelays</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Get all relays that the pool is connected to <simplesect kind="return"><para>A list of relay URLs </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="131" column="21" bodyfile="src/NostrPool.cpp" bodystart="226" bodyend="232"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1NostrPool_1a6930e93774d6d5dba07a7172bffd3684" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void NostrPool::disconnectRelay</definition>
+        <argsstring>(NostrString url)</argsstring>
+        <name>disconnectRelay</name>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>url</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Disconnect from the specified relay <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>url</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The relay URL </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="137" column="14" bodyfile="src/NostrPool.cpp" bodystart="165" bodyend="175"/>
+      </memberdef>
+      <memberdef kind="function" id="classnostr_1_1NostrPool_1a912d173034c08ea82922acf58c8acbc2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void NostrPool::close</definition>
+        <argsstring>()</argsstring>
+        <name>close</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Close the pool and disconnect from every relay </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="142" column="14" bodyfile="src/NostrPool.cpp" bodystart="177" bodyend="184"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="classnostr_1_1NostrPool_1a92d62c605a98401f1923ebf3f8256ec2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void NostrPool::onEvent</definition>
+        <argsstring>(NostrRelay *relay, NostrString message)</argsstring>
+        <name>onEvent</name>
+        <param>
+          <type><ref refid="classnostr_1_1NostrRelay" kindref="compound">NostrRelay</ref> *</type>
+          <declname>relay</declname>
+        </param>
+        <param>
+          <type><ref refid="NostrString_8h_1a51a5cc014ebe5eb0fda73fcf0e09b626" kindref="member">NostrString</ref></type>
+          <declname>message</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/NostrPool.h" line="149" column="14" bodyfile="src/NostrPool.cpp" bodystart="21" bodyend="78"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>The main class for interacting with the Nostr network. Handles subscriptions, relays, and event publishing. </para>
+    </detaileddescription>
+    <location file="src/NostrPool.h" line="64" column="5" bodyfile="src/NostrPool.h" bodystart="64" bodyend="153"/>
+    <listofallmembers>
+      <member refid="classnostr_1_1NostrPool_1a912d173034c08ea82922acf58c8acbc2" prot="public" virt="non-virtual"><scope>nostr::NostrPool</scope><name>close</name></member>
+      <member refid="classnostr_1_1NostrPool_1ab862d897213cbb3a7c39387253b2122b" prot="public" virt="non-virtual"><scope>nostr::NostrPool</scope><name>closeSubscription</name></member>
+      <member refid="classnostr_1_1NostrPool_1a6930e93774d6d5dba07a7172bffd3684" prot="public" virt="non-virtual"><scope>nostr::NostrPool</scope><name>disconnectRelay</name></member>
+      <member refid="classnostr_1_1NostrPool_1a9f6686275d59a1556b30c58737d45c0b" prot="public" virt="non-virtual"><scope>nostr::NostrPool</scope><name>ensureRelay</name></member>
+      <member refid="classnostr_1_1NostrPool_1aa236bbbe369bfb3e4fbf2067d86ca4d6" prot="private" virt="non-virtual"><scope>nostr::NostrPool</scope><name>eventStatusCallbackEntries</name></member>
+      <member refid="classnostr_1_1NostrPool_1abd60cb1f7ebfc6aa8bdc09abe2a074fb" prot="private" virt="non-virtual"><scope>nostr::NostrPool</scope><name>eventStatusTimeoutSeconds</name></member>
+      <member refid="classnostr_1_1NostrPool_1a87aacd8a79d84fa8a798f824ab21e16c" prot="public" virt="non-virtual"><scope>nostr::NostrPool</scope><name>getRelays</name></member>
+      <member refid="classnostr_1_1NostrPool_1ab396fdccb8964a50e88dc71357682e99" prot="public" virt="non-virtual"><scope>nostr::NostrPool</scope><name>loop</name></member>
+      <member refid="classnostr_1_1NostrPool_1aa169631cafd52ff3640edc32582ffd0f" prot="public" virt="non-virtual"><scope>nostr::NostrPool</scope><name>NostrPool</name></member>
+      <member refid="classnostr_1_1NostrPool_1abf91db61eff5d667b42d4f8ee41fe205" prot="private" virt="non-virtual"><scope>nostr::NostrPool</scope><name>noticeCallback</name></member>
+      <member refid="classnostr_1_1NostrPool_1a92d62c605a98401f1923ebf3f8256ec2" prot="private" virt="non-virtual"><scope>nostr::NostrPool</scope><name>onEvent</name></member>
+      <member refid="classnostr_1_1NostrPool_1ae3a75055cdf933a6ec0dbea4e4dcbc49" prot="public" virt="non-virtual"><scope>nostr::NostrPool</scope><name>publish</name></member>
+      <member refid="classnostr_1_1NostrPool_1afbc6d152e452422817dddbd7e430d0f7" prot="private" virt="non-virtual"><scope>nostr::NostrPool</scope><name>relays</name></member>
+      <member refid="classnostr_1_1NostrPool_1a4196c7e948ad728d2b587f8e00a0b221" prot="private" virt="non-virtual"><scope>nostr::NostrPool</scope><name>subs</name></member>
+      <member refid="classnostr_1_1NostrPool_1ac7234da5ae1a2b83564b1fed26cf1932" prot="public" virt="non-virtual"><scope>nostr::NostrPool</scope><name>subscribeMany</name></member>
+      <member refid="classnostr_1_1NostrPool_1af2d8c5ec3eb954fb4c4c9c2921d062a8" prot="private" virt="non-virtual"><scope>nostr::NostrPool</scope><name>subscriptions</name></member>
+      <member refid="classnostr_1_1NostrPool_1abc0444f924fe6bacba46aec404ee90ad" prot="private" virt="non-virtual"><scope>nostr::NostrPool</scope><name>transport</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
