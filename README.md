@@ -24,7 +24,7 @@ In addition to that, the library provides some "managed" services (in `src/servi
 
 ## Installation
 
-TODO
+Check the [platformio registry page](https://registry.platformio.org/libraries/rblb/Nostrduino/installation) for instructions.
 
 ## Usage
 See the example scripts in `examples/` for simple examples of how to use this library.
