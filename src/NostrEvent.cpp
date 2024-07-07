@@ -1,8 +1,4 @@
-/*
-  NostrEvent - Arduino library for Nostr.
-  Created by Riccardo Balbo <nostr@rblb.it>, July 2th 2024
-  Released under MIT License
-*/
+
 #include "NostrEvent.h"
  
 
@@ -15,11 +11,12 @@ const std::vector<NostrEventTag> &NostrEventTags::getTags() const
 {
     return tags;
 }
+const std::vector<NostrString> NostrEventTags::emptyTags;
+
 const std::vector<NostrString> &NostrEventTags::getTag(NostrString key) const {
     for (auto &tag : tags)
     {
-        if (tag.key == key)
-        {
+        if (NostrString_equals(tag.key , key)) {
             return tag.value;
         }
     }
@@ -58,7 +55,7 @@ void NostrEventTags::removeTag(unsigned int index)
 void NostrEventTags::removeTags(NostrString key) {
     for (int i = 0; i < tags.size(); i++)
     {
-        if (tags[i].key == key)
+        if (NostrString_equals(tags[i].key ,key))
         {
             tags.erase(tags.begin() + i);
             i--;
@@ -74,7 +71,7 @@ void NostrEventTags::clearTags()
 void NostrEventTags::toJson(JsonArray arr) const
 {
     for (int i = 0; i < tags.size(); i++) {
-        JsonArray arr2 = arr.createNestedArray();
+        JsonArray arr2 = arr.add<JsonArray>();
         arr2.add(tags[i].key);
         for (int j = 0; j < tags[i].value.size(); j++) {
             arr2.add(tags[i].value[j]);
@@ -95,14 +92,14 @@ SignedNostrEvent UnsignedNostrEvent::sign(NostrString privateKeyHex) {
 
     Utils::log("PubKey " + pubKeyHex);
 
-    StaticJsonDocument<2048> doc;
-    JsonArray data = doc.createNestedArray("data");
+    JsonDocument doc;
+    JsonArray data = doc["data"].to<JsonArray>();
     data.add(0);
     data.add(pubKeyHex);
     data.add(this->created_at);
     data.add(this->kind);
-    JsonArray tags = data.createNestedArray();
-    this->getTags().toJson(tags);
+    JsonArray tags = data.add<JsonArray>();
+    this->getTags()->toJson(tags);
     data.add(this->content);
 
     NostrString message;
@@ -136,12 +133,6 @@ SignedNostrEvent UnsignedNostrEvent::sign(NostrString privateKeyHex) {
     );
     Utils::log("Signature hash " + signatureHex);
 
-    if(!signedEvent.verify()){
-        Utils::log("Error: Signature verification failed");
-        throw std::runtime_error("Signature verification failed");
-    }else{
-        Utils::log("Signature verification passed");
-    }
 
     return signedEvent;
 }
@@ -178,7 +169,7 @@ void SignedNostrEvent::toJson(JsonObject doc) const
     doc["pubkey"] = this->pubkey;
     doc["created_at"] = this->created_at;
     doc["kind"] = this->kind;
-    JsonArray tags = doc.createNestedArray("tags");
+    JsonArray tags = doc["tags"].to<JsonArray>();
     this->tags.toJson(tags);
     doc["content"] = this->content;
     doc["sig"] = this->signature;    
@@ -188,7 +179,7 @@ void SignedNostrEvent::toJson(JsonObject doc) const
 void SignedNostrEvent::toSendableEvent(JsonArray doc) const
 {
     doc.add("EVENT");
-    JsonObject obj = doc.createNestedObject();
+    JsonObject obj = doc.add<JsonObject>();
     this->toJson(obj);
 }
 
@@ -207,7 +198,7 @@ SignedNostrEvent::SignedNostrEvent(JsonArray arr){
 
     this->id = obj["id"].as<NostrString>();
     this->pubkey = obj["pubkey"].as<NostrString>();
-    this->created_at = obj["created_at"].as<unsigned long>();
+    this->created_at = obj["created_at"].as<unsigned long long>();
     this->kind = obj["kind"].as<unsigned int>();
     NostrEventTags tt = NostrEventTags();
 

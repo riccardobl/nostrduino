@@ -1,10 +1,6 @@
-/*
-  NostrEvent - Arduino library for Nostr.
-  Created by Riccardo Balbo <nostr@rblb.it>, July 2th 2024
-  Released under MIT License
-*/
-#ifndef NostrEvent_h
-#define NostrEvent_h
+
+#ifndef _NOSTR_EVENT_H
+#define _NOSTR_EVENT_H
 
  
 #include "NostrString.h"
@@ -101,7 +97,7 @@ namespace nostr {
         virtual ~NostrEvent(){};
         unsigned long int getCreatedAt() { return this->created_at; }
         unsigned int getKind() { return this->kind; }
-        NostrEventTags &getTags() { return this->tags; }
+        NostrEventTags *getTags() { return &this->tags; }
         NostrString getContent() { return this->content; };
 
        protected:
@@ -164,7 +160,7 @@ namespace nostr {
 
         NostrString getPubkey() { return this->pubkey; };
 
-        const NostrEventTags &getTags() const { return this->tags; };
+        const NostrEventTags *getTags() const { return &this->tags; };
 
         NostrString getSignature() const { return this->signature; };
         NostrString getSubId() const { return this->subid; };
