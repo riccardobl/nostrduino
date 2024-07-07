@@ -57,23 +57,33 @@ namespace nostr {
         void processQueue();
     };
 
+    /**
+     * The main class for interacting with the Nostr network.
+     * Handles subscriptions, relays, and event publishing.
+     */
     class NostrPool {
-       private:
       
-        NostrNoticeCallback noticeCallback = nullptr;
-
-        long long subs = 0;
-        std::map<NostrString, NostrSubscription> subscriptions;
-        std::vector<NostrRelay*> relays;
-        void onEvent(NostrRelay *relay, NostrString message);
-        int eventStatusTimeoutSeconds = 60*10;
-        std::vector<EventStatusCallbackEntry>    eventStatusCallbackEntries;
-        Transport* transport;
        public:
-        NostrPool(Transport* transport,int eventStatusTimeoutSeconds=60*10) {
-            this->transport = transport;
-            this->eventStatusTimeoutSeconds = eventStatusTimeoutSeconds;
+         /**
+          * Create a new NostrPool
+          * @param transport A transport object, you can get one for the esp32 platform using nostr::esp32::ESP32Platform::getTransport() , for other platforms you need to implement the Transport
+          * interface
+          * @param eventStatusTimeoutSeconds The number of seconds to wait for an event status before timing out (optional)
+          */
+         NostrPool(Transport *transport, int eventStatusTimeoutSeconds = 60 * 10) {
+             this->transport = transport;
+             this->eventStatusTimeoutSeconds = eventStatusTimeoutSeconds;
         };
+
+        /**
+         * Subscribe to events from one or more relays
+         * @param urls The relays to subscribe to
+         * @param filters A list of filters for each relay
+         * @param eventCallback A callback to be called when an event is received (optional)
+         * @param closeCallback A callback to be called when the subscription is closed (optional)
+         * @param eoseCallback A callback to be called when the stored events are exhausted (optional) 
+         * @return The subscription ID
+         */
         NostrString subscribeMany(
             std::initializer_list<NostrString> urls,
             std::initializer_list<
@@ -84,16 +94,62 @@ namespace nostr {
             NostrEOSECallback eoseCallback = nullptr
       
         );
-        void closeSubscription(NostrString subId);
-        NostrRelay *ensureRelay(NostrString url);
-        std::vector<NostrString> getRelays();
+   
 
-        void disconnectRelay(NostrString url);
-        void close();
+        /**
+         * Publish a signed event to one or more relays. The pool will automatically start listening to the specified relays after publishing.
+         * @param rs The relays to publish to
+         * @param event The event to publish
+         * @param statusCallback A callback to be called when the event status is known (optional)
+         */
         void publish(std::initializer_list<NostrString> rs,
                      SignedNostrEvent *event,
                      NostrEventStatusCallback statusCallback = nullptr);
+
+        /**
+         * Tick the NostrPool. This should be called in the main loop of your sketch
+         */
         void loop();
+
+        /**
+         * Close the subscription with the given ID
+         * @param subId The subscription ID
+         */
+        void closeSubscription(NostrString subId);
+
+        /**
+         * Ensure the connection to the specified relay is open
+         * @param url The relay URL
+         * @return The relay object
+         */
+        NostrRelay *ensureRelay(NostrString url);
+
+        /**
+         * Get all relays that the pool is connected to
+         * @return A list of relay URLs
+         */
+        std::vector<NostrString> getRelays();
+
+        /**
+         * Disconnect from the specified relay
+         * @param url The relay URL
+         */
+        void disconnectRelay(NostrString url);
+
+        /**
+         * Close the pool and disconnect from every relay
+         */
+        void close();
+
+      private:
+        NostrNoticeCallback noticeCallback = nullptr;
+        long long subs = 0;
+        std::map<NostrString, NostrSubscription> subscriptions;
+        std::vector<NostrRelay *> relays;
+        void onEvent(NostrRelay *relay, NostrString message);
+        int eventStatusTimeoutSeconds = 60 * 10;
+        std::vector<EventStatusCallbackEntry> eventStatusCallbackEntries;
+        Transport *transport;
     };
 }  // namespace nostr
 #endif

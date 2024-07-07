@@ -144,6 +144,7 @@ class SignedNostrEvent : public NostrEvent {
     bool stored;
 
   public:
+    
     NostrString getId() { return this->id; }
     bool isStored() { return this->stored; }
 

@@ -28,6 +28,9 @@ namespace nostr {
                 Serial.println(str.c_str());
             }
 
+            /**
+             * Initialize the WiFi connection
+             */
             inline void initWifi(NostrString ssid,  NostrString passphrase, int channel = 6) {
                 esp_wifi_start();
                 WiFi.begin(ssid, passphrase, channel);
@@ -42,11 +45,17 @@ namespace nostr {
                 Serial.println(WiFi.localIP());
             }
 
+            /**
+             * Initialize the time service
+             */
             inline void initTime(const char* ntpServer, long gmtOffset_sec = 0,
                                  int daylightOffset_sec = 3600) {              
                 configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
             }
 
+            /**
+             * Initialize platform specific code for the nostr library
+             */
             inline void initNostr(bool withLogger){
                 bootloader_random_enable();
                 nostr::Utils::setUnixTimeSecondsProvider(getUnixTimestamp);
@@ -54,6 +63,9 @@ namespace nostr {
                 nostr::Utils::setRealRandom(getRealRandom);
             }
 
+            /**
+             * Get a platform specific transport 
+             */
             inline ESP32Transport* getTransport(){
                 return  new nostr::esp32::ESP32Transport();                
             }
