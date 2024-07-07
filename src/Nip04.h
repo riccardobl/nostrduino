@@ -1,30 +1,31 @@
-#ifndef NIP04_H
-#define NIP04_H
+#ifndef _NIP04_H
+#define _NIP04_H
 #include <aes.h>
+
+#include <vector>
 
 #include "Hash.h"
 #include "NostrString.h"
 #include "Utils.h"
 
- 
 namespace nostr {
     class Nip04 {
        public:
-        static NostrString decrypt(NostrString& privateKeyHex,
+        NostrString decrypt(NostrString& privateKeyHex,
                                    NostrString& senderPubKeyHex,
                                    NostrString content);
-        static NostrString encrypt(NostrString &privateKeyHex,
+        NostrString encrypt(NostrString &privateKeyHex,
                                    NostrString& recipientPubKeyHex,
                                    NostrString content);
 
        private:
-        static  NostrString encryptData(byte key[32], byte iv[16],
+         NostrString encryptData(byte key[32], byte iv[16],
                                        NostrString msg) ;
 
-        static  void stringToByteArray(const char *input, int padding_diff,
+         void stringToByteArray(const char *input, int padding_diff,
                                byte *output) ;
 
-        static  NostrString decryptData(byte key[32], byte iv[16],
+          NostrString decryptData(byte key[32], byte iv[16],
                                        NostrString messageHex) ;
     };
 }  // namespace nostr
