@@ -1,0 +1,32 @@
+name: Publish Package to PlatformIO Registry
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install PlatformIO
+        run: pip install -U platformio
+        
+      - name: Update version in library.json
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "Build version is $VERSION"
+          sed -i "s/\"version\": \".*\"/\"version\": \"$VERSION\"/" library.json
+          cat library.json
+
+      - name: Publish to PlatformIO Registry
+        env:
+          PLATFORMIO_AUTH_TOKEN: ${{ secrets.PLATFORMIO_AUTH_TOKEN }}
+        run: |
+          pio package publish --no-interactive

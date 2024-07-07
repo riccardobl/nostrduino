@@ -3,7 +3,7 @@
         {
             "maintainer": true,
             "name": "rblb",
-            "url": "https://github.com/riccardobl/nostrduino"
+            "url": "https://github.com/riccardobl"
         },
         {
             "maintainer": false,
@@ -28,7 +28,7 @@
     },
     "version": "1.2.0",
     "dependencies": {
-        "ArduinoJson": "^6.21.1",
+        "ArduinoJson": "^7.1.0",
         "uBitcoin": "^0.2.0",
         "WebSockets": "^2.4.1"
     }

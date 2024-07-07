@@ -1,0 +1,24 @@
+name: Build
+
+on:
+  push:
+        
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install PlatformIO
+        run: pip install -U platformio
+        
+      - name: Build
+        run: |
+            pio run -e ESP32TestNip01
+            pio run -e ESP32TestNip04
+            pio run -e ESP32TestNWC
