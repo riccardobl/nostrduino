@@ -26,12 +26,12 @@ NostrString esp32::ESP32Transport::getInvoiceFromLNAddr(NostrString addr, unsign
         return "";
     }
     NostrString status = doc["status"];
-    if (status != "OK") {
+    if (!NostrString_equals(status, "OK")) {
         Utils::log("LNURLP status not OK");
         return "";
     }
     NostrString callback = doc["callback"];
-    if (callback == "") {
+    if (NostrString_length(callback) == 0) {
         Utils::log("LNURLP callback not found");
         return "";
     }
@@ -58,12 +58,12 @@ NostrString esp32::ESP32Transport::getInvoiceFromLNAddr(NostrString addr, unsign
         return "";
     }
     NostrString callbackStatus = doc["status"];
-    if (callbackStatus != "OK") {
+    if (!NostrString_equals(callbackStatus, "OK")) {
         Utils::log("LNURLP callback status not OK");
         return "";
     }
     NostrString invoice = doc["pr"];
-    if (invoice == "") {
+    if (NostrString_length(invoice) == 0) {
         Utils::log("LNURLP invoice not found");
         return "";
     }
@@ -102,7 +102,7 @@ esp32::ESP32Connection::ESP32Connection(ESP32Transport *transport, NostrString u
     url = NostrString_substring(url, ssl ? 6 : 5);
     NostrString host = NostrString_substring(url, 0, NostrString_indexOf(url, "/"));
     NostrString path = NostrString_substring(url, NostrString_indexOf(url, "/"));
-    if (path.equals(""))
+    if (NostrString_equals(path, ""))
         path = "/";
     int port = ssl ? 443 : 80;
     if (NostrString_indexOf(host, ":") != -1) {
@@ -128,10 +128,15 @@ esp32::ESP32Connection::ESP32Connection(ESP32Transport *transport, NostrString u
             break;
         case WStype_TEXT: {
             NostrString message = NostrString_fromChars((char *)payload);
+            Utils::log("Received message: " + message);
             for (auto &listener : messageListeners) {
-                listener(message);
+                try {
+                    listener(message);
+                } catch (std::exception &e) {
+                    Utils::log(e.what());
+                }
             }
-
+            
             break;
         }
         case WStype_ERROR:
@@ -144,6 +149,7 @@ esp32::ESP32Connection::ESP32Connection(ESP32Transport *transport, NostrString u
 }
 
 void esp32::ESP32Connection::send(NostrString message) {
+    Utils::log("Sending message: " + message);
     ws.sendTXT((uint8_t *)NostrString_toChars(message), message.length());
 }
 

@@ -2,10 +2,9 @@
 #define NOSTR_UTILS_H
 
 #include <stdlib.h>
-
 #include <functional>
 #include <string>
-
+#include "ArduinoJson.h"
 #include "Bitcoin.h"
 #include "NostrString.h"
 #define NOSTR_DIGEST_SIZE 32
@@ -24,17 +23,12 @@ class Utils {
     static void setLogger(std::function<void(const NostrString &)> logger);
     static void log(const NostrString &message);
     static long long unixTimeSeconds();
-
     static NostrString getNewSubscriptionId();
-
-    /**
-     * Generate a random 32-byte value between min and max (inclusive)
-     *
-     */
     static long int randomInt(long int min, long int max);
-
     static NostrString getPublicKey(NostrString privKeyHex);
+    static void jsonParse(const NostrString *json, JsonDocument *doc);
+    static void jsonStringify(JsonVariantConst source, NostrString *json);
 };
-} // namespace nostr
+}  
 
 #endif

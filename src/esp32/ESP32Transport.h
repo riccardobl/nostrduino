@@ -43,7 +43,7 @@ class ESP32Transport : public Transport {
   private:
     std::vector<Connection *> connections;
 };
-} // namespace esp32
-} // namespace nostr
+} 
+} 
 
 #endif

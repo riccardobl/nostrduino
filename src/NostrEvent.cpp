@@ -75,8 +75,6 @@ SignedNostrEvent UnsignedNostrEvent::sign(NostrString privateKeyHex) {
     NostrString pubKeyHex = pubKey.toString();
     pubKeyHex = NostrString_substring(pubKeyHex, 2);
 
-    Utils::log("PubKey " + pubKeyHex);
-
     JsonDocument doc;
     JsonArray data = doc["data"].to<JsonArray>();
     data.add(0);
@@ -88,7 +86,7 @@ SignedNostrEvent UnsignedNostrEvent::sign(NostrString privateKeyHex) {
     data.add(this->content);
 
     NostrString message;
-    serializeJson(doc["data"], message);
+    Utils::jsonStringify(data, &message);
     doc.clear();
 
     Utils::log("Compute signature of: " + message);
@@ -116,24 +114,15 @@ SignedNostrEvent UnsignedNostrEvent::sign(NostrString privateKeyHex) {
 bool SignedNostrEvent::verify() const {
     Serial.println("Verifying event signature");
     byte messageBytes[32];
-    // fromHex(this->id, messageBytes, 32);
     NostrString_hexToBytes(this->id, messageBytes, 32);
-    // Serial.println("Message hash: "+this->id);
     Utils::log("Message hash: " + this->id);
-
     byte pubeyBytes[32];
     NostrString_hexToBytes("02" + this->pubkey, pubeyBytes, 32);
-    // fromHex("02"+this->pubkey, pubeyBytes, 32);
-    // Serial.println("Pubkey: "+this->pubkey);
     Utils::log("Pubkey: " + this->pubkey);
-
     PublicKey pub(pubeyBytes);
-
     byte signatureBytes[64];
-    // fromHex(this->signature, signatureBytes, 64);
     NostrString_hexToBytes(this->signature, signatureBytes, 64);
     SchnorrSignature signature(signatureBytes);
-    // Serial.println("Signature: " + this->signature);
     Utils::log("Signature: " + this->signature);
     return pub.schnorr_verify(signature, messageBytes);
 }
@@ -159,7 +148,6 @@ SignedNostrEvent::SignedNostrEvent(JsonArray arr) {
     if (arr[0] != "EVENT") {
         throw std::runtime_error("Invalid event type");
     }
-
     JsonObject obj;
     if (arr.size() > 2) {
         obj = arr[2];
@@ -167,13 +155,11 @@ SignedNostrEvent::SignedNostrEvent(JsonArray arr) {
     } else {
         obj = arr[1];
     }
-
     this->id = obj["id"].as<NostrString>();
     this->pubkey = obj["pubkey"].as<NostrString>();
     this->created_at = obj["created_at"].as<unsigned long long>();
     this->kind = obj["kind"].as<unsigned int>();
     NostrEventTags tt = NostrEventTags();
-
     JsonArray tags = obj["tags"].as<JsonArray>();
     for (int i = 0; i < tags.size(); i++) {
         JsonArray tag = tags[i];

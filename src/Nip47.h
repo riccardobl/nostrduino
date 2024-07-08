@@ -155,6 +155,6 @@ class Nip47 {
     Nip04 nip04;
     SignedNostrEvent createEvent(NostrString method, JsonDocument doc);
 };
-} // namespace nostr
+} 
 
-#endif // NIP47_H
+#endif 

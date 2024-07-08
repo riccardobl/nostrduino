@@ -61,74 +61,78 @@ void loop() {
 nostr::Transport *transport;
 
 void testNIP01() {
-    String relay = RELAY;
-    String privKey = PRIVKEY;
-    transport = nostr::esp32::ESP32Platform::getTransport();
+    try{
+        String relay = RELAY;
+        String privKey = PRIVKEY;
+        transport = nostr::esp32::ESP32Platform::getTransport();
 
-    // We need a NostrPool instance that will handle all the communication
-    nostr::NostrPool *pool = new nostr::NostrPool(transport);
-    pools.push_back(pool); // NB. we are adding it to this vector since we need to call
-                           // pool->loop() in the main loop to make it work properly
+        // We need a NostrPool instance that will handle all the communication
+        nostr::NostrPool *pool = new nostr::NostrPool(transport);
+        pools.push_back(pool); // NB. we are adding it to this vector since we need to call
+                            // pool->loop() in the main loop to make it work properly
 
-    // Lets subscribe to the relay
-    String subId = pool->subscribeMany(
-        {relay},
-        {
-            {// we set the filters here (see
-             // https://github.com/nostr-protocol/nips/blob/master/01.md#from-client-to-relay-sending-events-and-creating-subscriptions)
-             {"kinds", {"1"}},
-             // {"since",{"1234567890"}},
-             // {"until",{"1234567890"}},
-             // {"limit",{"10"}},
-             {"#t", {"arduinoTest"}}} //,
-            // You can add another filter here
-        },
-        [&](const String &subId, nostr::SignedNostrEvent *event) {
-            // Received events callback, we can access the event content with
-            // event->getContent() Here you should handle the event, for this
-            // test we will just serialize it and print to console
-            JsonDocument doc;
-            JsonArray arr = doc["data"].to<JsonArray>();
-            event->toSendableEvent(arr);
-            String json;
-            serializeJson(arr, json);
+        // Lets subscribe to the relay
+        String subId = pool->subscribeMany(
+            {relay},
+            {
+                {// we set the filters here (see
+                // https://github.com/nostr-protocol/nips/blob/master/01.md#from-client-to-relay-sending-events-and-creating-subscriptions)
+                {"kinds", {"1"}},
+                // {"since",{"1234567890"}},
+                // {"until",{"1234567890"}},
+                // {"limit",{"10"}},
+                {"#t", {"arduinoTest"}}} //,
+                // You can add another filter here
+            },
+            [&](const String &subId, nostr::SignedNostrEvent *event) {
+                // Received events callback, we can access the event content with
+                // event->getContent() Here you should handle the event, for this
+                // test we will just serialize it and print to console
+                JsonDocument doc;
+                JsonArray arr = doc["data"].to<JsonArray>();
+                event->toSendableEvent(arr);
+                String json;
+                serializeJson(arr, json);
 
-            Serial.println("Event received: " + json);
-        },
-        [&](const String &subId, const String &reason) {
-            // This is the callback that will be called when the subscription is
-            // closed
-            Serial.println("Subscription closed: " + reason);
-        },
-        [&](const String &subId) {
-            // This is the callback that will be called when the subscription is
-            // EOSE
-            Serial.println("Subscription EOSE: " + subId);
-        });
+                Serial.println("Event received: " + json);
+            },
+            [&](const String &subId, const String &reason) {
+                // This is the callback that will be called when the subscription is
+                // closed
+                Serial.println("Subscription closed: " + reason);
+            },
+            [&](const String &subId) {
+                // This is the callback that will be called when the subscription is
+                // EOSE
+                Serial.println("Subscription EOSE: " + subId);
+            });
 
-    // NB. you might want to save the subId somewhere since you are going to
-    // need it to close the subscription like so: pool.closeSubscription(subId);
+        // NB. you might want to save the subId somewhere since you are going to
+        // need it to close the subscription like so: pool.closeSubscription(subId);
 
-    // The pool will start to listen for events immediately after the next
-    // loop()
+        // The pool will start to listen for events immediately after the next
+        // loop()
 
-    // Lets try to send an event
-    // First we create an unsigned event
-    nostr::UnsignedNostrEvent ev(1, "Hello, World!", nostr::Utils::unixTimeSeconds());
-    // we can add some tags
-    ev.getTags()->addTag("t", {"arduinoTest"});
-    // then we sign it with our private key and we will get a SignedNostrEvent
-    // as result
-    nostr::SignedNostrEvent signEv = ev.sign(privKey);
-    // We can verify the event signature (this is not necessary here, but it
-    // might be when dealing with received events)
-    if (!signEv.verify()) {
-        Serial.println("Event signature is invalid");
-        return;
-    } else {
-        Serial.println("Event signature is valid");
+        // Lets try to send an event
+        // First we create an unsigned event
+        nostr::UnsignedNostrEvent ev(1, "Hello, World!", nostr::Utils::unixTimeSeconds());
+        // we can add some tags
+        ev.getTags()->addTag("t", {"arduinoTest"});
+        // then we sign it with our private key and we will get a SignedNostrEvent
+        // as result
+        nostr::SignedNostrEvent signEv = ev.sign(privKey);
+        // We can verify the event signature (this is not necessary here, but it
+        // might be when dealing with received events)
+        if (!signEv.verify()) {
+            Serial.println("Event signature is invalid");
+            return;
+        } else {
+            Serial.println("Event signature is valid");
+        }
+        // Now we can send the event
+        pool->publish({relay}, &signEv);
+        // The event will be sent in the next loop() call
+    } catch (const std::exception &e) {
+        Serial.println("Error: " + String(e.what()));
     }
-    // Now we can send the event
-    pool->publish({relay}, &signEv);
-    // The event will be sent in the next loop() call
 }

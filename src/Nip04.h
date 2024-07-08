@@ -21,5 +21,5 @@ class Nip04 {
 
     NostrString decryptData(byte key[32], byte iv[16], NostrString messageHex);
 };
-} // namespace nostr
-#endif // NIP47_H
+} 
+#endif 

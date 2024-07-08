@@ -164,5 +164,5 @@ class SignedNostrEvent : public NostrEvent {
         : NostrEvent(kind, tags, content, created_at), id(id), pubkey(pubkey), signature(signature), stored(false){};
 };
 
-} // namespace nostr
+} 
 #endif

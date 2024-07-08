@@ -19,10 +19,8 @@ void NostrRelay::processQueue() {
 }
 
 void NostrPool::onEvent(NostrRelay *relay, NostrString message) {
-
-    Utils::log("Received: " + message);
     JsonDocument doc;
-    deserializeJson(doc, message);
+    Utils::jsonParse(&message, &doc);
     if (doc.size() == 0) {
         return;
     }
@@ -56,7 +54,6 @@ void NostrPool::onEvent(NostrRelay *relay, NostrString message) {
                     entry.statusCallback(eventId, success, message);
                 }
                 this->eventStatusCallbackEntries.erase(this->eventStatusCallbackEntries.begin() + i);
-
                 break;
             }
         }
@@ -75,6 +72,7 @@ void NostrPool::onEvent(NostrRelay *relay, NostrString message) {
             sub.eventCallback(subId, &event);
         }
     }
+    doc.clear();
 }
 
 NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, std::initializer_list<std::map<NostrString, std::initializer_list<NostrString>>> filters,
@@ -102,7 +100,8 @@ NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, st
     }
 
     NostrString json;
-    serializeJson(req, json);
+    Utils::jsonStringify(req, &json);
+    doc.clear();
 
     if (this->subscriptions.find(subId) == this->subscriptions.end()) {
         // if subscription does not exist, create it
@@ -127,18 +126,16 @@ void NostrPool::closeSubscription(NostrString subId) {
         // if subscription does not exist, ignore
         return;
     }
-
     JsonDocument doc;
     JsonArray req = doc["req"].to<JsonArray>();
     req.add("CLOSE");
     req.add(subId);
     NostrString json;
-    serializeJson(req, json);
+    Utils::jsonStringify(req, &json);
+    doc.clear();
     for (NostrRelay *r : this->relays) {
         r->send(json);
     }
-    doc.clear();
-
     this->subscriptions.erase(subId);
 }
 
@@ -155,15 +152,12 @@ NostrRelay *NostrPool::ensureRelay(NostrString url) {
         Connection *conn = this->transport->connect(url);
         relay = new NostrRelay(conn, url);
         this->relays.push_back(relay);
-
         relay->conn->addMessageListener([this, relay](NostrString message) { this->onEvent(relay, message); });
     }
-
     return relay;
 }
 
 void NostrPool::disconnectRelay(NostrString url) {
-
     for (int i = 0; i < this->relays.size(); i++) {
         if (NostrString_equals(this->relays[i]->url, url)) {
             this->relays[i]->conn->disconnect();
@@ -188,7 +182,7 @@ void NostrPool::publish(std::initializer_list<NostrString> rs, SignedNostrEvent 
     JsonArray ev = doc.add<JsonArray>();
     event->toSendableEvent(ev);
     NostrString evJson;
-    serializeJson(ev, evJson);
+    Utils::jsonStringify(ev, &evJson);
     doc.clear();
     for (auto &r : rs) {
         NostrRelay *relay = this->ensureRelay(r);

@@ -60,3 +60,14 @@ NostrString Utils::getPublicKey(NostrString privKeyHex) {
     pubKeyHex = NostrString_substring(pubKeyHex, 2);
     return pubKeyHex;
 }
+
+void Utils::jsonParse(const NostrString *json, JsonDocument *doc) {
+    DeserializationError error = deserializeJson(*doc, *json);
+    if (error) {
+        throw std::runtime_error(error.c_str());
+    }
+}
+
+void Utils::jsonStringify(JsonVariantConst source, NostrString *json) {
+    serializeJson(source, *json);
+}

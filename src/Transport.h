@@ -23,5 +23,5 @@ class Transport {
     virtual bool isReady() = 0;
     virtual void close() = 0;
 };
-} // namespace nostr
+} 
 #endif

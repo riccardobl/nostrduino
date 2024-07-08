@@ -55,29 +55,33 @@ void loop() {
 }
 
 void testNWC() {
-    transport = nostr::esp32::ESP32Platform::getTransport();
-    nwc = new nostr::NWC(transport, NWC_URL);
+    try{
+        transport = nostr::esp32::ESP32Platform::getTransport();
+        nwc = new nostr::NWC(transport, NWC_URL);
 
-    nwc->getBalance([&](nostr::GetBalanceResponse resp) { Serial.println("[!] Balance: " + String(resp.balance) + " msatoshis"); },
-                    [](String err, String errMsg) { Serial.println("[!] Error: " + err + " " + errMsg); });
-    nwc->getInfo(
-        [&](nostr::GetInfoResponse resp) {
-            Serial.println("[!] Alias: " + resp.alias);
-            Serial.println("[!] Color: " + resp.color);
-            Serial.println("[!] Pubkey: " + resp.pubkey);
-            Serial.println("[!] Network: " + resp.network);
-            Serial.println("[!] Block height: " + String(resp.blockHeight));
-            Serial.println("[!] Block hash: " + resp.blockHash);
-            Serial.println("[!] Methods: ");
-            for (auto method : resp.methods) {
-                Serial.println("  " + method);
-            }
-        },
-        [](String err, String errMsg) { Serial.println("[!] Error: " + err + " " + errMsg); });
+        nwc->getBalance([&](nostr::GetBalanceResponse resp) { Serial.println("[!] Balance: " + String(resp.balance) + " msatoshis"); },
+                        [](String err, String errMsg) { Serial.println("[!] Error: " + err + " " + errMsg); });
+        nwc->getInfo(
+            [&](nostr::GetInfoResponse resp) {
+                Serial.println("[!] Alias: " + resp.alias);
+                Serial.println("[!] Color: " + resp.color);
+                Serial.println("[!] Pubkey: " + resp.pubkey);
+                Serial.println("[!] Network: " + resp.network);
+                Serial.println("[!] Block height: " + String(resp.blockHeight));
+                Serial.println("[!] Block hash: " + resp.blockHash);
+                Serial.println("[!] Methods: ");
+                for (auto method : resp.methods) {
+                    Serial.println("  " + method);
+                }
+            },
+            [](String err, String errMsg) { Serial.println("[!] Error: " + err + " " + errMsg); });
 
-    NostrString invoice = transport->getInvoiceFromLNAddr(PAYOUT_ADDRESS, PAYOUT_AMOUNT_MSAT, "Arduino NWC test");
-    Serial.println("[!] Paying " + String(PAYOUT_AMOUNT_MSAT) + " msats to " + PAYOUT_ADDRESS + " invoice: " + invoice);
-    nwc->payInvoice(
-        invoice, PAYOUT_AMOUNT_MSAT, [&](nostr::PayInvoiceResponse resp) { Serial.println("[!] Payment successful"); },
-        [](String err, String errMsg) { Serial.println("[!] Error: " + err + " " + errMsg); });
+        NostrString invoice = transport->getInvoiceFromLNAddr(PAYOUT_ADDRESS, PAYOUT_AMOUNT_MSAT, "Arduino NWC test");
+        Serial.println("[!] Paying " + String(PAYOUT_AMOUNT_MSAT) + " msats to " + PAYOUT_ADDRESS + " invoice: " + invoice);
+        nwc->payInvoice(
+            invoice, PAYOUT_AMOUNT_MSAT, [&](nostr::PayInvoiceResponse resp) { Serial.println("[!] Payment successful"); },
+            [](String err, String errMsg) { Serial.println("[!] Error: " + err + " " + errMsg); });
+    } catch (std::exception &e) {
+        Serial.println("[!] Exception: " + String(e.what()));
+    }
 }

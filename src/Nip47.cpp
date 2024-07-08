@@ -5,15 +5,12 @@ using namespace nostr;
 SignedNostrEvent Nip47::createEvent(NostrString method, JsonDocument doc) {
     doc["method"] = method;
     NostrString contentString;
-    serializeJson(doc, contentString);
+    Utils::jsonStringify(doc, &contentString);
     doc.clear();
-
     contentString = this->nip04.encrypt(this->userPrivKey, this->servicePubKey, contentString);
-
     UnsignedNostrEvent event(23194, contentString, Utils::unixTimeSeconds());
     NostrEventTags *tags = event.getTags();
     tags->addTag("p", {this->servicePubKey});
-
     return event.sign(this->userPrivKey);
 }
 
@@ -31,10 +28,10 @@ SignedNostrEvent Nip47::makeInvoice(unsigned long amount, NostrString descriptio
     JsonDocument doc;
     JsonObject params = doc["params"].to<JsonObject>();
     params["amount"] = amount;
-    if (description.length() > 0) {
+    if (NostrString_length(description) > 0) {
         params["description"] = description;
     }
-    if (descriptionHash.length() > 0) {
+    if (NostrString_length(descriptionHash) > 0) {
         params["descriptionHash"] = descriptionHash;
     }
     if (expiry > 0) {
@@ -77,15 +74,15 @@ SignedNostrEvent Nip47::multiPayInvoice(std::initializer_list<Invoice> invoices)
         record["invoice"] = invoice.invoice;
         record["amount"] = invoice.amount;
     }
-
     return this->createEvent("multi_pay_invoice", doc);
 }
+
 SignedNostrEvent Nip47::payKeySend(NostrString pubkey, unsigned long amount, NostrString preimage, std::initializer_list<TLVRecords> tlv) {
     JsonDocument doc;
     JsonObject params = doc["params"].to<JsonObject>();
     params["pubkey"] = pubkey;
     params["amount"] = amount;
-    if (preimage.length() > 0) {
+    if (NostrString_length(preimage) > 0) {
         params["preimage"] = preimage;
     }
     if (tlv.size() > 0) {
@@ -96,7 +93,6 @@ SignedNostrEvent Nip47::payKeySend(NostrString pubkey, unsigned long amount, Nos
             tlvRecord["value"] = record.value;
         }
     }
-
     return this->createEvent("pay_key_send", doc);
 }
 
@@ -108,7 +104,7 @@ SignedNostrEvent Nip47::multiPayKeySend(std::initializer_list<KeySend> keySends)
         JsonObject record = ks.add<JsonObject>();
         record["pubkey"] = keySend.pubkey;
         record["amount"] = keySend.amount;
-        if (keySend.preimage.length() > 0) {
+        if (NostrString_length(keySend.preimage) > 0) {
             record["preimage"] = keySend.preimage;
         }
         if (keySend.tlv.size() > 0) {
@@ -120,7 +116,6 @@ SignedNostrEvent Nip47::multiPayKeySend(std::initializer_list<KeySend> keySends)
             }
         }
     }
-
     return this->createEvent("multi_pay_key_send", doc);
 }
 
@@ -140,10 +135,9 @@ SignedNostrEvent Nip47::listTransactions(unsigned long from, unsigned long until
         params["offset"] = offset;
     }
     params["unpaid"] = unpaid;
-    if (type.length() > 0) {
+    if (NostrString_length(type) > 0) {
         params["type"] = type;
     }
-
     return this->createEvent("list_transactions", doc);
 }
 
@@ -151,12 +145,10 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<PayInvoiceRe
     out.errorCode = "";
     out.errorMessage = "";
     Utils::log("NWC: received pay_invoice response");
-
     if (response->verify()) {
         NostrString content = this->nip04.decrypt(this->userPrivKey, this->servicePubKey, response->getContent());
-
         JsonDocument doc;
-        deserializeJson(doc, content);
+        Utils::jsonParse(&content, &doc);
         JsonObject error = doc["error"];
         if (!error.isNull()) {
             out.errorCode = error["code"].as<NostrString>();
@@ -172,21 +164,20 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<PayInvoiceRe
             }
         }
     }
-
     if (NostrString_length(out.errorCode) == 0) {
         out.errorCode = "OTHER";
         out.errorMessage = "Invalid Event";
     }
 }
+
 void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MultiPayInvoiceResponse> &out) {
     out.errorCode = "";
     out.errorMessage = "";
     Utils::log("NWC: received multi_pay_invoice response");
     if (response->verify()) {
         NostrString content = this->nip04.decrypt(this->userPrivKey, this->servicePubKey, response->getContent());
-
         JsonDocument doc;
-        deserializeJson(doc, content);
+        Utils::jsonParse(&content, &doc);
         JsonObject error = doc["error"];
         if (!error.isNull()) {
             out.errorCode = error["code"].as<NostrString>();
@@ -203,23 +194,20 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MultiPayInvo
             }
         }
     }
-
     if (NostrString_length(out.errorCode) == 0) {
         out.errorCode = "OTHER";
         out.errorMessage = "Invalid Event";
     }
 }
+
 void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<PayKeySendResponse> &out) {
     out.errorCode = "";
     out.errorMessage = "";
-
     Utils::log("NWC: received pay_keysend response");
-
     if (response->verify()) {
         NostrString content = this->nip04.decrypt(this->userPrivKey, this->servicePubKey, response->getContent());
-
         JsonDocument doc;
-        deserializeJson(doc, content);
+        Utils::jsonParse(&content, &doc);
         JsonObject error = doc["error"];
         if (!error.isNull()) {
             out.errorCode = error["code"].as<NostrString>();
@@ -235,22 +223,20 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<PayKeySendRe
             }
         }
     }
-
     if (NostrString_length(out.errorCode) == 0) {
         out.errorCode = "OTHER";
         out.errorMessage = "Invalid Event";
     }
 }
+
 void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MultiPayKeySendResponse> &out) {
     out.errorCode = "";
     out.errorMessage = "";
     Utils::log("NWC: received multi_pay_keysend response");
-
     if (response->verify()) {
         NostrString content = this->nip04.decrypt(this->userPrivKey, this->servicePubKey, response->getContent());
-
         JsonDocument doc;
-        deserializeJson(doc, content);
+        Utils::jsonParse(&content, &doc);
         JsonObject error = doc["error"];
         if (!error.isNull()) {
             out.errorCode = error["code"].as<NostrString>();
@@ -267,22 +253,20 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MultiPayKeyS
             }
         }
     }
-
     if (NostrString_length(out.errorCode) == 0) {
         out.errorCode = "OTHER";
         out.errorMessage = "Invalid Event";
     }
 }
+
 void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MakeInvoiceResponse> &out) {
     out.errorCode = "";
     out.errorMessage = "";
     Utils::log("NWC: received make_invoice response");
-
     if (response->verify()) {
         NostrString content = this->nip04.decrypt(this->userPrivKey, this->servicePubKey, response->getContent());
-
         JsonDocument doc;
-        deserializeJson(doc, content);
+        Utils::jsonParse(&content, &doc);
         JsonObject error = doc["error"];
         if (!error.isNull()) {
             out.errorCode = error["code"].as<NostrString>();
@@ -302,35 +286,31 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MakeInvoiceR
                     out.result.feesPaid = data["fees_paid"].as<unsigned long long>();
                     out.result.createdAt = data["created_at"].as<unsigned long long>();
                     out.result.expiresAt = data["expires_at"].as<unsigned long long>();
-
                     JsonDocument metadataDoc;
                     JsonObject metadataObject = metadataDoc.as<JsonObject>();
                     for (JsonPair kv : data["metadata"].as<JsonObject>()) {
                         metadataObject[kv.key().c_str()] = kv.value().as<NostrString>();
                     }
                     out.result.metadata = metadataObject;
-
                     return;
                 }
             }
         }
     }
-
     if (NostrString_length(out.errorCode) == 0) {
         out.errorCode = "OTHER";
         out.errorMessage = "Invalid Event";
     }
 }
+
 void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<LookUpInvoiceResponse> &out) {
     out.errorCode = "";
     out.errorMessage = "";
     Utils::log("NWC: received lookup_invoice response");
-
     if (response->verify()) {
         NostrString content = this->nip04.decrypt(this->userPrivKey, this->servicePubKey, response->getContent());
-
         JsonDocument doc;
-        deserializeJson(doc, content);
+        Utils::jsonParse(&content, &doc);
         JsonObject error = doc["error"];
         if (!error.isNull()) {
             out.errorCode = error["code"].as<NostrString>();
@@ -351,35 +331,31 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<LookUpInvoic
                     out.result.createdAt = data["created_at"].as<unsigned long long>();
                     out.result.expiresAt = data["expires_at"].as<unsigned long long>();
                     out.result.settledAt = data["settled_at"].as<unsigned long long>();
-
                     JsonDocument metadataDoc;
                     JsonObject metadataObject = metadataDoc.as<JsonObject>();
                     for (JsonPair kv : data["metadata"].as<JsonObject>()) {
                         metadataObject[kv.key().c_str()] = kv.value().as<NostrString>();
                     }
                     out.result.metadata = metadataObject;
-
                     return;
                 }
             }
         }
     }
-
     if (NostrString_length(out.errorCode) == 0) {
         out.errorCode = "OTHER";
         out.errorMessage = "Invalid Event";
     }
 }
+
 void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<ListTransactionsResponse> &out) {
     out.errorCode = "";
     out.errorMessage = "";
     Utils::log("NWC: received list_transactions response");
-
     if (response->verify()) {
         NostrString content = this->nip04.decrypt(this->userPrivKey, this->servicePubKey, response->getContent());
-
         JsonDocument doc;
-        deserializeJson(doc, content);
+        Utils::jsonParse(&content, &doc);
         JsonObject error = doc["error"];
         if (!error.isNull()) {
             out.errorCode = error["code"].as<NostrString>();
@@ -402,14 +378,12 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<ListTransact
                         transaction.createdAt = kv.value()["created_at"].as<unsigned long long>();
                         transaction.expiresAt = kv.value()["expires_at"].as<unsigned long long>();
                         transaction.settledAt = kv.value()["settled_at"].as<unsigned long long>();
-
                         JsonDocument metadataDoc;
                         JsonObject metadataObject = metadataDoc.as<JsonObject>();
                         for (JsonPair kv : kv.value()["metadata"].as<JsonObject>()) {
                             metadataObject[kv.key().c_str()] = kv.value().as<NostrString>();
                         }
                         transaction.metadata = metadataObject;
-
                         out.result.transactions.push_back(transaction);
                     }
                     return;
@@ -417,21 +391,20 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<ListTransact
             }
         }
     }
-
     if (NostrString_length(out.errorCode) == 0) {
         out.errorCode = "OTHER";
         out.errorMessage = "Invalid Event";
     }
 }
+
 void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<GetBalanceResponse> &out) {
     out.errorCode = "";
     out.errorMessage = "";
     Utils::log("NWC: received get_balance response");
-
     if (response->verify()) {
         NostrString content = this->nip04.decrypt(this->userPrivKey, this->servicePubKey, response->getContent());
         JsonDocument doc;
-        deserializeJson(doc, content);
+        Utils::jsonParse(&content, &doc);
         JsonObject error = doc["error"];
         if (!error.isNull()) {
             out.errorCode = error["code"].as<NostrString>();
@@ -447,22 +420,20 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<GetBalanceRe
             }
         }
     }
-
     if (NostrString_length(out.errorCode) == 0) {
         out.errorCode = "OTHER";
         out.errorMessage = "Invalid Event";
     }
 }
+
 void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<GetInfoResponse> &out) {
     out.errorCode = "";
     out.errorMessage = "";
     Utils::log("NWC: received get_info response");
-
     if (response->verify()) {
         NostrString content = this->nip04.decrypt(this->userPrivKey, this->servicePubKey, response->getContent());
-
         JsonDocument doc;
-        deserializeJson(doc, content);
+        Utils::jsonParse(&content, &doc);
         JsonObject error = doc["error"];
         if (!error.isNull()) {
             out.errorCode = error["code"].as<NostrString>();
@@ -487,7 +458,6 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<GetInfoRespo
             }
         }
     }
-
     if (NostrString_length(out.errorCode) == 0) {
         out.errorCode = "OTHER";
         out.errorMessage = "Invalid Event";
