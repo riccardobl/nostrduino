@@ -32,7 +32,7 @@ SignedNostrEvent Nip47::makeInvoice(unsigned long amount, NostrString descriptio
         params["description"] = description;
     }
     if (NostrString_length(descriptionHash) > 0) {
-        params["descriptionHash"] = descriptionHash;
+        params["description_hash"] = descriptionHash;
     }
     if (expiry > 0) {
         params["expiry"] = expiry;
