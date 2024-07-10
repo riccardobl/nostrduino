@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['verify_417',['verify',['../classnostr_1_1SignedNostrEvent.html#a3b4d5bdc0c1799b97cdff7198c0de2ad',1,'nostr::SignedNostrEvent']]]
+  ['unixtimeseconds_419',['unixTimeSeconds',['../classnostr_1_1Utils.html#ac3406b5afa052bec36e3fed2d95e33f8',1,'nostr::Utils']]],
+  ['unsignednostrevent_420',['UnsignedNostrEvent',['../classnostr_1_1UnsignedNostrEvent.html#afddaa21707d84bf6b1a9e34576f5e7c9',1,'nostr::UnsignedNostrEvent::UnsignedNostrEvent()'],['../classnostr_1_1UnsignedNostrEvent.html#ace30203c0db0e13db4f949a6bf86ec97',1,'nostr::UnsignedNostrEvent::UnsignedNostrEvent(unsigned int kind, NostrString content, unsigned long int created_at)']]]
 ];

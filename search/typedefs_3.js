@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['keysend_486',['KeySend',['../namespacenostr.html#a2f0adf8fb06541c0734900f1f37c6a77',1,'nostr']]]
+  ['keysend_490',['KeySend',['../namespacenostr.html#a2f0adf8fb06541c0734900f1f37c6a77',1,'nostr']]]
 ];

@@ -93,6 +93,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a83898b2e9aa65a0cf05813f327d55f45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4dc29d30dfbdb8d035310cad80f42605"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Utils.html#a4dc29d30dfbdb8d035310cad80f42605">getPublicKey</a> (<a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> privKeyHex)</td></tr>
 <tr class="separator:a4dc29d30dfbdb8d035310cad80f42605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac53754f8482415b3309bc224889155c1"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Utils.html#ac53754f8482415b3309bc224889155c1">jsonParse</a> (const <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> *json, JsonDocument *doc)</td></tr>
+<tr class="separator:ac53754f8482415b3309bc224889155c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20e3e3354a081ed04ab496f5fd58eb37"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Utils.html#a20e3e3354a081ed04ab496f5fd58eb37">jsonStringify</a> (JsonVariantConst source, <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> *json)</td></tr>
+<tr class="separator:a20e3e3354a081ed04ab496f5fd58eb37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -146,6 +150,78 @@ Static Public Attributes</h2></td></tr>
           <td class="paramtype"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td>
           <td class="paramname"><em>privKeyHex</em></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac53754f8482415b3309bc224889155c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac53754f8482415b3309bc224889155c1">&#9670;&nbsp;</a></span>jsonParse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Utils::jsonParse </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> *&#160;</td>
+          <td class="paramname"><em>json</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">JsonDocument *&#160;</td>
+          <td class="paramname"><em>doc</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a20e3e3354a081ed04ab496f5fd58eb37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20e3e3354a081ed04ab496f5fd58eb37">&#9670;&nbsp;</a></span>jsonStringify()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Utils::jsonStringify </td>
+          <td>(</td>
+          <td class="paramtype">JsonVariantConst&#160;</td>
+          <td class="paramname"><em>source</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> *&#160;</td>
+          <td class="paramname"><em>json</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -216,7 +292,6 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Generate a random 32-byte value between min and max (inclusive) </p>
 
 </div>
 </div>

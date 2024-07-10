@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['makeinvoice_365',['makeInvoice',['../classnostr_1_1Nip47.html#aa567dc8ea8b24bbac721724f79c156ec',1,'nostr::Nip47::makeInvoice()'],['../classnostr_1_1NWC.html#a54556399de8c19c5a3c72b3262616b9c',1,'nostr::NWC::makeInvoice()']]],
-  ['multipayinvoice_366',['multiPayInvoice',['../classnostr_1_1Nip47.html#a6aa7e03b79ab36063c9dbbb95dd5a07c',1,'nostr::Nip47::multiPayInvoice()'],['../classnostr_1_1NWC.html#aba3161e7f5badbc631e7c861c4557107',1,'nostr::NWC::multiPayInvoice()']]],
-  ['multipaykeysend_367',['multiPayKeySend',['../classnostr_1_1Nip47.html#a3b82c08c5d19006e22d7f027829b6002',1,'nostr::Nip47::multiPayKeySend()'],['../classnostr_1_1NWC.html#a334c69af60cc76d8c32ba4f8fa3d621a',1,'nostr::NWC::multiPayKeySend()']]]
+  ['listtransactions_364',['listTransactions',['../classnostr_1_1Nip47.html#aa4f00696a8b58ae43ea7582d915147d4',1,'nostr::Nip47::listTransactions()'],['../classnostr_1_1NWC.html#a77246d9ec254155500dfd35a3ed46f87',1,'nostr::NWC::listTransactions()']]],
+  ['log_365',['log',['../classnostr_1_1Utils.html#a8d9559590001eff8072c190915a53771',1,'nostr::Utils']]],
+  ['lookupinvoice_366',['lookUpInvoice',['../classnostr_1_1Nip47.html#a74760efce0406b4ca35811112c4cf1dd',1,'nostr::Nip47::lookUpInvoice()'],['../classnostr_1_1NWC.html#a3e6bf85d69624a302cdce0db89f942b6',1,'nostr::NWC::lookUpInvoice()']]],
+  ['lookuppaymenthash_367',['lookUpPaymentHash',['../classnostr_1_1Nip47.html#a500ce5a6edd53194e6ddc035d0f4c50d',1,'nostr::Nip47::lookUpPaymentHash()'],['../classnostr_1_1NWC.html#a8c34f915eae08833ca38ca62f0811cdc',1,'nostr::NWC::lookUpPaymentHash()']]],
+  ['loop_368',['loop',['../classnostr_1_1esp32_1_1ESP32Connection.html#ac0bcd94ae63bdb92da45f8fee3b55ac2',1,'nostr::esp32::ESP32Connection::loop()'],['../classnostr_1_1NostrPool.html#ab396fdccb8964a50e88dc71357682e99',1,'nostr::NostrPool::loop()'],['../classnostr_1_1NWC.html#a986c7fa8b9480303f19be584b575e611',1,'nostr::NWC::loop()'],['../classnostr_1_1Connection.html#aee2be02ce75a3bb2a15306212e77b382',1,'nostr::Connection::loop()']]]
 ];
