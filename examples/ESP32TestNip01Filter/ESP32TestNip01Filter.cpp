@@ -66,6 +66,14 @@ void testNIP01Filter() {
                 {"since", {"1626023056"}},
                 {"until", {"1846947856"}},
                 {"limit", {"10"}},
+                // Filters defined in NIP01 are automatically converted to the correct type
+                // however this library support non-NIP01 filters as well, but you might need to 
+                // specify their type manually, if unspecified the code assumes string[]:
+                // eg. {"int newFilter", {"1"}}
+                // eg. {"int[] newFilter2", {"1", "2"}}
+                // eg. {"float newFilter3", {"1.1"}}
+                // eg. {"float[] newFilter4", {"1.1", "2.2"}}
+                // eg. {"string newFilter5", {"hello"}}
             }},
             [&](const String &subId, nostr::SignedNostrEvent *event) {               
                 JsonDocument doc;

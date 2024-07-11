@@ -90,6 +90,7 @@ NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, st
             bool isInt = NostrString_equals(key, "since") || NostrString_equals(key, "until") || NostrString_equals(key, "limit");
             bool isFloat = false;
             bool isFloatList = false;
+            bool isString = false;
             bool isPrefixed = NostrString_indexOf(key, " ") != -1;
             if (isPrefixed) {
                 if(NostrString_startsWith(key,"int ")){
@@ -104,6 +105,11 @@ NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, st
                 }else if(NostrString_startsWith(key,"float ")){
                     isFloat = true;
                     key = NostrString_substring(key, 6);
+                }else if(NostrString_startsWith(key,"string ")){
+                    isString = true;
+                    key = NostrString_substring(key, 7);
+                }else if(NostrString_startsWith(key,"string[] ")){
+                    key = NostrString_substring(key, 9);
                 }
             }
             if (isInt) {
@@ -114,7 +120,11 @@ NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, st
                 std::initializer_list<NostrString> values = pair.second;
                 NostrString value = *values.begin();
                 filterObj[key] = NostrString_toFloat(value);            
-            } else {
+            } else if(isString){
+                std::initializer_list<NostrString> values = pair.second;
+                NostrString value = *values.begin();
+                filterObj[key] = value;                
+            }else {
                 JsonArray arr = filterObj[key].to<JsonArray>();
                 for (const auto &value : pair.second) {
                     if (isIntList) {
