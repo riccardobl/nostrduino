@@ -94,8 +94,20 @@ namespace nostr {
             NostrEOSECallback eoseCallback = nullptr
       
         );
-   
 
+        /**
+         * Subscribe to events from one or more relays
+         * @param urls The relays to subscribe to
+         * @param filters A json array of filters for each relay
+         * @param eventCallback A callback to be called when an event is received (optional)
+         * @param closeCallback A callback to be called when the subscription is closed (optional)
+         * @param eoseCallback A callback to be called when the stored events are exhausted (optional)
+         * @return The subscription ID
+         */
+        NostrString subscribeMany(std::initializer_list<NostrString> urls, JsonArray filters,
+                                  NostrEventCallback eventCallback = nullptr, NostrCloseCallback closeCallback = nullptr, NostrEOSECallback eoseCallback = nullptr
+
+        );
         /**
          * Publish a signed event to one or more relays. The pool will automatically start listening to the specified relays after publishing.
          * @param rs The relays to publish to

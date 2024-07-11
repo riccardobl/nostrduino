@@ -77,13 +77,10 @@ void NostrPool::onEvent(NostrRelay *relay, NostrString message) {
 
 NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, std::initializer_list<std::map<NostrString, std::initializer_list<NostrString>>> filters,
                                      NostrEventCallback eventCallback, NostrCloseCallback closeCallback, NostrEOSECallback eoseCallback) {
-    NostrString subId = Utils::getNewSubscriptionId();
     JsonDocument doc;
-    JsonArray req = doc["req"].to<JsonArray>();
-    req.add("REQ");
-    req.add(subId);
+    JsonArray filtersArray = doc["filtersArray"].to<JsonArray>();
     for (const auto &filter : filters) {
-        JsonObject filterObj = req.add<JsonObject>();
+        JsonObject filterObj = filtersArray.add<JsonObject>();
         for (const auto &pair : filter) {
             NostrString key = pair.first;
             bool isIntList = NostrString_equals(key, "kinds");
@@ -139,6 +136,22 @@ NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, st
                 }
             }
         }
+    }
+
+    NostrString subId = this->subscribeMany(urls, filtersArray, eventCallback, closeCallback, eoseCallback);
+    doc.clear();
+    return subId;
+}
+
+NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, JsonArray filters, NostrEventCallback eventCallback, NostrCloseCallback closeCallback, NostrEOSECallback eoseCallback) {
+    NostrString subId = Utils::getNewSubscriptionId();
+    JsonDocument doc;
+    JsonArray req = doc["req"].to<JsonArray>();
+    req.add("REQ");
+    req.add(subId);
+    for(int i = 0; i < filters.size(); i++){
+        JsonObject filter = filters[i].as<JsonObject>();
+        req.add(filter);
     }
 
     NostrString json;
