@@ -6,6 +6,11 @@
 #include <Arduino.h>
 #include <Bitcoin.h>
 #define NostrString String
+double NostrString_toFloat(const String &str){
+    return str.toFloat();
+
+}
+
 long NostrString_toInt(const String &str) {
     return str.toInt();
 }
@@ -228,6 +233,10 @@ std::string NostrString_urlEncode(const std::string &str) {
         }
     }
     return encoded;
+}
+
+double NostrString_toFloat(const std::string &str) {
+    return std::stod(str);
 }
 #endif
 

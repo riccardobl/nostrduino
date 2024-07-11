@@ -7,6 +7,7 @@
 #include <Arduino.h>
 #include <Bitcoin.h>
 #define NostrString String
+double NostrString_toFloat(const String &str);
 long NostrString_toInt(const String &str);
 String NostrString_fromChars(char *chars);
 bool NostrString_startsWith(const String &str, const char *prefix);
@@ -31,6 +32,7 @@ String NostrString_fromUInt(unsigned long long i);
 String NostrString_urlEncode(const String &str);
 #else
 #define NostrString std::string
+double NostrString_toFloat(const std::string &str);
 long NostrString_toInt(const std::string &str);
 std::string NostrString_fromChars(char *chars);
 bool NostrString_startsWith(const std::string &str, const char *prefix);

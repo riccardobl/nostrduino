@@ -86,14 +86,46 @@ NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, st
         JsonObject filterObj = req.add<JsonObject>();
         for (const auto &pair : filter) {
             NostrString key = pair.first;
-            JsonArray arr = filterObj[key].to<JsonArray>();
-            bool isUint = NostrString_equals(key, "kinds") || NostrString_equals(key, "since") || NostrString_equals(key, "until") || NostrString_equals(key, "limit");
-            for (const auto &value : pair.second) {
-                if (isUint) {
-                    NostrString vStr = value;
-                    arr.add(NostrString_toInt(vStr));
-                } else {
-                    arr.add(value);
+            bool isIntList = NostrString_equals(key, "kinds");
+            bool isInt = NostrString_equals(key, "since") || NostrString_equals(key, "until") || NostrString_equals(key, "limit");
+            bool isFloat = false;
+            bool isFloatList = false;
+            bool isPrefixed = NostrString_indexOf(key, " ") != -1;
+            if (isPrefixed) {
+                if(NostrString_startsWith(key,"int ")){
+                    isInt = true;
+                    key = NostrString_substring(key, 4);
+                }else if(NostrString_startsWith(key,"int[] ")){
+                    isIntList = true;
+                    key = NostrString_substring(key, 6);
+                }else if(NostrString_startsWith(key,"float[] ")){
+                    isFloatList = true;
+                    key = NostrString_substring(key, 8);
+                }else if(NostrString_startsWith(key,"float ")){
+                    isFloat = true;
+                    key = NostrString_substring(key, 6);
+                }
+            }
+            if (isInt) {
+                std::initializer_list<NostrString> values = pair.second;
+                NostrString value = *values.begin();
+                filterObj[key] = NostrString_toInt(value);
+            } else if(isFloat){
+                std::initializer_list<NostrString> values = pair.second;
+                NostrString value = *values.begin();
+                filterObj[key] = NostrString_toFloat(value);            
+            } else {
+                JsonArray arr = filterObj[key].to<JsonArray>();
+                for (const auto &value : pair.second) {
+                    if (isIntList) {
+                        NostrString vStr = value;
+                        arr.add(NostrString_toInt(vStr));
+                    } else if(isFloatList){
+                        NostrString vStr = value;
+                        arr.add(NostrString_toFloat(vStr));
+                    }else {
+                        arr.add(value);
+                    }
                 }
             }
         }
