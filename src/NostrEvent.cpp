@@ -64,6 +64,7 @@ void NostrEventTags::toJson(JsonArray arr) const {
     }
 }
 
+
 SignedNostrEvent UnsignedNostrEvent::sign(NostrString privateKeyHex) {
     Utils::log("Signing event with private key");
     byte privateKeyBytes[NOSTR_DIGEST_SIZE];
@@ -88,10 +89,6 @@ SignedNostrEvent UnsignedNostrEvent::sign(NostrString privateKeyHex) {
     NostrString message;
     Utils::jsonStringify(data, &message);
     doc.clear();
-
-    Utils::log("Compute signature of: " + message);
-
-    // sha256 of message converted to hex, assign to msghash
     byte hash[64] = {0};
     int hashLen = 0;
     hashLen = sha256(message, hash);
@@ -99,7 +96,6 @@ SignedNostrEvent UnsignedNostrEvent::sign(NostrString privateKeyHex) {
 
     Utils::log("Message hash: " + msgHash);
 
-    // Generate the schnorr sig of the messageHash
     byte messageBytes[NOSTR_DIGEST_SIZE];
     NostrString_hexToBytes(msgHash, messageBytes, NOSTR_DIGEST_SIZE);
     SchnorrSignature signature = privateKey.schnorr_sign(messageBytes);
@@ -112,7 +108,28 @@ SignedNostrEvent UnsignedNostrEvent::sign(NostrString privateKeyHex) {
 }
 
 bool SignedNostrEvent::verify() const {
-    Serial.println("Verifying event signature");
+    Utils::log("Verifying event id");
+    JsonDocument doc;
+    JsonArray data = doc["data"].to<JsonArray>();
+    data.add(0);
+    data.add(this->pubkey);
+    data.add(this->created_at);
+    data.add(this->kind);
+    JsonArray tags = data.add<JsonArray>();
+    this->getTags()->toJson(tags);
+    data.add(this->content);
+    NostrString message;
+    Utils::jsonStringify(data, &message);
+    doc.clear();
+    byte hash[64] = {0};
+    int hashLen = 0;
+    hashLen = sha256(message, hash);
+    NostrString msgHash = NostrString_bytesToHex(hash, hashLen);
+    if(!NostrString_equals(msgHash, this->id)){
+        Utils::log("Event id does not match");
+        return false;
+    }
+    Utils::log("Verifying event signature");
     byte messageBytes[32];
     NostrString_hexToBytes(this->id, messageBytes, 32);
     Utils::log("Message hash: " + this->id);
