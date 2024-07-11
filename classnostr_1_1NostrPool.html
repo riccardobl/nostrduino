@@ -80,6 +80,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa169631cafd52ff3640edc32582ffd0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7234da5ae1a2b83564b1fed26cf1932"><td class="memItemLeft" align="right" valign="top"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1NostrPool.html#ac7234da5ae1a2b83564b1fed26cf1932">subscribeMany</a> (std::initializer_list&lt; <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> &gt; urls, std::initializer_list&lt; std::map&lt; <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>, std::initializer_list&lt; <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> &gt;&gt;&gt; filters, <a class="el" href="namespacenostr.html#ab0da4b375d4d7eda0bb0bf1010f381bc">NostrEventCallback</a> eventCallback=nullptr, <a class="el" href="namespacenostr.html#a6247e694a00e0a5cb14ddf0929408fb5">NostrCloseCallback</a> closeCallback=nullptr, <a class="el" href="namespacenostr.html#a7a3b6e8f71428b2bf4195b93d35756ed">NostrEOSECallback</a> eoseCallback=nullptr)</td></tr>
 <tr class="separator:ac7234da5ae1a2b83564b1fed26cf1932"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a282cb07c10b443ddbb6c26a679e35ec9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1NostrPool.html#a282cb07c10b443ddbb6c26a679e35ec9">subscribeMany</a> (std::initializer_list&lt; <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> &gt; urls, JsonArray filters, <a class="el" href="namespacenostr.html#ab0da4b375d4d7eda0bb0bf1010f381bc">NostrEventCallback</a> eventCallback=nullptr, <a class="el" href="namespacenostr.html#a6247e694a00e0a5cb14ddf0929408fb5">NostrCloseCallback</a> closeCallback=nullptr, <a class="el" href="namespacenostr.html#a7a3b6e8f71428b2bf4195b93d35756ed">NostrEOSECallback</a> eoseCallback=nullptr)</td></tr>
+<tr class="separator:a282cb07c10b443ddbb6c26a679e35ec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3a75055cdf933a6ec0dbea4e4dcbc49"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1NostrPool.html#ae3a75055cdf933a6ec0dbea4e4dcbc49">publish</a> (std::initializer_list&lt; <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> &gt; rs, <a class="el" href="classnostr_1_1SignedNostrEvent.html">SignedNostrEvent</a> *event, <a class="el" href="namespacenostr.html#a83396304773c199d3c6613e50113ac71">NostrEventStatusCallback</a> statusCallback=nullptr)</td></tr>
 <tr class="separator:ae3a75055cdf933a6ec0dbea4e4dcbc49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab396fdccb8964a50e88dc71357682e99"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1NostrPool.html#ab396fdccb8964a50e88dc71357682e99">loop</a> ()</td></tr>
@@ -311,8 +313,65 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a282cb07c10b443ddbb6c26a679e35ec9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a282cb07c10b443ddbb6c26a679e35ec9">&#9670;&nbsp;</a></span>subscribeMany() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> NostrPool::subscribeMany </td>
+          <td>(</td>
+          <td class="paramtype">std::initializer_list&lt; <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> &gt;&#160;</td>
+          <td class="paramname"><em>urls</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">JsonArray&#160;</td>
+          <td class="paramname"><em>filters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacenostr.html#ab0da4b375d4d7eda0bb0bf1010f381bc">NostrEventCallback</a>&#160;</td>
+          <td class="paramname"><em>eventCallback</em> = <code>nullptr</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacenostr.html#a6247e694a00e0a5cb14ddf0929408fb5">NostrCloseCallback</a>&#160;</td>
+          <td class="paramname"><em>closeCallback</em> = <code>nullptr</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacenostr.html#a7a3b6e8f71428b2bf4195b93d35756ed">NostrEOSECallback</a>&#160;</td>
+          <td class="paramname"><em>eoseCallback</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Subscribe to events from one or more relays </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">urls</td><td>The relays to subscribe to </td></tr>
+    <tr><td class="paramname">filters</td><td>A json array of filters for each relay </td></tr>
+    <tr><td class="paramname">eventCallback</td><td>A callback to be called when an event is received (optional) </td></tr>
+    <tr><td class="paramname">closeCallback</td><td>A callback to be called when the subscription is closed (optional) </td></tr>
+    <tr><td class="paramname">eoseCallback</td><td>A callback to be called when the stored events are exhausted (optional) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The subscription ID </dd></dl>
+
+</div>
+</div>
 <a id="ac7234da5ae1a2b83564b1fed26cf1932"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac7234da5ae1a2b83564b1fed26cf1932">&#9670;&nbsp;</a></span>subscribeMany()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7234da5ae1a2b83564b1fed26cf1932">&#9670;&nbsp;</a></span>subscribeMany() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
