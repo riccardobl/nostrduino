@@ -5,7 +5,6 @@
 #include "NostrString.h"
 
 #include <aes.h>
-#include <base64.h>
 #include <stdint.h>
 #include <stdlib.h>
 
