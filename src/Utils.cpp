@@ -1,4 +1,5 @@
 #include "Utils.h"
+#include "Bitcoin.h"
 
 using namespace nostr;
 

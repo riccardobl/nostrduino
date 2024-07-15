@@ -1,5 +1,6 @@
 
 #include "NostrEvent.h"
+#include "Bitcoin.h"
 
 using namespace nostr;
 

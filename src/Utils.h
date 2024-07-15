@@ -2,7 +2,6 @@
 #define NOSTR_UTILS_H
 
 #include "ArduinoJson.h"
-#include "Bitcoin.h"
 #include "NostrString.h"
 #include <functional>
 #define NOSTR_DIGEST_SIZE 32

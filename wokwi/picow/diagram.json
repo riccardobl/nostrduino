@@ -1,0 +1,31 @@
+{
+    "version": 1,
+    "author": "Riccardo Balbo",
+    "editor": "wokwi",
+    "parts": [
+        {
+    "type": "wokwi-pi-pico",
+    "id": "pico",
+            "top": 0,
+            "left": 0,
+    "attrs": {
+        "env": "arduino-community"
+    }
+}
+    ],
+    "connections": [
+        [
+            "pico:GP0",
+            "$serialMonitor:RX",
+            "",
+            []
+        ],
+        [
+            "pico:GP1",
+            "$serialMonitor:TX",
+            "",
+            []
+        ]
+    ],
+    "dependencies": {}
+}

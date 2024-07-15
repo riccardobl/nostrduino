@@ -1,6 +1,8 @@
 #ifndef NOSTR_STRING
-#define NOSTR_STRING 
+#define NOSTR_STRING
+#include <Bitcoin.h>
 #include <NostrString.h>
+
 #ifdef ARDUINO
 #include <Arduino.h>
 double NostrString_toFloat(const String &str) {
@@ -30,7 +32,7 @@ String NostrString_fromUInt(unsigned long long i) {
 void NostrString_split(const String &str, const char separator, std::vector<String> &result) {
     int startIndex = 0;
 
-    for (int i = 0; i <= str.length(); ++i) {
+    for (unsigned int i = 0; i <= str.length(); ++i) {
         if (str.charAt(i) == separator || i == str.length()) {
             // Extract the substring from startIndex to i
             String substring = str.substring(startIndex, i);
@@ -42,7 +44,7 @@ void NostrString_split(const String &str, const char separator, std::vector<Stri
 
 String NostrString_urlDecode(const String &encoded) {
     String decoded = "";
-    for (int i = 0; i < encoded.length(); i++) {
+    for (unsigned int i = 0; i < encoded.length(); i++) {
         char ch = encoded.charAt(i);
         if (ch == '+') {
             decoded += ' ';
@@ -86,7 +88,7 @@ String NostrString_base64ToHex(const String &b64) {
 String NostrString_trim(const String &s) {
     String ss = s;
     ss.trim();
-    for (int i = 0; i < ss.length(); i++) {
+    for (unsigned int i = 0; i < ss.length(); i++) {
         if (ss[i] < 32) {
             ss.remove(i);
         }
@@ -102,7 +104,7 @@ bool NostrString_equals(const String &str1, const String &str2) {
 
 String NostrString_urlEncode(const String &str) {
     String encoded = "";
-    for (int i = 0; i < str.length(); i++) {
+    for (unsigned int i = 0; i < str.length(); i++) {
         char ch = str.charAt(i);
         if (isAlphaNumeric(ch) || ch == '-' || ch == '_' || ch == '.' || ch == '~') {
             encoded += ch;
@@ -199,7 +201,7 @@ void NostrString_split(const std::string &str, const char separator, std::vector
 
 std::string NostrString_urlDecode(const std::string &encoded) {
     std::string decoded = "";
-    for (int i = 0; i < encoded.length(); i++) {
+    for (unsigned int i = 0; i < encoded.length(); i++) {
         char ch = encoded[i];
         if (ch == '+') {
             decoded += ' ';
@@ -219,7 +221,7 @@ std::string NostrString_fromUInt(unsigned long long i) {
 }
 std::string NostrString_urlEncode(const std::string &str) {
     std::string encoded = "";
-    for (int i = 0; i < str.length(); i++) {
+    for (unsigned int i = 0; i < str.length(); i++) {
         char ch = str[i];
         if (isalnum(ch) || ch == '-' || ch == '_' || ch == '.' || ch == '~') {
             encoded += ch;

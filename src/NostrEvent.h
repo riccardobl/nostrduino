@@ -10,7 +10,6 @@
 #include <vector>
 #include <initializer_list>
 #include "ArduinoJson.h"
-#include "Bitcoin.h"
 #include "Hash.h"
 #include "Utils.h"
 namespace nostr {

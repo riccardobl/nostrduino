@@ -1,7 +1,6 @@
 #ifndef _NOSTR_COMMON_BOARD_H
 #define _NOSTR_COMMON_BOARD_H 1
 
-
 #ifdef ESP32
 #define _ESP32_BOARD_
 #endif
@@ -17,8 +16,8 @@
 
 #endif
 
-#if defined(ARDUINO_UNOWIFIR4)
-#define _UNOR4_BOARD_
+#if defined(ARDUINO_ARCH_MBED_RP2040) || defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_RASPBERRY_PI_PICO_W)
+#define _PICOW_BOARD_
 #endif
 
 #endif

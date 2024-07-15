@@ -1,6 +1,5 @@
 #ifndef _NOSTR_STRING_H
 #define _NOSTR_STRING_H
-#include <Bitcoin.h>
 #include <vector>
 
 #ifdef ARDUINO

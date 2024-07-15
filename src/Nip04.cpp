@@ -1,4 +1,6 @@
 #include "Nip04.h"
+#include "Bitcoin.h"
+
 using namespace nostr;
 
 NostrString Nip04::decrypt(NostrString &privateKeyHex, NostrString &senderPubKeyHex, NostrString content) {
