@@ -1,14 +1,10 @@
 #ifndef NOSTR_STRING
-#define NOSTR_STRING 1
-#include <string>
-#include <vector>
+#define NOSTR_STRING 
+#include <NostrString.h>
 #ifdef ARDUINO
 #include <Arduino.h>
-#include <Bitcoin.h>
-#define NostrString String
-double NostrString_toFloat(const String &str){
+double NostrString_toFloat(const String &str) {
     return str.toFloat();
-
 }
 
 long NostrString_toInt(const String &str) {
@@ -28,7 +24,7 @@ String NostrString_substring(const String &str, int start) {
 }
 
 String NostrString_fromUInt(unsigned long long i) {
-    return String(i);
+    return String((long)i, DEC);
 }
 
 void NostrString_split(const String &str, const char separator, std::vector<String> &result) {
@@ -118,7 +114,7 @@ String NostrString_urlEncode(const String &str) {
     return encoded;
 }
 #else
-#define NostrString std::string
+#include <string>
 long NostrString_toInt(const std::string &str) {
     return std::stol(str);
 }

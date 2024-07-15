@@ -1,3 +1,5 @@
+#include <Arduino.h>
+
 #include "ArduinoJson.h"
 #include "NostrEvent.h"
 #include "NostrPool.h"

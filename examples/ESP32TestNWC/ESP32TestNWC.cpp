@@ -1,4 +1,6 @@
 
+#include <Arduino.h>
+
 #include "Transport.h"
 #include "esp32/ESP32Platform.h"
 #include "services/NWC.h"
@@ -10,7 +12,7 @@
 // IMPORTANT !!! Set a valid NWC url here
 #define NWC_URL                                                                                                                                                                                        \
     "nostr+walletconnect://69effe7b49a6dd5cf525bd0905917a5005ffe480b58eeb8e861418cf3ae760d9?relay=wss://relay.getalby.com/"                                                                            \
-    "v1&secret=1205ebd25d79a52a4e51920f6e1981a43400dc49daaa65d367bd8090218d206c&lud16=rblb@getalby.com"
+    "v1&secret=90a44d69283f46b0c917925980c9ade65449a5d85839162387948b42cd58bb1f&lud16=rblb@getalby.com"
 // Note: running this setting with default values will send 10 sats to the address below
 #define PAYOUT_ADDRESS "zap@rblb.it"
 #define PAYOUT_AMOUNT_MSAT 10000
@@ -55,7 +57,7 @@ void loop() {
 }
 
 void testNWC() {
-    try{
+    try {
         transport = nostr::esp32::ESP32Platform::getTransport();
         nwc = new nostr::NWC(transport, NWC_URL);
 
@@ -76,11 +78,16 @@ void testNWC() {
             },
             [](String err, String errMsg) { Serial.println("[!] Error: " + err + " " + errMsg); });
 
-        NostrString invoice = transport->getInvoiceFromLNAddr(PAYOUT_ADDRESS, PAYOUT_AMOUNT_MSAT, "Arduino NWC test");
-        Serial.println("[!] Paying " + String(PAYOUT_AMOUNT_MSAT) + " msats to " + PAYOUT_ADDRESS + " invoice: " + invoice);
-        nwc->payInvoice(
-            invoice, PAYOUT_AMOUNT_MSAT, [&](nostr::PayInvoiceResponse resp) { Serial.println("[!] Payment successful"); },
-            [](String err, String errMsg) { Serial.println("[!] Error: " + err + " " + errMsg); });
+        transport->getInvoiceFromLNAddr(PAYOUT_ADDRESS, PAYOUT_AMOUNT_MSAT, "Arduino NWC test", [&](String invoice) {
+            if(NostrString_equals(invoice,"")){
+                Serial.println("[!] Error: Could not get invoice from LN address");
+            }
+            Serial.println("[!] Paying " + String(PAYOUT_AMOUNT_MSAT) + " msats to " + PAYOUT_ADDRESS + " invoice: " + invoice);
+            nwc->payInvoice(
+                invoice, PAYOUT_AMOUNT_MSAT, [&](nostr::PayInvoiceResponse resp) { Serial.println("[!] Payment successful"); },
+                [](String err, String errMsg) { Serial.println("[!] Error: " + err + " " + errMsg); });
+        });
+
     } catch (std::exception &e) {
         Serial.println("[!] Exception: " + String(e.what()));
     }

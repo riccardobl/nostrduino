@@ -1,13 +1,17 @@
 #ifndef _NOSTR_ESP32_TRANSPORT_H
 #define _NOSTR_ESP32_TRANSPORT_H 1
-#include <HTTPClient.h>
-#include <WebSocketsClient.h>
+#ifdef ESP32
 
 #include "ArduinoJson.h"
 #include "NostrString.h"
 #include "Transport.h"
 #include "Utils.h"
 #include "WiFi.h"
+#include <HTTPClient.h>
+#include <WebSocketsClient.h>
+#include <functional>
+#include <initializer_list>
+#include <vector>
 namespace nostr {
 namespace esp32 {
 class ESP32Transport;
@@ -32,7 +36,7 @@ class ESP32Connection : public Connection {
 };
 class ESP32Transport : public Transport {
   public:
-    NostrString getInvoiceFromLNAddr(NostrString addr, unsigned long long amount, NostrString comment = "") override;
+    void getInvoiceFromLNAddr(NostrString addr, unsigned long long amountMSats, NostrString comment , std::function<void(NostrString)> callback);
     Connection *connect(NostrString url) override;
     void close();
     void disconnect(Connection *conn) override;
@@ -41,9 +45,10 @@ class ESP32Transport : public Transport {
     bool isReady() override;
 
   private:
+    void httpsGet(NostrString url, std::function<void(NostrString)> callback);
     std::vector<Connection *> connections;
 };
 } 
 } 
-
+#endif
 #endif

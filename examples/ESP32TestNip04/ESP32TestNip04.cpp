@@ -1,4 +1,6 @@
 
+#include <Arduino.h>
+
 #include "Nip04.h"
 #include "Transport.h"
 #include "esp32/ESP32Platform.h"

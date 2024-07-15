@@ -1,12 +1,10 @@
 #ifndef NOSTR_UTILS_H
 #define NOSTR_UTILS_H
 
-#include <stdlib.h>
-#include <functional>
-#include <string>
 #include "ArduinoJson.h"
 #include "Bitcoin.h"
 #include "NostrString.h"
+#include <functional>
 #define NOSTR_DIGEST_SIZE 32
 
 namespace nostr {

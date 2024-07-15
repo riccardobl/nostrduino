@@ -2,6 +2,7 @@
 #define _NOSTR_TRANSPORT_H
 
 #include "NostrString.h"
+#include <functional>
 
 namespace nostr {
 class Connection {
@@ -15,13 +16,14 @@ class Connection {
 };
 class Transport {
   public:
-    virtual NostrString getInvoiceFromLNAddr(NostrString addr, unsigned long long amountMSats, NostrString comment = "") = 0;
+    virtual void getInvoiceFromLNAddr(NostrString addr, unsigned long long amountMSats, NostrString comment , std::function<void(NostrString)> callback) = 0;
     virtual Connection *connect(NostrString url) = 0;
     virtual ~Transport() = default;
     Transport() = default;
     virtual void disconnect(Connection *conn) = 0;
     virtual bool isReady() = 0;
     virtual void close() = 0;
+    virtual void loop(){};
 };
 } 
 #endif

@@ -1,74 +1,90 @@
 #include "ESP32Transport.h"
 
+#ifdef ESP32
+
+
 using namespace nostr;
 
-NostrString esp32::ESP32Transport::getInvoiceFromLNAddr(NostrString addr, unsigned long long amount, NostrString comment) {
+void esp32::ESP32Transport::httpsGet(NostrString url, std::function<void(NostrString)> cb) {
+    HTTPClient http;
+    http.begin(url.c_str());
+    int httpCode = http.GET();
+    if (httpCode <= 0 || httpCode != HTTP_CODE_OK) {
+        cb("");
+        return;
+    }
+    NostrString str = http.getString();
+    http.end();
+    cb(str);
+}
+
+void esp32::ESP32Transport::getInvoiceFromLNAddr(NostrString addr, unsigned long long amount, NostrString comment, std::function<void(NostrString)> cb) {
     // username@domain.com
     // becomes https://domain.com/.well-known/lnurlp/username
     unsigned int atpos = NostrString_indexOf(addr, "@");
     if (atpos == -1) {
-        return "";
+        cb("");
+        return ;
     }
     NostrString username = NostrString_substring(addr, 0, atpos);
     NostrString domain = NostrString_substring(addr, atpos + 1);
     NostrString url = "https://" + domain + "/.well-known/lnurlp/" + NostrString_urlEncode(username);
 
-    HTTPClient http;
-    http.begin(url.c_str());
-    int httpCode = http.GET();
-    if (httpCode <= 0 || httpCode != HTTP_CODE_OK)
-        return "";
-    NostrString json = http.getString();
-    JsonDocument doc;
-    DeserializationError error = deserializeJson(doc, json);
-    if (error) {
-        Utils::log("Failed to parse lnaddr JSON " + json);
-        return "";
-    }
-    NostrString status = doc["status"];
-    if (!NostrString_equals(status, "OK")) {
-        Utils::log("LNURLP status not OK");
-        return "";
-    }
-    NostrString callback = doc["callback"];
-    if (NostrString_length(callback) == 0) {
-        Utils::log("LNURLP callback not found");
-        return "";
-    }
-    NostrString lnurlp = callback;
-    if (NostrString_indexOf(lnurlp, "?") != -1) {
-        lnurlp += "&";
-    } else {
-        lnurlp += "?";
-    }
-    lnurlp += "amount=" + NostrString_intToString(amount);
-    if (NostrString_length(comment) > 0) {
-        lnurlp += "&comment=" + NostrString_urlEncode(comment);
-    }
+    this->httpsGet(url, [this, amount, comment, cb](NostrString json) {
+        JsonDocument doc;
+        DeserializationError error = deserializeJson(doc, json);
+        if (error) {
+            Utils::log("Failed to parse lnaddr JSON " + json);
+            cb("");
+            return;
+        }
+        NostrString status = doc["status"];
+        if (!NostrString_equals(status, "OK")) {
+            Utils::log("LNURLP status not OK");
+            cb("");
+            return;
+        }
+        NostrString callback = doc["callback"];
+        if (NostrString_length(callback) == 0) {
+            Utils::log("LNURLP callback not found");
+            cb("");
+            return;
+        }
+        NostrString lnurlp = callback;
+        if (NostrString_indexOf(lnurlp, "?") != -1) {
+            lnurlp += "&";
+        } else {
+            lnurlp += "?";
+        }
+        lnurlp += "amount=" + NostrString_intToString(amount);
+        if (NostrString_length(comment) > 0) {
+            lnurlp += "&comment=" + NostrString_urlEncode(comment);
+        }
+        doc.clear();
+        this->httpsGet(lnurlp, [cb](NostrString json) {
+            JsonDocument doc;
 
-    http.end();
-    http.begin(lnurlp.c_str());
-    httpCode = http.GET();
-    if (httpCode <= 0 || httpCode != HTTP_CODE_OK)
-        return "";
-    json = http.getString();
-    error = deserializeJson(doc, json);
-    if (error) {
-        Utils::log("Failed to parse lnurlp JSON " + json);
-        return "";
-    }
-    NostrString callbackStatus = doc["status"];
-    if (!NostrString_equals(callbackStatus, "OK")) {
-        Utils::log("LNURLP callback status not OK");
-        return "";
-    }
-    NostrString invoice = doc["pr"];
-    if (NostrString_length(invoice) == 0) {
-        Utils::log("LNURLP invoice not found");
-        return "";
-    }
-    http.end();
-    return invoice;
+            DeserializationError error = deserializeJson(doc, json);
+            if (error) {
+                Utils::log("Failed to parse lnurlp JSON " + json);
+                cb("");
+                return;
+            }
+            NostrString callbackStatus = doc["status"];
+            if (!NostrString_equals(callbackStatus, "OK")) {
+                Utils::log("LNURLP callback status not OK");
+                cb("");
+                return;
+            }
+            NostrString invoice = doc["pr"];
+            if (NostrString_length(invoice) == 0) {
+                Utils::log("LNURLP invoice not found");
+                cb("");
+                return;
+            }
+            cb(invoice);
+        });
+    });
 }
 
 Connection *esp32::ESP32Transport::connect(NostrString url) {
@@ -183,3 +199,5 @@ esp32::ESP32Connection::~ESP32Connection() {
 }
 
 esp32::ESP32Transport::ESP32Transport() {}
+
+#endif

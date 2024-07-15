@@ -3,16 +3,12 @@
 #define _NOSTR_EVENT_H
 
 #include "NostrString.h"
+#include <functional>
 
 #include <aes.h>
-#include <stdint.h>
-#include <stdlib.h>
-
-#include <iostream>
 #include <map>
-#include <string>
 #include <vector>
-
+#include <initializer_list>
 #include "ArduinoJson.h"
 #include "Bitcoin.h"
 #include "Hash.h"

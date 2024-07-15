@@ -7,7 +7,6 @@
 #include "Hash.h"
 #include "NostrString.h"
 #include "Utils.h"
-
 namespace nostr {
 class Nip04 {
   public:

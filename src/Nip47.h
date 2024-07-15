@@ -6,6 +6,8 @@
 #include "NostrEvent.h"
 #include "NostrString.h"
 #include "Utils.h"
+#include <initializer_list>
+#include <vector>
 namespace nostr {
 typedef struct s_Invoice {
     NostrString invoice;

@@ -2,15 +2,14 @@
 #define _NOSTR_POOL_H
 
 #include <Transport.h>
-#include <iostream>
+#include <functional>
+#include <initializer_list>
 #include <map>
-#include <memory>
 #include <vector>
 
 #include "ArduinoJson.h"
 #include "NostrEvent.h"
 #include "NostrString.h"
-
 
 
 namespace nostr {

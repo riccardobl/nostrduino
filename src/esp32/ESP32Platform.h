@@ -1,12 +1,15 @@
 #ifndef _NOSTR_ESP32_PLATFORM_H
 #define _NOSTR_ESP32_PLATFORM_H 1
+#ifdef ESP32
+#include "NostrString.h"
 #include "Utils.h"
 #include "bootloader_random.h"
+#include "ESP32Transport.h"
 #include "esp_random.h"
 #include "esp_wifi.h"
 #include "time.h"
-#include "esp32/ESP32Transport.h"
-#include "NostrString.h"
+#include <initializer_list>
+#include <vector>
 namespace nostr {
     namespace esp32{
         namespace ESP32Platform{
@@ -72,4 +75,5 @@ namespace nostr {
         }
     }
 }
+#endif
 #endif
