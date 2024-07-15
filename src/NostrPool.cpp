@@ -279,3 +279,7 @@ std::vector<NostrString> NostrPool::getRelays() {
     }
     return urls;
 }
+
+std::vector<NostrRelay *> *NostrPool::getConnectedRelays() {
+    return &this->relays;
+}

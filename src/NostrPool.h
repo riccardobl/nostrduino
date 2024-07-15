@@ -48,12 +48,15 @@ namespace nostr {
          */
         void send(NostrString message);
         NostrRelay(Connection *conn, NostrString url) : conn(conn), url(url){};
-
+        Connection *getConnection() const { return conn; }
+        NostrString getUrl() const{
+            return url;
+        }
        protected:
-        std::vector<NostrString> messageQueue;
-        Connection *conn;
-        NostrString url;
-        void processQueue();
+         NostrString url;
+         std::vector<NostrString> messageQueue;
+         Connection *conn;
+         void processQueue();
     };
 
     /**
@@ -138,6 +141,7 @@ namespace nostr {
         /**
          * Get all relays that the pool is connected to
          * @return A list of relay URLs
+         * @deprecated Use getConnectedRelays() instead  
          */
         std::vector<NostrString> getRelays();
 
@@ -151,6 +155,13 @@ namespace nostr {
          * Close the pool and disconnect from every relay
          */
         void close();
+
+  
+        /**
+         * Get all relays that the pool is connected to
+         * @return A list of relays
+         */
+        std::vector<NostrRelay *> *getConnectedRelays();
 
       private:
         NostrNoticeCallback noticeCallback = nullptr;

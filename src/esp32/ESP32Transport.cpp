@@ -138,9 +138,23 @@ esp32::ESP32Connection::ESP32Connection(ESP32Transport *transport, NostrString u
         switch (type) {
         case WStype_DISCONNECTED:
             Utils::log("ESP32Connection disconnected.");
+            for (auto &listener : connectionListeners) {
+                try {
+                    listener(ConnectionStatus::DISCONNECTED);
+                } catch (std::exception &e) {
+                    Utils::log(e.what());
+                }
+            }
             break;
         case WStype_CONNECTED:
             Utils::log("ESP32Connection connected.");
+            for (auto &listener : connectionListeners) {
+                try {
+                    listener(ConnectionStatus::CONNECTED);
+                } catch (std::exception &e) {
+                    Utils::log(e.what());
+                }
+            }
             break;
         case WStype_TEXT: {
             NostrString message = NostrString_fromChars((char *)payload);
@@ -157,6 +171,13 @@ esp32::ESP32Connection::ESP32Connection(ESP32Transport *transport, NostrString u
         }
         case WStype_ERROR:
             Utils::log("ESP32Connection error.");
+            for (auto &listener : connectionListeners) {
+                try {
+                    listener(ConnectionStatus::ERROR);
+                } catch (std::exception &e) {
+                    Utils::log(e.what());
+                }
+            }
             break;
         default:
             break;
@@ -199,5 +220,9 @@ esp32::ESP32Connection::~ESP32Connection() {
 }
 
 esp32::ESP32Transport::ESP32Transport() {}
+
+void esp32::ESP32Connection::addConnectionStatusListener(std::function<void(ConnectionStatus status)> listener) {
+    connectionListeners.push_back(listener);
+}
 
 #endif

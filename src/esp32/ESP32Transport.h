@@ -24,6 +24,10 @@ class ESP32Connection : public Connection {
     void loop() override;
     bool isReady() override;
     void addMessageListener(std::function<void(NostrString)> listener) override;
+    void addConnectionStatusListener(std::function<void(ConnectionStatus status)> listener) override;
+    WebSocketsClient* getWebsocket(){
+        return &ws;
+    }
     ~ESP32Connection() override;
 
   protected:
@@ -33,6 +37,7 @@ class ESP32Connection : public Connection {
     ESP32Transport *transport;
     WebSocketsClient ws;
     std::vector<std::function<void(NostrString)>> messageListeners;
+    std::vector<std::function<void(ConnectionStatus status)>> connectionListeners;
 };
 class ESP32Transport : public Transport {
   public:

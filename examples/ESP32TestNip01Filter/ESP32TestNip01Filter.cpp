@@ -47,7 +47,7 @@ void setup() {
     testNIP01Filter();
 }
 
-void loop() {    
+void loop() {
     for (nostr::NostrPool *pool : pools) {
         pool->loop();
     }
@@ -56,7 +56,7 @@ void loop() {
 nostr::Transport *transport;
 
 void testNIP01Filter() {
-    try{
+    try {
         String relay = RELAY;
         transport = nostr::esp32::ESP32Platform::getTransport();
         nostr::NostrPool *pool = new nostr::NostrPool(transport);
@@ -64,12 +64,12 @@ void testNIP01Filter() {
         String subId = pool->subscribeMany(
             {relay},
             {{
-                {"kinds", {"1"}},
-                {"since", {"1626023056"}},
-                {"until", {"1846947856"}},
+                {"kinds", {"1"}}, 
+                {"since", {"1626023056"}}, 
+                {"until", {"1846947856"}}, 
                 {"limit", {"10"}},
                 // Filters defined in NIP01 are automatically converted to the correct type
-                // however this library support non-NIP01 filters as well, but you might need to 
+                // however this library support non-NIP01 filters as well, but you might need to
                 // specify their type manually, if unspecified the code assumes string[]:
                 // eg. {"int newFilter", {"1"}}
                 // eg. {"int[] newFilter2", {"1", "2"}}
@@ -77,7 +77,7 @@ void testNIP01Filter() {
                 // eg. {"float[] newFilter4", {"1.1", "2.2"}}
                 // eg. {"string newFilter5", {"hello"}}
             }},
-            [&](const String &subId, nostr::SignedNostrEvent *event) {               
+            [&](const String &subId, nostr::SignedNostrEvent *event) {
                 JsonDocument doc;
                 JsonArray arr = doc["data"].to<JsonArray>();
                 event->toSendableEvent(arr);
@@ -86,6 +86,22 @@ void testNIP01Filter() {
                 Serial.println("Event received: " + json);
             },
             [&](const String &subId, const String &reason) { Serial.println("Subscription closed: " + reason); }, [&](const String &subId) { Serial.println("Subscription EOSE: " + subId); });
+
+        std::vector<nostr::NostrRelay *> *relays = pool->getConnectedRelays();
+        for (nostr::NostrRelay *relay : *relays) {
+            Serial.println("Registering to connection events of: " + relay->getUrl());
+            relay->getConnection()->addConnectionStatusListener([&](const nostr::ConnectionStatus &status) { 
+                String sstatus="UNKNOWN";
+                if(status==nostr::ConnectionStatus::CONNECTED){
+                    sstatus="CONNECTED";
+                }else if(status==nostr::ConnectionStatus::DISCONNECTED){
+                    sstatus="DISCONNECTED";
+                }else if(status==nostr::ConnectionStatus::ERROR){
+                    sstatus = "ERROR";
+                }
+                Serial.println("Connection status changed: " + sstatus); 
+            });
+        }
     } catch (const std::exception &e) {
         Serial.println("Error: " + String(e.what()));
     }

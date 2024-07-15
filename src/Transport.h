@@ -5,6 +5,7 @@
 #include <functional>
 
 namespace nostr {
+enum class ConnectionStatus { CONNECTED, DISCONNECTED, ERROR };
 class Connection {
   public:
     virtual void addMessageListener(std::function<void(NostrString)> listener);
@@ -13,17 +14,18 @@ class Connection {
     virtual ~Connection() = default;
     virtual void loop() = 0;
     virtual bool isReady() = 0;
+    virtual void addConnectionStatusListener(std::function<void(ConnectionStatus status)> listener) {};
 };
 class Transport {
   public:
-    virtual void getInvoiceFromLNAddr(NostrString addr, unsigned long long amountMSats, NostrString comment , std::function<void(NostrString)> callback) = 0;
+    virtual void getInvoiceFromLNAddr(NostrString addr, unsigned long long amountMSats, NostrString comment, std::function<void(NostrString)> callback) = 0;
     virtual Connection *connect(NostrString url) = 0;
     virtual ~Transport() = default;
     Transport() = default;
     virtual void disconnect(Connection *conn) = 0;
     virtual bool isReady() = 0;
     virtual void close() = 0;
-    virtual void loop(){};
+    virtual void loop() {};
 };
-} 
+} // namespace nostr
 #endif
