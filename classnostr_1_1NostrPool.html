@@ -96,6 +96,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6930e93774d6d5dba07a7172bffd3684"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a912d173034c08ea82922acf58c8acbc2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1NostrPool.html#a912d173034c08ea82922acf58c8acbc2">close</a> ()</td></tr>
 <tr class="separator:a912d173034c08ea82922acf58c8acbc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b76c5bbd4d3cc7ecc5efae88776db2d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classnostr_1_1NostrRelay.html">NostrRelay</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1NostrPool.html#a7b76c5bbd4d3cc7ecc5efae88776db2d">getConnectedRelays</a> ()</td></tr>
+<tr class="separator:a7b76c5bbd4d3cc7ecc5efae88776db2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The main class for interacting with the Nostr network. Handles subscriptions, relays, and event publishing. </p>
@@ -135,7 +137,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Create a new <a class="el" href="classnostr_1_1NostrPool.html">NostrPool</a> </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">transport</td><td>A transport object, you can get one for the <a class="el" href="namespacenostr_1_1esp32.html">esp32</a> platform using <a class="el" href="namespacenostr_1_1esp32_1_1ESP32Platform.html#abe46d31af712a8dc70582da944ce1229">nostr::esp32::ESP32Platform::getTransport()</a> , for other platforms you need to implement the <a class="el" href="classnostr_1_1Transport.html">Transport</a> interface </td></tr>
+    <tr><td class="paramname">transport</td><td>A transport object, you can get one for the esp32 platform using nostr::esp32::ESP32Platform::getTransport() , for other platforms you need to implement the <a class="el" href="classnostr_1_1Transport.html">Transport</a> interface </td></tr>
     <tr><td class="paramname">eventStatusTimeoutSeconds</td><td>The number of seconds to wait for an event status before timing out (optional) </td></tr>
   </table>
   </dd>
@@ -235,6 +237,24 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a7b76c5bbd4d3cc7ecc5efae88776db2d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b76c5bbd4d3cc7ecc5efae88776db2d">&#9670;&nbsp;</a></span>getConnectedRelays()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classnostr_1_1NostrRelay.html">NostrRelay</a> * &gt; * NostrPool::getConnectedRelays </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get all relays that the pool is connected to </p><dl class="section return"><dt>Returns</dt><dd>A list of relays </dd></dl>
+
+</div>
+</div>
 <a id="a87aacd8a79d84fa8a798f824ab21e16c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a87aacd8a79d84fa8a798f824ab21e16c">&#9670;&nbsp;</a></span>getRelays()</h2>
 
@@ -250,6 +270,8 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Get all relays that the pool is connected to </p><dl class="section return"><dt>Returns</dt><dd>A list of relay URLs </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000001">Deprecated:</a></b></dt><dd>Use <a class="el" href="classnostr_1_1NostrPool.html#a7b76c5bbd4d3cc7ecc5efae88776db2d">getConnectedRelays()</a> instead <br  />
+ </dd></dl>
 
 </div>
 </div>

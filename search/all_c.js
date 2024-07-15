@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['esp32_116',['esp32',['../namespacenostr_1_1esp32.html',1,'nostr']]],
-  ['esp32platform_117',['ESP32Platform',['../namespacenostr_1_1esp32_1_1ESP32Platform.html',1,'nostr::esp32']]],
   ['n_118',['n',['../classnostr_1_1NWCResponseCallbackBase.html#a3ab0eff64ab942a724e9744520f0c964',1,'nostr::NWCResponseCallbackBase']]],
   ['nb_119',['Nb',['../aes_8cpp.html#a1ae104196f1fc7af4751c5b9e07b1610',1,'aes.cpp']]],
   ['network_120',['network',['../structnostr_1_1s__GetInfoResponse.html#ab731456e15cf89796232608fd69d81ec',1,'nostr::s_GetInfoResponse']]],
@@ -11,7 +9,7 @@ var searchData=
   ['nip47_124',['Nip47',['../classnostr_1_1Nip47.html#a832db110f750bae323891fc3113dc483',1,'nostr::Nip47::Nip47()'],['../classnostr_1_1Nip47.html#afa506b09ad4df68c72e088336d408429',1,'nostr::Nip47::Nip47(Nip04 nip04, NostrString servicePubKey, NostrString userPrivKey)'],['../classnostr_1_1Nip47.html',1,'nostr::Nip47']]],
   ['nip47_2ecpp_125',['Nip47.cpp',['../Nip47_8cpp.html',1,'']]],
   ['nip47_2eh_126',['Nip47.h',['../Nip47_8h.html',1,'']]],
-  ['nip47response_127',['Nip47Response',['../classnostr_1_1Nip47Response.html#ab81bd783b170fa8287fa93ae6a5614e9',1,'nostr::Nip47Response::Nip47Response()'],['../classnostr_1_1Nip47Response.html#a0f57334b55cc736954dcdea618857734',1,'nostr::Nip47Response::Nip47Response(NostrString errorCode, NostrString errorMessage, NostrString resultType, T result)'],['../classnostr_1_1Nip47Response.html',1,'nostr::Nip47Response&lt; T &gt;']]],
+  ['nip47response_127',['Nip47Response',['../classnostr_1_1Nip47Response.html#a0f57334b55cc736954dcdea618857734',1,'nostr::Nip47Response::Nip47Response(NostrString errorCode, NostrString errorMessage, NostrString resultType, T result)'],['../classnostr_1_1Nip47Response.html#ab81bd783b170fa8287fa93ae6a5614e9',1,'nostr::Nip47Response::Nip47Response()'],['../classnostr_1_1Nip47Response.html',1,'nostr::Nip47Response&lt; T &gt;']]],
   ['nk_128',['Nk',['../aes_8cpp.html#a7b1938df390b1afe917e8baa663c22af',1,'aes.cpp']]],
   ['nostr_129',['nostr',['../namespacenostr.html',1,'']]],
   ['nostr_5fdigest_5fsize_130',['NOSTR_DIGEST_SIZE',['../Utils_8h.html#a3f16b02f27bee5698c1e6ad357486214',1,'Utils.h']]],
@@ -31,7 +29,7 @@ var searchData=
   ['nostrpool_2ecpp_144',['NostrPool.cpp',['../NostrPool_8cpp.html',1,'']]],
   ['nostrpool_2eh_145',['NostrPool.h',['../NostrPool_8h.html',1,'']]],
   ['nostrrelay_146',['NostrRelay',['../classnostr_1_1NostrRelay.html',1,'nostr::NostrRelay'],['../classnostr_1_1NostrRelay.html#af668c3c57d9e84b398aac9ea481114e6',1,'nostr::NostrRelay::NostrRelay()']]],
-  ['nostrstring_147',['NostrString',['../NostrString_8cpp.html#a51a5cc014ebe5eb0fda73fcf0e09b626',1,'NostrString():&#160;NostrString.cpp'],['../NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626',1,'NostrString():&#160;NostrString.h']]],
+  ['nostrstring_147',['NostrString',['../NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626',1,'NostrString.h']]],
   ['nostrstring_2ecpp_148',['NostrString.cpp',['../NostrString_8cpp.html',1,'']]],
   ['nostrstring_2eh_149',['NostrString.h',['../NostrString_8h.html',1,'']]],
   ['nostrstring_5fbase64tohex_150',['NostrString_base64ToHex',['../NostrString_8cpp.html#af842440c472941f7df78b8a4cb4b0934',1,'NostrString_base64ToHex(const std::string &amp;b64):&#160;NostrString.cpp'],['../NostrString_8h.html#af842440c472941f7df78b8a4cb4b0934',1,'NostrString_base64ToHex(const std::string &amp;b64):&#160;NostrString.cpp']]],

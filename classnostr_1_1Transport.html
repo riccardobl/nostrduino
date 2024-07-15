@@ -73,20 +73,11 @@ $(function() {
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="Transport_8h_source.html">Transport.h</a>&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for nostr::Transport:</div>
-<div class="dyncontent">
- <div class="center">
-  <img src="classnostr_1_1Transport.png" usemap="#nostr::Transport_map" alt=""/>
-  <map id="nostr::Transport_map" name="nostr::Transport_map">
-<area href="classnostr_1_1esp32_1_1ESP32Transport.html" alt="nostr::esp32::ESP32Transport" shape="rect" coords="0,56,178,80"/>
-  </map>
-</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a42bedd0b5a19ddfc1ae5c02cd14edf14"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Transport.html#a42bedd0b5a19ddfc1ae5c02cd14edf14">getInvoiceFromLNAddr</a> (<a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> addr, unsigned long long amountMSats, <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> comment=&quot;&quot;)=0</td></tr>
-<tr class="separator:a42bedd0b5a19ddfc1ae5c02cd14edf14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3438c6030285fb9310efa7e628f61118"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Transport.html#a3438c6030285fb9310efa7e628f61118">getInvoiceFromLNAddr</a> (<a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> addr, unsigned long long amountMSats, <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> comment, std::function&lt; void(<a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>)&gt; callback)=0</td></tr>
+<tr class="separator:a3438c6030285fb9310efa7e628f61118"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c5e942cdc1befc66aae956d94469efd"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classnostr_1_1Connection.html">Connection</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Transport.html#a0c5e942cdc1befc66aae956d94469efd">connect</a> (<a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> url)=0</td></tr>
 <tr class="separator:a0c5e942cdc1befc66aae956d94469efd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af063ade88c53338ad4d7489c59b39625"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Transport.html#af063ade88c53338ad4d7489c59b39625">~Transport</a> ()=default</td></tr>
@@ -99,6 +90,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a277eac950191c1f87450d712c5bf6ec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0afe71e02773d9a026474372442e674a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Transport.html#a0afe71e02773d9a026474372442e674a">close</a> ()=0</td></tr>
 <tr class="separator:a0afe71e02773d9a026474372442e674a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa525f98cc51f701ca086112c44f2b5e2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Transport.html#aa525f98cc51f701ca086112c44f2b5e2">loop</a> ()</td></tr>
+<tr class="separator:aa525f98cc51f701ca086112c44f2b5e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af063ade88c53338ad4d7489c59b39625"></a>
@@ -175,8 +168,6 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classnostr_1_1esp32_1_1ESP32Transport.html#aca0ad35cfb8de39700eb79177f9b485b">nostr::esp32::ESP32Transport</a>.</p>
-
 </div>
 </div>
 <a id="a0c5e942cdc1befc66aae956d94469efd"></a>
@@ -202,8 +193,6 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Implemented in <a class="el" href="classnostr_1_1esp32_1_1ESP32Transport.html#aa0375d4e6040153c0aab9a02f20d3512">nostr::esp32::ESP32Transport</a>.</p>
 
 </div>
 </div>
@@ -231,12 +220,10 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classnostr_1_1esp32_1_1ESP32Transport.html#a32171ade3f194e9c868d8b4e0bd5654c">nostr::esp32::ESP32Transport</a>.</p>
-
 </div>
 </div>
-<a id="a42bedd0b5a19ddfc1ae5c02cd14edf14"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a42bedd0b5a19ddfc1ae5c02cd14edf14">&#9670;&nbsp;</a></span>getInvoiceFromLNAddr()</h2>
+<a id="a3438c6030285fb9310efa7e628f61118"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3438c6030285fb9310efa7e628f61118">&#9670;&nbsp;</a></span>getInvoiceFromLNAddr()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -245,7 +232,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> nostr::Transport::getInvoiceFromLNAddr </td>
+          <td class="memname">virtual void nostr::Transport::getInvoiceFromLNAddr </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td>
           <td class="paramname"><em>addr</em>, </td>
@@ -260,7 +247,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td>
-          <td class="paramname"><em>comment</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>comment</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::function&lt; void(<a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>)&gt;&#160;</td>
+          <td class="paramname"><em>callback</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -274,8 +267,6 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Implemented in <a class="el" href="classnostr_1_1esp32_1_1ESP32Transport.html#a4adb02ec58bdf74733f6b4cc812b99cc">nostr::esp32::ESP32Transport</a>.</p>
 
 </div>
 </div>
@@ -302,7 +293,30 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classnostr_1_1esp32_1_1ESP32Transport.html#a23d9f1794ca60bbfa1102947081cfcc2">nostr::esp32::ESP32Transport</a>.</p>
+</div>
+</div>
+<a id="aa525f98cc51f701ca086112c44f2b5e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa525f98cc51f701ca086112c44f2b5e2">&#9670;&nbsp;</a></span>loop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void nostr::Transport::loop </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

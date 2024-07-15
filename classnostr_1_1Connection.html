@@ -73,15 +73,6 @@ $(function() {
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="Transport_8h_source.html">Transport.h</a>&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for nostr::Connection:</div>
-<div class="dyncontent">
- <div class="center">
-  <img src="classnostr_1_1Connection.png" usemap="#nostr::Connection_map" alt=""/>
-  <map id="nostr::Connection_map" name="nostr::Connection_map">
-<area href="classnostr_1_1esp32_1_1ESP32Connection.html" alt="nostr::esp32::ESP32Connection" shape="rect" coords="0,56,188,80"/>
-  </map>
-</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -97,6 +88,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aee2be02ce75a3bb2a15306212e77b382"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af780de347728124fc0664614f100c604"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Connection.html#af780de347728124fc0664614f100c604">isReady</a> ()=0</td></tr>
 <tr class="separator:af780de347728124fc0664614f100c604"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71d4684389dc9b6f35f09829e69058b1"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Connection.html#a71d4684389dc9b6f35f09829e69058b1">addConnectionStatusListener</a> (std::function&lt; void(<a class="el" href="namespacenostr.html#a9e024483543fd2f2ca5116fd86e38c3c">ConnectionStatus</a> status)&gt; listener)</td></tr>
+<tr class="separator:a71d4684389dc9b6f35f09829e69058b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a8b3ae539c84b9de24c5db2071885b2c9"></a>
@@ -125,6 +118,32 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a71d4684389dc9b6f35f09829e69058b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71d4684389dc9b6f35f09829e69058b1">&#9670;&nbsp;</a></span>addConnectionStatusListener()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void nostr::Connection::addConnectionStatusListener </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; void(<a class="el" href="namespacenostr.html#a9e024483543fd2f2ca5116fd86e38c3c">ConnectionStatus</a> status)&gt;&#160;</td>
+          <td class="paramname"><em>listener</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a09f2f3d42f8b4143dc616207afa7cab3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a09f2f3d42f8b4143dc616207afa7cab3">&#9670;&nbsp;</a></span>addMessageListener()</h2>
 
@@ -148,8 +167,6 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Reimplemented in <a class="el" href="classnostr_1_1esp32_1_1ESP32Connection.html#a70bfc236b0189524d7d5965cba18cfc1">nostr::esp32::ESP32Connection</a>.</p>
 
 </div>
 </div>
@@ -176,8 +193,6 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classnostr_1_1esp32_1_1ESP32Connection.html#a8a21ab9c9baabe361305c97f5d7b7253">nostr::esp32::ESP32Connection</a>.</p>
-
 </div>
 </div>
 <a id="af780de347728124fc0664614f100c604"></a>
@@ -202,8 +217,6 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Implemented in <a class="el" href="classnostr_1_1esp32_1_1ESP32Connection.html#a69db2e6817533bffc6879915b6d8c87e">nostr::esp32::ESP32Connection</a>.</p>
 
 </div>
 </div>
@@ -230,8 +243,6 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classnostr_1_1esp32_1_1ESP32Connection.html#ac0bcd94ae63bdb92da45f8fee3b55ac2">nostr::esp32::ESP32Connection</a>.</p>
-
 </div>
 </div>
 <a id="ac5de060192a611ec634b1123c6ce7787"></a>
@@ -257,8 +268,6 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Implemented in <a class="el" href="classnostr_1_1esp32_1_1ESP32Connection.html#a57eb5e58ef7218c13b79f08b6bb87a86">nostr::esp32::ESP32Connection</a>.</p>
 
 </div>
 </div>

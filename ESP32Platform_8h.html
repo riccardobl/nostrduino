@@ -65,49 +65,12 @@ $(function() {
 </div>
 </div><!-- top -->
 <div class="header">
-  <div class="summary">
-<a href="#namespaces">Namespaces</a> &#124;
-<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">ESP32Platform.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="Utils_8h_source.html">Utils.h</a>&quot;</code><br />
-<code>#include &quot;bootloader_random.h&quot;</code><br />
-<code>#include &quot;esp_random.h&quot;</code><br />
-<code>#include &quot;esp_wifi.h&quot;</code><br />
-<code>#include &quot;time.h&quot;</code><br />
-<code>#include &quot;<a class="el" href="ESP32Transport_8h_source.html">esp32/ESP32Transport.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="NostrString_8h_source.html">NostrString.h</a>&quot;</code><br />
-</div>
+
 <p><a href="ESP32Platform_8h_source.html">Go to the source code of this file.</a></p>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
-Namespaces</h2></td></tr>
-<tr class="memitem:namespacenostr"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenostr.html">nostr</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespacenostr_1_1esp32"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenostr_1_1esp32.html">nostr::esp32</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespacenostr_1_1esp32_1_1ESP32Platform"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenostr_1_1esp32_1_1ESP32Platform.html">nostr::esp32::ESP32Platform</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:a5faabbc42497acaa66f7b10f2a9d9a4b"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenostr_1_1esp32_1_1ESP32Platform.html#a5faabbc42497acaa66f7b10f2a9d9a4b">nostr::esp32::ESP32Platform::getUnixTimestamp</a> ()</td></tr>
-<tr class="separator:a5faabbc42497acaa66f7b10f2a9d9a4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8019dd5e74873268e638516fa73b50e"><td class="memItemLeft" align="right" valign="top">long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenostr_1_1esp32_1_1ESP32Platform.html#ae8019dd5e74873268e638516fa73b50e">nostr::esp32::ESP32Platform::getRealRandom</a> (long int min, long int max)</td></tr>
-<tr class="separator:ae8019dd5e74873268e638516fa73b50e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdc5644c7c3ca147eb184fc1f7b0cb49"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenostr_1_1esp32_1_1ESP32Platform.html#abdc5644c7c3ca147eb184fc1f7b0cb49">nostr::esp32::ESP32Platform::serialLogger</a> (const <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> &amp;str)</td></tr>
-<tr class="separator:abdc5644c7c3ca147eb184fc1f7b0cb49"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef2b4ec9b016229f24baa98be113baaa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenostr_1_1esp32_1_1ESP32Platform.html#aef2b4ec9b016229f24baa98be113baaa">nostr::esp32::ESP32Platform::initWifi</a> (<a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> ssid, <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> passphrase, int channel=6)</td></tr>
-<tr class="separator:aef2b4ec9b016229f24baa98be113baaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add8d06cbe3a3b96d7d3c8edd90d99d3c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenostr_1_1esp32_1_1ESP32Platform.html#add8d06cbe3a3b96d7d3c8edd90d99d3c">nostr::esp32::ESP32Platform::initTime</a> (const char *ntpServer, long gmtOffset_sec=0, int daylightOffset_sec=3600)</td></tr>
-<tr class="separator:add8d06cbe3a3b96d7d3c8edd90d99d3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af10d1ee01a3830f608b316b4770072fb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenostr_1_1esp32_1_1ESP32Platform.html#af10d1ee01a3830f608b316b4770072fb">nostr::esp32::ESP32Platform::initNostr</a> (bool withLogger)</td></tr>
-<tr class="separator:af10d1ee01a3830f608b316b4770072fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe46d31af712a8dc70582da944ce1229"><td class="memItemLeft" align="right" valign="top">ESP32Transport *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenostr_1_1esp32_1_1ESP32Platform.html#abe46d31af712a8dc70582da944ce1229">nostr::esp32::ESP32Platform::getTransport</a> ()</td></tr>
-<tr class="separator:abe46d31af712a8dc70582da944ce1229"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

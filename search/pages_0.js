@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['nostrduino_530',['Nostrduino',['../index.html',1,'']]]
+  ['deprecated_20list_532',['Deprecated List',['../deprecated.html',1,'']]]
 ];

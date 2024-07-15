@@ -86,12 +86,17 @@ Philosophy</h1>
 <h1><a class="anchor" id="autotoc_md4"></a>
 Installation</h1>
 <p>Check the <a href="https://registry.platformio.org/libraries/rblb/Nostrduino/installation">platformio registry page</a> for instructions.</p>
-<h1><a class="anchor" id="autotoc_md5"></a>
+<h2><a class="anchor" id="autotoc_md5"></a>
+ESP32 dependencies</h2>
+<p>This library depends on the following additional libraries for the esp32 platform:</p><ul>
+<li>WebSockets@^2.4.1</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md6"></a>
 Usage</h1>
 <p>See the example scripts in <code>examples/</code> for simple examples of how to use this library.</p>
-<h1><a class="anchor" id="autotoc_md6"></a>
+<h1><a class="anchor" id="autotoc_md7"></a>
 Development</h1>
-<h2><a class="anchor" id="autotoc_md7"></a>
+<h2><a class="anchor" id="autotoc_md8"></a>
 Setting up the build environment</h2>
 <div class="fragment"><div class="line"># create venv</div>
 <div class="line">python3 -m venv venv</div>
@@ -99,20 +104,20 @@ Setting up the build environment</h2>
 <div class="line">source venv/bin/activate</div>
 <div class="line"># install platformio</div>
 <div class="line">pip install platformio</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md8"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md9"></a>
 Compiling Tests</h2>
-<h3><a class="anchor" id="autotoc_md9"></a>
+<h3><a class="anchor" id="autotoc_md10"></a>
 Test NIP01</h3>
 <p>Edit <code>examples/ESP32TestNip01/ESP32TestNip01.cpp</code> and set the <code>WIFI_SSID</code>, <code>WIFI_PASS</code> and <code>WIFI_CHANNEL</code>.</p>
 <p>Then compile with: </p><div class="fragment"><div class="line">pio run -e ESP32TestNip01</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md10"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md11"></a>
 Test NIP04</h2>
 <p>Compile with: </p><div class="fragment"><div class="line">pio run -e ESP32TestNip04</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md11"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md12"></a>
 Test NWC</h2>
 <p>Edit <code>examples/ESP32TestNWC/ESP32TestNWC.cpp</code> and set the <code>WIFI_SSID</code>, <code>WIFI_PASS</code> , <code>WIFI_CHANNEL</code> and <code>NWC_URL</code>. NB: you can get a nwc url from <a href="https://nwc.getalby.com/">https://nwc.getalby.com/</a> or <a href="https://app.mutinywallet.com/settings/connections">https://app.mutinywallet.com/settings/connections</a>.</p>
 <p>Then compile with: </p><div class="fragment"><div class="line">pio run -e ESP32TestNWC</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md12"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md13"></a>
 Running tests</h2>
 <p>You can upload the compiled tests to your ESP32 with: </p><div class="fragment"><div class="line">pio run -e TEST_NAME -t upload</div>
 </div><!-- fragment --><p>or use an emulator like <a href="https://wokwi.com/">wokwi</a>. </p>

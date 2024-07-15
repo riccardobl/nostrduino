@@ -1,14 +1,20 @@
 var searchData=
 [
-  ['nip04_262',['Nip04',['../classnostr_1_1Nip04.html',1,'nostr']]],
-  ['nip47_263',['Nip47',['../classnostr_1_1Nip47.html',1,'nostr']]],
-  ['nip47response_264',['Nip47Response',['../classnostr_1_1Nip47Response.html',1,'nostr']]],
-  ['nostrevent_265',['NostrEvent',['../classnostr_1_1NostrEvent.html',1,'nostr']]],
-  ['nostreventtags_266',['NostrEventTags',['../classnostr_1_1NostrEventTags.html',1,'nostr']]],
-  ['nostrpool_267',['NostrPool',['../classnostr_1_1NostrPool.html',1,'nostr']]],
-  ['nostrrelay_268',['NostrRelay',['../classnostr_1_1NostrRelay.html',1,'nostr']]],
-  ['nostrsubscription_269',['NostrSubscription',['../classnostr_1_1NostrSubscription.html',1,'nostr']]],
-  ['nwc_270',['NWC',['../classnostr_1_1NWC.html',1,'nostr']]],
-  ['nwcresponsecallback_271',['NWCResponseCallback',['../classnostr_1_1NWCResponseCallback.html',1,'nostr']]],
-  ['nwcresponsecallbackbase_272',['NWCResponseCallbackBase',['../classnostr_1_1NWCResponseCallbackBase.html',1,'nostr']]]
+  ['s_5feventstatuscallbackentry_274',['s_EventStatusCallbackEntry',['../structnostr_1_1s__EventStatusCallbackEntry.html',1,'nostr']]],
+  ['s_5fgetbalanceresponse_275',['s_GetBalanceResponse',['../structnostr_1_1s__GetBalanceResponse.html',1,'nostr']]],
+  ['s_5fgetinforesponse_276',['s_GetInfoResponse',['../structnostr_1_1s__GetInfoResponse.html',1,'nostr']]],
+  ['s_5finvoice_277',['s_Invoice',['../structnostr_1_1s__Invoice.html',1,'nostr']]],
+  ['s_5fkeysend_278',['s_KeySend',['../structnostr_1_1s__KeySend.html',1,'nostr']]],
+  ['s_5flisttransactionsresponse_279',['s_ListTransactionsResponse',['../structnostr_1_1s__ListTransactionsResponse.html',1,'nostr']]],
+  ['s_5flookupinvoiceresponse_280',['s_LookUpInvoiceResponse',['../structnostr_1_1s__LookUpInvoiceResponse.html',1,'nostr']]],
+  ['s_5fmakeinvoiceresponse_281',['s_MakeInvoiceResponse',['../structnostr_1_1s__MakeInvoiceResponse.html',1,'nostr']]],
+  ['s_5fmultipayinvoiceresponse_282',['s_MultiPayInvoiceResponse',['../structnostr_1_1s__MultiPayInvoiceResponse.html',1,'nostr']]],
+  ['s_5fmultipaykeysendresponse_283',['s_MultiPayKeySendResponse',['../structnostr_1_1s__MultiPayKeySendResponse.html',1,'nostr']]],
+  ['s_5fnostreventtag_284',['s_NostrEventTag',['../structnostr_1_1s__NostrEventTag.html',1,'nostr']]],
+  ['s_5fnwcdata_285',['s_NWCData',['../structnostr_1_1s__NWCData.html',1,'nostr']]],
+  ['s_5fpayinvoiceresponse_286',['s_PayInvoiceResponse',['../structnostr_1_1s__PayInvoiceResponse.html',1,'nostr']]],
+  ['s_5fpaykeysendresponse_287',['s_PayKeySendResponse',['../structnostr_1_1s__PayKeySendResponse.html',1,'nostr']]],
+  ['s_5ftlvrecords_288',['s_TLVRecords',['../structnostr_1_1s__TLVRecords.html',1,'nostr']]],
+  ['s_5ftransaction_289',['s_Transaction',['../structnostr_1_1s__Transaction.html',1,'nostr']]],
+  ['signednostrevent_290',['SignedNostrEvent',['../classnostr_1_1SignedNostrEvent.html',1,'nostr']]]
 ];

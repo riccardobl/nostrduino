@@ -64,9 +64,11 @@ $(function() {
 &#160;
 
 <h3><a id="index_a"></a>- a -</h3><ul>
+<li>addConnectionStatusListener()
+: <a class="el" href="classnostr_1_1Connection.html#a71d4684389dc9b6f35f09829e69058b1">nostr::Connection</a>
+</li>
 <li>addMessageListener()
 : <a class="el" href="classnostr_1_1Connection.html#a09f2f3d42f8b4143dc616207afa7cab3">nostr::Connection</a>
-, <a class="el" href="classnostr_1_1esp32_1_1ESP32Connection.html#a70bfc236b0189524d7d5965cba18cfc1">nostr::esp32::ESP32Connection</a>
 </li>
 <li>addTag()
 : <a class="el" href="classnostr_1_1NostrEventTags.html#ac82580cf67dc2e6b94e6b178a4730ce5">nostr::NostrEventTags</a>
@@ -83,8 +85,7 @@ $(function() {
 : <a class="el" href="classnostr_1_1NostrEventTags.html#ab31ef86e2a9bc93b1a795394c5ce2615">nostr::NostrEventTags</a>
 </li>
 <li>close()
-: <a class="el" href="classnostr_1_1esp32_1_1ESP32Transport.html#aca0ad35cfb8de39700eb79177f9b485b">nostr::esp32::ESP32Transport</a>
-, <a class="el" href="classnostr_1_1NostrPool.html#a912d173034c08ea82922acf58c8acbc2">nostr::NostrPool</a>
+: <a class="el" href="classnostr_1_1NostrPool.html#a912d173034c08ea82922acf58c8acbc2">nostr::NostrPool</a>
 , <a class="el" href="classnostr_1_1NWC.html#aa549023b05bdf32ecb43bf6587db9428">nostr::NWC</a>
 , <a class="el" href="classnostr_1_1Transport.html#a0afe71e02773d9a026474372442e674a">nostr::Transport</a>
 </li>
@@ -92,8 +93,7 @@ $(function() {
 : <a class="el" href="classnostr_1_1NostrPool.html#ab862d897213cbb3a7c39387253b2122b">nostr::NostrPool</a>
 </li>
 <li>connect()
-: <a class="el" href="classnostr_1_1esp32_1_1ESP32Transport.html#aa0375d4e6040153c0aab9a02f20d3512">nostr::esp32::ESP32Transport</a>
-, <a class="el" href="classnostr_1_1Transport.html#a0c5e942cdc1befc66aae956d94469efd">nostr::Transport</a>
+: <a class="el" href="classnostr_1_1Transport.html#a0c5e942cdc1befc66aae956d94469efd">nostr::Transport</a>
 </li>
 <li>count()
 : <a class="el" href="classnostr_1_1NostrEventTags.html#af893816d95d8514db7c99e34110d05fa">nostr::NostrEventTags</a>
@@ -107,8 +107,6 @@ $(function() {
 </li>
 <li>disconnect()
 : <a class="el" href="classnostr_1_1Connection.html#a0de18a7197c81db8ac43036f6dcfc4ff">nostr::Connection</a>
-, <a class="el" href="classnostr_1_1esp32_1_1ESP32Connection.html#a8a21ab9c9baabe361305c97f5d7b7253">nostr::esp32::ESP32Connection</a>
-, <a class="el" href="classnostr_1_1esp32_1_1ESP32Transport.html#a32171ade3f194e9c868d8b4e0bd5654c">nostr::esp32::ESP32Transport</a>
 , <a class="el" href="classnostr_1_1Transport.html#a574027b0ae5f5d1f67c64396ec8febc0">nostr::Transport</a>
 </li>
 <li>disconnectRelay()
@@ -124,12 +122,6 @@ $(function() {
 <li>ensureRelay()
 : <a class="el" href="classnostr_1_1NostrPool.html#a9f6686275d59a1556b30c58737d45c0b">nostr::NostrPool</a>
 </li>
-<li>ESP32Connection()
-: <a class="el" href="classnostr_1_1esp32_1_1ESP32Connection.html#ac99b6416b029fd2d3f86b21423c15b64">nostr::esp32::ESP32Connection</a>
-</li>
-<li>ESP32Transport()
-: <a class="el" href="classnostr_1_1esp32_1_1ESP32Transport.html#a442863628a576f577e34f102ad5bb966">nostr::esp32::ESP32Transport</a>
-</li>
 </ul>
 
 
@@ -137,6 +129,12 @@ $(function() {
 <li>getBalance()
 : <a class="el" href="classnostr_1_1Nip47.html#a086e38d7ee42d8d98f9e439b515f9cbb">nostr::Nip47</a>
 , <a class="el" href="classnostr_1_1NWC.html#a55874260c4af288a620e0b19d62ea949">nostr::NWC</a>
+</li>
+<li>getConnectedRelays()
+: <a class="el" href="classnostr_1_1NostrPool.html#a7b76c5bbd4d3cc7ecc5efae88776db2d">nostr::NostrPool</a>
+</li>
+<li>getConnection()
+: <a class="el" href="classnostr_1_1NostrRelay.html#a204827b642c3964d7be4bacb0dd75733">nostr::NostrRelay</a>
 </li>
 <li>getContent()
 : <a class="el" href="classnostr_1_1NostrEvent.html#aebb7ff8a3985bdcf93548cd0520c5593">nostr::NostrEvent</a>
@@ -152,8 +150,7 @@ $(function() {
 , <a class="el" href="classnostr_1_1NWC.html#ad646581995f7b719a14d46f26e000896">nostr::NWC</a>
 </li>
 <li>getInvoiceFromLNAddr()
-: <a class="el" href="classnostr_1_1esp32_1_1ESP32Transport.html#a4adb02ec58bdf74733f6b4cc812b99cc">nostr::esp32::ESP32Transport</a>
-, <a class="el" href="classnostr_1_1Transport.html#a42bedd0b5a19ddfc1ae5c02cd14edf14">nostr::Transport</a>
+: <a class="el" href="classnostr_1_1Transport.html#a3438c6030285fb9310efa7e628f61118">nostr::Transport</a>
 </li>
 <li>getKind()
 : <a class="el" href="classnostr_1_1NostrEvent.html#a7d66bdcdaad510b5c79d045b040ef99e">nostr::NostrEvent</a>
@@ -184,14 +181,15 @@ $(function() {
 , <a class="el" href="classnostr_1_1NostrEventTags.html#a0adcf1d628966f26ffaffa86fd90d64c">nostr::NostrEventTags</a>
 , <a class="el" href="classnostr_1_1SignedNostrEvent.html#a8e8ceb84938452b7c22a801a8365410f">nostr::SignedNostrEvent</a>
 </li>
+<li>getUrl()
+: <a class="el" href="classnostr_1_1NostrRelay.html#abd2edcdcafb73dc6c27ba3a0ec1b2484">nostr::NostrRelay</a>
+</li>
 </ul>
 
 
 <h3><a id="index_i"></a>- i -</h3><ul>
 <li>isReady()
 : <a class="el" href="classnostr_1_1Connection.html#af780de347728124fc0664614f100c604">nostr::Connection</a>
-, <a class="el" href="classnostr_1_1esp32_1_1ESP32Connection.html#a69db2e6817533bffc6879915b6d8c87e">nostr::esp32::ESP32Connection</a>
-, <a class="el" href="classnostr_1_1esp32_1_1ESP32Transport.html#a23d9f1794ca60bbfa1102947081cfcc2">nostr::esp32::ESP32Transport</a>
 , <a class="el" href="classnostr_1_1Transport.html#a277eac950191c1f87450d712c5bf6ec9">nostr::Transport</a>
 </li>
 <li>isStored()
@@ -228,9 +226,9 @@ $(function() {
 </li>
 <li>loop()
 : <a class="el" href="classnostr_1_1Connection.html#aee2be02ce75a3bb2a15306212e77b382">nostr::Connection</a>
-, <a class="el" href="classnostr_1_1esp32_1_1ESP32Connection.html#ac0bcd94ae63bdb92da45f8fee3b55ac2">nostr::esp32::ESP32Connection</a>
 , <a class="el" href="classnostr_1_1NostrPool.html#ab396fdccb8964a50e88dc71357682e99">nostr::NostrPool</a>
 , <a class="el" href="classnostr_1_1NWC.html#a986c7fa8b9480303f19be584b575e611">nostr::NWC</a>
+, <a class="el" href="classnostr_1_1Transport.html#aa525f98cc51f701ca086112c44f2b5e2">nostr::Transport</a>
 </li>
 </ul>
 
@@ -316,7 +314,6 @@ $(function() {
 <h3><a id="index_s"></a>- s -</h3><ul>
 <li>send()
 : <a class="el" href="classnostr_1_1Connection.html#ac5de060192a611ec634b1123c6ce7787">nostr::Connection</a>
-, <a class="el" href="classnostr_1_1esp32_1_1ESP32Connection.html#a57eb5e58ef7218c13b79f08b6bb87a86">nostr::esp32::ESP32Connection</a>
 , <a class="el" href="classnostr_1_1NostrRelay.html#aa52e9aac579b822a255080cbc12e6367">nostr::NostrRelay</a>
 </li>
 <li>setContent()
@@ -383,12 +380,6 @@ $(function() {
 <h3><a id="index__7E"></a>- ~ -</h3><ul>
 <li>~Connection()
 : <a class="el" href="classnostr_1_1Connection.html#a8b3ae539c84b9de24c5db2071885b2c9">nostr::Connection</a>
-</li>
-<li>~ESP32Connection()
-: <a class="el" href="classnostr_1_1esp32_1_1ESP32Connection.html#a5bcfe4c8e2b1fe994f89cd8290c53dab">nostr::esp32::ESP32Connection</a>
-</li>
-<li>~ESP32Transport()
-: <a class="el" href="classnostr_1_1esp32_1_1ESP32Transport.html#a69dbdfebd4d87498d90a8816294acd0b">nostr::esp32::ESP32Transport</a>
 </li>
 <li>~NostrEvent()
 : <a class="el" href="classnostr_1_1NostrEvent.html#a0e5d5662e539f439e9071459a4d9dad5">nostr::NostrEvent</a>

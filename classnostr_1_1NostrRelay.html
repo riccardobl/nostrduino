@@ -83,6 +83,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa52e9aac579b822a255080cbc12e6367"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af668c3c57d9e84b398aac9ea481114e6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1NostrRelay.html#af668c3c57d9e84b398aac9ea481114e6">NostrRelay</a> (<a class="el" href="classnostr_1_1Connection.html">Connection</a> *<a class="el" href="classnostr_1_1NostrRelay.html#ae456a4d62f0ede9c1dc6fc6e65f97679">conn</a>, <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> <a class="el" href="classnostr_1_1NostrRelay.html#a36f2d542488906bf120ad44190c9c0d4">url</a>)</td></tr>
 <tr class="separator:af668c3c57d9e84b398aac9ea481114e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a204827b642c3964d7be4bacb0dd75733"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classnostr_1_1Connection.html">Connection</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1NostrRelay.html#a204827b642c3964d7be4bacb0dd75733">getConnection</a> () const</td></tr>
+<tr class="separator:a204827b642c3964d7be4bacb0dd75733"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd2edcdcafb73dc6c27ba3a0ec1b2484"><td class="memItemLeft" align="right" valign="top"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1NostrRelay.html#abd2edcdcafb73dc6c27ba3a0ec1b2484">getUrl</a> () const</td></tr>
+<tr class="separator:abd2edcdcafb73dc6c27ba3a0ec1b2484"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -91,12 +95,12 @@ Protected Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
+<tr class="memitem:a36f2d542488906bf120ad44190c9c0d4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1NostrRelay.html#a36f2d542488906bf120ad44190c9c0d4">url</a></td></tr>
+<tr class="separator:a36f2d542488906bf120ad44190c9c0d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c9e582eb5dc99a49ae4bf496052f89c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1NostrRelay.html#a0c9e582eb5dc99a49ae4bf496052f89c">messageQueue</a></td></tr>
 <tr class="separator:a0c9e582eb5dc99a49ae4bf496052f89c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae456a4d62f0ede9c1dc6fc6e65f97679"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classnostr_1_1Connection.html">Connection</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1NostrRelay.html#ae456a4d62f0ede9c1dc6fc6e65f97679">conn</a></td></tr>
 <tr class="separator:ae456a4d62f0ede9c1dc6fc6e65f97679"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36f2d542488906bf120ad44190c9c0d4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1NostrRelay.html#a36f2d542488906bf120ad44190c9c0d4">url</a></td></tr>
-<tr class="separator:a36f2d542488906bf120ad44190c9c0d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -141,6 +145,56 @@ Friends</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a204827b642c3964d7be4bacb0dd75733"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a204827b642c3964d7be4bacb0dd75733">&#9670;&nbsp;</a></span>getConnection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classnostr_1_1Connection.html">Connection</a>* nostr::NostrRelay::getConnection </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abd2edcdcafb73dc6c27ba3a0ec1b2484"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd2edcdcafb73dc6c27ba3a0ec1b2484">&#9670;&nbsp;</a></span>getUrl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> nostr::NostrRelay::getUrl </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aa03ceeb2e171b89412fbdab332205c0a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa03ceeb2e171b89412fbdab332205c0a">&#9670;&nbsp;</a></span>processQueue()</h2>
 

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['esp32transport_510',['ESP32Transport',['../classnostr_1_1esp32_1_1ESP32Connection.html#abcef5e3285a164162a943f14b97d7aea',1,'nostr::esp32::ESP32Connection']]]
+  ['nostrpool_513',['NostrPool',['../classnostr_1_1SignedNostrEvent.html#a3956946748e4bf9d207bf29ccde7b3b2',1,'nostr::SignedNostrEvent::NostrPool()'],['../classnostr_1_1NostrRelay.html#a3956946748e4bf9d207bf29ccde7b3b2',1,'nostr::NostrRelay::NostrPool()']]]
 ];
