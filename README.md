@@ -26,6 +26,11 @@ In addition to that, the library provides some "managed" services (in `src/servi
 
 Check the [platformio registry page](https://registry.platformio.org/libraries/rblb/Nostrduino/installation) for instructions.
 
+### ESP32 dependencies
+This library depends on the following additional libraries for the esp32 platform:
+- WebSockets@^2.4.1
+
+
 ## Usage
 See the example scripts in `examples/` for simple examples of how to use this library.
 

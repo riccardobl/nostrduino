@@ -1,0 +1,24 @@
+{
+    "version": 1,
+    "editor": "wokwi",
+    "parts": [
+     
+        {
+            "type": "wokwi-arduino-uno",
+            "id": "uno",
+            "top": 403.8,
+            "left": -10.2,
+            "attrs": {}
+        }
+     
+    ],
+    "connections": [
+        
+    ],
+    "serialMonitor": {
+        "display": "always",
+        "newline": "none",
+        "convertEol": false
+    },
+    "dependencies": {}
+}
