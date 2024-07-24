@@ -11,7 +11,6 @@
 #include <time.h>
 
 #include <WiFi.h>
-#include <WiFiUdp.h>
 
 namespace nostr {
 namespace picow {
@@ -35,11 +34,11 @@ inline void serialLogger(const NostrString &str) {
  * Initialize the WiFi connection
  */
 inline void initWifi(NostrString ssid, NostrString passphrase, int channel = 6) {
-    WiFi.mode(WIFI_STA); 
+    WiFi.mode(WIFI_STA);
     if (WiFi.status() == WL_NO_MODULE) {
-        Serial.println("Communication with WiFi module failed!");
-        while (true)
-            ;
+        while (true){
+            Serial.println("Communication with WiFi module failed!");
+        }
     }
 
     String fv = WiFi.firmwareVersion();
@@ -50,7 +49,7 @@ inline void initWifi(NostrString ssid, NostrString passphrase, int channel = 6) 
     int wifiStatus = WiFi.begin(ssid.c_str(), passphrase.c_str());
 
     while (wifiStatus != WL_CONNECTED) {
-        Serial.print("Connecting...");
+        Serial.printf("Connecting... status: %d\n ",  wifiStatus);
         wifiStatus = WiFi.status();
         delay(500);
     }
