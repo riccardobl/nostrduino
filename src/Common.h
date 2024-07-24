@@ -1,7 +1,7 @@
 #ifndef _NOSTR_COMMON_BOARD_H
 #define _NOSTR_COMMON_BOARD_H 1
 
-#ifdef ESP32
+#if defined(ESP8266) || defined(ESP32)
 #define _ESP32_BOARD_
 #endif
 
