@@ -4,14 +4,13 @@
 #define _NOSTR_PICOW_PLATFORM_H 
 #ifdef _PICOW_BOARD_
 
+#include <SPI.h>
+#include <WiFi.h>
 #include "Arduino.h"
 #include "NostrString.h"
 #include "Utils.h"
 #include "picow/PICOWTransport.h"
 #include <time.h>
-
-#include <WiFi.h>
-
 namespace nostr {
 namespace picow {
 namespace PICOWPlatform {
@@ -34,25 +33,26 @@ inline void serialLogger(const NostrString &str) {
  * Initialize the WiFi connection
  */
 inline void initWifi(NostrString ssid, NostrString passphrase, int channel = 6) {
-    WiFi.mode(WIFI_STA);
-    if (WiFi.status() == WL_NO_MODULE) {
+    IPAddress dns(8, 8, 8, 8);
+ 
+
+    if (WiFi.status() == WL_NO_SHIELD) {
         while (true){
             Serial.println("Communication with WiFi module failed!");
         }
     }
+    
+    int status = WL_IDLE_STATUS;
 
-    String fv = WiFi.firmwareVersion();
-    if (fv < WIFI_FIRMWARE_LATEST_VERSION) {
-        Serial.println("Please upgrade the firmware");
+    while (status != WL_CONNECTED) {
+        Serial.print("Attempting to connect to SSID: ");
+        Serial.println(ssid.c_str());
+        status = WiFi.begin(ssid.c_str(), passphrase.c_str());
+
+        delay(10000);
     }
 
-    int wifiStatus = WiFi.begin(ssid.c_str(), passphrase.c_str());
-
-    while (wifiStatus != WL_CONNECTED) {
-        Serial.printf("Connecting... status: %d\n ",  wifiStatus);
-        wifiStatus = WiFi.status();
-        delay(500);
-    }
+    WiFi.setDNS(dns);
 
     Serial.println("Connected to WiFi");
     Serial.println("WiFi connected");

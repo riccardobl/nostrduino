@@ -1,6 +1,7 @@
-#include "Common.h"
 #ifndef _NOSTR_PICOW_TRANSPORT_H
 #define _NOSTR_PICOW_TRANSPORT_H
+#include "Common.h"
+
 #ifdef _PICOW_BOARD_
 
 #include <WebSocketsClient.h>
@@ -28,6 +29,8 @@ class PICOWConnection : public Connection {
     bool isReady() override;
     void addMessageListener(std::function<void(NostrString)> listener) override;
     ~PICOWConnection() override;
+    void addConnectionStatusListener(std::function<void(ConnectionStatus status)> listener) override;
+    
 
   protected:
     PICOWConnection(PICOWTransport *transport, NostrString url);
@@ -36,13 +39,13 @@ class PICOWConnection : public Connection {
     PICOWTransport *transport;
     WebSocketsClient ws;
     std::vector<std::function<void(NostrString)>> messageListeners;
-    
+    std::vector<std::function<void(ConnectionStatus status)>> connectionListeners;
 };
 class PICOWTransport : public Transport {
   public:
-    void getInvoiceFromLNAddr(NostrString addr, unsigned long long amountMSats, NostrString comment, std::function<void(NostrString)> callback);
+    void getInvoiceFromLNAddr(NostrString addr, unsigned long long amountMSats, NostrString comment, std::function<void(NostrString)> callback) override;
     Connection *connect(NostrString url) override;
-    void close();
+    void close() override;
     void disconnect(Connection *conn) override;
     ~PICOWTransport() override;
     PICOWTransport();

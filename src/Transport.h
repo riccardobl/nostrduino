@@ -8,13 +8,14 @@ namespace nostr {
 enum class ConnectionStatus { CONNECTED, DISCONNECTED, ERROR };
 class Connection {
   public:
-    virtual void addMessageListener(std::function<void(NostrString)> listener);
+    virtual void addMessageListener(std::function<void(NostrString)> listener) = 0;
     virtual void send(NostrString message) = 0;
     virtual void disconnect() = 0;
     virtual ~Connection() = default;
+    Connection() = default;
     virtual void loop() = 0;
     virtual bool isReady() = 0;
-    virtual void addConnectionStatusListener(std::function<void(ConnectionStatus status)> listener) {};
+    virtual void addConnectionStatusListener(std::function<void(ConnectionStatus status)> listener) = 0;
 };
 class Transport {
   public:

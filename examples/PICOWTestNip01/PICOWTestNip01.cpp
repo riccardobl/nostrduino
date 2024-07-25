@@ -39,7 +39,7 @@ void setup() {
     nostr::picow::PICOWPlatform::initTime("pool.ntp.org");
 
     Serial.println("Init Nostr");
-    nostr::picow::PICOWPlatform::initNostr(analogRead(9), true);
+    nostr::picow::PICOWPlatform::initNostr(analogRead(A0), true);
 
     Serial.println("Ready!");
 

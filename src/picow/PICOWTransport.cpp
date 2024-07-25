@@ -128,13 +128,13 @@ picow::PICOWConnection::PICOWConnection(PICOWTransport *transport, NostrString u
         port = NostrString_toInt(portStr);
         host = NostrString_substring(host, 0, NostrString_indexOf(host, ":"));
     }
-    // if (ssl) {
-    //     Utils::log("Connecting to " + host + " : " + port + " with path " + path + " using SSL...");
-    //     ws.beginSSL(host, port, path);
-    // } else {
+    if (ssl) {
+        Utils::log("Connecting to " + host + " : " + port + " with path " + path + " using SSL...");
+        ws.beginSSL(host.c_str(), port, path.c_str());
+    } else {
         Utils::log("Connecting to " + host + " : " + port + " with path " + path + "...");
         ws.begin(host, port, path);
-    // }
+    }
     ws.setReconnectInterval(5000);
     ws.onEvent([this](WStype_t type, uint8_t *payload, size_t length) {
         switch (type) {
@@ -201,5 +201,9 @@ picow::PICOWConnection::~PICOWConnection() {
 }
 
 picow::PICOWTransport::PICOWTransport() {}
+
+void picow::PICOWConnection::addConnectionStatusListener(std::function<void(ConnectionStatus status)> listener) {
+    connectionListeners.push_back(listener);
+}
 
 #endif

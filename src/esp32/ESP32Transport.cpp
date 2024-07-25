@@ -1,7 +1,7 @@
 #include "ESP32Transport.h"
+#include "Common.h"
 
-#ifdef ESP32
-
+#ifdef _ESP32_BOARD_
 
 using namespace nostr;
 
