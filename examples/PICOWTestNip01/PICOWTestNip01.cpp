@@ -1,4 +1,5 @@
  
+#include "picow/PICOWPlatform.h"
 
 
 #include "ArduinoJson.h"
@@ -6,12 +7,10 @@
 #include "NostrPool.h"
 #include "Transport.h"
 #include "Utils.h"
-#include "picow/PICOWPlatform.h"
 #include "time.h"
 
 #define WIFI_SSID "Wokwi-GUEST"
 #define WIFI_PASS ""
-#define WIFI_CHANNEL 6
 
 #define RELAY "wss://nostr.rblb.it:7777"
 #define PRIVKEY "1558dadfae151555818a6aa6cf046ca3dfbb196c419efc18482479a74b74009a"
@@ -33,7 +32,7 @@ void setup() {
     // while (!Serial);
 
     Serial.println("Init wifi");
-    nostr::picow::PICOWPlatform::initWifi(WIFI_SSID, WIFI_PASS, WIFI_CHANNEL);
+    nostr::picow::PICOWPlatform::initWifi(WIFI_SSID, WIFI_PASS);
 
     Serial.println("Init time");
     nostr::picow::PICOWPlatform::initTime("pool.ntp.org");

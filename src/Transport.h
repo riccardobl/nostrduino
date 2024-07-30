@@ -1,6 +1,6 @@
 #ifndef _NOSTR_TRANSPORT_H
 #define _NOSTR_TRANSPORT_H
-
+#include <Arduino.h>
 #include "NostrString.h"
 #include <functional>
 

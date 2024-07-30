@@ -47,7 +47,7 @@ void NostrPool::onEvent(NostrRelay *relay, NostrString message) {
         NostrString eventId = doc[1].as<NostrString>();
         bool success = doc[2].as<bool>();
         NostrString message = doc.size() > 3 ? doc[3].as<NostrString>() : "";
-        for (int i = 0; i < this->eventStatusCallbackEntries.size(); i++) {
+        for (size_t i = 0; i < this->eventStatusCallbackEntries.size(); i++) {
             EventStatusCallbackEntry entry = this->eventStatusCallbackEntries[i];
             if (NostrString_equals(entry.eventId, eventId)) {
                 if (entry.statusCallback != nullptr) {
@@ -149,7 +149,7 @@ NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, Js
     JsonArray req = doc["req"].to<JsonArray>();
     req.add("REQ");
     req.add(subId);
-    for(int i = 0; i < filters.size(); i++){
+    for(size_t i = 0; i < filters.size(); i++){
         JsonObject filter = filters[i].as<JsonObject>();
         req.add(filter);
     }
@@ -213,7 +213,7 @@ NostrRelay *NostrPool::ensureRelay(NostrString url) {
 }
 
 void NostrPool::disconnectRelay(NostrString url) {
-    for (int i = 0; i < this->relays.size(); i++) {
+    for (size_t i = 0; i < this->relays.size(); i++) {
         if (NostrString_equals(this->relays[i]->url, url)) {
             this->relays[i]->conn->disconnect();
             delete this->relays[i];
@@ -263,7 +263,7 @@ void NostrPool::loop() {
 
     // remove expired callback entries
     long long now = Utils::unixTimeSeconds();
-    for (int i = 0; i < this->eventStatusCallbackEntries.size(); i++) {
+    for (size_t i = 0; i < this->eventStatusCallbackEntries.size(); i++) {
         EventStatusCallbackEntry entry = this->eventStatusCallbackEntries[i];
         if (now - entry.timestampSeconds > this->eventStatusTimeoutSeconds) {
             this->eventStatusCallbackEntries.erase(this->eventStatusCallbackEntries.begin() + i);

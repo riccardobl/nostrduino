@@ -1,6 +1,6 @@
 #ifndef _NIP47_H
 #define _NIP47_H
-
+#include <Arduino.h>
 #include "ArduinoJson.h"
 #include "Nip04.h"
 #include "NostrEvent.h"

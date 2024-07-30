@@ -1,12 +1,12 @@
 #ifndef _NOSTR_POOL_H
 #define _NOSTR_POOL_H
-
+#include <Arduino.h>
 #include <Transport.h>
 #include <functional>
 #include <initializer_list>
 #include <map>
 #include <vector>
-
+#include "NostrString.h"
 #include "ArduinoJson.h"
 #include "NostrEvent.h"
 #include "NostrString.h"
@@ -53,9 +53,9 @@ namespace nostr {
             return url;
         }
        protected:
+         Connection *conn;
          NostrString url;
          std::vector<NostrString> messageQueue;
-         Connection *conn;
          void processQueue();
     };
 

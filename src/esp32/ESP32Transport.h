@@ -2,14 +2,21 @@
 #define _NOSTR_ESP32_TRANSPORT_H 1
 #include "Common.h"
 
-#ifdef _ESP32_BOARD_
+#if defined(_ESP32_BOARD_) || defined(_ESP8266_BOARD_)
 
 #include "ArduinoJson.h"
 #include "NostrString.h"
 #include "Transport.h"
 #include "Utils.h"
+#ifdef _ESP8266_BOARD_
+#include <ESP8266HTTPClient.h>
+#include <ESP8266WiFi.h>
+#include <WiFiClient.h>
+
+#else
 #include "WiFi.h"
 #include <HTTPClient.h>
+#endif
 #include <WebSocketsClient.h>
 #include <functional>
 #include <initializer_list>
@@ -27,9 +34,7 @@ class ESP32Connection : public Connection {
     bool isReady() override;
     void addMessageListener(std::function<void(NostrString)> listener) override;
     void addConnectionStatusListener(std::function<void(ConnectionStatus status)> listener) override;
-    WebSocketsClient* getWebsocket(){
-        return &ws;
-    }
+    WebSocketsClient *getWebsocket() { return &ws; }
     ~ESP32Connection() override;
 
   protected:
@@ -43,7 +48,7 @@ class ESP32Connection : public Connection {
 };
 class ESP32Transport : public Transport {
   public:
-    void getInvoiceFromLNAddr(NostrString addr, unsigned long long amountMSats, NostrString comment , std::function<void(NostrString)> callback);
+    void getInvoiceFromLNAddr(NostrString addr, unsigned long long amountMSats, NostrString comment, std::function<void(NostrString)> callback);
     Connection *connect(NostrString url) override;
     void close();
     void disconnect(Connection *conn) override;
@@ -55,7 +60,7 @@ class ESP32Transport : public Transport {
     void httpsGet(NostrString url, std::function<void(NostrString)> callback);
     std::vector<Connection *> connections;
 };
-} 
-} 
+} // namespace esp32
+} // namespace nostr
 #endif
 #endif

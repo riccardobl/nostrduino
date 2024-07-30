@@ -1,10 +1,8 @@
 #ifndef _NIP04_H
 #define _NIP04_H
+#include <Arduino.h>
 #include <aes.h>
-
 #include <vector>
-
-#include "Hash.h"
 #include "NostrString.h"
 #include "Utils.h"
 namespace nostr {

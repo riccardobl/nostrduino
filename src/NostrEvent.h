@@ -1,17 +1,16 @@
 
 #ifndef _NOSTR_EVENT_H
 #define _NOSTR_EVENT_H
+#include <Arduino.h>
 
+#include "ArduinoJson.h"
 #include "NostrString.h"
-#include <functional>
-
+#include "Utils.h"
 #include <aes.h>
+#include <functional>
+#include <initializer_list>
 #include <map>
 #include <vector>
-#include <initializer_list>
-#include "ArduinoJson.h"
-#include "Hash.h"
-#include "Utils.h"
 namespace nostr {
 using EventSubmissionFailureCallback = std::function<void(const String &)>;
 
@@ -95,8 +94,8 @@ class NostrEvent {
   protected:
     unsigned int kind;
     NostrEventTags tags;
-    unsigned long int created_at;
     NostrString content;
+    unsigned long int created_at;
     NostrEvent(unsigned int kind, NostrEventTags tags, NostrString content, unsigned long int created_at) : kind(kind), tags(tags), content(content), created_at(created_at){};
 };
 

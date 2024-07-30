@@ -1,3 +1,5 @@
+#include "esp32/ESP32Platform.h"
+
 #include <Arduino.h>
 
 #include "ArduinoJson.h"
@@ -5,12 +7,11 @@
 #include "NostrPool.h"
 #include "Transport.h"
 #include "Utils.h"
-#include "esp32/ESP32Platform.h"
 #include "time.h"
+
 
 #define WIFI_SSID "Wokwi-GUEST"
 #define WIFI_PASS ""
-#define WIFI_CHANNEL 6
 
 #define RELAY "wss://nostr.rblb.it:7777"
 
@@ -30,7 +31,7 @@ void setup() {
     Serial.begin(115200);
 
     Serial.println("Init wifi");
-    nostr::esp32::ESP32Platform::initWifi(WIFI_SSID, WIFI_PASS, WIFI_CHANNEL);
+    nostr::esp32::ESP32Platform::initWifi(WIFI_SSID, WIFI_PASS);
 
     Serial.println("Init time");
     nostr::esp32::ESP32Platform::initTime("pool.ntp.org");

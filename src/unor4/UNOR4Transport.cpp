@@ -1,8 +1,6 @@
 #include "UNOR4Transport.h"
-// #define ARDUINO_UNOWIFIR4 1
 
-#ifdef ARDUINO_UNOWIFIR4
-
+#ifdef _UNOR4_BOARD_
 
 using namespace nostr;
 void unor4::UNOR4Transport::loop() {
@@ -42,7 +40,7 @@ void unor4::UNOR4Transport::httpsGet(NostrString url, std::function<void(NostrSt
 void unor4::UNOR4Transport::getInvoiceFromLNAddr(NostrString addr, unsigned long long amount, NostrString comment, std::function<void(NostrString)> cb) {
     // username@domain.com
     // becomes https://domain.com/.well-known/lnurlp/username
-    unsigned int atpos = NostrString_indexOf(addr, "@");
+    int atpos = NostrString_indexOf(addr, "@");
     if (atpos == -1) {
         cb("");
         return;
@@ -128,7 +126,7 @@ void unor4::UNOR4Transport::close() {
 }
 
 void unor4::UNOR4Transport::disconnect(Connection *conn) {
-    for (int i = 0; i < connections.size(); i++) {
+    for (size_t i = 0; i < connections.size(); i++) {
         if (connections[i] == conn) {
             conn->disconnect();
             delete conn;
@@ -156,17 +154,31 @@ unor4::UNOR4Connection::UNOR4Connection(UNOR4Transport *transport, NostrString u
     //     Utils::log("Connecting to " + host + " : " + port + " with path " + path + " using SSL...");
     //     ws.beginSSL(host, port, path);
     // } else {
-        Utils::log("Connecting to " + host + " : " + port + " with path " + path + "...");
-        ws.begin(host, port, path);
+    Utils::log("Connecting to " + host + " : " + port + " with path " + path + "...");
+    ws.begin(host, port, path);
     // }
     ws.setReconnectInterval(5000);
     ws.onEvent([this](WStype_t type, uint8_t *payload, size_t length) {
         switch (type) {
         case WStype_DISCONNECTED:
             Utils::log("UNOR4Connection disconnected.");
+            for (auto &listener : connectionListeners) {
+                try {
+                    listener(ConnectionStatus::DISCONNECTED);
+                } catch (std::exception &e) {
+                    Utils::log(e.what());
+                }
+            }
             break;
         case WStype_CONNECTED:
             Utils::log("UNOR4Connection connected.");
+            for (auto &listener : connectionListeners) {
+                try {
+                    listener(ConnectionStatus::CONNECTED);
+                } catch (std::exception &e) {
+                    Utils::log(e.what());
+                }
+            }
             break;
         case WStype_TEXT: {
             NostrString message = NostrString_fromChars((char *)payload);
@@ -178,11 +190,18 @@ unor4::UNOR4Connection::UNOR4Connection(UNOR4Transport *transport, NostrString u
                     Utils::log(e.what());
                 }
             }
-            
+
             break;
         }
         case WStype_ERROR:
             Utils::log("UNOR4Connection error.");
+            for (auto &listener : connectionListeners) {
+                try {
+                    listener(ConnectionStatus::ERROR);
+                } catch (std::exception &e) {
+                    Utils::log(e.what());
+                }
+            }
             break;
         default:
             break;
@@ -225,5 +244,8 @@ unor4::UNOR4Connection::~UNOR4Connection() {
 }
 
 unor4::UNOR4Transport::UNOR4Transport() {}
+void unor4::UNOR4Connection::addConnectionStatusListener(std::function<void(ConnectionStatus status)> listener) {
+    connectionListeners.push_back(listener);
+}
 
 #endif

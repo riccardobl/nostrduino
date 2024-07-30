@@ -22,7 +22,7 @@ void picow::PICOWTransport::httpsGet(NostrString url, std::function<void(NostrSt
 void picow::PICOWTransport::getInvoiceFromLNAddr(NostrString addr, unsigned long long amount, NostrString comment, std::function<void(NostrString)> cb) {
     // username@domain.com
     // becomes https://domain.com/.well-known/lnurlp/username
-    unsigned int atpos = NostrString_indexOf(addr, "@");
+    int atpos = NostrString_indexOf(addr, "@");
     if (atpos == -1) {
         cb("");
         return;
@@ -99,12 +99,12 @@ void picow::PICOWTransport::close() {
         conn->disconnect();
         delete conn;
     }
-   
+
     connections.clear();
 }
 
 void picow::PICOWTransport::disconnect(Connection *conn) {
-    for (int i = 0; i < connections.size(); i++) {
+    for (size_t i = 0; i < connections.size(); i++) {
         if (connections[i] == conn) {
             conn->disconnect();
             delete conn;
@@ -140,9 +140,23 @@ picow::PICOWConnection::PICOWConnection(PICOWTransport *transport, NostrString u
         switch (type) {
         case WStype_DISCONNECTED:
             Utils::log("PICOWConnection disconnected.");
+            for (auto &listener : connectionListeners) {
+                try {
+                    listener(ConnectionStatus::DISCONNECTED);
+                } catch (std::exception &e) {
+                    Utils::log(e.what());
+                }
+            }
             break;
         case WStype_CONNECTED:
             Utils::log("PICOWConnection connected.");
+            for (auto &listener : connectionListeners) {
+                try {
+                    listener(ConnectionStatus::CONNECTED);
+                } catch (std::exception &e) {
+                    Utils::log(e.what());
+                }
+            }
             break;
         case WStype_TEXT: {
             NostrString message = NostrString_fromChars((char *)payload);
@@ -154,11 +168,18 @@ picow::PICOWConnection::PICOWConnection(PICOWTransport *transport, NostrString u
                     Utils::log(e.what());
                 }
             }
-            
+
             break;
         }
         case WStype_ERROR:
             Utils::log("PICOWConnection error.");
+            for (auto &listener : connectionListeners) {
+                try {
+                    listener(ConnectionStatus::ERROR);
+                } catch (std::exception &e) {
+                    Utils::log(e.what());
+                }
+            }
             break;
         default:
             break;

@@ -1,12 +1,12 @@
 # Nostrduino
 
-A [nostr-tools](https://github.com/nbd-wtf/nostr-tools) inspired library for Arduino (and other) microcontrollers.
+A [nostr-tools](https://github.com/nbd-wtf/nostr-tools) inspired library for Arduino (and others).
 
 This was created using [arduino-nostr](https://github.com/lnbits/arduino-nostr) as starting point, most of the code was rewritten and the library was expanded to include more features.
 
 ## Compatibility 
-This library is compatible with esp32 microcontrollers out of the box.
-But it can be ported to other microcontrollers by reimplementing the platform specific code in the `src/esp32`.
+This library is compatible with esp32 based boards out of the box.
+But it can be ported to other boards by reimplementing the platform specific code in the `src/esp32`.
 
 ## Features
 

@@ -3,79 +3,87 @@
 #include "Common.h"
 
 #ifdef _ESP32_BOARD_
+#include "ESP32Transport.h"
 #include "NostrString.h"
 #include "Utils.h"
+#include "WiFi.h"
 #include "bootloader_random.h"
-#include "ESP32Transport.h"
 #include "esp_random.h"
 #include "esp_wifi.h"
 #include "time.h"
 #include <initializer_list>
 #include <vector>
 namespace nostr {
-    namespace esp32{
-        namespace ESP32Platform{
-            inline unsigned long getUnixTimestamp() {
-                time_t now;
-                struct tm timeinfo;
-                if (!getLocalTime(&timeinfo)) {
-                    return 0;
-                }
-                time(&now);
-                return now;
-            }
+namespace esp32 {
+namespace ESP32Platform {
 
-            inline  long int getRealRandom(long int min, long int max) {
-                uint32_t rand = esp_random();
-                return (rand % (max - min + 1)) + min;
-            }
-            inline void serialLogger(const NostrString &str) {
-                Serial.println(str.c_str());
-            }
-
-            /**
-             * Initialize the WiFi connection
-             */
-            inline void initWifi(NostrString ssid,  NostrString passphrase, int channel = 6) {
-                esp_wifi_start();
-                WiFi.begin(ssid, passphrase, channel);
-                Serial.println("Connecting to " + ssid);
-                while (WiFi.status() != WL_CONNECTED) {
-                    delay(500);
-                    Serial.print(".");
-                }
-                Serial.println("");
-                Serial.println("WiFi connected");
-                Serial.println("IP address: ");
-                Serial.println(WiFi.localIP());
-            }
-
-            /**
-             * Initialize the time service
-             */
-            inline void initTime(const char* ntpServer, long gmtOffset_sec = 0,
-                                 int daylightOffset_sec = 3600) {              
-                configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
-            }
-
-            /**
-             * Initialize platform specific code for the nostr library
-             */
-            inline void initNostr(bool withLogger){
-                bootloader_random_enable();
-                nostr::Utils::setUnixTimeSecondsProvider(getUnixTimestamp);
-                if(withLogger)nostr::Utils::setLogger(serialLogger);
-                nostr::Utils::setRealRandom(getRealRandom);
-            }
-
-            /**
-             * Get a platform specific transport 
-             */
-            inline ESP32Transport* getTransport(){
-                return  new nostr::esp32::ESP32Transport();                
-            }
-        }
+unsigned long getUnixTimestamp() {
+    time_t now;
+    struct tm timeinfo;
+    while (!getLocalTime(&timeinfo)) {
+        Serial.println("Still waiting for ntp sync");
+        delay(10);
     }
+    time(&now);
+    return now;
 }
+
+long int getRealRandom(long int min, long int max) {
+    uint32_t rand = esp_random();
+    return (rand % (max - min + 1)) + min;
+}
+void serialLogger(const NostrString &str) {
+    Serial.println(str.c_str());
+}
+
+/**
+ * Initialize the WiFi connection
+ */
+void initWifi(NostrString ssid, NostrString passphrase, int unused = 6) {
+    esp_wifi_start();
+    WiFi.begin(ssid, passphrase);
+    Serial.println("Connecting to " + ssid);
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+    Serial.println("");
+    Serial.println("WiFi connected");
+    Serial.println("IP address: ");
+    Serial.println(WiFi.localIP());
+}
+
+/**
+ * Initialize the time service
+ */
+void initTime(const char *ntpServer, long unused1 = 0, int unused2 = 3600) {
+    configTime(0, 0, ntpServer);
+}
+
+/**
+ * Initialize platform specific code for the nostr library
+ */
+void initNostr(bool withLogger) {
+    bootloader_random_enable();
+    Utils::init();
+    nostr::Utils::setUnixTimeSecondsProvider(getUnixTimestamp);
+    if (withLogger)
+        nostr::Utils::setLogger(serialLogger);
+    nostr::Utils::setRealRandom(getRealRandom);
+}
+
+void close() {
+    Utils::close();
+}
+
+/**
+ * Get a platform specific transport
+ */
+ESP32Transport *getTransport() {
+    return new nostr::esp32::ESP32Transport();
+}
+} // namespace ESP32Platform
+} // namespace esp32
+} // namespace nostr
 #endif
 #endif

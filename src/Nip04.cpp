@@ -1,5 +1,4 @@
 #include "Nip04.h"
-#include "Bitcoin.h"
 
 using namespace nostr;
 
@@ -10,29 +9,20 @@ NostrString Nip04::decrypt(NostrString &privateKeyHex, NostrString &senderPubKey
 
     NostrString encryptedMessage = NostrString_substring(content, 0, ivParamIndex);
 
-    NostrString encryptedMessageHex = NostrString_base64ToHex(encryptedMessage);
+    NostrString encryptedMessageHex = Utils::base64ToHex(encryptedMessage);
     int encryptedMessageSize = NostrString_length(encryptedMessageHex) / 2;
     byte encryptedMessageBin[encryptedMessageSize];
-    NostrString_hexToBytes(encryptedMessageHex, encryptedMessageBin, encryptedMessageSize);
-  
+    Utils::hexToBytes(encryptedMessageHex, encryptedMessageBin, encryptedMessageSize);
+
     NostrString iv = NostrString_substring(content, ivParamIndex + 4);
-    NostrString ivHex = NostrString_base64ToHex(iv);
+    NostrString ivHex = Utils::base64ToHex(iv);
     int ivSize = 16;
     byte ivBin[ivSize];
-    NostrString_hexToBytes(ivHex, ivBin, ivSize);
+    Utils::hexToBytes(ivHex, ivBin, ivSize);
 
-    int byteSize = 32;
-    byte privateKeyBytes[byteSize];
-    NostrString_hexToBytes(privateKeyHex, privateKeyBytes, byteSize);
-    PrivateKey privateKey(privateKeyBytes);
-
-    byte senderPublicKeyBin[64];
-    NostrString_hexToBytes("02" + senderPubKeyHex, senderPublicKeyBin, 64);
-    PublicKey senderPublicKey(senderPublicKeyBin);
-
-    byte sharedPointX[32];
-    privateKey.ecdh(senderPublicKey, sharedPointX, false);
-    NostrString sharedPointXHex = NostrString_bytesToHex(sharedPointX, 32);
+    uint8_t sharedPointX[32];
+    Utils::ecdh(privateKeyHex, senderPubKeyHex, sharedPointX);
+    NostrString sharedPointXHex = Utils::toHex(sharedPointX, 32);
 
     NostrString message = decryptData(sharedPointX, ivBin, encryptedMessageHex);
     message = NostrString_trim(message);
@@ -41,35 +31,18 @@ NostrString Nip04::decrypt(NostrString &privateKeyHex, NostrString &senderPubKey
 }
 
 NostrString Nip04::encrypt(NostrString &privateKeyHex, NostrString &recipientPubKeyHex, NostrString content) {
-    int byteSize = 32;
-    byte privateKeyBytes[byteSize];
-    NostrString_hexToBytes(privateKeyHex, privateKeyBytes, byteSize);
-    PrivateKey privateKey(privateKeyBytes);
 
-    byte publicKeyBin[64];
-    NostrString_hexToBytes("02" + NostrString(recipientPubKeyHex), publicKeyBin, 64);
-    PublicKey otherDhPublicKey(publicKeyBin);
-
-    byte sharedPointX[32];
-    privateKey.ecdh(otherDhPublicKey, sharedPointX, false);
-    NostrString sharedPointXHex = NostrString_bytesToHex(sharedPointX, 32);
-
+    uint8_t sharedPointX[32];
+    Utils::ecdh(privateKeyHex, recipientPubKeyHex, sharedPointX);
+    NostrString sharedPointXHex = Utils::toHex(sharedPointX, 32);
     uint8_t iv[16];
-    for (int i = 0; i < sizeof(iv); i++) {
+    for (size_t i = 0; i < sizeof(iv); i++) {
         iv[i] = (uint8_t)Utils::randomInt(0, 255);
     }
-
-    NostrString ivHex = toHex(iv, sizeof(iv));
-    String ivBase64 = hexToBase64(ivHex);
-
+    NostrString ivHex = Utils::toHex(iv, sizeof(iv));
+    NostrString ivBase64 = Utils::hexToBase64(ivHex);
     NostrString encryptedMessageHex = encryptData(sharedPointX, iv, content);
-
-    int encryptedMessageSize = NostrString_length(encryptedMessageHex) / 2;
-    uint8_t encryptedMessage[encryptedMessageSize];
-    NostrString_hexToBytes(encryptedMessageHex, encryptedMessage, encryptedMessageSize);
-
-    String encryptedMessageBase64 = hexToBase64(encryptedMessageHex);
-
+    NostrString encryptedMessageBase64 = Utils::hexToBase64(encryptedMessageHex);
     encryptedMessageBase64 += "?iv=" + ivBase64;
     return encryptedMessageBase64;
 }
@@ -87,7 +60,7 @@ NostrString Nip04::encryptData(byte key[32], byte iv[16], NostrString msg) {
 
     AES_CBC_encrypt_buffer(&ctx, messageBin, sizeof(messageBin));
 
-    return toHex(messageBin, sizeof(messageBin));
+    return Utils::toHex(messageBin, sizeof(messageBin));
 }
 
 void Nip04::stringToByteArray(const char *input, int padding_diff, byte *output) {
@@ -107,7 +80,7 @@ void Nip04::stringToByteArray(const char *input, int padding_diff, byte *output)
 NostrString Nip04::decryptData(byte key[32], byte iv[16], NostrString messageHex) {
     int byteSize = NostrString_length(messageHex) / 2;
     byte messageBin[byteSize];
-    NostrString_hexToBytes(messageHex, messageBin, byteSize);
+    Utils::hexToBytes(messageHex, messageBin, byteSize);
 
     AES_ctx ctx;
     AES_init_ctx_iv(&ctx, key, iv);

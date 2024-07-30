@@ -14,31 +14,32 @@
 namespace nostr {
 namespace picow {
 namespace PICOWPlatform {
-inline unsigned long getUnixTimestamp() {
+unsigned long getUnixTimestamp() {
     time_t t = time(nullptr);
     unsigned long unixTime = t;
     return unixTime;
 }
 
-inline long int getRealRandom(long int min, long int max) {
+long int getRealRandom(long int min, long int max) {
     uint32_t rand = random(min, max + 1);
     return rand;
 }
 
-inline void serialLogger(const NostrString &str) {
+void serialLogger(const NostrString &str) {
     Serial.println(str.c_str());
 }
 
 /**
  * Initialize the WiFi connection
  */
-inline void initWifi(NostrString ssid, NostrString passphrase, int channel = 6) {
+void initWifi(NostrString ssid, NostrString passphrase, int unused = 6) {
     IPAddress dns(8, 8, 8, 8);
  
 
     if (WiFi.status() == WL_NO_SHIELD) {
         while (true){
             Serial.println("Communication with WiFi module failed!");
+            delay(10);
         }
     }
     
@@ -48,8 +49,7 @@ inline void initWifi(NostrString ssid, NostrString passphrase, int channel = 6) 
         Serial.print("Attempting to connect to SSID: ");
         Serial.println(ssid.c_str());
         status = WiFi.begin(ssid.c_str(), passphrase.c_str());
-
-        delay(10000);
+        delay(500);
     }
 
     WiFi.setDNS(dns);
@@ -64,7 +64,7 @@ inline void initWifi(NostrString ssid, NostrString passphrase, int channel = 6) 
 /**
  * Initialize the time service
  */
-inline void initTime(const char *ntpServer, long timeZoneOffsetHours = 0) {
+void initTime(const char *ntpServer) {
     NTP.begin(ntpServer);
     NTP.waitSet();
 }
@@ -72,7 +72,7 @@ inline void initTime(const char *ntpServer, long timeZoneOffsetHours = 0) {
 /**
  * Initialize platform specific code for the nostr library
  */
-inline void initNostr(unsigned long seed, bool withLogger) {
+void initNostr(unsigned long seed, bool withLogger) {
     randomSeed(seed);
     nostr::Utils::setUnixTimeSecondsProvider(getUnixTimestamp);
     if (withLogger)
@@ -83,8 +83,12 @@ inline void initNostr(unsigned long seed, bool withLogger) {
 /**
  * Get a platform specific transport
  */
-inline PICOWTransport *getTransport() {
+PICOWTransport *getTransport() {
     return new nostr::picow::PICOWTransport();
+}
+
+void close(){
+    Utils::close();
 }
 } 
 } 

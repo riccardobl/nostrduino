@@ -1,6 +1,4 @@
-#ifndef NOSTR_STRING
-#define NOSTR_STRING
-#include <Bitcoin.h>
+
 #include <NostrString.h>
 
 #ifdef ARDUINO
@@ -66,12 +64,6 @@ String NostrString_intToString(long int i) {
 int NostrString_indexOf(const String &str1, const char *str2) {
     return str1.indexOf(str2);
 }
-void NostrString_hexToBytes(const String &hex, uint8_t *array, size_t arraySize) {
-    fromHex(hex, array, arraySize);
-}
-String NostrString_bytesToHex(uint8_t *array, size_t arraySize) {
-    return toHex(array, arraySize);
-}
 
 long int NostrString_length(const String &str) {
     return str.length();
@@ -79,10 +71,6 @@ long int NostrString_length(const String &str) {
 
 const char *NostrString_toChars(const String &str) {
     return str.c_str();
-}
-
-String NostrString_base64ToHex(const String &b64) {
-    return base64ToHex(b64);
 }
 
 String NostrString_trim(const String &s) {
@@ -143,29 +131,7 @@ int NostrString_indexOf(const std::string &str1, const char *str2) {
     return str1.find(str2);
 }
 
-void NostrString_hexToBytes(const std::string &hex, uint8_t *array, size_t arraySize) {
-    const char *chex = hex.c_str();
-    fromHex(chex, strlen(chex), array, arraySize);
-}
 
-std::string NostrString_bytesToHex(uint8_t *array, size_t arraySize) {
-    if (array == NULL) {
-        return std::string();
-    }
-    size_t outputSize = arraySize * 2 + 1;
-    char *output = (char *)malloc(outputSize);
-    if (output == NULL) {
-        return std::string();
-    }
-
-    toHex(array, arraySize, output, outputSize);
-
-    std::string result(output);
-
-    memzero(output, outputSize);
-    free(output);
-    return result;
-}
 long int NostrString_length(const std::string &str) {
     return str.length();
 }
@@ -181,9 +147,7 @@ const char *NostrString_toChars(const std::string &str) {
     return str.c_str();
 }
 
-std::string NostrString_base64ToHex(const std::string &b64) {
-    return base64ToHex(b64);
-}
+
 
 std::string NostrString_trim(const std::string &s) {
     std::string ss = s;
@@ -236,6 +200,8 @@ std::string NostrString_urlEncode(const std::string &str) {
 double NostrString_toFloat(const std::string &str) {
     return std::stod(str);
 }
-#endif
+
+
 
 #endif
+

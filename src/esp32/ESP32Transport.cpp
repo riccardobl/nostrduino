@@ -1,13 +1,17 @@
 #include "ESP32Transport.h"
 #include "Common.h"
 
-#ifdef _ESP32_BOARD_
-
+#if defined(_ESP32_BOARD_) || defined(_ESP8266_BOARD_)
 using namespace nostr;
 
 void esp32::ESP32Transport::httpsGet(NostrString url, std::function<void(NostrString)> cb) {
     HTTPClient http;
+#ifdef _ESP8266_BOARD_
+    WiFiClient wifiClient;
+    http.begin(wifiClient, url.c_str());
+#else
     http.begin(url.c_str());
+#endif
     int httpCode = http.GET();
     if (httpCode <= 0 || httpCode != HTTP_CODE_OK) {
         cb("");
@@ -21,10 +25,10 @@ void esp32::ESP32Transport::httpsGet(NostrString url, std::function<void(NostrSt
 void esp32::ESP32Transport::getInvoiceFromLNAddr(NostrString addr, unsigned long long amount, NostrString comment, std::function<void(NostrString)> cb) {
     // username@domain.com
     // becomes https://domain.com/.well-known/lnurlp/username
-    unsigned int atpos = NostrString_indexOf(addr, "@");
+    int atpos = NostrString_indexOf(addr, "@");
     if (atpos == -1) {
         cb("");
-        return ;
+        return;
     }
     NostrString username = NostrString_substring(addr, 0, atpos);
     NostrString domain = NostrString_substring(addr, atpos + 1);
@@ -102,7 +106,7 @@ void esp32::ESP32Transport::close() {
 }
 
 void esp32::ESP32Transport::disconnect(Connection *conn) {
-    for (int i = 0; i < connections.size(); i++) {
+    for (size_t i = 0; i < connections.size(); i++) {
         if (connections[i] == conn) {
             conn->disconnect();
             delete conn;
@@ -128,7 +132,11 @@ esp32::ESP32Connection::ESP32Connection(ESP32Transport *transport, NostrString u
     }
     if (ssl) {
         Utils::log("Connecting to " + host + " : " + port + " with path " + path + " using SSL...");
+#ifdef _ESP8266_BOARD_
+        ws.beginSSL(host.c_str(), port, path.c_str());
+#else
         ws.beginSSL(host, port, path);
+#endif
     } else {
         Utils::log("Connecting to " + host + " : " + port + " with path " + path + "...");
         ws.begin(host, port, path);
@@ -166,7 +174,7 @@ esp32::ESP32Connection::ESP32Connection(ESP32Transport *transport, NostrString u
                     Utils::log(e.what());
                 }
             }
-            
+
             break;
         }
         case WStype_ERROR:

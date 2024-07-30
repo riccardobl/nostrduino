@@ -1,5 +1,7 @@
 
-#include "unor4/UNOR4Platform.h"
+// This need to be included before the other includes
+#include "esp8266/ESP8266Platform.h"
+///
 
 #include <Arduino.h>
 
@@ -29,48 +31,56 @@ void setup() {
     ///         code, you can just omit the related lines here and call only
     ///         initNostr
     ////////////////////////
-    Serial.begin(9600);
-    // while (!Serial);
+    Serial.begin(115200);
+
+    ESP.wdtDisable();
+    *((volatile uint32_t *)0x60000900) &= ~(1);
 
     Serial.println("Init wifi");
-    nostr::unor4::UNOR4Platform::initWifi(WIFI_SSID, WIFI_PASS);
+    nostr::esp8266::ESP8266Platform::initWifi(WIFI_SSID, WIFI_PASS);
 
     Serial.println("Init time");
-    nostr::unor4::UNOR4Platform::initTime("pool.ntp.org");
+    nostr::esp8266::ESP8266Platform::initTime("pool.ntp.org");
 
     Serial.println("Init Nostr");
-    nostr::unor4::UNOR4Platform::initNostr(analogRead(9), true);
+    nostr::esp8266::ESP8266Platform::initNostr(true);
 
     Serial.println("Ready!");
 
-    // ////////////////////////
-    // /// END OF INITIALIZATION
-    // ////////////////////////
+    ////////////////////////
+    /// END OF INITIALIZATION
+    ////////////////////////
 
-    testNIP01();
+    
 }
-nostr::Transport *transport;
 
+bool initialized = false;
 void loop() {
-    // we loop the transport to run its internals
-    transport->loop();
-    // We need to call some pool methods in the main loop to make its internal
-    // loop work properly it is not very important how it is done, here we keep
-    // a reference of every pool in a vector but you can do it in a different
-    // way
-    for (nostr::NostrPool *pool : pools) {
-        // Run internal loop: refresh relays, complete pending connections, send
-        // pending messages
-        pool->loop();
+    if(!initialized){
+        initialized = true;
+        testNIP01();
+        delay(1000);
+    }else{
+        // We need to call some pool methods in the main loop to make its internal
+        // loop work properly it is not very important how it is done, here we keep
+        // a reference of every pool in a vector but you can do it in a different
+        // way
+        for (nostr::NostrPool *pool : pools) {
+            // Run internal loop: refresh relays, complete pending connections, send
+            // pending messages
+            pool->loop();
+        }
     }
 }
 
+nostr::Transport *transport;
 
 void testNIP01() {
+    yield();
     try{
         String relay = RELAY;
         String privKey = PRIVKEY;
-        transport = nostr::unor4::UNOR4Platform::getTransport();
+        transport = nostr::esp8266::ESP8266Platform::getTransport();
 
         // We need a NostrPool instance that will handle all the communication
         nostr::NostrPool *pool = new nostr::NostrPool(transport);

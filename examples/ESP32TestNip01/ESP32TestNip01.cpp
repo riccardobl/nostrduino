@@ -1,16 +1,18 @@
+#include "esp32/ESP32Platform.h"
+
 #include <Arduino.h>
+
 
 #include "ArduinoJson.h"
 #include "NostrEvent.h"
 #include "NostrPool.h"
 #include "Transport.h"
 #include "Utils.h"
-#include "esp32/ESP32Platform.h"
 #include "time.h"
 
 #define WIFI_SSID "Wokwi-GUEST"
 #define WIFI_PASS ""
-#define WIFI_CHANNEL 6
+
 
 #define RELAY "wss://nostr.rblb.it:7777"
 #define PRIVKEY "1558dadfae151555818a6aa6cf046ca3dfbb196c419efc18482479a74b74009a"
@@ -31,7 +33,7 @@ void setup() {
     Serial.begin(115200);
 
     Serial.println("Init wifi");
-    nostr::esp32::ESP32Platform::initWifi(WIFI_SSID, WIFI_PASS, WIFI_CHANNEL);
+    nostr::esp32::ESP32Platform::initWifi(WIFI_SSID, WIFI_PASS);
 
     Serial.println("Init time");
     nostr::esp32::ESP32Platform::initTime("pool.ntp.org");
@@ -96,7 +98,13 @@ void testNIP01() {
                 String json;
                 serializeJson(arr, json);
 
-                Serial.println("Event received: " + json);
+                Serial.println("Event received!: " + json);
+
+                if (event->verify()) {
+                    Serial.println("Event signature is valid");
+                } else {
+                    Serial.println("Event signature is invalid");
+                }
             },
             [&](const String &subId, const String &reason) {
                 // This is the callback that will be called when the subscription is

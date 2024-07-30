@@ -1,14 +1,14 @@
 
+#include "esp32/ESP32Platform.h"
+
 #include <Arduino.h>
 
 #include "Transport.h"
-#include "esp32/ESP32Platform.h"
 #include "services/NWC.h"
 
 // CONFIGURATION
 #define WIFI_SSID "Wokwi-GUEST"
 #define WIFI_PASS ""
-#define WIFI_CHANNEL 6
 // IMPORTANT !!! Set a valid NWC url here
 #define NWC_URL                                                                                                                                                                                        \
     "nostr+walletconnect://69effe7b49a6dd5cf525bd0905917a5005ffe480b58eeb8e861418cf3ae760d9?relay=wss://relay.getalby.com/"                                                                            \
@@ -32,7 +32,7 @@ void setup() {
     Serial.begin(115200);
 
     Serial.println("Init wifi");
-    nostr::esp32::ESP32Platform::initWifi(WIFI_SSID, WIFI_PASS, WIFI_CHANNEL);
+    nostr::esp32::ESP32Platform::initWifi(WIFI_SSID, WIFI_PASS);
 
     Serial.println("Init time");
     nostr::esp32::ESP32Platform::initTime("pool.ntp.org");

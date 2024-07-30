@@ -1,7 +1,7 @@
+#include "Common.h"
 #ifndef _NOSTR_UNOR4_TRANSPORT_H
 #define _NOSTR_UNOR4_TRANSPORT_H
-// #define ARDUINO_UNOWIFIR4 1
-#ifdef ARDUINO_UNOWIFIR4
+#ifdef _UNOR4_BOARD_
 
 #include <WebSocketsClient.h>
 
@@ -10,10 +10,11 @@
 #include "NostrString.h"
 #include "Transport.h"
 #include "Utils.h"
-#include "WiFiSSLClient.h"
 #include "WiFiS3.h"
+#include "WiFiSSLClient.h"
 #include <initializer_list>
 #include <vector>
+
 namespace nostr {
 namespace unor4 {
 
@@ -34,6 +35,7 @@ class UNOR4Connection : public Connection {
     bool isReady() override;
     void addMessageListener(std::function<void(NostrString)> listener) override;
     ~UNOR4Connection() override;
+    void addConnectionStatusListener(std::function<void(ConnectionStatus status)> listener) override;
 
   protected:
     UNOR4Connection(UNOR4Transport *transport, NostrString url);
@@ -42,7 +44,7 @@ class UNOR4Connection : public Connection {
     UNOR4Transport *transport;
     WebSocketsClient ws;
     std::vector<std::function<void(NostrString)>> messageListeners;
-    
+    std::vector<std::function<void(ConnectionStatus status)>> connectionListeners;
 };
 class UNOR4Transport : public Transport {
   public:
@@ -54,13 +56,14 @@ class UNOR4Transport : public Transport {
     UNOR4Transport();
     bool isReady() override;
     void loop() override;
+
   private:
     void httpsGet(NostrString url, std::function<void(NostrString)> callback);
     std::vector<Connection *> connections;
     std::vector<ActiveRequest> getRequests;
 };
-} 
-} 
+} // namespace unor4
+} // namespace nostr
 
 #endif
 #endif

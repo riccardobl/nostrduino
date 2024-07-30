@@ -1,14 +1,13 @@
+#include "esp32/ESP32Platform.h"
 
 #include <Arduino.h>
 
 #include "Nip04.h"
 #include "Transport.h"
-#include "esp32/ESP32Platform.h"
 #include "services/NWC.h"
 
 #define WIFI_SSID "Wokwi-GUEST"
 #define WIFI_PASS ""
-#define WIFI_CHANNEL 6
 
 void testNIP04();
 

@@ -7,16 +7,15 @@
 #include <WebSocketsClient.h>
 
 #include "ArduinoJson.h"
+#include "HTTPClient.h"
 #include "IPAddress.h"
 #include "NostrString.h"
 #include "Transport.h"
 #include "Utils.h"
-#include "HTTPClient.h"
 #include <initializer_list>
 #include <vector>
 namespace nostr {
 namespace picow {
-
 
 class PICOWTransport;
 class PICOWConnection : public Connection {
@@ -30,7 +29,6 @@ class PICOWConnection : public Connection {
     void addMessageListener(std::function<void(NostrString)> listener) override;
     ~PICOWConnection() override;
     void addConnectionStatusListener(std::function<void(ConnectionStatus status)> listener) override;
-    
 
   protected:
     PICOWConnection(PICOWTransport *transport, NostrString url);
@@ -50,12 +48,13 @@ class PICOWTransport : public Transport {
     ~PICOWTransport() override;
     PICOWTransport();
     bool isReady() override;
+
   private:
     void httpsGet(NostrString url, std::function<void(NostrString)> callback);
     std::vector<Connection *> connections;
 };
-} 
-} 
+} // namespace picow
+} // namespace nostr
 
 #endif
 #endif

@@ -8,6 +8,8 @@ def after_build(source, target, env):
     platform="esp32"
     if "ESP32" in sol:
         platform="esp32"
+    elif "ESP8266" in sol:
+        platform="esp8266"
     elif "UNOR4" in sol:
         platform="unor4"
     elif "UNO" in sol:

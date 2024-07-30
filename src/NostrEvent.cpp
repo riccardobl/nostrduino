@@ -1,7 +1,5 @@
 
 #include "NostrEvent.h"
-#include "Bitcoin.h"
-
 using namespace nostr;
 
 const std::vector<NostrEventTag> &NostrEventTags::getTags() const {
@@ -43,7 +41,7 @@ void NostrEventTags::removeTag(unsigned int index) {
 }
 
 void NostrEventTags::removeTags(NostrString key) {
-    for (int i = 0; i < tags.size(); i++) {
+    for (size_t i = 0; i < tags.size(); i++) {
         if (NostrString_equals(tags[i].key, key)) {
             tags.erase(tags.begin() + i);
             i--;
@@ -56,10 +54,10 @@ void NostrEventTags::clearTags() {
 }
 
 void NostrEventTags::toJson(JsonArray arr) const {
-    for (int i = 0; i < tags.size(); i++) {
+    for (size_t i = 0; i < tags.size(); i++) {
         JsonArray arr2 = arr.add<JsonArray>();
         arr2.add(tags[i].key);
-        for (int j = 0; j < tags[i].value.size(); j++) {
+        for (size_t j = 0; j < tags[i].value.size(); j++) {
             arr2.add(tags[i].value[j]);
         }
     }
@@ -68,14 +66,8 @@ void NostrEventTags::toJson(JsonArray arr) const {
 
 SignedNostrEvent UnsignedNostrEvent::sign(NostrString privateKeyHex) {
     Utils::log("Signing event with private key");
-    byte privateKeyBytes[NOSTR_DIGEST_SIZE];
-    NostrString_hexToBytes(privateKeyHex, privateKeyBytes, NOSTR_DIGEST_SIZE);
-    PrivateKey privateKey(privateKeyBytes);
-
-    byte pubKeyBytes[NOSTR_DIGEST_SIZE];
-    PublicKey pubKey = privateKey.publicKey();
-    NostrString pubKeyHex = pubKey.toString();
-    pubKeyHex = NostrString_substring(pubKeyHex, 2);
+    
+    NostrString pubKeyHex = Utils::getPublicKey(privateKeyHex);
 
     JsonDocument doc;
     JsonArray data = doc["data"].to<JsonArray>();
@@ -92,16 +84,16 @@ SignedNostrEvent UnsignedNostrEvent::sign(NostrString privateKeyHex) {
     doc.clear();
     byte hash[64] = {0};
     int hashLen = 0;
-    hashLen = sha256(message, hash);
-    NostrString msgHash = NostrString_bytesToHex(hash, hashLen);
+    hashLen = Utils::sha256(message, hash);
+    NostrString msgHash = Utils::toHex(hash, hashLen);
 
     Utils::log("Message hash: " + msgHash);
 
     byte messageBytes[NOSTR_DIGEST_SIZE];
-    NostrString_hexToBytes(msgHash, messageBytes, NOSTR_DIGEST_SIZE);
-    SchnorrSignature signature = privateKey.schnorr_sign(messageBytes);
-    NostrString signatureHex = NostrString(signature);
-
+    Utils::hexToBytes(msgHash, messageBytes, NOSTR_DIGEST_SIZE);
+    
+    NostrString signatureHex = Utils::sign(privateKeyHex, messageBytes, NOSTR_DIGEST_SIZE);
+    
     SignedNostrEvent signedEvent(msgHash, pubKeyHex, this->created_at, this->kind, this->tags, this->content, signatureHex);
     Utils::log("Signature hash " + signatureHex);
 
@@ -124,25 +116,20 @@ bool SignedNostrEvent::verify() const {
     doc.clear();
     byte hash[64] = {0};
     int hashLen = 0;
-    hashLen = sha256(message, hash);
-    NostrString msgHash = NostrString_bytesToHex(hash, hashLen);
+    hashLen = Utils::sha256(message, hash);
+    NostrString msgHash = Utils::toHex(hash, hashLen);
     if(!NostrString_equals(msgHash, this->id)){
         Utils::log("Event id does not match");
         return false;
     }
     Utils::log("Verifying event signature");
     byte messageBytes[32];
-    NostrString_hexToBytes(this->id, messageBytes, 32);
+    Utils::hexToBytes(this->id, messageBytes, 32);
     Utils::log("Message hash: " + this->id);
-    byte pubeyBytes[32];
-    NostrString_hexToBytes("02" + this->pubkey, pubeyBytes, 32);
+   
     Utils::log("Pubkey: " + this->pubkey);
-    PublicKey pub(pubeyBytes);
-    byte signatureBytes[64];
-    NostrString_hexToBytes(this->signature, signatureBytes, 64);
-    SchnorrSignature signature(signatureBytes);
     Utils::log("Signature: " + this->signature);
-    return pub.schnorr_verify(signature, messageBytes);
+    return Utils::verify(this->pubkey, messageBytes, this->signature);
 }
 
 void SignedNostrEvent::toJson(JsonObject doc) const {
@@ -179,10 +166,10 @@ SignedNostrEvent::SignedNostrEvent(JsonArray arr) {
     this->kind = obj["kind"].as<unsigned int>();
     NostrEventTags tt = NostrEventTags();
     JsonArray tags = obj["tags"].as<JsonArray>();
-    for (int i = 0; i < tags.size(); i++) {
+    for (size_t i = 0; i < tags.size(); i++) {
         JsonArray tag = tags[i];
         std::vector<String> value;
-        for (int j = 1; j < tag.size(); j++) {
+        for (size_t j = 1; j < tag.size(); j++) {
             value.push_back(tag[j].as<NostrString>());
         }
         tt.addTag(tag[0].as<NostrString>(), value);

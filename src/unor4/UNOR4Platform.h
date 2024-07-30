@@ -1,7 +1,9 @@
 
+#include "Common.h"
+
 #ifndef _NOSTR_UNOR4_PLATFORM_H
-#define _NOSTR_UNOR4_PLATFORM_H 
-#ifdef ARDUINO_UNOWIFIR4
+#define _NOSTR_UNOR4_PLATFORM_H
+#ifdef _UNOR4_BOARD_
 
 #include "Arduino.h"
 #include "NostrString.h"
@@ -16,30 +18,33 @@
 namespace nostr {
 namespace unor4 {
 namespace UNOR4Platform {
-inline unsigned long getUnixTimestamp() {
+unsigned long getUnixTimestamp() {
     RTCTime currentTime;
     RTC.getTime(currentTime);
     unsigned long unixTime = currentTime.getUnixTime();
     return unixTime;
 }
 
-inline long int getRealRandom(long int min, long int max) {
+long int getRealRandom(long int min, long int max) {
     uint32_t rand = random(min, max + 1);
     return rand;
 }
 
-inline void serialLogger(const NostrString &str) {
+void serialLogger(const NostrString &str) {
     Serial.println(str.c_str());
 }
 
 /**
  * Initialize the WiFi connection
  */
-inline void initWifi(NostrString ssid, NostrString passphrase, int channel = 6) {
+void initWifi(NostrString ssid, NostrString passphrase, int unused = 6) {
+    IPAddress dns(8, 8, 8, 8);
+
     if (WiFi.status() == WL_NO_MODULE) {
-        Serial.println("Communication with WiFi module failed!");
-        while (true)
-            ;
+        while (true){
+            Serial.println("Communication with WiFi module failed!");
+            delay(10);
+        }
     }
 
     String fv = WiFi.firmwareVersion();
@@ -47,13 +52,16 @@ inline void initWifi(NostrString ssid, NostrString passphrase, int channel = 6) 
         Serial.println("Please upgrade the firmware");
     }
 
-    int wifiStatus = WiFi.begin(ssid.c_str(), passphrase.c_str());
 
-    while (wifiStatus != WL_CONNECTED) {
-        Serial.print("Connecting...");
-        wifiStatus = WiFi.status();
+    int status = WL_IDLE_STATUS;
+
+    while (status != WL_CONNECTED) {
+        Serial.print("Attempting to connect to SSID: ");
+        Serial.println(ssid.c_str());
+        status = WiFi.begin(ssid.c_str(), passphrase.c_str());
         delay(500);
     }
+    WiFi.setDNS(dns);
 
     Serial.println("Connected to WiFi");
     Serial.println("WiFi connected");
@@ -66,18 +74,19 @@ NTPClient timeClient(Udp);
 /**
  * Initialize the time service
  */
-inline void initTime(const char *ntpServer, long timeZoneOffsetHours = 0) {
+void initTime(const char *ntpServer) {
     RTC.begin();
     timeClient.setPoolServerName(ntpServer);
     timeClient.update();
-    RTCTime timeToSet = RTCTime(timeClient.getEpochTime() + (timeZoneOffsetHours * 3600));
+    RTCTime timeToSet = RTCTime(timeClient.getEpochTime());
     RTC.setTime(timeToSet);
+    
 }
 
 /**
  * Initialize platform specific code for the nostr library
  */
-inline void initNostr(unsigned long seed, bool withLogger) {
+void initNostr(unsigned long seed, bool withLogger) {
     randomSeed(seed);
     nostr::Utils::setUnixTimeSecondsProvider(getUnixTimestamp);
     if (withLogger)
@@ -88,11 +97,13 @@ inline void initNostr(unsigned long seed, bool withLogger) {
 /**
  * Get a platform specific transport
  */
-inline UNOR4Transport *getTransport() {
+UNOR4Transport *getTransport() {
     return new nostr::unor4::UNOR4Transport();
 }
-} 
-} 
-} 
+
+void close() {}
+} // namespace UNOR4Platform
+} // namespace unor4
+} // namespace nostr
 #endif
 #endif
