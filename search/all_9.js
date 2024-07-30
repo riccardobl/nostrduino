@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['key_96',['key',['../structnostr_1_1s__NostrEventTag.html#a95e8590f64380a02483b6f459be3c3ad',1,'nostr::s_NostrEventTag']]],
-  ['keysend_97',['KeySend',['../namespacenostr.html#a2f0adf8fb06541c0734900f1f37c6a77',1,'nostr']]],
-  ['kind_98',['kind',['../classnostr_1_1NostrEvent.html#a669166a35df88ee656e39d5360414691',1,'nostr::NostrEvent']]]
+  ['jsonparse_99',['jsonParse',['../classnostr_1_1Utils.html#ac53754f8482415b3309bc224889155c1',1,'nostr::Utils']]],
+  ['jsonstringify_100',['jsonStringify',['../classnostr_1_1Utils.html#a20e3e3354a081ed04ab496f5fd58eb37',1,'nostr::Utils']]]
 ];

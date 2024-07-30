@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['nostr_294',['nostr',['../namespacenostr.html',1,'']]]
+  ['nostr_301',['nostr',['../namespacenostr.html',1,'']]]
 ];

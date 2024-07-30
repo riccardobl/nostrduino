@@ -73,7 +73,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="Utils_8h_source.html">Utils.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="NostrUtils_8h_source.html">NostrUtils.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -97,6 +97,30 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:ac53754f8482415b3309bc224889155c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20e3e3354a081ed04ab496f5fd58eb37"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Utils.html#a20e3e3354a081ed04ab496f5fd58eb37">jsonStringify</a> (JsonVariantConst source, <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> *json)</td></tr>
 <tr class="separator:a20e3e3354a081ed04ab496f5fd58eb37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5187b6a0a702f2c17f2813da555e67a8"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Utils.html#a5187b6a0a702f2c17f2813da555e67a8">toHex</a> (const uint8_t *array, size_t arraySize)</td></tr>
+<tr class="separator:a5187b6a0a702f2c17f2813da555e67a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05c8721c02dccfc10896925255d826c6"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Utils.html#a05c8721c02dccfc10896925255d826c6">hexToBase64</a> (<a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> hex)</td></tr>
+<tr class="separator:a05c8721c02dccfc10896925255d826c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa48335394dac48197f13e1de5ed5f1dc"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Utils.html#aa48335394dac48197f13e1de5ed5f1dc">fromHex</a> (<a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> hex, uint8_t *output, size_t outputSize)</td></tr>
+<tr class="separator:aa48335394dac48197f13e1de5ed5f1dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd3a8b85eb62fe2cb9662b61175c22d7"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Utils.html#acd3a8b85eb62fe2cb9662b61175c22d7">fromBase64</a> (const char *encoded, size_t encodedSize, uint8_t *output, size_t outputSize, uint8_t flags)</td></tr>
+<tr class="separator:acd3a8b85eb62fe2cb9662b61175c22d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adaffef045997b74bdd5697fa8218e19f"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Utils.html#adaffef045997b74bdd5697fa8218e19f">ecdh</a> (<a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> privKeyHex, <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> pubKeyHex, uint8_t *out)</td></tr>
+<tr class="separator:adaffef045997b74bdd5697fa8218e19f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac63b63268f625bce95f10101055d419a"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Utils.html#ac63b63268f625bce95f10101055d419a">toBase64</a> (const uint8_t *array, size_t arraySize, char *output, size_t outputSize, uint8_t flags)</td></tr>
+<tr class="separator:ac63b63268f625bce95f10101055d419a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed0b8b375422ba361ac9583e799406ff"><td class="memItemLeft" align="right" valign="top">static size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Utils.html#aed0b8b375422ba361ac9583e799406ff">sha256</a> (<a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> message, uint8_t *hash)</td></tr>
+<tr class="separator:aed0b8b375422ba361ac9583e799406ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82669c511e27be519af4b5c6f92615da"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Utils.html#a82669c511e27be519af4b5c6f92615da">sign</a> (<a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> privateKeyHex, uint8_t *message, size_t messageSize)</td></tr>
+<tr class="separator:a82669c511e27be519af4b5c6f92615da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0a29ee035dafd0a57c3a98ef10fb1f2"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Utils.html#af0a29ee035dafd0a57c3a98ef10fb1f2">verify</a> (<a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> pubKeyHex, uint8_t *messageHash, <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> signatureHex)</td></tr>
+<tr class="separator:af0a29ee035dafd0a57c3a98ef10fb1f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad269e612d30654f47cff8528095bb661"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Utils.html#ad269e612d30654f47cff8528095bb661">base64ToHex</a> (<a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> base64ToHex)</td></tr>
+<tr class="separator:ad269e612d30654f47cff8528095bb661"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a924fd35d88623bcaac986c76a75ce276"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Utils.html#a924fd35d88623bcaac986c76a75ce276">init</a> ()</td></tr>
+<tr class="separator:a924fd35d88623bcaac986c76a75ce276"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa81514124e6350731bae4545f75a79fb"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Utils.html#aa81514124e6350731bae4545f75a79fb">close</a> ()</td></tr>
+<tr class="separator:aa81514124e6350731bae4545f75a79fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -110,6 +134,195 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:a2b6c177c1e6138d0fbce8cf1f9db828a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ad269e612d30654f47cff8528095bb661"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad269e612d30654f47cff8528095bb661">&#9670;&nbsp;</a></span>base64ToHex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> Utils::base64ToHex </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td>
+          <td class="paramname"><em>base64ToHex</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa81514124e6350731bae4545f75a79fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa81514124e6350731bae4545f75a79fb">&#9670;&nbsp;</a></span>close()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Utils::close </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adaffef045997b74bdd5697fa8218e19f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adaffef045997b74bdd5697fa8218e19f">&#9670;&nbsp;</a></span>ecdh()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Utils::ecdh </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td>
+          <td class="paramname"><em>privKeyHex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td>
+          <td class="paramname"><em>pubKeyHex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>out</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acd3a8b85eb62fe2cb9662b61175c22d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd3a8b85eb62fe2cb9662b61175c22d7">&#9670;&nbsp;</a></span>fromBase64()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t Utils::fromBase64 </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>encoded</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>encodedSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>output</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>outputSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>flags</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa48335394dac48197f13e1de5ed5f1dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa48335394dac48197f13e1de5ed5f1dc">&#9670;&nbsp;</a></span>fromHex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t Utils::fromHex </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td>
+          <td class="paramname"><em>hex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>output</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>outputSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ac357e509edfd7eb730bacc55f003aa65"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac357e509edfd7eb730bacc55f003aa65">&#9670;&nbsp;</a></span>getNewSubscriptionId()</h2>
 
@@ -149,6 +362,57 @@ Static Public Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td>
           <td class="paramname"><em>privKeyHex</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a05c8721c02dccfc10896925255d826c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05c8721c02dccfc10896925255d826c6">&#9670;&nbsp;</a></span>hexToBase64()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> Utils::hexToBase64 </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td>
+          <td class="paramname"><em>hex</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a924fd35d88623bcaac986c76a75ce276"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a924fd35d88623bcaac986c76a75ce276">&#9670;&nbsp;</a></span>init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Utils::init </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -373,6 +637,174 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aed0b8b375422ba361ac9583e799406ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed0b8b375422ba361ac9583e799406ff">&#9670;&nbsp;</a></span>sha256()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t Utils::sha256 </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td>
+          <td class="paramname"><em>message</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>hash</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a82669c511e27be519af4b5c6f92615da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82669c511e27be519af4b5c6f92615da">&#9670;&nbsp;</a></span>sign()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> Utils::sign </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td>
+          <td class="paramname"><em>privateKeyHex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>message</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>messageSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac63b63268f625bce95f10101055d419a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac63b63268f625bce95f10101055d419a">&#9670;&nbsp;</a></span>toBase64()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t Utils::toBase64 </td>
+          <td>(</td>
+          <td class="paramtype">const uint8_t *&#160;</td>
+          <td class="paramname"><em>array</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>arraySize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>output</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>outputSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>flags</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5187b6a0a702f2c17f2813da555e67a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5187b6a0a702f2c17f2813da555e67a8">&#9670;&nbsp;</a></span>toHex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> Utils::toHex </td>
+          <td>(</td>
+          <td class="paramtype">const uint8_t *&#160;</td>
+          <td class="paramname"><em>array</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>arraySize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ac3406b5afa052bec36e3fed2d95e33f8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac3406b5afa052bec36e3fed2d95e33f8">&#9670;&nbsp;</a></span>unixTimeSeconds()</h2>
 
@@ -387,6 +819,48 @@ Static Public Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af0a29ee035dafd0a57c3a98ef10fb1f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0a29ee035dafd0a57c3a98ef10fb1f2">&#9670;&nbsp;</a></span>verify()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Utils::verify </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td>
+          <td class="paramname"><em>pubKeyHex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>messageHash</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>&#160;</td>
+          <td class="paramname"><em>signatureHex</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -488,8 +962,8 @@ Static Public Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>src/<a class="el" href="Utils_8h_source.html">Utils.h</a></li>
-<li>src/<a class="el" href="Utils_8cpp.html">Utils.cpp</a></li>
+<li>src/<a class="el" href="NostrUtils_8h_source.html">NostrUtils.h</a></li>
+<li>src/<a class="el" href="NostrUtils_8cpp.html">NostrUtils.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

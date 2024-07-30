@@ -1,5 +1,21 @@
 var searchData=
 [
-  ['jsonparse_365',['jsonParse',['../classnostr_1_1Utils.html#ac53754f8482415b3309bc224889155c1',1,'nostr::Utils']]],
-  ['jsonstringify_366',['jsonStringify',['../classnostr_1_1Utils.html#a20e3e3354a081ed04ab496f5fd58eb37',1,'nostr::Utils']]]
+  ['getbalance_359',['getBalance',['../classnostr_1_1NWC.html#a55874260c4af288a620e0b19d62ea949',1,'nostr::NWC::getBalance()'],['../classnostr_1_1Nip47.html#a086e38d7ee42d8d98f9e439b515f9cbb',1,'nostr::Nip47::getBalance()']]],
+  ['getconnectedrelays_360',['getConnectedRelays',['../classnostr_1_1NostrPool.html#a7b76c5bbd4d3cc7ecc5efae88776db2d',1,'nostr::NostrPool']]],
+  ['getconnection_361',['getConnection',['../classnostr_1_1NostrRelay.html#a204827b642c3964d7be4bacb0dd75733',1,'nostr::NostrRelay']]],
+  ['getcontent_362',['getContent',['../classnostr_1_1NostrEvent.html#aebb7ff8a3985bdcf93548cd0520c5593',1,'nostr::NostrEvent']]],
+  ['getcreatedat_363',['getCreatedAt',['../classnostr_1_1NostrEvent.html#ae4371b0dadcb8fe08e8504a1437ff6b4',1,'nostr::NostrEvent']]],
+  ['getid_364',['getId',['../classnostr_1_1SignedNostrEvent.html#a960a678a356d36a951f8758a3609725f',1,'nostr::SignedNostrEvent']]],
+  ['getinfo_365',['getInfo',['../classnostr_1_1Nip47.html#ad3598c721308e98893c1af2526b6ca98',1,'nostr::Nip47::getInfo()'],['../classnostr_1_1NWC.html#ad646581995f7b719a14d46f26e000896',1,'nostr::NWC::getInfo()']]],
+  ['getinvoicefromlnaddr_366',['getInvoiceFromLNAddr',['../classnostr_1_1Transport.html#a3438c6030285fb9310efa7e628f61118',1,'nostr::Transport']]],
+  ['getkind_367',['getKind',['../classnostr_1_1NostrEvent.html#a7d66bdcdaad510b5c79d045b040ef99e',1,'nostr::NostrEvent']]],
+  ['getnewsubscriptionid_368',['getNewSubscriptionId',['../classnostr_1_1Utils.html#ac357e509edfd7eb730bacc55f003aa65',1,'nostr::Utils']]],
+  ['getpubkey_369',['getPubkey',['../classnostr_1_1SignedNostrEvent.html#a3538024dd02de6db6c4348c7011eea4e',1,'nostr::SignedNostrEvent']]],
+  ['getpublickey_370',['getPublicKey',['../classnostr_1_1Utils.html#a4dc29d30dfbdb8d035310cad80f42605',1,'nostr::Utils']]],
+  ['getrelays_371',['getRelays',['../classnostr_1_1NostrPool.html#a87aacd8a79d84fa8a798f824ab21e16c',1,'nostr::NostrPool']]],
+  ['getsignature_372',['getSignature',['../classnostr_1_1SignedNostrEvent.html#a172618d2515facba9a4814c19b17f186',1,'nostr::SignedNostrEvent']]],
+  ['getsubid_373',['getSubId',['../classnostr_1_1SignedNostrEvent.html#aa8515e93f44bb3bf63add56aeddcb95c',1,'nostr::SignedNostrEvent']]],
+  ['gettag_374',['getTag',['../classnostr_1_1NostrEventTags.html#a1033d773b10d3ba70a06cd8f6582f4bc',1,'nostr::NostrEventTags']]],
+  ['gettags_375',['getTags',['../classnostr_1_1NostrEventTags.html#a0adcf1d628966f26ffaffa86fd90d64c',1,'nostr::NostrEventTags::getTags()'],['../classnostr_1_1NostrEvent.html#a752465b8cdfb66f6b730250af1a40fa5',1,'nostr::NostrEvent::getTags()'],['../classnostr_1_1SignedNostrEvent.html#a8e8ceb84938452b7c22a801a8365410f',1,'nostr::SignedNostrEvent::getTags()']]],
+  ['geturl_376',['getUrl',['../classnostr_1_1NostrRelay.html#abd2edcdcafb73dc6c27ba3a0ec1b2484',1,'nostr::NostrRelay']]]
 ];

@@ -72,24 +72,26 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="Transport_8h_source.html">Transport.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="NostrTransport_8h_source.html">NostrTransport.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a09f2f3d42f8b4143dc616207afa7cab3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Connection.html#a09f2f3d42f8b4143dc616207afa7cab3">addMessageListener</a> (std::function&lt; void(<a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>)&gt; listener)</td></tr>
-<tr class="separator:a09f2f3d42f8b4143dc616207afa7cab3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86f93d3b50232aa5978a8339909f0bd4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Connection.html#a86f93d3b50232aa5978a8339909f0bd4">addMessageListener</a> (std::function&lt; void(<a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>)&gt; listener)=0</td></tr>
+<tr class="separator:a86f93d3b50232aa5978a8339909f0bd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5de060192a611ec634b1123c6ce7787"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Connection.html#ac5de060192a611ec634b1123c6ce7787">send</a> (<a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> message)=0</td></tr>
 <tr class="separator:ac5de060192a611ec634b1123c6ce7787"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0de18a7197c81db8ac43036f6dcfc4ff"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Connection.html#a0de18a7197c81db8ac43036f6dcfc4ff">disconnect</a> ()=0</td></tr>
 <tr class="separator:a0de18a7197c81db8ac43036f6dcfc4ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b3ae539c84b9de24c5db2071885b2c9"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Connection.html#a8b3ae539c84b9de24c5db2071885b2c9">~Connection</a> ()=default</td></tr>
 <tr class="separator:a8b3ae539c84b9de24c5db2071885b2c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25209362646ddc87d77b31aea484e3de"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Connection.html#a25209362646ddc87d77b31aea484e3de">Connection</a> ()=default</td></tr>
+<tr class="separator:a25209362646ddc87d77b31aea484e3de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee2be02ce75a3bb2a15306212e77b382"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Connection.html#aee2be02ce75a3bb2a15306212e77b382">loop</a> ()=0</td></tr>
 <tr class="separator:aee2be02ce75a3bb2a15306212e77b382"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af780de347728124fc0664614f100c604"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Connection.html#af780de347728124fc0664614f100c604">isReady</a> ()=0</td></tr>
 <tr class="separator:af780de347728124fc0664614f100c604"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71d4684389dc9b6f35f09829e69058b1"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Connection.html#a71d4684389dc9b6f35f09829e69058b1">addConnectionStatusListener</a> (std::function&lt; void(<a class="el" href="namespacenostr.html#a9e024483543fd2f2ca5116fd86e38c3c">ConnectionStatus</a> status)&gt; listener)</td></tr>
-<tr class="separator:a71d4684389dc9b6f35f09829e69058b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa76b31402b2d76446ad11ec326efa70"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1Connection.html#aaa76b31402b2d76446ad11ec326efa70">addConnectionStatusListener</a> (std::function&lt; void(<a class="el" href="namespacenostr.html#a9e024483543fd2f2ca5116fd86e38c3c">ConnectionStatus</a> status)&gt; listener)=0</td></tr>
+<tr class="separator:aaa76b31402b2d76446ad11ec326efa70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a8b3ae539c84b9de24c5db2071885b2c9"></a>
@@ -117,9 +119,34 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a25209362646ddc87d77b31aea484e3de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25209362646ddc87d77b31aea484e3de">&#9670;&nbsp;</a></span>Connection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">nostr::Connection::Connection </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a71d4684389dc9b6f35f09829e69058b1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a71d4684389dc9b6f35f09829e69058b1">&#9670;&nbsp;</a></span>addConnectionStatusListener()</h2>
+<a id="aaa76b31402b2d76446ad11ec326efa70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa76b31402b2d76446ad11ec326efa70">&#9670;&nbsp;</a></span>addConnectionStatusListener()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -137,15 +164,15 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a09f2f3d42f8b4143dc616207afa7cab3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a09f2f3d42f8b4143dc616207afa7cab3">&#9670;&nbsp;</a></span>addMessageListener()</h2>
+<a id="a86f93d3b50232aa5978a8339909f0bd4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86f93d3b50232aa5978a8339909f0bd4">&#9670;&nbsp;</a></span>addMessageListener()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -163,7 +190,7 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -272,7 +299,7 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>src/<a class="el" href="Transport_8h_source.html">Transport.h</a></li>
+<li>src/<a class="el" href="NostrTransport_8h_source.html">NostrTransport.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
