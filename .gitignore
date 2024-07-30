@@ -6,3 +6,8 @@ venv
 docs
 bin
 pvenv
+src/nano
+examples/ArduinoUIP*
+arduinouip
+examples/NANO*
+wokwi/nano*
