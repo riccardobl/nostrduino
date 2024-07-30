@@ -1,11 +1,11 @@
 #ifndef _NOSTR_ESP32_PLATFORM_H
 #define _NOSTR_ESP32_PLATFORM_H 1
-#include "Common.h"
+#include "NostrCommon.h"
 
 #ifdef _ESP32_BOARD_
 #include "ESP32Transport.h"
 #include "NostrString.h"
-#include "Utils.h"
+#include "NostrUtils.h"
 #include "WiFi.h"
 #include "bootloader_random.h"
 #include "esp_random.h"

@@ -1,5 +1,5 @@
 
-#include "Common.h"
+#include "NostrCommon.h"
 #ifndef _NOSTR_PICOW_PLATFORM_H
 #define _NOSTR_PICOW_PLATFORM_H 
 #ifdef _PICOW_BOARD_
@@ -8,7 +8,7 @@
 #include <WiFi.h>
 #include "Arduino.h"
 #include "NostrString.h"
-#include "Utils.h"
+#include "NostrUtils.h"
 #include "picow/PICOWTransport.h"
 #include <time.h>
 namespace nostr {

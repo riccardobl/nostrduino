@@ -8,8 +8,8 @@
 #include "ArduinoJson.h"
 #include "NostrEvent.h"
 #include "NostrPool.h"
-#include "Transport.h"
-#include "Utils.h"
+#include "NostrTransport.h"
+#include "NostrUtils.h"
 #include "time.h"
 
 #define WIFI_SSID "Wokwi-GUEST"

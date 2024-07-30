@@ -5,8 +5,8 @@
 
 #include "ArduinoJson.h"
 #include "NostrString.h"
-#include "Utils.h"
-#include <aes.h>
+#include "NostrUtils.h"
+#include <NostrAES.h>
 #include <functional>
 #include <initializer_list>
 #include <map>

@@ -1,6 +1,6 @@
 #ifndef _NOSTR_ESP8266_TRANSPORT_H
 #define _NOSTR_ESP8266_TRANSPORT_H 1
-#include "Common.h"
+#include "NostrCommon.h"
 
 #ifdef _ESP8266_BOARD_
 

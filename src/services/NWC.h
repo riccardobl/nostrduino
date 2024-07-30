@@ -8,8 +8,8 @@
 #include "NostrEvent.h"
 #include "NostrPool.h"
 #include "NostrString.h"
-#include "Transport.h"
-#include "Utils.h"
+#include "NostrTransport.h"
+#include "NostrUtils.h"
 
 namespace nostr {
 class NWCResponseCallbackBase {

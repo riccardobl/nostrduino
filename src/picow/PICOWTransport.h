@@ -1,6 +1,6 @@
 #ifndef _NOSTR_PICOW_TRANSPORT_H
 #define _NOSTR_PICOW_TRANSPORT_H
-#include "Common.h"
+#include "NostrCommon.h"
 
 #ifdef _PICOW_BOARD_
 
@@ -10,8 +10,8 @@
 #include "HTTPClient.h"
 #include "IPAddress.h"
 #include "NostrString.h"
-#include "Transport.h"
-#include "Utils.h"
+#include "NostrTransport.h"
+#include "NostrUtils.h"
 #include <initializer_list>
 #include <vector>
 namespace nostr {

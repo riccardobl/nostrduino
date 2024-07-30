@@ -1,10 +1,10 @@
 #ifndef _NIP04_H
 #define _NIP04_H
-#include <Arduino.h>
-#include <aes.h>
-#include <vector>
 #include "NostrString.h"
-#include "Utils.h"
+#include "NostrUtils.h"
+#include <Arduino.h>
+#include <NostrAES.h>
+#include <vector>
 namespace nostr {
 class Nip04 {
   public:

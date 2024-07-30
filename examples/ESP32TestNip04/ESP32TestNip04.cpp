@@ -3,7 +3,7 @@
 #include <Arduino.h>
 
 #include "Nip04.h"
-#include "Transport.h"
+#include "NostrTransport.h"
 #include "services/NWC.h"
 
 #define WIFI_SSID "Wokwi-GUEST"

@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#include "Transport.h"
+#include "NostrTransport.h"
 #include "services/NWC.h"
 
 // CONFIGURATION

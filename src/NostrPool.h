@@ -1,7 +1,7 @@
 #ifndef _NOSTR_POOL_H
 #define _NOSTR_POOL_H
 #include <Arduino.h>
-#include <Transport.h>
+#include <NostrTransport.h>
 #include <functional>
 #include <initializer_list>
 #include <map>

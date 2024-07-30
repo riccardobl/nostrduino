@@ -1,13 +1,13 @@
 #ifndef _NOSTR_ESP32_TRANSPORT_H
 #define _NOSTR_ESP32_TRANSPORT_H 1
-#include "Common.h"
+#include "NostrCommon.h"
 
 #if defined(_ESP32_BOARD_) || defined(_ESP8266_BOARD_)
 
 #include "ArduinoJson.h"
 #include "NostrString.h"
-#include "Transport.h"
-#include "Utils.h"
+#include "NostrTransport.h"
+#include "NostrUtils.h"
 #ifdef _ESP8266_BOARD_
 #include <ESP8266HTTPClient.h>
 #include <ESP8266WiFi.h>

@@ -5,11 +5,11 @@
 #include "Nip04.h"
 #include "NostrEvent.h"
 #include "NostrString.h"
-#include "Utils.h"
+#include "NostrUtils.h"
 #include <initializer_list>
 #include <vector>
 namespace nostr {
-    
+
 typedef struct s_Invoice {
     NostrString invoice;
     unsigned long amount;

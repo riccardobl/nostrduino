@@ -1,4 +1,4 @@
-#include "Common.h"
+#include "NostrCommon.h"
 #ifndef _NOSTR_UNOR4_TRANSPORT_H
 #define _NOSTR_UNOR4_TRANSPORT_H
 #ifdef _UNOR4_BOARD_
@@ -8,8 +8,8 @@
 #include "ArduinoJson.h"
 #include "IPAddress.h"
 #include "NostrString.h"
-#include "Transport.h"
-#include "Utils.h"
+#include "NostrTransport.h"
+#include "NostrUtils.h"
 #include "WiFiS3.h"
 #include "WiFiSSLClient.h"
 #include <initializer_list>

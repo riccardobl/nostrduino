@@ -1,13 +1,13 @@
 #ifndef _NOSTR_ESP8266_PLATFORM_H
 #define _NOSTR_ESP8266_PLATFORM_H 1
 
-#include "Common.h"
+#include "NostrCommon.h"
 
 #ifdef _ESP8266_BOARD_
 
 #include "ESP8266Transport.h"
 #include "NostrString.h"
-#include "Utils.h"
+#include "NostrUtils.h"
 #include "time.h"
 #include <ESP8266HTTPClient.h>
 #include <ESP8266TrueRandom.h>

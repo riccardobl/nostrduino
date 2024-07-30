@@ -1,5 +1,5 @@
 
-#include "Common.h"
+#include "NostrCommon.h"
 
 #ifndef _NOSTR_UNOR4_PLATFORM_H
 #define _NOSTR_UNOR4_PLATFORM_H
@@ -8,7 +8,7 @@
 #include "Arduino.h"
 #include "NostrString.h"
 #include "RTC.h"
-#include "Utils.h"
+#include "NostrUtils.h"
 #include "unor4/UNOR4Transport.h"
 
 #include <NTPClient.h>

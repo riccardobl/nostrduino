@@ -1,5 +1,5 @@
 #include "ESP32Transport.h"
-#include "Common.h"
+#include "NostrCommon.h"
 
 #if defined(_ESP32_BOARD_) || defined(_ESP8266_BOARD_)
 using namespace nostr;

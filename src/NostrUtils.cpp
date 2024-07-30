@@ -1,4 +1,4 @@
-#include "Utils.h"
+#include "NostrUtils.h"
 
 #include "uBitcoin/src/Bitcoin.h"
 #include "uBitcoin/src/Hash.h"
