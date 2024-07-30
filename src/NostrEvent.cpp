@@ -90,7 +90,7 @@ SignedNostrEvent UnsignedNostrEvent::sign(NostrString privateKeyHex) {
     Utils::log("Message hash: " + msgHash);
 
     byte messageBytes[NOSTR_DIGEST_SIZE];
-    Utils::hexToBytes(msgHash, messageBytes, NOSTR_DIGEST_SIZE);
+    Utils::fromHex(msgHash, messageBytes, NOSTR_DIGEST_SIZE);
     
     NostrString signatureHex = Utils::sign(privateKeyHex, messageBytes, NOSTR_DIGEST_SIZE);
     
@@ -124,7 +124,7 @@ bool SignedNostrEvent::verify() const {
     }
     Utils::log("Verifying event signature");
     byte messageBytes[32];
-    Utils::hexToBytes(this->id, messageBytes, 32);
+    Utils::fromHex(this->id, messageBytes, 32);
     Utils::log("Message hash: " + this->id);
    
     Utils::log("Pubkey: " + this->pubkey);

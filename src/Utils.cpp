@@ -70,10 +70,7 @@ void Utils::jsonStringify(JsonVariantConst source, NostrString *json) {
 }
 
 
-size_t Utils::fromHex(const char *hex, size_t hexLen, uint8_t *array, size_t arraySize) {
 
-    return ::fromHex(hex, hexLen, array, arraySize);
-}
 
 NostrString Utils::toHex(const uint8_t *array, size_t arraySize) {
     return ::toHex(array, arraySize);    
@@ -87,7 +84,7 @@ NostrString Utils::base64ToHex(NostrString base64) {
     return ::base64ToHex(base64);
 }
 
-size_t Utils::hexToBytes(NostrString hex, uint8_t *output, size_t outputSize) {
+size_t Utils::fromHex(NostrString hex, uint8_t *output, size_t outputSize) {
     return ::fromHex(hex, output, outputSize);
 }
 
@@ -111,7 +108,7 @@ size_t Utils::sha256(NostrString message, uint8_t *hash) {
 
 NostrString Utils::getPublicKey(NostrString privKeyHex) {
     byte privateKeyBytes[NOSTR_DIGEST_SIZE];
-    hexToBytes(privKeyHex, privateKeyBytes, NOSTR_DIGEST_SIZE);
+    fromHex(privKeyHex, privateKeyBytes, NOSTR_DIGEST_SIZE);
     PrivateKey privateKey(privateKeyBytes);
 
     PublicKey pubKey = privateKey.publicKey();
@@ -125,11 +122,11 @@ void Utils::ecdh(NostrString privateKeyHex, NostrString pubKeyHex, uint8_t *out)
 
     int byteSize = 32;
     byte privateKeyBytes[byteSize];
-    hexToBytes(privateKeyHex, privateKeyBytes, byteSize);
+    fromHex(privateKeyHex, privateKeyBytes, byteSize);
     PrivateKey privateKey(privateKeyBytes);
 
     uint8_t pubkeyBytes[64];
-    hexToBytes("02" + NostrString(pubKeyHex), pubkeyBytes, 64);
+    fromHex("02" + NostrString(pubKeyHex), pubkeyBytes, 64);
     PublicKey otherDhPublicKey(pubkeyBytes);
     privateKey.ecdh(otherDhPublicKey, out, false);
 }
@@ -139,7 +136,7 @@ NostrString Utils::sign(NostrString privateKeyHex, uint8_t *messageBytes, size_t
         throw std::runtime_error("Message size must be 32 bytes");
     }
     uint8_t privateKeyBytes[32];
-    hexToBytes(privateKeyHex, privateKeyBytes, 32);
+    fromHex(privateKeyHex, privateKeyBytes, 32);
     PrivateKey privateKey(privateKeyBytes);
     SchnorrSignature signature = privateKey.schnorr_sign(messageBytes);
     NostrString signatureHex = signature.toString();
@@ -148,10 +145,10 @@ NostrString Utils::sign(NostrString privateKeyHex, uint8_t *messageBytes, size_t
 
 bool Utils::verify(NostrString pubKeyHex, uint8_t *messageHash, NostrString signatureHex){
     byte pubkeyBytes[64];
-    hexToBytes("02" + pubKeyHex, pubkeyBytes, 64);
+    fromHex("02" + pubKeyHex, pubkeyBytes, 64);
     PublicKey pub(pubkeyBytes);
     byte signatureBytes[64];
-    hexToBytes(signatureHex, signatureBytes, 64);
+    fromHex(signatureHex, signatureBytes, 64);
     SchnorrSignature signature(signatureBytes);
     return pub.schnorr_verify(signature, messageHash);
 }
