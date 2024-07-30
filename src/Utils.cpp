@@ -3,12 +3,7 @@
 #include "uBitcoin/src/Bitcoin.h"
 #include "uBitcoin/src/Hash.h"
 
-
-// #define LONESHA256_STATIC
-// #include "lonesha256.h"
 using namespace nostr;
-// size_t context_size = secp256k1_context_preallocated_size(SECP256K1_CONTEXT_VERIFY | SECP256K1_CONTEXT_SIGN);
-// void* nostr::Utils::secp256k1_ctx = secp256k1_context_create(SECP256K1_CONTEXT_VERIFY | SECP256K1_CONTEXT_SIGN);
 
 std::function<void(const NostrString &)> Utils::logger = nullptr;
 unsigned long long Utils::subs = 0;
@@ -57,7 +52,6 @@ long int Utils::randomInt(long int min, long int max) {
     return realRandom(min, max);
 }
 
-
 void Utils::jsonParse(const NostrString *json, JsonDocument *doc) {
     DeserializationError error = deserializeJson(*doc, *json);
     if (error) {
@@ -68,9 +62,6 @@ void Utils::jsonParse(const NostrString *json, JsonDocument *doc) {
 void Utils::jsonStringify(JsonVariantConst source, NostrString *json) {
     serializeJson(source, *json);
 }
-
-
-
 
 NostrString Utils::toHex(const uint8_t *array, size_t arraySize) {
     return ::toHex(array, arraySize);    
@@ -88,18 +79,14 @@ size_t Utils::fromHex(NostrString hex, uint8_t *output, size_t outputSize) {
     return ::fromHex(hex, output, outputSize);
 }
 
-
 size_t Utils::fromBase64(const char *encoded, size_t encodedSize, uint8_t *output, size_t outputSize, uint8_t flags) {
     return ::fromBase64(encoded, encodedSize, output, outputSize, flags);
 }
 
 
-
-
 size_t Utils::toBase64(const uint8_t *array, size_t arraySize, char *output, size_t outputSize, uint8_t flags) {
     return ::toBase64(array, arraySize, output, outputSize, flags);
 }
-
 
 
 size_t Utils::sha256(NostrString message, uint8_t *hash) {

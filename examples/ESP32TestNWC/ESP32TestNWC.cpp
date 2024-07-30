@@ -79,7 +79,7 @@ void testNWC() {
             [](String err, String errMsg) { Serial.println("[!] Error: " + err + " " + errMsg); });
 
         transport->getInvoiceFromLNAddr(PAYOUT_ADDRESS, PAYOUT_AMOUNT_MSAT, "Arduino NWC test", [&](String invoice) {
-            if(NostrString_equals(invoice,"")){
+            if (NostrString_equals(invoice, "")) {
                 Serial.println("[!] Error: Could not get invoice from LN address");
             }
             Serial.println("[!] Paying " + String(PAYOUT_AMOUNT_MSAT) + " msats to " + PAYOUT_ADDRESS + " invoice: " + invoice);

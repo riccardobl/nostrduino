@@ -3,7 +3,6 @@
 using namespace nostr;
 
 NostrString Nip04::decrypt(NostrString &privateKeyHex, NostrString &senderPubKeyHex, NostrString content) {
-
     int ivParamIndex = NostrString_indexOf(content, "?iv=");
     if (ivParamIndex == -1) throw std::invalid_argument("Encrypted string does not contain ?iv= parameter.");
 
@@ -31,7 +30,6 @@ NostrString Nip04::decrypt(NostrString &privateKeyHex, NostrString &senderPubKey
 }
 
 NostrString Nip04::encrypt(NostrString &privateKeyHex, NostrString &recipientPubKeyHex, NostrString content) {
-
     uint8_t sharedPointX[32];
     Utils::ecdh(privateKeyHex, recipientPubKeyHex, sharedPointX);
     NostrString sharedPointXHex = Utils::toHex(sharedPointX, 32);
@@ -70,7 +68,6 @@ void Nip04::stringToByteArray(const char *input, int padding_diff, byte *output)
         output[i] = input[i];
         i++;
     }
-
     // pad between 1 and 16 bytes
     for (int j = 0; j < padding_diff; j++) {
         output[i + j] = padding_diff;

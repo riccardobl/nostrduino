@@ -88,6 +88,7 @@ void initTime(const char *ntpServer) {
  */
 void initNostr(unsigned long seed, bool withLogger) {
     randomSeed(seed);
+    Utils::init();
     nostr::Utils::setUnixTimeSecondsProvider(getUnixTimestamp);
     if (withLogger)
         nostr::Utils::setLogger(serialLogger);
@@ -101,7 +102,9 @@ UNOR4Transport *getTransport() {
     return new nostr::unor4::UNOR4Transport();
 }
 
-void close() {}
+void close() {
+    Utils::close();
+}
 } // namespace UNOR4Platform
 } // namespace unor4
 } // namespace nostr

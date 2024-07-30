@@ -9,7 +9,6 @@
 #include "Utils.h"
 #include "time.h"
 
-
 #define WIFI_SSID "Wokwi-GUEST"
 #define WIFI_PASS ""
 
@@ -65,10 +64,7 @@ void testNIP01Filter() {
         String subId = pool->subscribeMany(
             {relay},
             {{
-                {"kinds", {"1"}}, 
-                {"since", {"1626023056"}}, 
-                {"until", {"1846947856"}}, 
-                {"limit", {"10"}},
+                {"kinds", {"1"}}, {"since", {"1626023056"}}, {"until", {"1846947856"}}, {"limit", {"10"}},
                 // Filters defined in NIP01 are automatically converted to the correct type
                 // however this library support non-NIP01 filters as well, but you might need to
                 // specify their type manually, if unspecified the code assumes string[]:
@@ -91,16 +87,16 @@ void testNIP01Filter() {
         std::vector<nostr::NostrRelay *> *relays = pool->getConnectedRelays();
         for (nostr::NostrRelay *relay : *relays) {
             Serial.println("Registering to connection events of: " + relay->getUrl());
-            relay->getConnection()->addConnectionStatusListener([&](const nostr::ConnectionStatus &status) { 
-                String sstatus="UNKNOWN";
-                if(status==nostr::ConnectionStatus::CONNECTED){
-                    sstatus="CONNECTED";
-                }else if(status==nostr::ConnectionStatus::DISCONNECTED){
-                    sstatus="DISCONNECTED";
-                }else if(status==nostr::ConnectionStatus::ERROR){
+            relay->getConnection()->addConnectionStatusListener([&](const nostr::ConnectionStatus &status) {
+                String sstatus = "UNKNOWN";
+                if (status == nostr::ConnectionStatus::CONNECTED) {
+                    sstatus = "CONNECTED";
+                } else if (status == nostr::ConnectionStatus::DISCONNECTED) {
+                    sstatus = "DISCONNECTED";
+                } else if (status == nostr::ConnectionStatus::ERROR) {
                     sstatus = "ERROR";
                 }
-                Serial.println("Connection status changed: " + sstatus); 
+                Serial.println("Connection status changed: " + sstatus);
             });
         }
     } catch (const std::exception &e) {

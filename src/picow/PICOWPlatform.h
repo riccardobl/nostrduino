@@ -74,6 +74,7 @@ void initTime(const char *ntpServer) {
  */
 void initNostr(unsigned long seed, bool withLogger) {
     randomSeed(seed);
+    Utils::init();
     nostr::Utils::setUnixTimeSecondsProvider(getUnixTimestamp);
     if (withLogger)
         nostr::Utils::setLogger(serialLogger);

@@ -82,6 +82,7 @@ void close() {
  * Initialize platform specific code for the nostr library
  */
 void initNostr(bool withLogger) {
+    Utils::init();
 
     nostr::Utils::setUnixTimeSecondsProvider(getUnixTimestamp);
     if (withLogger)

@@ -65,6 +65,7 @@ SignedNostrEvent Nip47::getInfo() {
     JsonObject params = doc["params"].to<JsonObject>();
     return this->createEvent("get_info", doc);
 }
+
 SignedNostrEvent Nip47::multiPayInvoice(std::initializer_list<Invoice> invoices) {
     JsonDocument doc;
     JsonObject params = doc["params"].to<JsonObject>();

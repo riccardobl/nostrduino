@@ -65,9 +65,8 @@ void loop() {
     }
 }
 
-
 void testNIP01() {
-    try{
+    try {
         String relay = RELAY;
         String privKey = PRIVKEY;
         transport = nostr::unor4::UNOR4Platform::getTransport();
@@ -75,19 +74,19 @@ void testNIP01() {
         // We need a NostrPool instance that will handle all the communication
         nostr::NostrPool *pool = new nostr::NostrPool(transport);
         pools.push_back(pool); // NB. we are adding it to this vector since we need to call
-                            // pool->loop() in the main loop to make it work properly
+                               // pool->loop() in the main loop to make it work properly
 
         // Lets subscribe to the relay
         String subId = pool->subscribeMany(
             {relay},
             {
                 {// we set the filters here (see
-                // https://github.com/nostr-protocol/nips/blob/master/01.md#from-client-to-relay-sending-events-and-creating-subscriptions)
-                {"kinds", {"1"}},
-                // {"since",{"1234567890"}},
-                // {"until",{"1234567890"}},
-                // {"limit",{"10"}},
-                {"#t", {"arduinoTest"}}} //,
+                 // https://github.com/nostr-protocol/nips/blob/master/01.md#from-client-to-relay-sending-events-and-creating-subscriptions)
+                 {"kinds", {"1"}},
+                 // {"since",{"1234567890"}},
+                 // {"until",{"1234567890"}},
+                 // {"limit",{"10"}},
+                 {"#t", {"arduinoTest"}}} //,
                 // You can add another filter here
             },
             [&](const String &subId, nostr::SignedNostrEvent *event) {

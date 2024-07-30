@@ -9,14 +9,17 @@
 #include <initializer_list>
 #include <vector>
 namespace nostr {
+    
 typedef struct s_Invoice {
     NostrString invoice;
     unsigned long amount;
 } Invoice;
+
 typedef struct s_TLVRecords {
     NostrString type;
     NostrString value;
 } TLVRecords;
+
 typedef struct s_KeySend {
     NostrString pubkey;
     unsigned long amount;

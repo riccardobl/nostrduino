@@ -33,8 +33,12 @@ void setup() {
     ////////////////////////
     Serial.begin(115200);
 
-    ESP.wdtDisable();
-    *((volatile uint32_t *)0x60000900) &= ~(1);
+    // HACK:
+    // Uncomment this if the code crashes with cause: 4
+    // it seems there are some issues with the watchdog
+    // in some boards
+    // ESP.wdtDisable();
+    // *((volatile uint32_t *)0x60000900) &= ~(1);
 
     Serial.println("Init wifi");
     nostr::esp8266::ESP8266Platform::initWifi(WIFI_SSID, WIFI_PASS);
@@ -50,17 +54,15 @@ void setup() {
     ////////////////////////
     /// END OF INITIALIZATION
     ////////////////////////
-
-    
 }
 
 bool initialized = false;
 void loop() {
-    if(!initialized){
+    if (!initialized) {
         initialized = true;
         testNIP01();
         delay(1000);
-    }else{
+    } else {
         // We need to call some pool methods in the main loop to make its internal
         // loop work properly it is not very important how it is done, here we keep
         // a reference of every pool in a vector but you can do it in a different
@@ -77,7 +79,7 @@ nostr::Transport *transport;
 
 void testNIP01() {
     yield();
-    try{
+    try {
         String relay = RELAY;
         String privKey = PRIVKEY;
         transport = nostr::esp8266::ESP8266Platform::getTransport();
@@ -85,19 +87,19 @@ void testNIP01() {
         // We need a NostrPool instance that will handle all the communication
         nostr::NostrPool *pool = new nostr::NostrPool(transport);
         pools.push_back(pool); // NB. we are adding it to this vector since we need to call
-                            // pool->loop() in the main loop to make it work properly
+                               // pool->loop() in the main loop to make it work properly
 
         // Lets subscribe to the relay
         String subId = pool->subscribeMany(
             {relay},
             {
                 {// we set the filters here (see
-                // https://github.com/nostr-protocol/nips/blob/master/01.md#from-client-to-relay-sending-events-and-creating-subscriptions)
-                {"kinds", {"1"}},
-                // {"since",{"1234567890"}},
-                // {"until",{"1234567890"}},
-                // {"limit",{"10"}},
-                {"#t", {"arduinoTest"}}} //,
+                 // https://github.com/nostr-protocol/nips/blob/master/01.md#from-client-to-relay-sending-events-and-creating-subscriptions)
+                 {"kinds", {"1"}},
+                 // {"since",{"1234567890"}},
+                 // {"until",{"1234567890"}},
+                 // {"limit",{"10"}},
+                 {"#t", {"arduinoTest"}}} //,
                 // You can add another filter here
             },
             [&](const String &subId, nostr::SignedNostrEvent *event) {
