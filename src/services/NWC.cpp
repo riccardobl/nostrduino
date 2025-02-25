@@ -160,7 +160,7 @@ void NWC::lookUpInvoice(NostrString invoice, std::function<void(LookUpInvoiceRes
 
 void NWC::listTransactions(unsigned long from, unsigned long until, int limit, int offset, bool unpaid, NostrString type, std::function<void(ListTransactionsResponse)> onRes,
                            std::function<void(NostrString, NostrString)> onErr) {
-    SignedNostrEvent ev = this->nip47.listTransactions(from, until);
+    SignedNostrEvent ev = this->nip47.listTransactions(from, until, limit, offset, unpaid, type);
     std::unique_ptr<NWCResponseCallback<ListTransactionsResponse>> callback(new NWCResponseCallback<ListTransactionsResponse>());
     callback->onRes = onRes;
     callback->onErr = onErr;
