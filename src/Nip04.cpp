@@ -81,7 +81,7 @@ NostrString Nip04::decryptData(byte key[32], byte iv[16], NostrString messageHex
     AES_ctx ctx;
     AES_init_ctx_iv(&ctx, key, iv);
     AES_CBC_decrypt_buffer(&ctx, messageBin, byteSize);
-    String result = NostrString_substring(NostrString((char *)messageBin),0, byteSize);
+    NostrString result = NostrString_substring(NostrString((char *)messageBin),0, byteSize);
     free(messageBin);
     return result;
 }
