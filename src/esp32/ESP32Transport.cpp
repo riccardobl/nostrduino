@@ -198,6 +198,7 @@ esp32::ESP32Connection::ESP32Connection(ESP32Transport *transport, NostrString u
         case WStype_FRAGMENT_FIN:
             Utils::log("Fragmented message finalized.");
             this->fragmentedMessage += NostrString_fromChars((char *)payload);
+            Utils::log("Assembled fragmented message: " + this->fragmentedMessage);
             for (auto &listener : messageListeners) {
                 try {
                     listener(this->fragmentedMessage);
