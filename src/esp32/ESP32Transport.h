@@ -45,6 +45,7 @@ class ESP32Connection : public Connection {
     WebSocketsClient ws;
     std::vector<std::function<void(NostrString)>> messageListeners;
     std::vector<std::function<void(ConnectionStatus status)>> connectionListeners;
+    NostrString fragmentedMessage;
 };
 class ESP32Transport : public Transport {
   public:

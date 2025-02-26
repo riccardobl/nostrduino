@@ -187,6 +187,25 @@ esp32::ESP32Connection::ESP32Connection(ESP32Transport *transport, NostrString u
                 }
             }
             break;
+        case WStype_FRAGMENT_TEXT_START:
+            Utils::log("Fragmented message start.");
+            this->fragmentedMessage = NostrString_fromChars((char *)payload);
+            break;
+        case WStype_FRAGMENT:
+            Utils::log("Fragmented message continued.");
+            this->fragmentedMessage += NostrString_fromChars((char *)payload);
+            break;
+        case WStype_FRAGMENT_FIN:
+            Utils::log("Fragmented message finalized.");
+            this->fragmentedMessage += NostrString_fromChars((char *)payload);
+            for (auto &listener : messageListeners) {
+                try {
+                    listener(this->fragmentedMessage);
+                } catch (std::exception &e) {
+                    Utils::log(e.what());
+                }
+            }
+            break;
         default:
             break;
         }
