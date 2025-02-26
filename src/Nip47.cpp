@@ -366,22 +366,22 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<ListTransact
                 NostrString resultType = doc["result_type"].as<NostrString>();
                 JsonObject data = doc["result"];
                 if (NostrString_equals(resultType, "list_transactions")) {
-                    for (JsonPair kv : data["transactions"].as<JsonObject>()) {
+                    for (JsonObject kv : data["transactions"].as<JsonArray>()) {
                         Transaction transaction;
-                        transaction.type = kv.value()["type"].as<NostrString>();
-                        transaction.invoice = kv.value()["invoice"].as<NostrString>();
-                        transaction.description = kv.value()["description"].as<NostrString>();
-                        transaction.descriptionHash = kv.value()["description_hash"].as<NostrString>();
-                        transaction.preimage = kv.value()["preimage"].as<NostrString>();
-                        transaction.paymentHash = kv.value()["payment_hash"].as<NostrString>();
-                        transaction.amount = kv.value()["amount"].as<unsigned long long>();
-                        transaction.feesPaid = kv.value()["fees_paid"].as<unsigned long long>();
-                        transaction.createdAt = kv.value()["created_at"].as<unsigned long long>();
-                        transaction.expiresAt = kv.value()["expires_at"].as<unsigned long long>();
-                        transaction.settledAt = kv.value()["settled_at"].as<unsigned long long>();
+                        transaction.type = kv["type"].as<NostrString>();
+                        transaction.invoice = kv["invoice"].as<NostrString>();
+                        transaction.description = kv["description"].as<NostrString>();
+                        transaction.descriptionHash = kv["description_hash"].as<NostrString>();
+                        transaction.preimage = kv["preimage"].as<NostrString>();
+                        transaction.paymentHash = kv["payment_hash"].as<NostrString>();
+                        transaction.amount = kv["amount"].as<unsigned long long>();
+                        transaction.feesPaid = kv["fees_paid"].as<unsigned long long>();
+                        transaction.createdAt = kv["created_at"].as<unsigned long long>();
+                        transaction.expiresAt = kv["expires_at"].as<unsigned long long>();
+                        transaction.settledAt = kv["settled_at"].as<unsigned long long>();
                         JsonDocument metadataDoc;
                         JsonObject metadataObject = metadataDoc.as<JsonObject>();
-                        for (JsonPair kv : kv.value()["metadata"].as<JsonObject>()) {
+                        for (JsonPair kv : kv["metadata"].as<JsonObject>()) {
                             metadataObject[kv.key().c_str()] = kv.value().as<NostrString>();
                         }
                         transaction.metadata = metadataObject;
