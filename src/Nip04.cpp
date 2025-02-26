@@ -10,8 +10,7 @@ NostrString Nip04::decrypt(NostrString &privateKeyHex, NostrString &senderPubKey
 
     NostrString encryptedMessageHex = Utils::base64ToHex(encryptedMessage);
     int encryptedMessageSize = NostrString_length(encryptedMessageHex) / 2;
-    byte encryptedMessageBin[encryptedMessageSize];
-    Utils::fromHex(encryptedMessageHex, encryptedMessageBin, encryptedMessageSize);
+    if (!encryptedMessageSize) return NostrString(); // nothing to do (can happen if base64ToHex returns "" because out of memory)
 
     NostrString iv = NostrString_substring(content, ivParamIndex + 4);
     NostrString ivHex = Utils::base64ToHex(iv);
@@ -76,12 +75,13 @@ void Nip04::stringToByteArray(const char *input, int padding_diff, byte *output)
 
 NostrString Nip04::decryptData(byte key[32], byte iv[16], NostrString messageHex) {
     int byteSize = NostrString_length(messageHex) / 2;
-    byte messageBin[byteSize];
+    byte* messageBin = (byte*)malloc(byteSize);
+    if (!messageBin) return NostrString();
     Utils::fromHex(messageHex, messageBin, byteSize);
-
     AES_ctx ctx;
     AES_init_ctx_iv(&ctx, key, iv);
-    AES_CBC_decrypt_buffer(&ctx, messageBin, sizeof(messageBin));
-
-    return NostrString_substring(NostrString((char *)messageBin),0, byteSize);
+    AES_CBC_decrypt_buffer(&ctx, messageBin, byteSize);
+    NostrString result = NostrString_substring(NostrString((char *)messageBin),0, byteSize);
+    free(messageBin);
+    return result;
 }
