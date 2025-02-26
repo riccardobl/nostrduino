@@ -43,8 +43,8 @@ void esp32::ESP32Transport::getInvoiceFromLNAddr(NostrString addr, unsigned long
             return;
         }
         NostrString status = doc["status"];
-        if (status != "" && !NostrString_equals(status, "OK")) {
-            Utils::log("LNURLP status is set but not OK");
+        if (!NostrString_equals(status,"null") && !NostrString_equals(status, "OK")) {
+            Utils::log("LNURLP status is set but not OK, status is: '" + status + "'");
             cb("");
             return;
         }
@@ -75,8 +75,8 @@ void esp32::ESP32Transport::getInvoiceFromLNAddr(NostrString addr, unsigned long
                 return;
             }
             NostrString callbackStatus = doc["status"];
-            if (callbackStatus != "" && !NostrString_equals(callbackStatus, "OK")) {
-                Utils::log("LNURLP callback status is set but not OK");
+            if (!NostrString_equals(callbackStatus,"null") && !NostrString_equals(callbackStatus, "OK")) {
+                Utils::log("LNURLP callback status is set but not OK, status is: '" + callbackStatus + "'");
                 cb("");
                 return;
             }
