@@ -454,6 +454,10 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<GetInfoRespo
                     for (JsonVariant v : methodsObj) {
                         out.result.methods.push_back(v.as<NostrString>());
                     }
+                    JsonArray notificationsObj = data["notifications"].as<JsonArray>();
+                    for (JsonVariant v : notificationsObj) {
+                        out.result.notifications.push_back(v.as<NostrString>());
+                    }
                     return;
                 }
             }

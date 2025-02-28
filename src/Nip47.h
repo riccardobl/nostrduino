@@ -120,6 +120,7 @@ typedef struct s_GetInfoResponse {
     unsigned long long blockHeight;
     NostrString blockHash;
     std::vector<NostrString> methods;
+    std::vector<NostrString> notifications;
 } GetInfoResponse;
 
 typedef struct s_NWCData {
