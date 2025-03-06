@@ -28,7 +28,9 @@ Check the [platformio registry page](https://registry.platformio.org/libraries/r
 
 ### ESP32 dependencies
 This library depends on the following additional libraries for the esp32 platform:
-- WebSockets@^2.4.1
+- ArduinoJson (>=7.1.0)
+- uBitcoin (>=0.2.0)
+- WebSockets (>=2.4.1)
 
 
 ## Usage

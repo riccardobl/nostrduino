@@ -1,7 +1,7 @@
 #include "NostrUtils.h"
 
-#include "uBitcoin/src/Bitcoin.h"
-#include "uBitcoin/src/Hash.h"
+#include "Hash.h" // depends on uBitcoin: https://github.com/micro-bitcoin/uBitcoin
+#include "Bitcoin.h" // depends on uBitcoin: https://github.com/micro-bitcoin/uBitcoin
 
 using namespace nostr;
 
