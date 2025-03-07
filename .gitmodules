@@ -1,3 +1,0 @@
-[submodule "src/uBitcoin"]
-	path = src/uBitcoin
-	url = git@github.com:micro-bitcoin/uBitcoin.git
