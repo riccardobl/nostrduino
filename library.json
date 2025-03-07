@@ -9,6 +9,11 @@
             "maintainer": false,
             "name": "BlackCoffee",
             "url": "https://github.com/blackcoffeexbt"
+        },
+        {
+            "maintainer": false,
+            "name": "ThomasFarstrike",
+            "url": "https://github.com/ThomasFarstrike"
         }
     ],
     "description": "Nostr Client for Arduino",
@@ -26,7 +31,7 @@
         "type": "git",
         "url": "https://github.com/riccardobl/nostrduino"
     },
-    "version": "1.3.4",
+    "version": "1.3.5",
     "dependencies": {
         "ArduinoJson": "^7.1.0",
         "uBitcoin": "^0.2.0",
