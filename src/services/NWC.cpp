@@ -31,14 +31,12 @@ void NWC::close() {
 void NWC::loop() {
     this->pool->loop();
     for (auto it = this->callbacks.begin(); it != this->callbacks.end();) {
-
         if (it->get()->n == 0) {
             NostrString subId = it->get()->subId;
             this->pool->closeSubscription(subId);
             it = this->callbacks.erase(it);
             continue;
         }
-
         if (Utils::unixTimeSeconds() - it->get()->timestampSeconds > it->get()->timeoutSeconds) {
             NostrString subId = it->get()->subId;
             this->pool->closeSubscription(subId);
