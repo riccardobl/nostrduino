@@ -31,17 +31,15 @@ void NWC::close() {
 void NWC::loop() {
     this->pool->loop();
     for (auto it = this->callbacks.begin(); it != this->callbacks.end();) {
-        unsigned int currentN = it->get()->n;
 
-        if (currentN == 0) {
+        if (it->get()->n == 0) {
             NostrString subId = it->get()->subId;
             this->pool->closeSubscription(subId);
             it = this->callbacks.erase(it);
             continue;
         }
 
-        unsigned int timeoutSeconds = it->get()->timeoutSeconds;
-        if (timeoutSeconds != NWC_INFINITE_TIMEOUT && Utils::unixTimeSeconds() - it->get()->timestampSeconds > timeoutSeconds) {
+        if (Utils::unixTimeSeconds() - it->get()->timestampSeconds > it->get()->timeoutSeconds) {
             NostrString subId = it->get()->subId;
             this->pool->closeSubscription(subId);
             it->get()->onErr("OTHER", "timeout");
@@ -237,9 +235,10 @@ void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes
     callback->onRes = onRes;
     callback->onErr = onErr;
     callback->timestampSeconds = Utils::unixTimeSeconds();
-    callback->eventId = "";
-    callback->n = -1; // Persistent
+    callback->timeoutSeconds = NWC_INFINITE_TIMEOUT;
+    callback->eventId = ""; // notifications are not tied to events
     callback->subId = notificationSubId;
+    callback->n = 1;
     this->callbacks.push_back(std::move(callback));
     Utils::log("Subscribed to notifications with sub ID: " + notificationSubId);
 }
