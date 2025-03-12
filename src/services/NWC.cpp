@@ -241,5 +241,3 @@ void NWC::getInfo(std::function<void(GetInfoResponse)> onRes, std::function<void
     callback->subId = this->sendEvent(&ev);
     this->callbacks.push_back(std::move(callback));
 }
-
-
