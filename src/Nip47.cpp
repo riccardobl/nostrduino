@@ -494,3 +494,75 @@ void Nip47::parseNWC(NostrString nwc, NWCData &data) {
         }
     }
 }
+
+void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<NotificationResponse> &out) {
+    out.errorCode = "";
+    out.errorMessage = "";
+    out.resultType = ""; // Initialize resultType
+    Utils::log("NWC: received notification response");
+
+    if (response->getKind() != 23196) {
+        out.errorCode = "INVALID_KIND";
+        out.errorMessage = "Unexpected event kind: " + NostrString_intToString(response->getKind());
+        return;
+    }
+
+    if (!response->verify()) {
+        out.errorCode = "VERIFICATION_FAILED";
+        out.errorMessage = "Notification event verification failed";
+        return;
+    }
+
+    NostrString content;
+    try {
+        content = this->nip04.decrypt(this->userPrivKey, this->servicePubKey, response->getContent());
+    } catch (const std::exception& e) {
+        out.errorCode = "DECRYPTION_FAILED";
+        out.errorMessage = "Failed to decrypt notification content: " + NostrString(e.what());
+        return;
+    }
+
+    if (NostrString_length(content) == 0) {
+        out.errorCode = "EMPTY_CONTENT";
+        out.errorMessage = "Decrypted notification content is empty";
+        return;
+    }
+
+    StaticJsonDocument<1024> doc;
+    DeserializationError error = deserializeJson(doc, content);
+    if (error) {
+        out.errorCode = "JSON_PARSE_ERROR";
+        out.errorMessage = "Failed to parse notification JSON: " + NostrString(error.c_str());
+        return;
+    }
+
+    NostrString notificationType = doc["notification_type"] | "";
+    if (NostrString_length(notificationType) == 0) {
+        out.errorCode = "MISSING_TYPE";
+        out.errorMessage = "Notification missing 'notification_type' field";
+        return;
+    }
+
+    JsonObject notification = doc["notification"];
+    if (!notification) {
+        out.errorCode = "MISSING_NOTIFICATION";
+        out.errorMessage = "Notification missing 'notification' object";
+        return;
+    }
+
+    Nip47Notification nip47Notification = {};
+    nip47Notification.notificationType = notificationType;
+    nip47Notification.type = notification["type"] | "";
+    nip47Notification.invoice = notification["invoice"] | "";
+    nip47Notification.description = notification["description"] | "";
+    nip47Notification.descriptionHash = notification["description_hash"] | "";
+    nip47Notification.preimage = notification["preimage"] | "";
+    nip47Notification.paymentHash = notification["payment_hash"] | "";
+    nip47Notification.amount = notification["amount"] | 0ULL;
+    nip47Notification.feesPaid = notification["fees_paid"] | 0ULL;
+    nip47Notification.createdAt = notification["created_at"] | 0ULL;
+    nip47Notification.settledAt = notification["settled_at"] | 0ULL;
+
+    out.resultType = notificationType; // Set resultType to match notification_type
+    out.result.notification = nip47Notification;
+}

@@ -11,6 +11,8 @@
 #include "NostrTransport.h"
 #include "NostrUtils.h"
 
+#define NWC_DEFAULT_TIMEOUT (60 * 10) // 10 minutes in seconds
+
 namespace nostr {
 class NWCResponseCallbackBase {
   public:
@@ -18,6 +20,7 @@ class NWCResponseCallbackBase {
     virtual void call(Nip47 *nip47, SignedNostrEvent *ev) {}
     std::function<void(NostrString, NostrString)> onErr = nullptr;
     unsigned long long timestampSeconds;
+    unsigned int timeoutSeconds = NWC_DEFAULT_TIMEOUT;
     NostrString eventId;
     NostrString subId;
     unsigned int n = 1;
@@ -157,6 +160,13 @@ class NWC {
      * @param onErr A callback that will be called when the info retrieval fails (optional)
      */
     void getInfo(std::function<void(GetInfoResponse)> onRes = nullptr, std::function<void(NostrString, NostrString)> onErr = nullptr);
+
+    /**
+     * Subscribe to payment notifications
+     * @param onRes A callback that will be called when a payment notification is received
+     * @param onErr A callback that will be called when an error is received (optional)
+     */
+    void subscribeNotifications(std::function<void(NotificationResponse)> onRes, std::function<void(NostrString, NostrString)> onErr);
 
   private:
     Transport *transport;

@@ -1,6 +1,8 @@
 #include "NWC.h"
-
 #include "Nip47.h"
+
+#define NWC_INFINITE_TIMEOUT (0xFFFFFFFF) // Max unsigned int, ~136 years
+
 using namespace nostr;
 
 NWC::~NWC() {
@@ -29,13 +31,17 @@ void NWC::close() {
 void NWC::loop() {
     this->pool->loop();
     for (auto it = this->callbacks.begin(); it != this->callbacks.end();) {
-        if (it->get()->n == 0) {
+        unsigned int currentN = it->get()->n;
+
+        if (currentN == 0) {
             NostrString subId = it->get()->subId;
             this->pool->closeSubscription(subId);
             it = this->callbacks.erase(it);
             continue;
         }
-        if (Utils::unixTimeSeconds() - it->get()->timestampSeconds > 60 * 10) {
+
+        unsigned int timeoutSeconds = it->get()->timeoutSeconds;
+        if (timeoutSeconds != NWC_INFINITE_TIMEOUT && Utils::unixTimeSeconds() - it->get()->timestampSeconds > timeoutSeconds) {
             NostrString subId = it->get()->subId;
             this->pool->closeSubscription(subId);
             it->get()->onErr("OTHER", "timeout");
@@ -46,6 +52,7 @@ void NWC::loop() {
     }
 }
 
+
 NostrString NWC::sendEvent(SignedNostrEvent *event) {
     NostrString subId = this->pool->subscribeMany(
         {this->nwc.relay}, {{{"kinds", {"23195"}}, {"#p", {this->accountPubKey}}, {"#e", {event->getId()}}}},
@@ -53,10 +60,10 @@ NostrString NWC::sendEvent(SignedNostrEvent *event) {
             NostrString eventRef = event->getTags()->getTag("e")[0];
             for (auto it = this->callbacks.begin(); it != this->callbacks.end(); it++) {
                 if (NostrString_equals(it->get()->eventId, eventRef)) {
-                    if (it->get()->n > 0) {
+                    if (it->get()->n > 0) { // Only call and decrement if n > 0
                         it->get()->call(&this->nip47, event);
-                    } 
-                    it->get()->n--;
+                        it->get()->n--;
+                    }
                     break;
                 }
             }
@@ -193,4 +200,46 @@ void NWC::getInfo(std::function<void(GetInfoResponse)> onRes, std::function<void
     callback->n = 1;
     callback->subId = this->sendEvent(&ev);
     this->callbacks.push_back(std::move(callback));
+}
+
+void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
+    if (!pool) {
+        Utils::log("Cannot subscribe to notifications: Pool is null");
+        if (onErr) onErr("NO_POOL", "Pool is null");
+        return;
+    }
+    if (pool->getRelays().empty()) {
+        Utils::log("Cannot subscribe to notifications: No relays connected");
+        if (onErr) onErr("NO_RELAYS", "No relays connected");
+        return;
+    }
+
+    NostrString notificationSubId = pool->subscribeMany(
+        {this->nwc.relay}, {{{"kinds", {"23196"}}, {"#p", {this->accountPubKey}}}},
+        [this, onRes, onErr](const NostrString &subId, SignedNostrEvent *event) {
+            Nip47Response<NotificationResponse> resp;
+            nip47.parseResponse(event, resp);
+            if (NostrString_length(resp.errorCode) > 0) {
+                if (onErr) onErr(resp.errorCode, resp.errorMessage);
+            } else {
+                if (onRes) onRes(resp.result);
+            }
+            // No delete event here; pool manages it
+        },
+        [onErr](const NostrString &subId, const NostrString &reason) {
+            Utils::log("Notification subscription closed: " + reason);
+            if (onErr) onErr("SUB_CLOSED", reason);
+        },
+        [](const NostrString &subId) { Utils::log("Notification subscription EOS"); }
+    );
+
+    std::unique_ptr<NWCResponseCallback<NotificationResponse>> callback(new NWCResponseCallback<NotificationResponse>());
+    callback->onRes = onRes;
+    callback->onErr = onErr;
+    callback->timestampSeconds = Utils::unixTimeSeconds();
+    callback->eventId = "";
+    callback->n = -1; // Persistent
+    callback->subId = notificationSubId;
+    this->callbacks.push_back(std::move(callback));
+    Utils::log("Subscribed to notifications with sub ID: " + notificationSubId);
 }
