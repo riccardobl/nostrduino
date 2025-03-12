@@ -74,6 +74,51 @@ NostrString NWC::sendEvent(SignedNostrEvent *event) {
     return subId;
 }
 
+// This function has similaries with sendEvent() but it's quite different,
+// as subscribing to notifications doesn't involve sending any event.
+void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
+    if (!pool) {
+        Utils::log("Cannot subscribe to notifications: Pool is null");
+        if (onErr) onErr("NO_POOL", "Pool is null");
+        return;
+    }
+    if (pool->getRelays().empty()) {
+        Utils::log("Cannot subscribe to notifications: No relays connected");
+        if (onErr) onErr("NO_RELAYS", "No relays connected");
+        return;
+    }
+
+    NostrString notificationSubId = pool->subscribeMany(
+        {this->nwc.relay}, {{{"kinds", {"23196"}}, {"#p", {this->accountPubKey}}}},
+        [this, onRes, onErr](const NostrString &subId, SignedNostrEvent *event) {
+            Nip47Response<NotificationResponse> resp;
+            nip47.parseResponse(event, resp);
+            if (NostrString_length(resp.errorCode) > 0) {
+                if (onErr) onErr(resp.errorCode, resp.errorMessage);
+            } else {
+                if (onRes) onRes(resp.result);
+            }
+            // No delete event here; pool manages it
+        },
+        [onErr](const NostrString &subId, const NostrString &reason) {
+            Utils::log("Notification subscription closed: " + reason);
+            if (onErr) onErr("SUB_CLOSED", reason);
+        },
+        [](const NostrString &subId) { Utils::log("Notification subscription EOS"); }
+    );
+
+    std::unique_ptr<NWCResponseCallback<NotificationResponse>> callback(new NWCResponseCallback<NotificationResponse>());
+    callback->onRes = onRes;
+    callback->onErr = onErr;
+    callback->timestampSeconds = Utils::unixTimeSeconds();
+    callback->timeoutSeconds = NWC_INFINITE_TIMEOUT;
+    callback->eventId = ""; // notifications are not tied to events
+    callback->subId = notificationSubId;
+    callback->n = 1;
+    this->callbacks.push_back(std::move(callback));
+    Utils::log("Subscribed to notifications with sub ID: " + notificationSubId);
+}
+
 void NWC::payInvoice(NostrString invoice, unsigned long amount, std::function<void(PayInvoiceResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
     SignedNostrEvent ev = this->nip47.payInvoice(invoice, amount);
     std::unique_ptr<NWCResponseCallback<PayInvoiceResponse>> callback(new NWCResponseCallback<PayInvoiceResponse>());
@@ -197,45 +242,4 @@ void NWC::getInfo(std::function<void(GetInfoResponse)> onRes, std::function<void
     this->callbacks.push_back(std::move(callback));
 }
 
-void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
-    if (!pool) {
-        Utils::log("Cannot subscribe to notifications: Pool is null");
-        if (onErr) onErr("NO_POOL", "Pool is null");
-        return;
-    }
-    if (pool->getRelays().empty()) {
-        Utils::log("Cannot subscribe to notifications: No relays connected");
-        if (onErr) onErr("NO_RELAYS", "No relays connected");
-        return;
-    }
 
-    NostrString notificationSubId = pool->subscribeMany(
-        {this->nwc.relay}, {{{"kinds", {"23196"}}, {"#p", {this->accountPubKey}}}},
-        [this, onRes, onErr](const NostrString &subId, SignedNostrEvent *event) {
-            Nip47Response<NotificationResponse> resp;
-            nip47.parseResponse(event, resp);
-            if (NostrString_length(resp.errorCode) > 0) {
-                if (onErr) onErr(resp.errorCode, resp.errorMessage);
-            } else {
-                if (onRes) onRes(resp.result);
-            }
-            // No delete event here; pool manages it
-        },
-        [onErr](const NostrString &subId, const NostrString &reason) {
-            Utils::log("Notification subscription closed: " + reason);
-            if (onErr) onErr("SUB_CLOSED", reason);
-        },
-        [](const NostrString &subId) { Utils::log("Notification subscription EOS"); }
-    );
-
-    std::unique_ptr<NWCResponseCallback<NotificationResponse>> callback(new NWCResponseCallback<NotificationResponse>());
-    callback->onRes = onRes;
-    callback->onErr = onErr;
-    callback->timestampSeconds = Utils::unixTimeSeconds();
-    callback->timeoutSeconds = NWC_INFINITE_TIMEOUT;
-    callback->eventId = ""; // notifications are not tied to events
-    callback->subId = notificationSubId;
-    callback->n = 1;
-    this->callbacks.push_back(std::move(callback));
-    Utils::log("Subscribed to notifications with sub ID: " + notificationSubId);
-}
