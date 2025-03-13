@@ -522,7 +522,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<Notification
         return;
     }
 
-    StaticJsonDocument<1024> doc;
+    JsonDocument doc;
     DeserializationError error = deserializeJson(doc, content);
     if (error) {
         out.errorCode = "JSON_PARSE_ERROR";
