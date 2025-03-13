@@ -50,7 +50,7 @@ void NWC::loop() {
 NostrString NWC::sendEvent(SignedNostrEvent *eventToSend = nullptr) {
     int kind = eventToSend ? NWC_RESPONSE_KIND : NWC_NOTIFICATION_KIND; // If an event is sent, expect a reponse. Otherwise, expect a notification.
     // Create JSON filter dynamically
-    DynamicJsonDocument doc(160); // enough for kind, #p and #e
+    JsonDocument doc;
     JsonArray filters = doc.to<JsonArray>();
     JsonObject filter = filters.createNestedObject();
     filter["kinds"].add(kind);
@@ -60,8 +60,7 @@ NostrString NWC::sendEvent(SignedNostrEvent *eventToSend = nullptr) {
     // Common subscription logic
     NostrString subId = this->pool->subscribeMany(
         {this->nwc.relay}, filters,
-        [&](const NostrString &subId, SignedNostrEvent *event) {
-            if (event->getTags()->getTag("e").empty()) eventToSend = nullptr; // workaround eventToSend not being null
+        [this, eventToSend](const NostrString &subId, SignedNostrEvent *event) {
             NostrString ref = eventToSend ? event->getTags()->getTag("e")[0] : event->getSubId();
             for (auto it = this->callbacks.begin(); it != this->callbacks.end(); it++) {
                 if (NostrString_equals(eventToSend ? it->get()->eventId : it->get()->subId, ref)) {
