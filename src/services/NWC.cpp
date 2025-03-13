@@ -50,25 +50,25 @@ void NWC::loop() {
 }
 
 // Subscribe to NWC reponses or notifications, and send an event, if provided.
-NostrString NWC::sendEvent(SignedNostrEvent *event = nullptr) {
-    const char* kind = event ? NWC_RESPONSE_KIND : NWC_NOTIFICATION_KIND; // If an event is sent, expect a reponse. Otherwise, expect a notification.
+NostrString NWC::sendEvent(SignedNostrEvent *eventToSend = nullptr) {
+    const char* kind = eventToSend ? NWC_RESPONSE_KIND : NWC_NOTIFICATION_KIND; // If an event is sent, expect a reponse. Otherwise, expect a notification.
     std::map<NostrString, std::initializer_list<NostrString>> filter = {
         {"kinds", {kind}},
         {"#p", {this->accountPubKey}}
     };
-    if (event) {
-        filter["#e"] = {event->getId()};
+    if (eventToSend) {
+        filter["#e"] = {eventToSend->getId()};
     }
 
     // Common subscription logic
     NostrString subId = this->pool->subscribeMany(
         {this->nwc.relay}, {{filter}},
-        [&](const NostrString &subId, SignedNostrEvent *receivedEvent) {
-            NostrString ref = event ? receivedEvent->getTags()->getTag("e")[0] : receivedEvent->getSubId();
+        [&](const NostrString &subId, SignedNostrEvent *event) {
+            NostrString ref = eventToSend ? event->getTags()->getTag("e")[0] : event->getSubId();
             for (auto it = this->callbacks.begin(); it != this->callbacks.end(); it++) {
-                if (NostrString_equals(event ? it->get()->eventId : it->get()->subId, ref)) {
-                    if (!event || it->get()->n > 0) { // If no event is provided, always call. Otherwise, only do so if n > 0.
-                        it->get()->call(&this->nip47, receivedEvent);
+                if (NostrString_equals(eventToSend ? it->get()->eventId : it->get()->subId, ref)) {
+                    if (!eventToSend || it->get()->n > 0) { // If no eventToSend is provided, always call. Otherwise, only do so if n > 0.
+                        it->get()->call(&this->nip47, event);
                     }
                     it->get()->n--;
                     break;
@@ -78,9 +78,9 @@ NostrString NWC::sendEvent(SignedNostrEvent *event = nullptr) {
         [&](const String &subId, const String &reason) { Utils::log("NWC: closed subscription: " + reason); }, [&](const String &subId) { Utils::log("NWC: EOS"); });
 
     // Publish if event is provided
-    if (event) {
+    if (eventToSend) {
         this->pool->publish(
-            {this->nwc.relay}, event,
+            {this->nwc.relay}, eventToSend,
             [&](const NostrString &eventId, bool status, const NostrString &msg) {
                 Utils::log(status ? "NWC: event sent: " + eventId : "NWC: error sending event: " + msg);
             }
