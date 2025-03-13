@@ -12,6 +12,7 @@
 #include "NostrUtils.h"
 
 #define NWC_DEFAULT_TIMEOUT (60 * 10) // 10 minutes in seconds
+#define NWC_INFINITE_TIMEOUT (0xFFFFFFFF) // Max unsigned int, ~136 years
 
 namespace nostr {
 class NWCResponseCallbackBase {
@@ -171,7 +172,6 @@ class NWC {
   private:
     Transport *transport;
     NostrString sendEvent(SignedNostrEvent *ev);
-    NostrString subscribeInternal();
     std::unique_ptr<NostrPool> pool;
     NWCData nwc;
     Nip47 nip47;

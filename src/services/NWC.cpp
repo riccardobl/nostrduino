@@ -1,7 +1,8 @@
 #include "NWC.h"
 #include "Nip47.h"
 
-#define NWC_INFINITE_TIMEOUT (0xFFFFFFFF) // Max unsigned int, ~136 years
+const char* NWC_RESPONSE_KIND = "23195";
+const char* NWC_NOTIFICATION_KIND = "23196";
 
 using namespace nostr;
 
@@ -48,45 +49,47 @@ void NWC::loop() {
     }
 }
 
-NostrString NWC::sendEvent(SignedNostrEvent *event) {
+// Subscribe to NWC reponses or notifications, and send an event, if provided.
+NostrString NWC::sendEvent(SignedNostrEvent *event = nullptr) {
+    const char* kind = event ? NWC_RESPONSE_KIND : NWC_NOTIFICATION_KIND; // If an event is sent, expect a reponse. Otherwise, expect a notification.
+    std::map<NostrString, std::initializer_list<NostrString>> filter = {
+        {"kinds", {kind}},
+        {"#p", {this->accountPubKey}}
+    };
+    if (event) {
+        filter["#e"] = {event->getId()};
+    }
+
+    // Common subscription logic
     NostrString subId = this->pool->subscribeMany(
-        {this->nwc.relay}, {{{"kinds", {"23195"}}, {"#p", {this->accountPubKey}}, {"#e", {event->getId()}}}},
-        [&](const String &subId, nostr::SignedNostrEvent *event) {
-            NostrString eventRef = event->getTags()->getTag("e")[0];
+        {this->nwc.relay}, {{filter}},
+        [&](const NostrString &subId, SignedNostrEvent *receivedEvent) {
+            NostrString ref = event ? receivedEvent->getTags()->getTag("e")[0] : receivedEvent->getSubId();
             for (auto it = this->callbacks.begin(); it != this->callbacks.end(); it++) {
-                if (NostrString_equals(it->get()->eventId, eventRef)) {
-                    if (it->get()->n > 0) { // Only call and decrement if n > 0
-                        it->get()->call(&this->nip47, event);
-                        it->get()->n--;
+                if (NostrString_equals(event ? it->get()->eventId : it->get()->subId, ref)) {
+                    if (!event || it->get()->n > 0) { // Check n only for event case, because 
+                        it->get()->call(&this->nip47, receivedEvent);
+                        if (event) it->get()->n--;
                     }
                     break;
                 }
             }
         },
-        [&](const String &subId, const String &reason) { Utils::log("NWC: closed subscription: " + reason); }, [&](const String &subId) { Utils::log("NWC: EOS"); });
-    this->pool->publish({this->nwc.relay}, event, [&](const NostrString &eventId, bool status, const NostrString &msg) {
-        if (!status) {
-            Utils::log("NWC: error sending event: " + msg);
-        } else {
-            Utils::log("NWC: event sent: " + eventId);
-        }
-    });
-    return subId;
-}
+        [&](const String &subId, const String &reason) { Utils::log("NWC: closed subscription: " + reason); },
+        [&](const String &subId) { Utils::log("NWC: EOS"); }
+    );
 
-NostrString NWC::subscribeInternal() {
-    return pool->subscribeMany(
-        {this->nwc.relay}, {{{"kinds", {"23196"}}, {"#p", {this->accountPubKey}}}},
-        [&](const NostrString &subId, SignedNostrEvent *event) {
-            NostrString subRef = event->getSubId();
-            for (auto it = this->callbacks.begin(); it != this->callbacks.end(); it++) {
-                if (NostrString_equals(it->get()->subId, subRef)) {
-                    it->get()->call(&this->nip47, event);
-                    break;
-                }
+    // Publish if event is provided
+    if (event) {
+        this->pool->publish(
+            {this->nwc.relay}, event,
+            [&](const NostrString &eventId, bool status, const NostrString &msg) {
+                Utils::log(status ? "NWC: event sent: " + eventId : "NWC: error sending event: " + msg);
             }
-        },
-        [&](const String &subId, const String &reason) { Utils::log("NWC: closed subscription: " + reason); }, [&](const String &subId) { Utils::log("NWC: EOS"); });
+        );
+    }
+
+    return subId;
 }
 
 void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
@@ -95,7 +98,7 @@ void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes
     callback->onErr = onErr;
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->timeoutSeconds = NWC_INFINITE_TIMEOUT;
-    callback->subId = subscribeInternal();
+    callback->subId = sendEvent();
     callback->n = 1;
     this->callbacks.push_back(std::move(callback));
 }
