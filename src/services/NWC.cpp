@@ -69,7 +69,7 @@ NostrString NWC::sendEvent(SignedNostrEvent *eventToSend = nullptr) {
                 if (NostrString_equals(eventToSend ? it->get()->eventId : it->get()->subId, ref)) {
                     if (!eventToSend || it->get()->n > 0) { // If no eventToSend is provided, always call. Otherwise, only do so if n > 0.
                         it->get()->call(&this->nip47, event);
-                    }
+                    } 
                     it->get()->n--;
                     break;
                 }
