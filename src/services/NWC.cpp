@@ -78,21 +78,15 @@ NostrString NWC::subscribeInternal(std::function<void(NotificationResponse)> onR
     return pool->subscribeMany(
         {this->nwc.relay}, {{{"kinds", {"23196"}}, {"#p", {this->accountPubKey}}}},
         [this, onRes, onErr](const NostrString &subId, SignedNostrEvent *event) {
-            Nip47Response<NotificationResponse> resp;
-            nip47.parseResponse(event, resp);
-            if (NostrString_length(resp.errorCode) > 0) {
-                if (onErr) onErr(resp.errorCode, resp.errorMessage);
-            } else {
-                if (onRes) onRes(resp.result);
+            NostrString subRef = event->getSubId();
+            for (auto it = this->callbacks.begin(); it != this->callbacks.end(); it++) {
+                if (NostrString_equals(it->get()->subId, subRef)) {
+                    it->get()->call(&this->nip47, event);
+                    break;
+                }
             }
-            // No delete event here; pool manages it
         },
-        [onErr](const NostrString &subId, const NostrString &reason) {
-            Utils::log("Notification subscription closed: " + reason);
-            if (onErr) onErr("SUB_CLOSED", reason);
-        },
-        [](const NostrString &subId) { Utils::log("Notification subscription EOS"); }
-    );
+        [&](const String &subId, const String &reason) { Utils::log("NWC: closed subscription: " + reason); }, [&](const String &subId) { Utils::log("NWC: EOS"); });
 }
 
 void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
