@@ -74,10 +74,10 @@ NostrString NWC::sendEvent(SignedNostrEvent *event) {
     return subId;
 }
 
-NostrString NWC::subscribeInternal(std::function<void(NotificationResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
+NostrString NWC::subscribeInternal() {
     return pool->subscribeMany(
         {this->nwc.relay}, {{{"kinds", {"23196"}}, {"#p", {this->accountPubKey}}}},
-        [this, onRes, onErr](const NostrString &subId, SignedNostrEvent *event) {
+        [&](const NostrString &subId, SignedNostrEvent *event) {
             NostrString subRef = event->getSubId();
             for (auto it = this->callbacks.begin(); it != this->callbacks.end(); it++) {
                 if (NostrString_equals(it->get()->subId, subRef)) {
@@ -95,8 +95,7 @@ void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes
     callback->onErr = onErr;
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->timeoutSeconds = NWC_INFINITE_TIMEOUT;
-    callback->eventId = ""; // notifications are not tied to events
-    callback->subId = subscribeInternal(onRes, onErr);
+    callback->subId = subscribeInternal();
     callback->n = 1;
     this->callbacks.push_back(std::move(callback));
 }

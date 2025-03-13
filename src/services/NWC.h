@@ -171,7 +171,7 @@ class NWC {
   private:
     Transport *transport;
     NostrString sendEvent(SignedNostrEvent *ev);
-    NostrString subscribeInternal(std::function<void(NotificationResponse)> onRes, std::function<void(NostrString, NostrString)> onErr);
+    NostrString subscribeInternal();
     std::unique_ptr<NostrPool> pool;
     NWCData nwc;
     Nip47 nip47;
