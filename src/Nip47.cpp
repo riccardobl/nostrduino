@@ -501,12 +501,6 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<Notification
     out.resultType = ""; // Initialize resultType
     Utils::log("NWC: received notification response");
 
-    if (response->getKind() != 23196) {
-        out.errorCode = "INVALID_KIND";
-        out.errorMessage = "Unexpected event kind: " + NostrString_intToString(response->getKind());
-        return;
-    }
-
     if (!response->verify()) {
         out.errorCode = "VERIFICATION_FAILED";
         out.errorMessage = "Notification event verification failed";
