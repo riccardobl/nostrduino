@@ -1,9 +1,6 @@
 #include "NWC.h"
 #include "Nip47.h"
 
-const char* NWC_RESPONSE_KIND = "23195";
-const char* NWC_NOTIFICATION_KIND = "23196";
-
 using namespace nostr;
 
 NWC::~NWC() {
@@ -51,19 +48,20 @@ void NWC::loop() {
 
 // Subscribe to NWC reponses or notifications, and send an event, if provided.
 NostrString NWC::sendEvent(SignedNostrEvent *eventToSend = nullptr) {
-    const char* kind = eventToSend ? NWC_RESPONSE_KIND : NWC_NOTIFICATION_KIND; // If an event is sent, expect a reponse. Otherwise, expect a notification.
-    std::map<NostrString, std::initializer_list<NostrString>> filter = {
-        {"kinds", {kind}},
-        {"#p", {this->accountPubKey}}
-    };
-    if (eventToSend) {
-        filter["#e"] = {eventToSend->getId()};
-    }
+    int kind = eventToSend ? NWC_RESPONSE_KIND : NWC_NOTIFICATION_KIND; // If an event is sent, expect a reponse. Otherwise, expect a notification.
+    // Create JSON filter dynamically
+    DynamicJsonDocument doc(160); // enough for kind, #p and #e
+    JsonArray filters = doc.to<JsonArray>();
+    JsonObject filter = filters.createNestedObject();
+    filter["kinds"].add(kind);
+    filter["#p"].add(this->accountPubKey);
+    if (eventToSend) filter["#e"].add(eventToSend->getId());
 
     // Common subscription logic
     NostrString subId = this->pool->subscribeMany(
-        {this->nwc.relay}, {{filter}},
+        {this->nwc.relay}, filters,
         [&](const NostrString &subId, SignedNostrEvent *event) {
+            if (event->getTags()->getTag("e").empty()) eventToSend = nullptr; // workaround eventToSend not being null
             NostrString ref = eventToSend ? event->getTags()->getTag("e")[0] : event->getSubId();
             for (auto it = this->callbacks.begin(); it != this->callbacks.end(); it++) {
                 if (NostrString_equals(eventToSend ? it->get()->eventId : it->get()->subId, ref)) {
@@ -97,6 +95,7 @@ void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->timeoutSeconds = NWC_INFINITE_TIMEOUT;
     callback->subId = sendEvent();
+    callback->n = -1; // never timeout
     this->callbacks.push_back(std::move(callback));
 }
 
