@@ -48,12 +48,11 @@ void NWC::loop() {
 
 // Subscribe to NWC reponses or notifications, and send an event, if provided.
 NostrString NWC::sendEvent(SignedNostrEvent *eventToSend = nullptr) {
-    int kind = eventToSend ? NWC_RESPONSE_KIND : NWC_NOTIFICATION_KIND; // If an event is sent, expect a reponse. Otherwise, expect a notification.
-    // Create JSON filter dynamically
+    // These filters have to be created dynamically because the #e tag is conditional
     JsonDocument doc;
     JsonArray filters = doc.to<JsonArray>();
     JsonObject filter = filters.add<JsonObject>();
-    filter["kinds"].add(kind);
+    filter["kinds"].add(eventToSend ? NWC_RESPONSE_KIND : NWC_NOTIFICATION_KIND); // If an event is sent, expect a reponse. Otherwise, expect a notification.
     filter["#p"].add(this->accountPubKey);
     if (eventToSend) filter["#e"].add(eventToSend->getId());
 
@@ -74,7 +73,7 @@ NostrString NWC::sendEvent(SignedNostrEvent *eventToSend = nullptr) {
         },
         [&](const String &subId, const String &reason) { Utils::log("NWC: closed subscription: " + reason); }, [&](const String &subId) { Utils::log("NWC: EOS"); });
 
-    // Publish if event is provided
+    // Publish event, if provided
     if (eventToSend) {
         this->pool->publish(
             {this->nwc.relay}, eventToSend,
