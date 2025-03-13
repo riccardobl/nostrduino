@@ -94,7 +94,7 @@ void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->timeoutSeconds = NWC_INFINITE_TIMEOUT;
     callback->subId = sendEvent();
-    callback->n = -1; // never timeout
+    callback->n = -1; // don't disconnect after n responses are received; stay connected, waiting for notifications
     this->callbacks.push_back(std::move(callback));
 }
 
