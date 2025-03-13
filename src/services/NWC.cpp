@@ -52,7 +52,7 @@ NostrString NWC::sendEvent(SignedNostrEvent *eventToSend = nullptr) {
     // Create JSON filter dynamically
     JsonDocument doc;
     JsonArray filters = doc.to<JsonArray>();
-    JsonObject filter = filters.createNestedObject();
+    JsonObject filter = filters.add<JsonObject>();
     filter["kinds"].add(kind);
     filter["#p"].add(this->accountPubKey);
     if (eventToSend) filter["#e"].add(eventToSend->getId());
