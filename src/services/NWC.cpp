@@ -67,9 +67,9 @@ NostrString NWC::sendEvent(SignedNostrEvent *event = nullptr) {
             NostrString ref = event ? receivedEvent->getTags()->getTag("e")[0] : receivedEvent->getSubId();
             for (auto it = this->callbacks.begin(); it != this->callbacks.end(); it++) {
                 if (NostrString_equals(event ? it->get()->eventId : it->get()->subId, ref)) {
-                    if (!event || it->get()->n > 0) { // Check n only for event case, because 
+                    if (!event || it->get()->n > 0) { // If no event is provided, always call. Otherwise, only do so if n > 0.
                         it->get()->call(&this->nip47, receivedEvent);
-                        if (event) it->get()->n--;
+                        if (event) it->get()->n--;  // Decrement only if event provided and called
                     }
                     break;
                 }
@@ -99,7 +99,6 @@ void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->timeoutSeconds = NWC_INFINITE_TIMEOUT;
     callback->subId = sendEvent();
-    callback->n = 1;
     this->callbacks.push_back(std::move(callback));
 }
 
