@@ -494,3 +494,47 @@ void Nip47::parseNWC(NostrString nwc, NWCData &data) {
         }
     }
 }
+
+void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<NotificationResponse> &out) {
+    out.errorCode = "";
+    out.errorMessage = "";
+    out.resultType = "";
+    Utils::log("NWC: received notification response");
+
+    if (response->verify()) {
+        NostrString content = this->nip04.decrypt(this->userPrivKey, this->servicePubKey, response->getContent());
+        JsonDocument doc;
+        Utils::jsonParse(&content, &doc);
+
+        JsonObject error = doc["error"];
+        if (!error.isNull()) {
+            out.errorCode = error["code"].as<NostrString>();
+            out.errorMessage = error["message"].as<NostrString>();
+        } else {
+            NostrString notificationType = doc["notification_type"].as<NostrString>();
+            JsonObject notification = doc["notification"].as<JsonObject>();
+            if (NostrString_length(notificationType) > 0 && notification) {
+                Nip47Notification nip47Notification = {};
+                nip47Notification.notificationType = notificationType;
+                nip47Notification.type = notification["type"].as<NostrString>();
+                nip47Notification.invoice = notification["invoice"].as<NostrString>();
+                nip47Notification.description = notification["description"].as<NostrString>();
+                nip47Notification.descriptionHash = notification["description_hash"].as<NostrString>();
+                nip47Notification.preimage = notification["preimage"].as<NostrString>();
+                nip47Notification.paymentHash = notification["payment_hash"].as<NostrString>();
+                nip47Notification.amount = notification["amount"].as<uint64_t>();
+                nip47Notification.feesPaid = notification["fees_paid"].as<uint64_t>();
+                nip47Notification.createdAt = notification["created_at"].as<uint64_t>();
+                nip47Notification.settledAt = notification["settled_at"].as<uint64_t>();
+
+                out.resultType = notificationType;
+                out.result.notification = nip47Notification;
+                return;
+            }
+        }
+    }
+    if (NostrString_length(out.errorCode) == 0) {
+        out.errorCode = "OTHER";
+        out.errorMessage = "Invalid Notification Event";
+    }
+}
