@@ -41,6 +41,7 @@ void serialLogger(const NostrString &str) {
  */
 void initWifi(NostrString ssid, NostrString passphrase, int unused = 6) {
     esp_wifi_start();
+    WiFi.persistent(false); // don't wear out the flash by writing wifi credentials to it (also fixes wifi connection on a159x36's QEMU for ESP32)
     WiFi.begin(ssid, passphrase);
     Serial.println("Connecting to " + ssid);
     while (WiFi.status() != WL_CONNECTED) {
