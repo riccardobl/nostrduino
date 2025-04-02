@@ -77,7 +77,7 @@ void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes
     callback->onRes = onRes;
     callback->onErr = onErr;
     callback->timestampSeconds = Utils::unixTimeSeconds();
-    callback->timeoutSeconds = NWC_INFINITE_TIMEOUT;
+    callback->timeoutSeconds = NWC_INFINITE_TIMEOUT; // notification subscriptions don't timeout, they can come after any amount of time
     callback->subId = pool->subscribeMany(
         {this->nwc.relay}, {{{"kinds", {NWC_NOTIFICATION_KIND}}, {"#p", {this->accountPubKey}}}},
         [&](const NostrString &subId, SignedNostrEvent *event) {
