@@ -129,6 +129,26 @@ typedef struct s_NWCData {
     NostrString secret;
 } NWCData;
 
+
+typedef struct s_Nip47Notification {
+    NostrString notificationType;
+    NostrString type;
+    NostrString invoice;
+    NostrString description;
+    NostrString descriptionHash;
+    NostrString preimage;
+    NostrString paymentHash;
+    unsigned long long amount;
+    unsigned long long feesPaid;
+    unsigned long long createdAt;
+    unsigned long long settledAt;
+} Nip47Notification;
+
+typedef struct s_NotificationResponse {
+    Nip47Notification notification;
+} NotificationResponse;
+
+
 class Nip47 {
   public:
     Nip47(){};
@@ -153,6 +173,7 @@ class Nip47 {
     void parseResponse(SignedNostrEvent *response, Nip47Response<ListTransactionsResponse> &out);
     void parseResponse(SignedNostrEvent *response, Nip47Response<GetBalanceResponse> &out);
     void parseResponse(SignedNostrEvent *response, Nip47Response<GetInfoResponse> &out);
+    void parseResponse(SignedNostrEvent *response, Nip47Response<NotificationResponse> &out);
     static void parseNWC(NostrString, NWCData &);
 
   private:
@@ -160,6 +181,7 @@ class Nip47 {
     NostrString userPrivKey;
     Nip04 nip04;
     SignedNostrEvent createEvent(NostrString method, JsonDocument doc);
+    std::function<void(Nip47Notification)> notificationCallback;
 };
 } 
 

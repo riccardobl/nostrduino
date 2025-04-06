@@ -1,6 +1,6 @@
 #include "NWC.h"
-
 #include "Nip47.h"
+
 using namespace nostr;
 
 NWC::~NWC() {
@@ -35,7 +35,7 @@ void NWC::loop() {
             it = this->callbacks.erase(it);
             continue;
         }
-        if (Utils::unixTimeSeconds() - it->get()->timestampSeconds > 60 * 10) {
+        if (Utils::unixTimeSeconds() - it->get()->timestampSeconds > it->get()->timeoutSeconds) {
             NostrString subId = it->get()->subId;
             this->pool->closeSubscription(subId);
             it->get()->onErr("OTHER", "timeout");
@@ -48,14 +48,14 @@ void NWC::loop() {
 
 NostrString NWC::sendEvent(SignedNostrEvent *event) {
     NostrString subId = this->pool->subscribeMany(
-        {this->nwc.relay}, {{{"kinds", {"23195"}}, {"#p", {this->accountPubKey}}, {"#e", {event->getId()}}}},
+        {this->nwc.relay}, {{{"kinds", {NWC_RESPONSE_KIND}}, {"#p", {this->accountPubKey}}, {"#e", {event->getId()}}}},
         [&](const String &subId, nostr::SignedNostrEvent *event) {
             NostrString eventRef = event->getTags()->getTag("e")[0];
             for (auto it = this->callbacks.begin(); it != this->callbacks.end(); it++) {
                 if (NostrString_equals(it->get()->eventId, eventRef)) {
                     if (it->get()->n > 0) {
                         it->get()->call(&this->nip47, event);
-                    } 
+                    }
                     it->get()->n--;
                     break;
                 }
@@ -70,6 +70,27 @@ NostrString NWC::sendEvent(SignedNostrEvent *event) {
         }
     });
     return subId;
+}
+
+void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
+    std::unique_ptr<NWCResponseCallback<NotificationResponse>> callback(new NWCResponseCallback<NotificationResponse>());
+    callback->onRes = onRes;
+    callback->onErr = onErr;
+    callback->timestampSeconds = Utils::unixTimeSeconds();
+    callback->timeoutSeconds = NWC_INFINITE_TIMEOUT; // notification subscriptions don't timeout, they can come after any amount of time
+    callback->subId = pool->subscribeMany(
+        {this->nwc.relay}, {{{"kinds", {NWC_NOTIFICATION_KIND}}, {"#p", {this->accountPubKey}}}},
+        [&](const NostrString &subId, SignedNostrEvent *event) {
+            NostrString subRef = event->getSubId();
+            for (auto it = this->callbacks.begin(); it != this->callbacks.end(); it++) {
+                if (NostrString_equals(it->get()->subId, subRef)) {
+                    it->get()->call(&this->nip47, event);
+                    break;
+                }
+            }
+        },
+        [&](const String &subId, const String &reason) { Utils::log("NWC: closed notification subscription: " + reason); }, [&](const String &subId) { Utils::log("NWC: notification EOS"); });
+    this->callbacks.push_back(std::move(callback));
 }
 
 void NWC::payInvoice(NostrString invoice, unsigned long amount, std::function<void(PayInvoiceResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
