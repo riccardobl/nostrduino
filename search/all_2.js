@@ -17,6 +17,6 @@ var searchData=
   ['content_14',['content',['../classnostr_1_1NostrEvent.html#ad625c784ea6908e9f5f1d251718a2d08',1,'nostr::NostrEvent']]],
   ['count_15',['count',['../classnostr_1_1NostrEventTags.html#af893816d95d8514db7c99e34110d05fa',1,'nostr::NostrEventTags']]],
   ['created_5fat_16',['created_at',['../classnostr_1_1NostrEvent.html#a1f0316b807c981423321b1ce288c8baf',1,'nostr::NostrEvent']]],
-  ['createdat_17',['createdat',['../structnostr_1_1s__MakeInvoiceResponse.html#ad19ebeaedf39995483e4017b9bab3a0f',1,'nostr::s_MakeInvoiceResponse::createdAt'],['../structnostr_1_1s__LookUpInvoiceResponse.html#a1d9c0ef9a426afa1c861118d65851d3d',1,'nostr::s_LookUpInvoiceResponse::createdAt'],['../structnostr_1_1s__Transaction.html#ac4520e36db73ca34ffbef5cfd1f5112c',1,'nostr::s_Transaction::createdAt']]],
+  ['createdat_17',['createdat',['../structnostr_1_1s__MakeInvoiceResponse.html#ad19ebeaedf39995483e4017b9bab3a0f',1,'nostr::s_MakeInvoiceResponse::createdAt'],['../structnostr_1_1s__LookUpInvoiceResponse.html#a1d9c0ef9a426afa1c861118d65851d3d',1,'nostr::s_LookUpInvoiceResponse::createdAt'],['../structnostr_1_1s__Transaction.html#ac4520e36db73ca34ffbef5cfd1f5112c',1,'nostr::s_Transaction::createdAt'],['../structnostr_1_1s__Nip47Notification.html#a0785d1d9c00e4bc34ae20dd770387ea5',1,'nostr::s_Nip47Notification::createdAt']]],
   ['ctr_18',['CTR',['../NostrAES_8h.html#aa445a79fc0f7373036c72d198e51f19a',1,'NostrAES.h']]]
 ];

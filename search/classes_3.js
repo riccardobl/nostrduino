@@ -10,11 +10,13 @@ var searchData=
   ['s_5fmakeinvoiceresponse_7',['s_MakeInvoiceResponse',['../structnostr_1_1s__MakeInvoiceResponse.html',1,'nostr']]],
   ['s_5fmultipayinvoiceresponse_8',['s_MultiPayInvoiceResponse',['../structnostr_1_1s__MultiPayInvoiceResponse.html',1,'nostr']]],
   ['s_5fmultipaykeysendresponse_9',['s_MultiPayKeySendResponse',['../structnostr_1_1s__MultiPayKeySendResponse.html',1,'nostr']]],
-  ['s_5fnostreventtag_10',['s_NostrEventTag',['../structnostr_1_1s__NostrEventTag.html',1,'nostr']]],
-  ['s_5fnwcdata_11',['s_NWCData',['../structnostr_1_1s__NWCData.html',1,'nostr']]],
-  ['s_5fpayinvoiceresponse_12',['s_PayInvoiceResponse',['../structnostr_1_1s__PayInvoiceResponse.html',1,'nostr']]],
-  ['s_5fpaykeysendresponse_13',['s_PayKeySendResponse',['../structnostr_1_1s__PayKeySendResponse.html',1,'nostr']]],
-  ['s_5ftlvrecords_14',['s_TLVRecords',['../structnostr_1_1s__TLVRecords.html',1,'nostr']]],
-  ['s_5ftransaction_15',['s_Transaction',['../structnostr_1_1s__Transaction.html',1,'nostr']]],
-  ['signednostrevent_16',['SignedNostrEvent',['../classnostr_1_1SignedNostrEvent.html',1,'nostr']]]
+  ['s_5fnip47notification_10',['s_Nip47Notification',['../structnostr_1_1s__Nip47Notification.html',1,'nostr']]],
+  ['s_5fnostreventtag_11',['s_NostrEventTag',['../structnostr_1_1s__NostrEventTag.html',1,'nostr']]],
+  ['s_5fnotificationresponse_12',['s_NotificationResponse',['../structnostr_1_1s__NotificationResponse.html',1,'nostr']]],
+  ['s_5fnwcdata_13',['s_NWCData',['../structnostr_1_1s__NWCData.html',1,'nostr']]],
+  ['s_5fpayinvoiceresponse_14',['s_PayInvoiceResponse',['../structnostr_1_1s__PayInvoiceResponse.html',1,'nostr']]],
+  ['s_5fpaykeysendresponse_15',['s_PayKeySendResponse',['../structnostr_1_1s__PayKeySendResponse.html',1,'nostr']]],
+  ['s_5ftlvrecords_16',['s_TLVRecords',['../structnostr_1_1s__TLVRecords.html',1,'nostr']]],
+  ['s_5ftransaction_17',['s_Transaction',['../structnostr_1_1s__Transaction.html',1,'nostr']]],
+  ['signednostrevent_18',['SignedNostrEvent',['../classnostr_1_1SignedNostrEvent.html',1,'nostr']]]
 ];

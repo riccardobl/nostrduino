@@ -111,6 +111,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a55874260c4af288a620e0b19d62ea949"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad646581995f7b719a14d46f26e000896" id="r_ad646581995f7b719a14d46f26e000896"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classnostr_1_1Nip47Response.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1NWC.html#ad646581995f7b719a14d46f26e000896">getInfo</a> (std::function&lt; <a class="el" href="classnostr_1_1Nip47Response.html">void</a>(<a class="el" href="namespacenostr.html#af3dc0dbf7fa69605d5ad971a37c5fe7f">GetInfoResponse</a>)&gt; onRes=<a class="el" href="classnostr_1_1Nip47Response.html">nullptr</a>, std::function&lt; <a class="el" href="classnostr_1_1Nip47Response.html">void</a>(<a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>, <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>)&gt; onErr=<a class="el" href="classnostr_1_1Nip47Response.html">nullptr</a>)</td></tr>
 <tr class="separator:ad646581995f7b719a14d46f26e000896"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae028409e7b22dfe55329906240ff39d8" id="r_ae028409e7b22dfe55329906240ff39d8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classnostr_1_1Nip47Response.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1NWC.html#ae028409e7b22dfe55329906240ff39d8">subscribeNotifications</a> (std::function&lt; <a class="el" href="classnostr_1_1Nip47Response.html">void</a>(<a class="el" href="namespacenostr.html#af0f516c7dba0ba6555f320d629da8201">NotificationResponse</a>)&gt; onRes, std::function&lt; <a class="el" href="classnostr_1_1Nip47Response.html">void</a>(<a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>, <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>)&gt; onErr)</td></tr>
+<tr class="separator:ae028409e7b22dfe55329906240ff39d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A class to interact with the Nostr Wallet Connect services without dealing with the underlying transport </p>
@@ -688,6 +690,41 @@ Public Member Functions</h2></td></tr>
     <tr><td class="paramname">tlv</td><td>A list of TLV records to include (optional) </td></tr>
     <tr><td class="paramname">onRes</td><td>A callback that will be called when the payment is successful (optional) </td></tr>
     <tr><td class="paramname">onErr</td><td>A callback that will be called when the payment fails (optional) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae028409e7b22dfe55329906240ff39d8" name="ae028409e7b22dfe55329906240ff39d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae028409e7b22dfe55329906240ff39d8">&#9670;&#160;</a></span>subscribeNotifications()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classnostr_1_1Nip47Response.html">void</a> NWC::subscribeNotifications </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; <a class="el" href="classnostr_1_1Nip47Response.html">void</a>(<a class="el" href="namespacenostr.html#af0f516c7dba0ba6555f320d629da8201">NotificationResponse</a>)&gt;&#160;</td>
+          <td class="paramname"><em>onRes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::function&lt; <a class="el" href="classnostr_1_1Nip47Response.html">void</a>(<a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>, <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a>)&gt;&#160;</td>
+          <td class="paramname"><em>onErr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Subscribe to payment notifications </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">onRes</td><td>A callback that will be called when a payment notification is received </td></tr>
+    <tr><td class="paramname">onErr</td><td>A callback that will be called when an error is received (optional) </td></tr>
   </table>
   </dd>
 </dl>
