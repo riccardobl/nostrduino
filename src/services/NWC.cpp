@@ -53,6 +53,7 @@ NostrString NWC::sendEvent(SignedNostrEvent *event) {
         {this->nwc.relay}, {{{"kinds", {NWC_RESPONSE_KIND}}, {"authors", {this->nwc.pubkey}}, {"#p", {this->accountPubKey}}, {"#e", {event->getId()}}}},
         [&](const String &subId, nostr::SignedNostrEvent *event) {
             if (!NostrString_equals(event->getPubkey(), this->nwc.pubkey)) return;
+            if (!event->verify()) return;
             
             const std::vector<NostrString> &eTags = event->getTags()->getTag("e");
             if (eTags.size() == 0) return;
@@ -89,6 +90,7 @@ void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes
         {this->nwc.relay}, {{{"kinds", {NWC_NOTIFICATION_KIND}}, {"authors", {this->nwc.pubkey}}, {"#p", {this->accountPubKey}}}},
         [&](const NostrString &subId, SignedNostrEvent *event) {
             if (!NostrString_equals(event->getPubkey(), this->nwc.pubkey))  return;
+            if (!event->verify()) return;
             NostrString subRef = event->getSubId();
             for (auto it = this->callbacks.begin(); it != this->callbacks.end(); it++) {
                 if (NostrString_equals(it->get()->subId, subRef)) {

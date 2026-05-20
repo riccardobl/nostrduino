@@ -135,6 +135,7 @@ class SignedNostrEvent : public NostrEvent {
     NostrString signature;
     NostrString subid;
     bool stored;
+    mutable int verifyState = -1;
 
   public:
     
@@ -154,7 +155,7 @@ class SignedNostrEvent : public NostrEvent {
   protected:
     SignedNostrEvent(JsonArray relayEvent);
     SignedNostrEvent(NostrString id, NostrString pubkey, unsigned long int created_at, unsigned int kind, NostrEventTags tags, NostrString content, NostrString signature)
-        : NostrEvent(kind, tags, content, created_at), id(id), pubkey(pubkey), signature(signature), stored(false){};
+        : NostrEvent(kind, tags, content, created_at), id(id), pubkey(pubkey), signature(signature), stored(false), verifyState(-1){};
 };
 
 } 

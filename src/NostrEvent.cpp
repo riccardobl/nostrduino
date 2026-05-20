@@ -101,6 +101,9 @@ SignedNostrEvent UnsignedNostrEvent::sign(NostrString privateKeyHex) {
 }
 
 bool SignedNostrEvent::verify() const {
+    if (this->verifyState != -1) {
+        return this->verifyState == 1;
+    }
     Utils::log("Verifying event id");
     JsonDocument doc;
     JsonArray data = doc["data"].to<JsonArray>();
@@ -120,6 +123,7 @@ bool SignedNostrEvent::verify() const {
     NostrString msgHash = Utils::toHex(hash, hashLen);
     if(!NostrString_equals(msgHash, this->id)){
         Utils::log("Event id does not match");
+        this->verifyState = 0;
         return false;
     }
     Utils::log("Verifying event signature");
@@ -129,7 +133,9 @@ bool SignedNostrEvent::verify() const {
    
     Utils::log("Pubkey: " + this->pubkey);
     Utils::log("Signature: " + this->signature);
-    return Utils::verify(this->pubkey, messageBytes, this->signature);
+    bool verified = Utils::verify(this->pubkey, messageBytes, this->signature);
+    this->verifyState = verified ? 1 : 0;
+    return verified;
 }
 
 void SignedNostrEvent::toJson(JsonObject doc) const {
