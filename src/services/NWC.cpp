@@ -38,7 +38,9 @@ void NWC::loop() {
         if (Utils::unixTimeSeconds() - it->get()->timestampSeconds > it->get()->timeoutSeconds) {
             NostrString subId = it->get()->subId;
             this->pool->closeSubscription(subId);
-            it->get()->onErr("OTHER", "timeout");
+            if (it->get()->onErr != nullptr) {
+                it->get()->onErr("OTHER", "timeout");
+            }
             it = this->callbacks.erase(it);
         } else {
             it++;
