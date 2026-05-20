@@ -36,7 +36,11 @@ void NostrPool::onEvent(NostrRelay *relay, NostrString message) {
         }
     } else if (NostrString_equals(doc[0], "EOSE")) {
         NostrString subId = doc[1].as<NostrString>();
-        NostrSubscription *sub = &this->subscriptions[subId];
+        std::map<NostrString, NostrSubscription>::iterator it = this->subscriptions.find(subId);
+        if (it == this->subscriptions.end()) {
+            return;
+        }
+        NostrSubscription *sub = &it->second;
         if (!sub->eose) {
             sub->eose = true;
             if (sub->eoseCallback != nullptr) {
@@ -65,7 +69,11 @@ void NostrPool::onEvent(NostrRelay *relay, NostrString message) {
         }
     } else if (NostrString_equals(doc[0], "EVENT")) {
         NostrString subId = doc[1].as<NostrString>();
-        NostrSubscription sub = this->subscriptions[subId];
+        std::map<NostrString, NostrSubscription>::iterator it = this->subscriptions.find(subId);
+        if (it == this->subscriptions.end()) {
+            return;
+        }
+        NostrSubscription sub = it->second;
         SignedNostrEvent event(doc.as<JsonArray>());
         event.stored = !sub.eose;
         if (sub.eventCallback != nullptr) {
