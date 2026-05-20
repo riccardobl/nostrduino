@@ -48,9 +48,14 @@ void NWC::loop() {
 
 NostrString NWC::sendEvent(SignedNostrEvent *event) {
     NostrString subId = this->pool->subscribeMany(
-        {this->nwc.relay}, {{{"kinds", {NWC_RESPONSE_KIND}}, {"#p", {this->accountPubKey}}, {"#e", {event->getId()}}}},
+        {this->nwc.relay}, {{{"kinds", {NWC_RESPONSE_KIND}}, {"authors", {this->nwc.pubkey}}, {"#p", {this->accountPubKey}}, {"#e", {event->getId()}}}},
         [&](const String &subId, nostr::SignedNostrEvent *event) {
-            NostrString eventRef = event->getTags()->getTag("e")[0];
+            if (!NostrString_equals(event->getPubkey(), this->nwc.pubkey)) return;
+            
+            const std::vector<NostrString> &eTags = event->getTags()->getTag("e");
+            if (eTags.size() == 0) return;
+            
+            NostrString eventRef = eTags[0];
             for (auto it = this->callbacks.begin(); it != this->callbacks.end(); it++) {
                 if (NostrString_equals(it->get()->eventId, eventRef)) {
                     if (it->get()->n > 0) {
@@ -79,8 +84,9 @@ void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->timeoutSeconds = NWC_INFINITE_TIMEOUT; // notification subscriptions don't timeout, they can come after any amount of time
     callback->subId = pool->subscribeMany(
-        {this->nwc.relay}, {{{"kinds", {NWC_NOTIFICATION_KIND}}, {"#p", {this->accountPubKey}}}},
+        {this->nwc.relay}, {{{"kinds", {NWC_NOTIFICATION_KIND}}, {"authors", {this->nwc.pubkey}}, {"#p", {this->accountPubKey}}}},
         [&](const NostrString &subId, SignedNostrEvent *event) {
+            if (!NostrString_equals(event->getPubkey(), this->nwc.pubkey))  return;
             NostrString subRef = event->getSubId();
             for (auto it = this->callbacks.begin(); it != this->callbacks.end(); it++) {
                 if (NostrString_equals(it->get()->subId, subRef)) {
