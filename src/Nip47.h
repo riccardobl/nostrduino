@@ -68,7 +68,7 @@ typedef struct s_MakeInvoiceResponse {
     unsigned long long feesPaid;
     unsigned long long createdAt;
     unsigned long long expiresAt;
-    JsonObject metadata;
+    JsonDocument metadata;
 } MakeInvoiceResponse;
 
 typedef struct s_LookUpInvoiceResponse {
@@ -84,7 +84,7 @@ typedef struct s_LookUpInvoiceResponse {
     unsigned long long expiresAt;
     unsigned long long settledAt;
 
-    JsonObject metadata;
+    JsonDocument metadata;
 } LookUpInvoiceResponse;
 
 typedef struct s_Transaction {
@@ -100,7 +100,7 @@ typedef struct s_Transaction {
     unsigned long long expiresAt;
     unsigned long long settledAt;
 
-    JsonObject metadata;
+    JsonDocument metadata;
 
 } Transaction;
 
