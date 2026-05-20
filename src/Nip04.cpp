@@ -11,9 +11,11 @@ NostrString Nip04::decrypt(NostrString &privateKeyHex, NostrString &senderPubKey
     NostrString encryptedMessageHex = Utils::base64ToHex(encryptedMessage);
     int encryptedMessageSize = NostrString_length(encryptedMessageHex) / 2;
     if (!encryptedMessageSize) return NostrString(); // nothing to do (can happen if base64ToHex returns "" because out of memory)
+    if (encryptedMessageSize % 16 != 0) return NostrString();
 
     NostrString iv = NostrString_substring(content, ivParamIndex + 4);
     NostrString ivHex = Utils::base64ToHex(iv);
+    if (NostrString_length(ivHex) / 2 != 16) return NostrString();
     int ivSize = 16;
     byte ivBin[ivSize];
     Utils::fromHex(ivHex, ivBin, ivSize);
@@ -22,10 +24,7 @@ NostrString Nip04::decrypt(NostrString &privateKeyHex, NostrString &senderPubKey
     Utils::ecdh(privateKeyHex, senderPubKeyHex, sharedPointX);
     NostrString sharedPointXHex = Utils::toHex(sharedPointX, 32);
 
-    NostrString message = decryptData(sharedPointX, ivBin, encryptedMessageHex);
-    message = NostrString_trim(message);
-
-    return message;
+    return decryptData(sharedPointX, ivBin, encryptedMessageHex);
 }
 
 NostrString Nip04::encrypt(NostrString &privateKeyHex, NostrString &recipientPubKeyHex, NostrString content) {
@@ -50,7 +49,7 @@ NostrString Nip04::encryptData(byte key[32], byte iv[16], NostrString msg) {
 
     int byteSize = NostrString_length(msg) + padding_diff;
     byte messageBin[byteSize];
-    stringToByteArray(NostrString_toChars(msg), padding_diff, messageBin);
+    stringToByteArray(msg, padding_diff, messageBin);
 
     AES_ctx ctx;
     AES_init_ctx_iv(&ctx, key, iv);
@@ -60,28 +59,43 @@ NostrString Nip04::encryptData(byte key[32], byte iv[16], NostrString msg) {
     return Utils::toHex(messageBin, sizeof(messageBin));
 }
 
-void Nip04::stringToByteArray(const char *input, int padding_diff, byte *output) {
-    int i = 0;
-    // remove end-of-string char
-    while (input[i] != '\0') {
+void Nip04::stringToByteArray(const NostrString &input, int padding_diff, byte *output) {
+    int inputSize = NostrString_length(input);
+    for (int i = 0; i < inputSize; i++) {
         output[i] = input[i];
-        i++;
     }
     // pad between 1 and 16 bytes
     for (int j = 0; j < padding_diff; j++) {
-        output[i + j] = padding_diff;
+        output[inputSize + j] = padding_diff;
     }
 }
 
 NostrString Nip04::decryptData(byte key[32], byte iv[16], NostrString messageHex) {
     int byteSize = NostrString_length(messageHex) / 2;
+    if (byteSize == 0 || byteSize % 16 != 0) return NostrString();
     byte* messageBin = (byte*)malloc(byteSize);
     if (!messageBin) return NostrString();
     Utils::fromHex(messageHex, messageBin, byteSize);
     AES_ctx ctx;
     AES_init_ctx_iv(&ctx, key, iv);
     AES_CBC_decrypt_buffer(&ctx, messageBin, byteSize);
-    NostrString result = NostrString_substring(NostrString((char *)messageBin),0, byteSize);
+    int padding = messageBin[byteSize - 1];
+    if (padding < 1 || padding > 16 || padding > byteSize) {
+        free(messageBin);
+        return NostrString();
+    }
+    for (int i = byteSize - padding; i < byteSize; i++) {
+        if (messageBin[i] != padding) {
+            free(messageBin);
+            return NostrString();
+        }
+    }
+    int resultSize = byteSize - padding;
+    NostrString result;
+    result.reserve(resultSize);
+    for (int i = 0; i < resultSize; i++) {
+        result += (char)messageBin[i];
+    }
     free(messageBin);
     return result;
 }

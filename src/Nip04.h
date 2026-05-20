@@ -12,7 +12,7 @@ class Nip04 {
     NostrString encrypt(NostrString &privateKeyHex, NostrString &recipientPubKeyHex, NostrString content);
   private:
     NostrString encryptData(byte key[32], byte iv[16], NostrString msg);
-    void stringToByteArray(const char *input, int padding_diff, byte *output);
+    void stringToByteArray(const NostrString &input, int padding_diff, byte *output);
     NostrString decryptData(byte key[32], byte iv[16], NostrString messageHex);
 };
 } 
