@@ -188,9 +188,12 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MultiPayInvo
                 NostrString resultType = doc["result_type"].as<NostrString>();
                 JsonObject data = doc["result"];
                 if (NostrString_equals(resultType, "multi_pay_invoice")) {
-                    out.result.preimage = data["preimage"].as<NostrString>();
-                    out.result.d = response->getTags()->getTag("d")[0];
-                    return;
+                    const std::vector<NostrString> &dTags = response->getTags()->getTag("d");
+                    if (dTags.size() > 0) {
+                        out.result.preimage = data["preimage"].as<NostrString>();
+                        out.result.d = dTags[0];
+                        return;
+                    }
                 }
             }
         }
@@ -247,9 +250,12 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MultiPayKeyS
                 NostrString resultType = doc["result_type"].as<NostrString>();
                 JsonObject data = doc["result"];
                 if (NostrString_equals(resultType, "multi_pay_keysend")) {
-                    out.result.preimage = data["preimage"].as<NostrString>();
-                    out.result.d = response->getTags()->getTag("d")[0];
-                    return;
+                    const std::vector<NostrString> &dTags = response->getTags()->getTag("d");
+                    if (dTags.size() > 0) {
+                        out.result.preimage = data["preimage"].as<NostrString>();
+                        out.result.d = dTags[0];
+                        return;
+                    }
                 }
             }
         }
