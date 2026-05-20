@@ -11,7 +11,7 @@
 #define WIFI_SSID "Wokwi-GUEST"
 #define WIFI_PASS ""
 
-#define RELAY "wss://nostr.rblb.it:7777"
+#define RELAY "wss://nostr.rblb.it"
 #define PRIVKEY "1558dadfae151555818a6aa6cf046ca3dfbb196c419efc18482479a74b74009a"
 
 std::vector<nostr::NostrPool *> pools;

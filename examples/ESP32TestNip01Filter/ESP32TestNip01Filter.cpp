@@ -12,7 +12,7 @@
 #define WIFI_SSID "Wokwi-GUEST"
 #define WIFI_PASS ""
 
-#define RELAY "wss://nostr.rblb.it:7777"
+#define RELAY "wss://nostr.rblb.it"
 
 std::vector<nostr::NostrPool *> pools;
 void testNIP01Filter();

@@ -11,10 +11,9 @@
 #define WIFI_PASS ""
 // IMPORTANT !!! Set a valid NWC url here
 #define NWC_URL                                                                                                                                                                                        \
-    "nostr+walletconnect://69effe7b49a6dd5cf525bd0905917a5005ffe480b58eeb8e861418cf3ae760d9?relay=wss://relay.getalby.com/"                                                                            \
-    "v1&secret=90a44d69283f46b0c917925980c9ade65449a5d85839162387948b42cd58bb1f&lud16=rblb@getalby.com"
+    "nostr+walletconnect://8e1e934ea0dd99cc2949805ed577abe76bb7d8c34d2d44a9e5f144a308b831f3?relay=wss://nostr.rblb.it&secret=8f4792207bab646d698892918f9bb0273fb5018d5561d67fcf05905a41efc66c"
 // Note: running this setting with default values will send 10 sats to the address below
-#define PAYOUT_ADDRESS "zap@rblb.it"
+#define PAYOUT_ADDRESS "nostrduino@lntest.rblb.it"
 #define PAYOUT_AMOUNT_MSAT 10000
 
 void testNWC();
