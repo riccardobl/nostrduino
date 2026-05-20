@@ -215,7 +215,7 @@ NostrRelay *NostrPool::ensureRelay(NostrString url) {
 void NostrPool::disconnectRelay(NostrString url) {
     for (size_t i = 0; i < this->relays.size(); i++) {
         if (NostrString_equals(this->relays[i]->url, url)) {
-            this->relays[i]->conn->disconnect();
+            this->transport->disconnect(this->relays[i]->conn);
             delete this->relays[i];
             this->relays.erase(this->relays.begin() + i);
             break;
@@ -226,7 +226,7 @@ void NostrPool::disconnectRelay(NostrString url) {
 void NostrPool::close() {
     Utils::log("Closing NostrPool");
     for (auto &relay : relays) {
-        relay->conn->disconnect();
+        this->transport->disconnect(relay->conn);
         delete relay;
     }
     relays.clear();

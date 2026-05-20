@@ -216,7 +216,6 @@ void unor4::UNOR4Connection::send(NostrString message) {
 
 void unor4::UNOR4Connection::disconnect() {
     ws.disconnect();
-    this->transport->disconnect(this);
 }
 
 bool unor4::UNOR4Transport::isReady() {

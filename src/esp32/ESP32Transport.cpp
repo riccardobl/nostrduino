@@ -220,7 +220,6 @@ void esp32::ESP32Connection::send(NostrString message) {
 
 void esp32::ESP32Connection::disconnect() {
     ws.disconnect();
-    this->transport->disconnect(this);
 }
 
 bool esp32::ESP32Transport::isReady() {

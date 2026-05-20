@@ -194,7 +194,6 @@ void picow::PICOWConnection::send(NostrString message) {
 
 void picow::PICOWConnection::disconnect() {
     ws.disconnect();
-    this->transport->disconnect(this);
 }
 
 bool picow::PICOWTransport::isReady() {
