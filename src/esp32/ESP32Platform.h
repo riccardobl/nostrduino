@@ -7,7 +7,6 @@
 #include "NostrString.h"
 #include "NostrUtils.h"
 #include "WiFi.h"
-#include "bootloader_random.h"
 #include "esp_random.h"
 #include "esp_wifi.h"
 #include "time.h"
@@ -28,9 +27,11 @@ unsigned long getUnixTimestamp() {
     return now;
 }
 
-long int getRealRandom(long int min, long int max) {
-    uint32_t rand = esp_random();
-    return (rand % (max - min + 1)) + min;
+bool fillRandom(uint8_t *output, size_t outputSize) {
+    if (output == nullptr && outputSize != 0) return false;
+    if (outputSize == 0) return true;
+    esp_fill_random(output, outputSize);
+    return true;
 }
 void serialLogger(const NostrString &str) {
     Serial.println(str.c_str());
@@ -65,12 +66,11 @@ void initTime(const char *ntpServer, long unused1 = 0, int unused2 = 3600) {
  * Initialize platform specific code for the nostr library
  */
 void initNostr(bool withLogger) {
-    bootloader_random_enable();
+    nostr::Utils::setRandomBytesProvider(fillRandom);
     Utils::init();
     nostr::Utils::setUnixTimeSecondsProvider(getUnixTimestamp);
     if (withLogger)
         nostr::Utils::setLogger(serialLogger);
-    nostr::Utils::setRealRandom(getRealRandom);
 }
 
 void close() {

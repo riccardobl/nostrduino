@@ -84,20 +84,6 @@ void Utils::setUnixTimeSecondsProvider(std::function<unsigned long long()> provi
     Utils::timeSecondsProvider = provider;
 }
 
-void Utils::setRealRandom(std::function<long int(long int min, long int max)> provider) {
-    if (!provider) {
-        setRandomBytesProvider(nullptr);
-        return;
-    }
-    setRandomBytesProvider([provider](uint8_t *output, size_t outputSize) {
-        if (output == nullptr && outputSize != 0) return false;
-        for (size_t i = 0; i < outputSize; ++i) {
-            output[i] = static_cast<uint8_t>(provider(0, 255));
-        }
-        return true;
-    });
-}
-
 void Utils::setRandomBytesProvider(std::function<bool(uint8_t *, size_t)> provider) {
     Utils::randomBytesProvider = provider;
 }

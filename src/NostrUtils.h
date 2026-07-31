@@ -21,7 +21,6 @@ class Utils {
     static std::function<unsigned long long()> timeSecondsProvider;
 
     static void setUnixTimeSecondsProvider(std::function<unsigned long long()> timeSecondsProvider);
-    static void setRealRandom(std::function<long int(long int min, long int max)> realRandom);
     static void setRandomBytesProvider(std::function<bool(uint8_t *, size_t)> randomBytesProvider);
     static void setLogger(std::function<void(const NostrString &)> logger);
     static void log(const NostrString &message);
