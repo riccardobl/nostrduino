@@ -162,7 +162,8 @@ void SignedNostrEvent::toSendableEvent(JsonArray doc) const {
     this->toJson(obj);
 }
 
-bool SignedNostrEvent::parseRelayFrame(JsonArrayConst arr, SignedNostrEvent &out) {
+bool SignedNostrEvent::parseRelayFrame(JsonArrayConst arr, SignedNostrEvent &out, const NostrLimits &limits) {
+    out = SignedNostrEvent();
     SignedNostrEvent parsed;
     try {
         if (arr.size() != 3 || !arr[0].is<const char *>() ||
@@ -181,6 +182,11 @@ bool SignedNostrEvent::parseRelayFrame(JsonArrayConst arr, SignedNostrEvent &out
             !content.is<const char *>() || !signature.is<const char *>() ||
             !createdAt.is<unsigned long>() || !kind.is<unsigned int>() ||
             !rawTags.is<JsonArrayConst>()) return false;
+        JsonArrayConst tags = rawTags.as<JsonArrayConst>();
+        if (std::strlen(arr[1].as<const char *>()) > limits.maxSubscriptionIdBytes ||
+            std::strlen(content.as<const char *>()) > limits.maxEventContentBytes ||
+            std::strlen(id.as<const char *>()) != 64 || std::strlen(pubkey.as<const char *>()) != 64 ||
+            std::strlen(signature.as<const char *>()) != 128 || tags.size() > limits.maxTagCount) return false;
 
         uint8_t fieldBytes[64];
         if (!Utils::decodeHexExact(id.as<const char *>(), fieldBytes, 32) ||
@@ -188,15 +194,16 @@ bool SignedNostrEvent::parseRelayFrame(JsonArrayConst arr, SignedNostrEvent &out
             !Utils::decodeHexExact(signature.as<const char *>(), fieldBytes, 64)) return false;
 
         NostrEventTags parsedTags;
-        JsonArrayConst tags = rawTags.as<JsonArrayConst>();
         for (size_t i = 0; i < tags.size(); ++i) {
             if (!tags[i].is<JsonArrayConst>()) return false;
             JsonArrayConst tag = tags[i].as<JsonArrayConst>();
-            if (tag.size() == 0 || !tag[0].is<const char *>()) return false;
+            if (tag.size() == 0 || tag.size() > limits.maxTagElements || !tag[0].is<const char *>()) return false;
+            if (std::strlen(tag[0].as<const char *>()) > limits.maxTagElementBytes) return false;
             std::vector<NostrString> values;
             values.reserve(tag.size() - 1);
             for (size_t j = 1; j < tag.size(); ++j) {
                 if (!tag[j].is<const char *>()) return false;
+                if (std::strlen(tag[j].as<const char *>()) > limits.maxTagElementBytes) return false;
                 values.push_back(tag[j].as<const char *>());
             }
             parsedTags.addTag(tag[0].as<const char *>(), values);
@@ -213,8 +220,7 @@ bool SignedNostrEvent::parseRelayFrame(JsonArrayConst arr, SignedNostrEvent &out
         parsed.valid = true;
         out = parsed;
         return true;
-    } catch (const std::exception &) {
-        out = SignedNostrEvent();
+    } catch (...) {
         return false;
     }
 }

@@ -7,6 +7,7 @@
 #include <map>
 #include <vector>
 #include "NostrString.h"
+#include "NostrLimits.h"
 #include "ArduinoJson.h"
 #include "NostrEvent.h"
 #include "NostrString.h"
@@ -72,9 +73,10 @@ namespace nostr {
           * interface
           * @param eventStatusTimeoutSeconds The number of seconds to wait for an event status before timing out (optional)
           */
-         NostrPool(Transport *transport, int eventStatusTimeoutSeconds = 60 * 10) {
+         NostrPool(Transport *transport, int eventStatusTimeoutSeconds = 60 * 10, const NostrLimits &limits = NostrLimits()) {
              this->transport = transport;
              this->eventStatusTimeoutSeconds = eventStatusTimeoutSeconds;
+             this->limits = limits;
         };
 
         /**
@@ -172,6 +174,7 @@ namespace nostr {
         int eventStatusTimeoutSeconds = 60 * 10;
         std::vector<EventStatusCallbackEntry> eventStatusCallbackEntries;
         Transport *transport;
+        NostrLimits limits;
     };
 }  // namespace nostr
 #endif

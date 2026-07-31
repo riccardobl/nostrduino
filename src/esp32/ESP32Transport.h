@@ -6,6 +6,7 @@
 
 #include "ArduinoJson.h"
 #include "NostrString.h"
+#include "NostrLimits.h"
 #include "NostrTransport.h"
 #include "NostrUtils.h"
 #include "WiFi.h"
@@ -17,16 +18,24 @@
 #include <vector>
 namespace nostr {
 namespace esp32 {
-struct ESP32TransportConfig {
+struct ESP32TlsConfig {
+    // The caller owns this PEM buffer and must keep it alive for the complete
+    // lifetime of the transport and every connection created from it.
     const char *caCertificatePem;
     bool requireCertificateValidation;
-    uint16_t httpTimeoutMs;
-    size_t maxHttpResponseBytes;
-    size_t maxWebSocketMessageBytes;
+
+    ESP32TlsConfig() : caCertificatePem(nullptr), requireCertificateValidation(false) {}
+};
+
+struct ESP32TransportConfig {
+    ESP32TlsConfig tls;
+    NostrLimits limits;
+    uint16_t connectTimeoutMs;
+    uint16_t readTimeoutMs;
+    uint8_t maxProtocolViolations;
 
     ESP32TransportConfig()
-        : caCertificatePem(nullptr), requireCertificateValidation(false), httpTimeoutMs(15000),
-          maxHttpResponseBytes(64 * 1024), maxWebSocketMessageBytes(64 * 1024) {}
+        : tls(), limits(), connectTimeoutMs(10000), readTimeoutMs(15000), maxProtocolViolations(3) {}
 };
 
 class ESP32Transport;
@@ -52,6 +61,10 @@ class ESP32Connection : public Connection {
     std::vector<std::function<void(NostrString)>> messageListeners;
     std::vector<std::function<void(ConnectionStatus status)>> connectionListeners;
     NostrString fragmentedMessage;
+    bool fragmentedMessageRejected = false;
+    bool failed = false;
+    uint8_t protocolViolations = 0;
+    void noteProtocolViolation(const char *message);
 };
 class ESP32Transport : public Transport {
     friend class ESP32Connection;
@@ -64,7 +77,7 @@ class ESP32Transport : public Transport {
     explicit ESP32Transport(const ESP32TransportConfig &config = ESP32TransportConfig());
     bool isReady() override;
     const ESP32TransportConfig &getConfig() const { return config; }
-    bool tlsCertificateValidationActive() const { return config.caCertificatePem != nullptr; }
+    bool tlsCertificateValidationActive() const { return config.tls.caCertificatePem != nullptr; }
 
   private:
     void httpsGet(NostrString url, std::function<void(NostrString)> callback);

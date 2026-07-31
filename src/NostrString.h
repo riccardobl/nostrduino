@@ -17,6 +17,8 @@
 double NostrString_toFloat(const String &str);
 long NostrString_toInt(const String &str);
 String NostrString_fromChars(char *chars);
+String NostrString_fromBytes(const char *bytes, size_t byteCount);
+bool NostrString_appendBytes(String &target, const char *bytes, size_t byteCount, size_t maxSize);
 bool NostrString_startsWith(const String &str, const char *prefix);
 String NostrString_substring(const String &str, int start, int end);
 String NostrString_substring(const String &str, int start);
@@ -34,6 +36,8 @@ String NostrString_urlEncode(const String &str);
 double NostrString_toFloat(const std::string &str);
 long NostrString_toInt(const std::string &str);
 std::string NostrString_fromChars(char *chars);
+std::string NostrString_fromBytes(const char *bytes, size_t byteCount);
+bool NostrString_appendBytes(std::string &target, const char *bytes, size_t byteCount, size_t maxSize);
 bool NostrString_startsWith(const std::string &str, const char *prefix);
 std::string NostrString_substring(const std::string &str, int start, int end);
 std::string NostrString_substring(const std::string &str, int start);

@@ -1,11 +1,15 @@
 #include "ESP32Transport.h"
 #include "NostrCommon.h"
+#include "NostrUrl.h"
+#include <algorithm>
 
 #if defined(_ESP32_BOARD_)
 using namespace nostr;
 
 void esp32::ESP32Transport::httpsGet(NostrString url, std::function<void(NostrString)> cb) {
-    if (!NostrString_startsWith(url, "https://") || !allowTlsConnection()) {
+    ParsedUrl parsedUrl;
+    if (NostrString_length(url) < 0 || static_cast<size_t>(NostrString_length(url)) > config.limits.maxUrlBytes ||
+        !parseHttpsUrl(url, parsedUrl) || !allowTlsConnection()) {
         cb("");
         return;
     }
@@ -18,7 +22,9 @@ void esp32::ESP32Transport::httpsGet(NostrString url, std::function<void(NostrSt
         cb("");
         return;
     }
-    http.setTimeout(config.httpTimeoutMs);
+    http.setConnectTimeout(config.connectTimeoutMs);
+    http.setTimeout(config.readTimeoutMs);
+    http.setFollowRedirects(HTTPC_DISABLE_FOLLOW_REDIRECTS);
     int httpCode = http.GET();
     if (httpCode <= 0 || httpCode != HTTP_CODE_OK) {
         http.end();
@@ -26,7 +32,7 @@ void esp32::ESP32Transport::httpsGet(NostrString url, std::function<void(NostrSt
         return;
     }
     const int responseSize = http.getSize();
-    if (responseSize > static_cast<int>(config.maxHttpResponseBytes)) {
+    if (responseSize >= 0 && static_cast<size_t>(responseSize) > config.limits.maxHttpResponseBytes) {
         http.end();
         cb("");
         return;
@@ -38,23 +44,38 @@ void esp32::ESP32Transport::httpsGet(NostrString url, std::function<void(NostrSt
         cb("");
         return;
     }
-    if (responseSize >= 0) str.reserve(static_cast<size_t>(responseSize));
+    if (responseSize > 0 && !str.reserve(static_cast<unsigned int>(responseSize))) {
+        http.end();
+        cb("");
+        return;
+    }
     uint8_t buffer[512];
+    uint32_t lastProgress = millis();
     while (http.connected() || stream->available()) {
         const size_t available = stream->available();
         if (available == 0) {
+            if (static_cast<uint32_t>(millis() - lastProgress) >= config.readTimeoutMs) {
+                str = "";
+                break;
+            }
             delay(1);
             continue;
         }
         const size_t toRead = available < sizeof(buffer) ? available : sizeof(buffer);
         const int readSize = stream->readBytes(reinterpret_cast<char *>(buffer), toRead);
-        if (readSize <= 0 || str.length() > config.maxHttpResponseBytes - static_cast<size_t>(readSize)) {
+        if (readSize <= 0 || static_cast<size_t>(readSize) > config.limits.maxHttpResponseBytes ||
+            str.length() > config.limits.maxHttpResponseBytes - static_cast<size_t>(readSize)) {
             str = "";
             break;
         }
-        for (int i = 0; i < readSize; ++i) str += static_cast<char>(buffer[i]);
+        if (!NostrString_appendBytes(str, reinterpret_cast<const char *>(buffer),
+                                    static_cast<size_t>(readSize), config.limits.maxHttpResponseBytes)) {
+            str = "";
+            break;
+        }
+        lastProgress = millis();
     }
-    std::fill(std::begin(buffer), std::end(buffer), 0);
+    for (size_t i = 0; i < sizeof(buffer); ++i) buffer[i] = 0;
     http.end();
     cb(str);
 }
@@ -97,7 +118,7 @@ void esp32::ESP32Transport::getInvoiceFromLNAddr(NostrString addr, unsigned long
         } else {
             lnurlp += "?";
         }
-        lnurlp += "amount=" + NostrString_intToString(amount);
+        lnurlp += "amount=" + NostrString_fromUInt(amount);
         if (NostrString_length(comment) > 0) {
             lnurlp += "&comment=" + NostrString_urlEncode(comment);
         }
@@ -155,35 +176,35 @@ void esp32::ESP32Transport::disconnect(Connection *conn) {
 
 esp32::ESP32Connection::ESP32Connection(ESP32Transport *transport, NostrString url) {
     this->transport = transport;
-    bool ssl = NostrString_startsWith(url, "wss://");
-    url = NostrString_substring(url, ssl ? 6 : 5);
-    NostrString host = NostrString_substring(url, 0, NostrString_indexOf(url, "/"));
-    NostrString path = NostrString_substring(url, NostrString_indexOf(url, "/"));
-    if (NostrString_equals(path, ""))
-        path = "/";
-    int port = ssl ? 443 : 80;
-    if (NostrString_indexOf(host, ":") != -1) {
-        NostrString portStr = NostrString_substring(host, NostrString_indexOf(host, ":") + 1);
-        port = NostrString_toInt(portStr);
-        host = NostrString_substring(host, 0, NostrString_indexOf(host, ":"));
+    ParsedUrl parsedUrl;
+    if (NostrString_length(url) < 0 || static_cast<size_t>(NostrString_length(url)) > transport->config.limits.maxUrlBytes ||
+        !parseWebSocketUrl(url, parsedUrl)) {
+        failed = true;
+        Utils::log("Rejected invalid WebSocket URL");
+        return;
     }
-    if (ssl) {
-        Utils::log("Connecting to " + host + " : " + port + " with path " + path + " using SSL...");
-        if (!transport->allowTlsConnection()) return;
-        if (transport->config.caCertificatePem != nullptr)
-            ws.beginSslWithCA(host.c_str(), port, path.c_str(), transport->config.caCertificatePem);
+    if (parsedUrl.secure) {
+        Utils::log("Connecting to " + parsedUrl.host + " : " + parsedUrl.port + " with path " + parsedUrl.path + " using SSL...");
+        if (!transport->allowTlsConnection()) {
+            failed = true;
+            return;
+        }
+        if (transport->config.tls.caCertificatePem != nullptr)
+            ws.beginSslWithCA(parsedUrl.host.c_str(), parsedUrl.port, parsedUrl.path.c_str(), transport->config.tls.caCertificatePem);
         else {
             transport->noteUnverifiedTls();
-            ws.beginSSL(host.c_str(), port, path.c_str());
+            ws.beginSSL(parsedUrl.host.c_str(), parsedUrl.port, parsedUrl.path.c_str());
         }
     } else {
-        Utils::log("Connecting to " + host + " : " + port + " with path " + path + "...");
-        ws.begin(host, port, path);
+        Utils::log("Connecting to " + parsedUrl.host + " : " + parsedUrl.port + " with path " + parsedUrl.path + "...");
+        ws.begin(parsedUrl.host, parsedUrl.port, parsedUrl.path);
     }
     ws.setReconnectInterval(5000);
     ws.onEvent([this](WStype_t type, uint8_t *payload, size_t length) {
         switch (type) {
         case WStype_DISCONNECTED:
+            fragmentedMessage = "";
+            fragmentedMessageRejected = false;
             Utils::log("ESP32Connection disconnected.");
             for (auto &listener : connectionListeners) {
                 try {
@@ -194,6 +215,9 @@ esp32::ESP32Connection::ESP32Connection(ESP32Transport *transport, NostrString u
             }
             break;
         case WStype_CONNECTED:
+            fragmentedMessage = "";
+            fragmentedMessageRejected = false;
+            protocolViolations = 0;
             Utils::log("ESP32Connection connected.");
             for (auto &listener : connectionListeners) {
                 try {
@@ -204,8 +228,18 @@ esp32::ESP32Connection::ESP32Connection(ESP32Transport *transport, NostrString u
             }
             break;
         case WStype_TEXT: {
-            NostrString message = NostrString_fromChars((char *)payload);
-            Utils::log("Received message: " + message);
+            fragmentedMessage = "";
+            fragmentedMessageRejected = false;
+            if (payload == nullptr || length > this->transport->config.limits.maxWebSocketMessageBytes) {
+                noteProtocolViolation("Rejected oversized or malformed WebSocket text message");
+                break;
+            }
+            NostrString message = NostrString_fromBytes(reinterpret_cast<const char *>(payload), length);
+            if (NostrString_length(message) < 0 || static_cast<size_t>(NostrString_length(message)) != length) {
+                noteProtocolViolation("Failed to allocate WebSocket text message");
+                break;
+            }
+            Utils::log("Received WebSocket text message");
             for (auto &listener : messageListeners) {
                 try {
                     listener(message);
@@ -217,6 +251,8 @@ esp32::ESP32Connection::ESP32Connection(ESP32Transport *transport, NostrString u
             break;
         }
         case WStype_ERROR:
+            fragmentedMessage = "";
+            fragmentedMessageRejected = false;
             Utils::log("ESP32Connection error.");
             for (auto &listener : connectionListeners) {
                 try {
@@ -227,24 +263,46 @@ esp32::ESP32Connection::ESP32Connection(ESP32Transport *transport, NostrString u
             }
             break;
         case WStype_FRAGMENT_TEXT_START:
+            fragmentedMessage = "";
+            fragmentedMessageRejected = false;
             Utils::log("Fragmented message start.");
-            this->fragmentedMessage = NostrString_fromChars((char *)payload);
+            if (payload == nullptr || !NostrString_appendBytes(this->fragmentedMessage,
+                    reinterpret_cast<const char *>(payload), length,
+                    this->transport->config.limits.maxWebSocketMessageBytes)) {
+                fragmentedMessage = "";
+                fragmentedMessageRejected = true;
+                noteProtocolViolation("Rejected oversized or malformed WebSocket message fragment");
+            }
             break;
         case WStype_FRAGMENT:
             Utils::log("Fragmented message continued.");
-            this->fragmentedMessage += NostrString_fromChars((char *)payload);
+            if (!fragmentedMessageRejected && (payload == nullptr || !NostrString_appendBytes(this->fragmentedMessage,
+                    reinterpret_cast<const char *>(payload), length,
+                    this->transport->config.limits.maxWebSocketMessageBytes))) {
+                fragmentedMessage = "";
+                fragmentedMessageRejected = true;
+                noteProtocolViolation("Rejected oversized or malformed WebSocket message fragment");
+            }
             break;
         case WStype_FRAGMENT_FIN:
             Utils::log("Fragmented message finalized.");
-            this->fragmentedMessage += NostrString_fromChars((char *)payload);
-            Utils::log("Assembled fragmented message: " + this->fragmentedMessage);
-            for (auto &listener : messageListeners) {
-                try {
-                    listener(this->fragmentedMessage);
-                } catch (std::exception &e) {
-                    Utils::log(e.what());
+            if (!fragmentedMessageRejected && (payload == nullptr || !NostrString_appendBytes(this->fragmentedMessage,
+                    reinterpret_cast<const char *>(payload), length,
+                    this->transport->config.limits.maxWebSocketMessageBytes))) {
+                fragmentedMessageRejected = true;
+                noteProtocolViolation("Rejected oversized or malformed WebSocket message fragment");
+            }
+            if (!fragmentedMessageRejected) {
+                for (auto &listener : messageListeners) {
+                    try {
+                        listener(this->fragmentedMessage);
+                    } catch (std::exception &e) {
+                        Utils::log(e.what());
+                    }
                 }
             }
+            fragmentedMessage = "";
+            fragmentedMessageRejected = false;
             break;
         default:
             break;
@@ -253,8 +311,12 @@ esp32::ESP32Connection::ESP32Connection(ESP32Transport *transport, NostrString u
 }
 
 void esp32::ESP32Connection::send(NostrString message) {
-    Utils::log("Sending message: " + message);
-    ws.sendTXT((uint8_t *)NostrString_toChars(message), message.length());
+    if (failed || NostrString_length(message) < 0 || static_cast<size_t>(NostrString_length(message)) > transport->config.limits.maxWebSocketMessageBytes) {
+        Utils::log("Rejected oversized outgoing WebSocket message");
+        return;
+    }
+    Utils::log("Sending WebSocket message");
+    ws.sendTXT(message);
 }
 
 void esp32::ESP32Connection::disconnect() {
@@ -270,7 +332,7 @@ void esp32::ESP32Connection::loop() {
 }
 
 bool esp32::ESP32Connection::isReady() {
-    return ws.isConnected();
+    return !failed && ws.isConnected();
 }
 
 void esp32::ESP32Connection::addMessageListener(std::function<void(NostrString)> listener) {
@@ -289,8 +351,9 @@ esp32::ESP32Transport::ESP32Transport(const ESP32TransportConfig &config) : conf
 
 bool esp32::ESP32Transport::configureTls(WiFiClientSecure &client) {
     if (!allowTlsConnection()) return false;
-    if (config.caCertificatePem != nullptr) {
-        client.setCACert(config.caCertificatePem);
+    client.setTimeout(config.readTimeoutMs);
+    if (config.tls.caCertificatePem != nullptr) {
+        client.setCACert(config.tls.caCertificatePem);
     } else {
         noteUnverifiedTls();
         client.setInsecure();
@@ -299,7 +362,7 @@ bool esp32::ESP32Transport::configureTls(WiFiClientSecure &client) {
 }
 
 bool esp32::ESP32Transport::allowTlsConnection() {
-    if (config.requireCertificateValidation && config.caCertificatePem == nullptr) {
+    if (config.tls.requireCertificateValidation && config.tls.caCertificatePem == nullptr) {
         if (!warnedUnverifiedTls) {
             Utils::log("TLS validation is required but no CA certificate was configured");
             warnedUnverifiedTls = true;
@@ -318,6 +381,20 @@ void esp32::ESP32Transport::noteUnverifiedTls() {
 
 void esp32::ESP32Connection::addConnectionStatusListener(std::function<void(ConnectionStatus status)> listener) {
     connectionListeners.push_back(listener);
+    if (failed && listener) {
+        try {
+            listener(ConnectionStatus::ERROR);
+        } catch (const std::exception &error) {
+            Utils::log(error.what());
+        }
+    }
+}
+
+void esp32::ESP32Connection::noteProtocolViolation(const char *message) {
+    Utils::log(message);
+    if (protocolViolations < UINT8_MAX) ++protocolViolations;
+    const uint8_t threshold = transport->config.maxProtocolViolations;
+    if (threshold != 0 && protocolViolations >= threshold) ws.disconnect();
 }
 
 #endif

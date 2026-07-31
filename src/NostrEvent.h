@@ -5,6 +5,7 @@
 
 #include "ArduinoJson.h"
 #include "NostrString.h"
+#include "NostrLimits.h"
 #include "NostrUtils.h"
 #include <NostrAES.h>
 #include <functional>
@@ -140,7 +141,7 @@ class SignedNostrEvent : public NostrEvent {
 
   public:
     SignedNostrEvent() : NostrEvent(), stored(false), verifyState(-1), valid(false) {}
-    static bool parseRelayFrame(JsonArrayConst relayEvent, SignedNostrEvent &out);
+    static bool parseRelayFrame(JsonArrayConst relayEvent, SignedNostrEvent &out, const NostrLimits &limits = NostrLimits());
     bool isValid() const { return valid; }
     NostrString getId() { return this->id; }
     bool isStored() { return this->stored; }
