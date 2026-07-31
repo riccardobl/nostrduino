@@ -155,7 +155,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<PayInvoiceRe
             out.errorCode = error["code"].as<NostrString>();
             out.errorMessage = error["message"].as<NostrString>();
         } else {
-            if (doc.containsKey("result") && doc.containsKey("result_type")) {
+            if (doc["result"].is<JsonObject>() && doc["result_type"].is<const char *>()) {
                 NostrString resultType = doc["result_type"].as<NostrString>();
                 JsonObject data = doc["result"];
                 if (NostrString_equals(resultType, "pay_invoice")) {
@@ -184,7 +184,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MultiPayInvo
             out.errorCode = error["code"].as<NostrString>();
             out.errorMessage = error["message"].as<NostrString>();
         } else {
-            if (doc.containsKey("result") && doc.containsKey("result_type")) {
+            if (doc["result"].is<JsonObject>() && doc["result_type"].is<const char *>()) {
                 NostrString resultType = doc["result_type"].as<NostrString>();
                 JsonObject data = doc["result"];
                 if (NostrString_equals(resultType, "multi_pay_invoice")) {
@@ -217,7 +217,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<PayKeySendRe
             out.errorCode = error["code"].as<NostrString>();
             out.errorMessage = error["message"].as<NostrString>();
         } else {
-            if (doc.containsKey("result") && doc.containsKey("result_type")) {
+            if (doc["result"].is<JsonObject>() && doc["result_type"].is<const char *>()) {
                 NostrString resultType = doc["result_type"].as<NostrString>();
                 JsonObject data = doc["result"];
                 if (NostrString_equals(resultType, "pay_keysend")) {
@@ -246,7 +246,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MultiPayKeyS
             out.errorCode = error["code"].as<NostrString>();
             out.errorMessage = error["message"].as<NostrString>();
         } else {
-            if (doc.containsKey("result") && doc.containsKey("result_type")) {
+            if (doc["result"].is<JsonObject>() && doc["result_type"].is<const char *>()) {
                 NostrString resultType = doc["result_type"].as<NostrString>();
                 JsonObject data = doc["result"];
                 if (NostrString_equals(resultType, "multi_pay_keysend")) {
@@ -279,7 +279,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MakeInvoiceR
             out.errorCode = error["code"].as<NostrString>();
             out.errorMessage = error["message"].as<NostrString>();
         } else {
-            if (doc.containsKey("result") && doc.containsKey("result_type")) {
+            if (doc["result"].is<JsonObject>() && doc["result_type"].is<const char *>()) {
                 NostrString resultType = doc["result_type"].as<NostrString>();
                 JsonObject data = doc["result"];
                 if (NostrString_equals(resultType, "make_invoice")) {
@@ -322,7 +322,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<LookUpInvoic
             out.errorCode = error["code"].as<NostrString>();
             out.errorMessage = error["message"].as<NostrString>();
         } else {
-            if (doc.containsKey("result") && doc.containsKey("result_type")) {
+            if (doc["result"].is<JsonObject>() && doc["result_type"].is<const char *>()) {
                 NostrString resultType = doc["result_type"].as<NostrString>();
                 JsonObject data = doc["result"];
                 if (NostrString_equals(resultType, "lookup_invoice")) {
@@ -366,7 +366,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<ListTransact
             out.errorCode = error["code"].as<NostrString>();
             out.errorMessage = error["message"].as<NostrString>();
         } else {
-            if (doc.containsKey("result") && doc.containsKey("result_type")) {
+            if (doc["result"].is<JsonObject>() && doc["result_type"].is<const char *>()) {
                 NostrString resultType = doc["result_type"].as<NostrString>();
                 JsonObject data = doc["result"];
                 if (NostrString_equals(resultType, "list_transactions")) {
@@ -414,7 +414,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<GetBalanceRe
             out.errorCode = error["code"].as<NostrString>();
             out.errorMessage = error["message"].as<NostrString>();
         } else {
-            if (doc.containsKey("result") && doc.containsKey("result_type")) {
+            if (doc["result"].is<JsonObject>() && doc["result_type"].is<const char *>()) {
                 NostrString resultType = doc["result_type"].as<NostrString>();
                 JsonObject data = doc["result"];
                 if (NostrString_equals(resultType, "get_balance")) {
@@ -443,7 +443,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<GetInfoRespo
             out.errorCode = error["code"].as<NostrString>();
             out.errorMessage = error["message"].as<NostrString>();
         } else {
-            if (doc.containsKey("result") && doc.containsKey("result_type")) {
+            if (doc["result"].is<JsonObject>() && doc["result_type"].is<const char *>()) {
                 NostrString resultType = doc["result_type"].as<NostrString>();
                 JsonObject data = doc["result"];
                 if (NostrString_equals(resultType, "get_info")) {
