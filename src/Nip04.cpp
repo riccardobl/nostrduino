@@ -4,7 +4,7 @@ using namespace nostr;
 
 NostrString Nip04::decrypt(NostrString &privateKeyHex, NostrString &senderPubKeyHex, NostrString content) {
     int ivParamIndex = NostrString_indexOf(content, "?iv=");
-    if (ivParamIndex == -1) throw std::invalid_argument("Encrypted string does not contain ?iv= parameter.");
+    if (ivParamIndex == -1) return "";
 
     NostrString encryptedMessage = NostrString_substring(content, 0, ivParamIndex);
 
@@ -18,10 +18,10 @@ NostrString Nip04::decrypt(NostrString &privateKeyHex, NostrString &senderPubKey
     if (NostrString_length(ivHex) / 2 != 16) return NostrString();
     int ivSize = 16;
     byte ivBin[ivSize];
-    Utils::fromHex(ivHex, ivBin, ivSize);
+    if (!Utils::decodeHexExact(ivHex, ivBin, sizeof(ivBin))) return "";
 
     uint8_t sharedPointX[32];
-    Utils::ecdh(privateKeyHex, senderPubKeyHex, sharedPointX);
+    if (!Utils::ecdh(privateKeyHex, senderPubKeyHex, sharedPointX)) return "";
     NostrString sharedPointXHex = Utils::toHex(sharedPointX, 32);
 
     return decryptData(sharedPointX, ivBin, encryptedMessageHex);
@@ -29,7 +29,7 @@ NostrString Nip04::decrypt(NostrString &privateKeyHex, NostrString &senderPubKey
 
 NostrString Nip04::encrypt(NostrString &privateKeyHex, NostrString &recipientPubKeyHex, NostrString content) {
     uint8_t sharedPointX[32];
-    Utils::ecdh(privateKeyHex, recipientPubKeyHex, sharedPointX);
+    if (!Utils::ecdh(privateKeyHex, recipientPubKeyHex, sharedPointX)) return "";
     NostrString sharedPointXHex = Utils::toHex(sharedPointX, 32);
     uint8_t iv[16];
     for (size_t i = 0; i < sizeof(iv); i++) {
@@ -75,7 +75,10 @@ NostrString Nip04::decryptData(byte key[32], byte iv[16], NostrString messageHex
     if (byteSize == 0 || byteSize % 16 != 0) return NostrString();
     byte* messageBin = (byte*)malloc(byteSize);
     if (!messageBin) return NostrString();
-    Utils::fromHex(messageHex, messageBin, byteSize);
+    if (!Utils::decodeHexExact(messageHex, messageBin, byteSize)) {
+        free(messageBin);
+        return "";
+    }
     AES_ctx ctx;
     AES_init_ctx_iv(&ctx, key, iv);
     AES_CBC_decrypt_buffer(&ctx, messageBin, byteSize);

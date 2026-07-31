@@ -83,7 +83,7 @@ class NostrEventTags {
  */
 class NostrEvent {
   public:
-    NostrEvent(){};
+    NostrEvent() : kind(0), created_at(0) {};
 
     virtual ~NostrEvent(){};
     unsigned long int getCreatedAt() { return this->created_at; }
@@ -136,9 +136,12 @@ class SignedNostrEvent : public NostrEvent {
     NostrString subid;
     bool stored;
     mutable int verifyState = -1;
+    bool valid;
 
   public:
-    
+    SignedNostrEvent() : NostrEvent(), stored(false), verifyState(-1), valid(false) {}
+    static bool parseRelayFrame(JsonArrayConst relayEvent, SignedNostrEvent &out);
+    bool isValid() const { return valid; }
     NostrString getId() { return this->id; }
     bool isStored() { return this->stored; }
 
@@ -153,9 +156,8 @@ class SignedNostrEvent : public NostrEvent {
     bool verify() const;
 
   protected:
-    SignedNostrEvent(JsonArray relayEvent);
     SignedNostrEvent(NostrString id, NostrString pubkey, unsigned long int created_at, unsigned int kind, NostrEventTags tags, NostrString content, NostrString signature)
-        : NostrEvent(kind, tags, content, created_at), id(id), pubkey(pubkey), signature(signature), stored(false), verifyState(-1){};
+        : NostrEvent(kind, tags, content, created_at), id(id), pubkey(pubkey), signature(signature), stored(false), verifyState(-1), valid(true){};
 };
 
 } 

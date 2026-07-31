@@ -1,5 +1,6 @@
 
 #include "NostrEvent.h"
+#include <cstring>
 using namespace nostr;
 
 const std::vector<NostrEventTag> &NostrEventTags::getTags() const {
@@ -68,6 +69,7 @@ SignedNostrEvent UnsignedNostrEvent::sign(NostrString privateKeyHex) {
     Utils::log("Signing event with private key");
     
     NostrString pubKeyHex = Utils::getPublicKey(privateKeyHex);
+    if (NostrString_length(pubKeyHex) != 64) return SignedNostrEvent();
 
     JsonDocument doc;
     JsonArray data = doc["data"].to<JsonArray>();
@@ -90,9 +92,10 @@ SignedNostrEvent UnsignedNostrEvent::sign(NostrString privateKeyHex) {
     Utils::log("Message hash: " + msgHash);
 
     byte messageBytes[NOSTR_DIGEST_SIZE];
-    Utils::fromHex(msgHash, messageBytes, NOSTR_DIGEST_SIZE);
+    if (!Utils::decodeHexExact(msgHash, messageBytes, sizeof(messageBytes))) return SignedNostrEvent();
     
     NostrString signatureHex = Utils::sign(privateKeyHex, messageBytes, NOSTR_DIGEST_SIZE);
+    if (NostrString_length(signatureHex) != 128) return SignedNostrEvent();
     
     SignedNostrEvent signedEvent(msgHash, pubKeyHex, this->created_at, this->kind, this->tags, this->content, signatureHex);
     Utils::log("Signature hash " + signatureHex);
@@ -101,6 +104,7 @@ SignedNostrEvent UnsignedNostrEvent::sign(NostrString privateKeyHex) {
 }
 
 bool SignedNostrEvent::verify() const {
+    if (!this->valid) return false;
     if (this->verifyState != -1) {
         return this->verifyState == 1;
     }
@@ -128,7 +132,10 @@ bool SignedNostrEvent::verify() const {
     }
     Utils::log("Verifying event signature");
     byte messageBytes[32];
-    Utils::fromHex(this->id, messageBytes, 32);
+    if (!Utils::decodeHexExact(this->id, messageBytes, sizeof(messageBytes))) {
+        this->verifyState = 0;
+        return false;
+    }
     Utils::log("Message hash: " + this->id);
    
     Utils::log("Pubkey: " + this->pubkey);
@@ -155,32 +162,59 @@ void SignedNostrEvent::toSendableEvent(JsonArray doc) const {
     this->toJson(obj);
 }
 
-SignedNostrEvent::SignedNostrEvent(JsonArray arr) {
-    if (arr[0] != "EVENT") {
-        throw std::runtime_error("Invalid event type");
-    }
-    JsonObject obj;
-    if (arr.size() > 2) {
-        obj = arr[2];
-        this->subid = arr[1].as<NostrString>();
-    } else {
-        obj = arr[1];
-    }
-    this->id = obj["id"].as<NostrString>();
-    this->pubkey = obj["pubkey"].as<NostrString>();
-    this->created_at = obj["created_at"].as<unsigned long long>();
-    this->kind = obj["kind"].as<unsigned int>();
-    NostrEventTags tt = NostrEventTags();
-    JsonArray tags = obj["tags"].as<JsonArray>();
-    for (size_t i = 0; i < tags.size(); i++) {
-        JsonArray tag = tags[i];
-        std::vector<String> value;
-        for (size_t j = 1; j < tag.size(); j++) {
-            value.push_back(tag[j].as<NostrString>());
+bool SignedNostrEvent::parseRelayFrame(JsonArrayConst arr, SignedNostrEvent &out) {
+    SignedNostrEvent parsed;
+    try {
+        if (arr.size() != 3 || !arr[0].is<const char *>() ||
+            std::strcmp(arr[0].as<const char *>(), "EVENT") != 0 ||
+            !arr[1].is<const char *>() || !arr[2].is<JsonObjectConst>()) return false;
+
+        JsonObjectConst obj = arr[2].as<JsonObjectConst>();
+        JsonVariantConst id = obj["id"];
+        JsonVariantConst pubkey = obj["pubkey"];
+        JsonVariantConst content = obj["content"];
+        JsonVariantConst signature = obj["sig"];
+        JsonVariantConst createdAt = obj["created_at"];
+        JsonVariantConst kind = obj["kind"];
+        JsonVariantConst rawTags = obj["tags"];
+        if (!id.is<const char *>() || !pubkey.is<const char *>() ||
+            !content.is<const char *>() || !signature.is<const char *>() ||
+            !createdAt.is<unsigned long>() || !kind.is<unsigned int>() ||
+            !rawTags.is<JsonArrayConst>()) return false;
+
+        uint8_t fieldBytes[64];
+        if (!Utils::decodeHexExact(id.as<const char *>(), fieldBytes, 32) ||
+            !Utils::decodeHexExact(pubkey.as<const char *>(), fieldBytes, 32) ||
+            !Utils::decodeHexExact(signature.as<const char *>(), fieldBytes, 64)) return false;
+
+        NostrEventTags parsedTags;
+        JsonArrayConst tags = rawTags.as<JsonArrayConst>();
+        for (size_t i = 0; i < tags.size(); ++i) {
+            if (!tags[i].is<JsonArrayConst>()) return false;
+            JsonArrayConst tag = tags[i].as<JsonArrayConst>();
+            if (tag.size() == 0 || !tag[0].is<const char *>()) return false;
+            std::vector<NostrString> values;
+            values.reserve(tag.size() - 1);
+            for (size_t j = 1; j < tag.size(); ++j) {
+                if (!tag[j].is<const char *>()) return false;
+                values.push_back(tag[j].as<const char *>());
+            }
+            parsedTags.addTag(tag[0].as<const char *>(), values);
         }
-        tt.addTag(tag[0].as<NostrString>(), value);
+
+        parsed.id = id.as<const char *>();
+        parsed.pubkey = pubkey.as<const char *>();
+        parsed.subid = arr[1].as<const char *>();
+        parsed.created_at = createdAt.as<unsigned long>();
+        parsed.kind = kind.as<unsigned int>();
+        parsed.tags = parsedTags;
+        parsed.content = content.as<const char *>();
+        parsed.signature = signature.as<const char *>();
+        parsed.valid = true;
+        out = parsed;
+        return true;
+    } catch (const std::exception &) {
+        out = SignedNostrEvent();
+        return false;
     }
-    this->tags = tt;
-    this->content = obj["content"].as<NostrString>();
-    this->signature = obj["sig"].as<NostrString>();
 }

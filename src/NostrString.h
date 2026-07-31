@@ -11,7 +11,6 @@
 #endif
 
 
-#include "NostrUtils.h"
 #include <vector>
 
 #ifdef ARDUINO

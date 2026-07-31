@@ -1,4 +1,5 @@
 #include "NostrUtils.h"
+#include "NostrEncoding.h"
 
 #include "Hash.h" // depends on uBitcoin: https://github.com/micro-bitcoin/uBitcoin
 #include "Bitcoin.h" // depends on uBitcoin: https://github.com/micro-bitcoin/uBitcoin
@@ -52,11 +53,13 @@ long int Utils::randomInt(long int min, long int max) {
     return realRandom(min, max);
 }
 
-void Utils::jsonParse(const NostrString *json, JsonDocument *doc) {
+bool Utils::jsonParse(const NostrString *json, JsonDocument *doc) {
     DeserializationError error = deserializeJson(*doc, *json);
     if (error) {
-        throw std::runtime_error(error.c_str());
+        doc->clear();
+        return false;
     }
+    return true;
 }
 
 void Utils::jsonStringify(JsonVariantConst source, NostrString *json) {
@@ -65,6 +68,14 @@ void Utils::jsonStringify(JsonVariantConst source, NostrString *json) {
 
 NostrString Utils::toHex(const uint8_t *array, size_t arraySize) {
     return ::toHex(array, arraySize);    
+}
+
+bool Utils::decodeHexExact(const NostrString &input, uint8_t *output, size_t outputCapacity, size_t expectedBytes) {
+    return nostr::decodeHexExact(input, output, outputCapacity, expectedBytes);
+}
+
+bool Utils::decodeHexExact(const NostrString &input, uint8_t *output, size_t expectedBytes) {
+    return nostr::decodeHexExact(input, output, expectedBytes);
 }
 
 NostrString Utils::hexToBase64(NostrString hex) {
@@ -76,7 +87,8 @@ NostrString Utils::base64ToHex(NostrString base64) {
 }
 
 size_t Utils::fromHex(NostrString hex, uint8_t *output, size_t outputSize) {
-    return ::fromHex(hex, output, outputSize);
+    if (!decodeHexExact(hex, output, outputSize, outputSize)) return 0;
+    return outputSize;
 }
 
 size_t Utils::fromBase64(const char *encoded, size_t encodedSize, uint8_t *output, size_t outputSize, uint8_t flags) {
@@ -95,7 +107,7 @@ size_t Utils::sha256(NostrString message, uint8_t *hash) {
 
 NostrString Utils::getPublicKey(NostrString privKeyHex) {
     byte privateKeyBytes[NOSTR_DIGEST_SIZE];
-    fromHex(privKeyHex, privateKeyBytes, NOSTR_DIGEST_SIZE);
+    if (!decodeHexExact(privKeyHex, privateKeyBytes, sizeof(privateKeyBytes))) return "";
     PrivateKey privateKey(privateKeyBytes);
 
     PublicKey pubKey = privateKey.publicKey();
@@ -105,17 +117,19 @@ NostrString Utils::getPublicKey(NostrString privKeyHex) {
 }
 
 
-void Utils::ecdh(NostrString privateKeyHex, NostrString pubKeyHex, uint8_t *out) {
+bool Utils::ecdh(NostrString privateKeyHex, NostrString pubKeyHex, uint8_t *out) {
 
     int byteSize = 32;
     byte privateKeyBytes[byteSize];
-    fromHex(privateKeyHex, privateKeyBytes, byteSize);
+    if (!decodeHexExact(privateKeyHex, privateKeyBytes, sizeof(privateKeyBytes))) return false;
     PrivateKey privateKey(privateKeyBytes);
 
     uint8_t pubkeyBytes[64];
-    fromHex("02" + NostrString(pubKeyHex), pubkeyBytes, 64);
+    NostrString compressed = "02" + NostrString(pubKeyHex);
+    if (!decodeHexExact(compressed, pubkeyBytes, sizeof(pubkeyBytes))) return false;
     PublicKey otherDhPublicKey(pubkeyBytes);
     privateKey.ecdh(otherDhPublicKey, out, false);
+    return true;
 }
 
 NostrString Utils::sign(NostrString privateKeyHex, uint8_t *messageBytes, size_t messageSize) {
@@ -123,7 +137,7 @@ NostrString Utils::sign(NostrString privateKeyHex, uint8_t *messageBytes, size_t
         throw std::runtime_error("Message size must be 32 bytes");
     }
     uint8_t privateKeyBytes[32];
-    fromHex(privateKeyHex, privateKeyBytes, 32);
+    if (!decodeHexExact(privateKeyHex, privateKeyBytes, sizeof(privateKeyBytes))) return "";
     PrivateKey privateKey(privateKeyBytes);
     SchnorrSignature signature = privateKey.schnorr_sign(messageBytes);
     NostrString signatureHex = signature.toString();
@@ -132,10 +146,11 @@ NostrString Utils::sign(NostrString privateKeyHex, uint8_t *messageBytes, size_t
 
 bool Utils::verify(NostrString pubKeyHex, uint8_t *messageHash, NostrString signatureHex){
     byte pubkeyBytes[64];
-    fromHex("02" + pubKeyHex, pubkeyBytes, 64);
+    NostrString compressed = "02" + pubKeyHex;
+    if (!decodeHexExact(compressed, pubkeyBytes, sizeof(pubkeyBytes))) return false;
     PublicKey pub(pubkeyBytes);
     byte signatureBytes[64];
-    fromHex(signatureHex, signatureBytes, 64);
+    if (!decodeHexExact(signatureHex, signatureBytes, sizeof(signatureBytes))) return false;
     SchnorrSignature signature(signatureBytes);
     return pub.schnorr_verify(signature, messageHash);
 }

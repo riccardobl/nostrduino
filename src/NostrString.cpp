@@ -1,5 +1,9 @@
 
 #include <NostrString.h>
+#include <algorithm>
+#include <cctype>
+#include <cstdlib>
+#include <sstream>
 
 #ifdef ARDUINO
 #include <Arduino.h>
@@ -190,8 +194,11 @@ std::string NostrString_urlEncode(const std::string &str) {
         if (isalnum(ch) || ch == '-' || ch == '_' || ch == '.' || ch == '~') {
             encoded += ch;
         } else {
+            static const char hex[] = "0123456789ABCDEF";
+            const unsigned char byte = static_cast<unsigned char>(ch);
             encoded += '%';
-            encoded += std::to_string((int)ch, 16);
+            encoded += hex[(byte >> 4) & 0x0f];
+            encoded += hex[byte & 0x0f];
         }
     }
     return encoded;
@@ -204,4 +211,3 @@ double NostrString_toFloat(const std::string &str) {
 
 
 #endif
-

@@ -20,13 +20,13 @@ void NostrRelay::processQueue() {
 
 void NostrPool::onEvent(NostrRelay *relay, NostrString message) {
     JsonDocument doc;
-    Utils::jsonParse(&message, &doc);
-    if (doc.size() == 0) {
+    if (!Utils::jsonParse(&message, &doc) || !doc.is<JsonArray>() || doc.size() == 0) {
         return;
     }
     if (NostrString_equals(doc[0], "CLOSED")) {
-        NostrString subId = doc[1];
-        NostrString reason = doc.size() > 2 ? doc[2].as<NostrString>() : "";
+        if (doc.size() < 2 || !doc[1].is<const char *>() || (doc.size() > 2 && !doc[2].is<const char *>())) return;
+        NostrString subId = doc[1].as<const char *>();
+        NostrString reason = doc.size() > 2 ? doc[2].as<const char *>() : "";
         std::map<NostrString, NostrSubscription>::iterator it = this->subscriptions.find(subId);
         if (it != this->subscriptions.end()) {
             if (it->second.closeCallback != nullptr) {
@@ -35,7 +35,8 @@ void NostrPool::onEvent(NostrRelay *relay, NostrString message) {
             this->subscriptions.erase(it);
         }
     } else if (NostrString_equals(doc[0], "EOSE")) {
-        NostrString subId = doc[1].as<NostrString>();
+        if (doc.size() < 2 || !doc[1].is<const char *>()) return;
+        NostrString subId = doc[1].as<const char *>();
         std::map<NostrString, NostrSubscription>::iterator it = this->subscriptions.find(subId);
         if (it == this->subscriptions.end()) {
             return;
@@ -48,9 +49,11 @@ void NostrPool::onEvent(NostrRelay *relay, NostrString message) {
             }
         }
     } else if (NostrString_equals(doc[0], "OK")) {
-        NostrString eventId = doc[1].as<NostrString>();
+        if (doc.size() < 3 || !doc[1].is<const char *>() || !doc[2].is<bool>() ||
+            (doc.size() > 3 && !doc[3].is<const char *>())) return;
+        NostrString eventId = doc[1].as<const char *>();
         bool success = doc[2].as<bool>();
-        NostrString message = doc.size() > 3 ? doc[3].as<NostrString>() : "";
+        NostrString message = doc.size() > 3 ? doc[3].as<const char *>() : "";
         for (size_t i = 0; i < this->eventStatusCallbackEntries.size(); i++) {
             EventStatusCallbackEntry entry = this->eventStatusCallbackEntries[i];
             if (NostrString_equals(entry.eventId, eventId)) {
@@ -63,18 +66,21 @@ void NostrPool::onEvent(NostrRelay *relay, NostrString message) {
         }
 
     } else if (NostrString_equals(doc[0], "NOTICE")) {
-        NostrString message = doc[1].as<NostrString>();
+        if (doc.size() < 2 || !doc[1].is<const char *>()) return;
+        NostrString message = doc[1].as<const char *>();
         if (this->noticeCallback != nullptr) {
             this->noticeCallback(relay, message);
         }
     } else if (NostrString_equals(doc[0], "EVENT")) {
-        NostrString subId = doc[1].as<NostrString>();
+        if (doc.size() != 3 || !doc[1].is<const char *>()) return;
+        NostrString subId = doc[1].as<const char *>();
         std::map<NostrString, NostrSubscription>::iterator it = this->subscriptions.find(subId);
         if (it == this->subscriptions.end()) {
             return;
         }
         NostrSubscription sub = it->second;
-        SignedNostrEvent event(doc.as<JsonArray>());
+        SignedNostrEvent event;
+        if (!SignedNostrEvent::parseRelayFrame(doc.as<JsonArrayConst>(), event)) return;
         event.stored = !sub.eose;
         if (sub.eventCallback != nullptr) {
             sub.eventCallback(subId, &event);

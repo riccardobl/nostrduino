@@ -3,6 +3,7 @@
 #include <Arduino.h>
 
 #include "ArduinoJson.h"
+#include "NostrEncoding.h"
 #include "NostrString.h"
 #include <functional>
 #define NOSTR_DIGEST_SIZE 32
@@ -27,13 +28,15 @@ class Utils {
     static NostrString getNewSubscriptionId();
     static long int randomInt(long int min, long int max);
     static NostrString getPublicKey(NostrString privKeyHex);
-    static void jsonParse(const NostrString *json, JsonDocument *doc);
+    static bool jsonParse(const NostrString *json, JsonDocument *doc);
     static void jsonStringify(JsonVariantConst source, NostrString *json);
     static NostrString toHex(const uint8_t *array, size_t arraySize);
+    static bool decodeHexExact(const NostrString &input, uint8_t *output, size_t outputCapacity, size_t expectedBytes);
+    static bool decodeHexExact(const NostrString &input, uint8_t *output, size_t expectedBytes);
     static NostrString hexToBase64(NostrString hex);
     static size_t fromHex(NostrString hex, uint8_t *output, size_t outputSize);
     static size_t fromBase64(const char *encoded, size_t encodedSize, uint8_t *output, size_t outputSize, uint8_t flags);
-    static void ecdh(NostrString privKeyHex, NostrString pubKeyHex, uint8_t *out);
+    static bool ecdh(NostrString privKeyHex, NostrString pubKeyHex, uint8_t *out);
     static size_t toBase64(const uint8_t *array, size_t arraySize, char *output, size_t outputSize, uint8_t flags) ;
     static size_t sha256(NostrString message, uint8_t *hash);
     static NostrString sign(NostrString privateKeyHex, uint8_t *message, size_t messageSize);
@@ -44,6 +47,7 @@ class Utils {
     private:
     static void *secp256k1_ctx;
 };
+
 }
 
 
