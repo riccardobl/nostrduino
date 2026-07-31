@@ -2,21 +2,14 @@
 #define _NOSTR_ESP32_TRANSPORT_H 1
 #include "NostrCommon.h"
 
-#if defined(_ESP32_BOARD_) || defined(_ESP8266_BOARD_)
+#if defined(_ESP32_BOARD_)
 
 #include "ArduinoJson.h"
 #include "NostrString.h"
 #include "NostrTransport.h"
 #include "NostrUtils.h"
-#ifdef _ESP8266_BOARD_
-#include <ESP8266HTTPClient.h>
-#include <ESP8266WiFi.h>
-#include <WiFiClient.h>
-
-#else
 #include "WiFi.h"
 #include <HTTPClient.h>
-#endif
 #include <WebSocketsClient.h>
 #include <functional>
 #include <initializer_list>

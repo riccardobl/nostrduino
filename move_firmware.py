@@ -6,16 +6,6 @@ import os
 def after_build(source, target, env):
     sol=env.subst("$BUILD_DIR")
     platform="esp32"
-    if "ESP32" in sol:
-        platform="esp32"
-    elif "ESP8266" in sol:
-        platform="esp8266"
-    elif "UNOR4" in sol:
-        platform="unor4"
-    elif "UNO" in sol:
-        platform="uno"
-    elif "PICOW" in sol:
-        platform="picow"
 
     # Copy firmware binary
     firmware_src = env.subst("$BUILD_DIR/${PROGNAME}.bin")

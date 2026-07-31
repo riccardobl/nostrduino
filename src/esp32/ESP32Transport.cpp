@@ -1,17 +1,12 @@
 #include "ESP32Transport.h"
 #include "NostrCommon.h"
 
-#if defined(_ESP32_BOARD_) || defined(_ESP8266_BOARD_)
+#if defined(_ESP32_BOARD_)
 using namespace nostr;
 
 void esp32::ESP32Transport::httpsGet(NostrString url, std::function<void(NostrString)> cb) {
     HTTPClient http;
-#ifdef _ESP8266_BOARD_
-    WiFiClient wifiClient;
-    http.begin(wifiClient, url.c_str());
-#else
     http.begin(url.c_str());
-#endif
     int httpCode = http.GET();
     if (httpCode <= 0 || httpCode != HTTP_CODE_OK) {
         cb("");
@@ -132,11 +127,7 @@ esp32::ESP32Connection::ESP32Connection(ESP32Transport *transport, NostrString u
     }
     if (ssl) {
         Utils::log("Connecting to " + host + " : " + port + " with path " + path + " using SSL...");
-#ifdef _ESP8266_BOARD_
-        ws.beginSSL(host.c_str(), port, path.c_str());
-#else
         ws.beginSSL(host, port, path);
-#endif
     } else {
         Utils::log("Connecting to " + host + " : " + port + " with path " + path + "...");
         ws.begin(host, port, path);
