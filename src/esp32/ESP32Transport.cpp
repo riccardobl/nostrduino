@@ -5,14 +5,56 @@
 using namespace nostr;
 
 void esp32::ESP32Transport::httpsGet(NostrString url, std::function<void(NostrString)> cb) {
-    HTTPClient http;
-    http.begin(url.c_str());
-    int httpCode = http.GET();
-    if (httpCode <= 0 || httpCode != HTTP_CODE_OK) {
+    if (!NostrString_startsWith(url, "https://") || !allowTlsConnection()) {
         cb("");
         return;
     }
-    NostrString str = http.getString();
+    if (!configureTls(httpsClient)) {
+        cb("");
+        return;
+    }
+    HTTPClient http;
+    if (!http.begin(httpsClient, url.c_str())) {
+        cb("");
+        return;
+    }
+    http.setTimeout(config.httpTimeoutMs);
+    int httpCode = http.GET();
+    if (httpCode <= 0 || httpCode != HTTP_CODE_OK) {
+        http.end();
+        cb("");
+        return;
+    }
+    const int responseSize = http.getSize();
+    if (responseSize > static_cast<int>(config.maxHttpResponseBytes)) {
+        http.end();
+        cb("");
+        return;
+    }
+    WiFiClient *stream = http.getStreamPtr();
+    NostrString str;
+    if (stream == nullptr) {
+        http.end();
+        cb("");
+        return;
+    }
+    if (responseSize >= 0) str.reserve(static_cast<size_t>(responseSize));
+    uint8_t buffer[512];
+    while (http.connected() || stream->available()) {
+        const size_t available = stream->available();
+        if (available == 0) {
+            delay(1);
+            continue;
+        }
+        const size_t toRead = available < sizeof(buffer) ? available : sizeof(buffer);
+        const int readSize = stream->readBytes(reinterpret_cast<char *>(buffer), toRead);
+        if (readSize <= 0 || str.length() > config.maxHttpResponseBytes - static_cast<size_t>(readSize)) {
+            str = "";
+            break;
+        }
+        for (int i = 0; i < readSize; ++i) str += static_cast<char>(buffer[i]);
+    }
+    std::fill(std::begin(buffer), std::end(buffer), 0);
     http.end();
     cb(str);
 }
@@ -127,7 +169,13 @@ esp32::ESP32Connection::ESP32Connection(ESP32Transport *transport, NostrString u
     }
     if (ssl) {
         Utils::log("Connecting to " + host + " : " + port + " with path " + path + " using SSL...");
-        ws.beginSSL(host, port, path);
+        if (!transport->allowTlsConnection()) return;
+        if (transport->config.caCertificatePem != nullptr)
+            ws.beginSslWithCA(host.c_str(), port, path.c_str(), transport->config.caCertificatePem);
+        else {
+            transport->noteUnverifiedTls();
+            ws.beginSSL(host.c_str(), port, path.c_str());
+        }
     } else {
         Utils::log("Connecting to " + host + " : " + port + " with path " + path + "...");
         ws.begin(host, port, path);
@@ -237,7 +285,36 @@ esp32::ESP32Connection::~ESP32Connection() {
     ws.disconnect();
 }
 
-esp32::ESP32Transport::ESP32Transport() {}
+esp32::ESP32Transport::ESP32Transport(const ESP32TransportConfig &config) : config(config) {}
+
+bool esp32::ESP32Transport::configureTls(WiFiClientSecure &client) {
+    if (!allowTlsConnection()) return false;
+    if (config.caCertificatePem != nullptr) {
+        client.setCACert(config.caCertificatePem);
+    } else {
+        noteUnverifiedTls();
+        client.setInsecure();
+    }
+    return true;
+}
+
+bool esp32::ESP32Transport::allowTlsConnection() {
+    if (config.requireCertificateValidation && config.caCertificatePem == nullptr) {
+        if (!warnedUnverifiedTls) {
+            Utils::log("TLS validation is required but no CA certificate was configured");
+            warnedUnverifiedTls = true;
+        }
+        return false;
+    }
+    return true;
+}
+
+void esp32::ESP32Transport::noteUnverifiedTls() {
+    if (!warnedUnverifiedTls) {
+        Utils::log("TLS certificate validation is disabled for this transport");
+        warnedUnverifiedTls = true;
+    }
+}
 
 void esp32::ESP32Connection::addConnectionStatusListener(std::function<void(ConnectionStatus status)> listener) {
     connectionListeners.push_back(listener);

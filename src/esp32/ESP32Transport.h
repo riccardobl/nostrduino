@@ -9,6 +9,7 @@
 #include "NostrTransport.h"
 #include "NostrUtils.h"
 #include "WiFi.h"
+#include <WiFiClientSecure.h>
 #include <HTTPClient.h>
 #include <WebSocketsClient.h>
 #include <functional>
@@ -16,6 +17,18 @@
 #include <vector>
 namespace nostr {
 namespace esp32 {
+struct ESP32TransportConfig {
+    const char *caCertificatePem;
+    bool requireCertificateValidation;
+    uint16_t httpTimeoutMs;
+    size_t maxHttpResponseBytes;
+    size_t maxWebSocketMessageBytes;
+
+    ESP32TransportConfig()
+        : caCertificatePem(nullptr), requireCertificateValidation(false), httpTimeoutMs(15000),
+          maxHttpResponseBytes(64 * 1024), maxWebSocketMessageBytes(64 * 1024) {}
+};
+
 class ESP32Transport;
 class ESP32Connection : public Connection {
     friend class ESP32Transport;
@@ -41,17 +54,26 @@ class ESP32Connection : public Connection {
     NostrString fragmentedMessage;
 };
 class ESP32Transport : public Transport {
+    friend class ESP32Connection;
   public:
     void getInvoiceFromLNAddr(NostrString addr, unsigned long long amountMSats, NostrString comment, std::function<void(NostrString)> callback);
     Connection *connect(NostrString url) override;
     void close();
     void disconnect(Connection *conn) override;
     ~ESP32Transport() override;
-    ESP32Transport();
+    explicit ESP32Transport(const ESP32TransportConfig &config = ESP32TransportConfig());
     bool isReady() override;
+    const ESP32TransportConfig &getConfig() const { return config; }
+    bool tlsCertificateValidationActive() const { return config.caCertificatePem != nullptr; }
 
   private:
     void httpsGet(NostrString url, std::function<void(NostrString)> callback);
+    bool configureTls(WiFiClientSecure &client);
+    bool allowTlsConnection();
+    void noteUnverifiedTls();
+    ESP32TransportConfig config;
+    bool warnedUnverifiedTls = false;
+    WiFiClientSecure httpsClient;
     std::vector<Connection *> connections;
 };
 } // namespace esp32

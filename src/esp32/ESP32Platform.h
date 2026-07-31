@@ -83,6 +83,9 @@ void close() {
 ESP32Transport *getTransport() {
     return new nostr::esp32::ESP32Transport();
 }
+ESP32Transport *getTransport(const ESP32TransportConfig &config) {
+    return new nostr::esp32::ESP32Transport(config);
+}
 } // namespace ESP32Platform
 } // namespace esp32
 } // namespace nostr
