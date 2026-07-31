@@ -19,7 +19,9 @@
     "description": "Nostr Client for Arduino",
     "export": {
         "exclude": [
-            "tests"
+            "tests",
+            "src/uBitcoin/examples",
+            "src/uBitcoin/tests"
         ]
     },
     "frameworks": "arduino",
@@ -34,7 +36,6 @@
     "version": "1.3.6",
     "dependencies": {
         "ArduinoJson": "^7.1.0",
-        "uBitcoin": "^0.2.0",
         "WebSockets": "^2.4.1"
     }
 }
