@@ -12,3 +12,10 @@ add_executable(test_encoding
     ../../src/NostrString.cpp
 )
 target_include_directories(test_encoding PRIVATE ../../src)
+
+add_executable(test_transport_helpers
+    test_transport_helpers.cpp
+    ../../src/NostrUrl.cpp
+    ../../src/NostrString.cpp
+)
+target_include_directories(test_transport_helpers PRIVATE ../../src)

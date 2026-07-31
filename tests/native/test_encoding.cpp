@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
+#include <cstring>
 #include <string>
 
 static std::string hexString(size_t length, char value = 'a') {
@@ -43,6 +44,18 @@ int main() {
     std::fill(std::begin(smallOutput), std::end(smallOutput), 0xa5);
     assert(!nostr::decodeHexExact(hexString(64), smallOutput, 31, 32));
     for (uint8_t byte : smallOutput) assert(byte == 0 || byte == 0xa5);
+
+    size_t decodedSize = 0;
+    assert(nostr::validateBase64Encoding("TWFu", 4, false, false, decodedSize) && decodedSize == 3);
+    assert(nostr::validateBase64Encoding("TWE=", 4, false, false, decodedSize) && decodedSize == 2);
+    assert(nostr::validateBase64Encoding("TQ==", 4, false, false, decodedSize) && decodedSize == 1);
+    assert(nostr::validateBase64Encoding("-_8", 3, true, true, decodedSize) && decodedSize == 2);
+    for (const char *invalidBase64 : {"", "A", "TQ=", "TQ===", "T=Q=", "TQ==x",
+                                      "TR==", "TWF=", "TQ==\n", "TQ-_"}) {
+        assert(!nostr::validateBase64Encoding(invalidBase64, std::strlen(invalidBase64), false, false, decodedSize));
+    }
+    assert(!nostr::validateBase64Encoding("+/8", 3, true, true, decodedSize));
+    assert(!nostr::validateBase64Encoding("-_8=", 4, true, true, decodedSize));
 
     return 0;
 }
