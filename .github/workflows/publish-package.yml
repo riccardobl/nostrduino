@@ -8,27 +8,43 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
-          submodules: true
+          submodules: recursive
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: '3.11'
 
       - name: Install PlatformIO
-        run: pip install -U platformio
+        run: python -m pip install platformio==6.1.18
         
       - name: Update version in library.json
         run: |
           VERSION=${GITHUB_REF#refs/tags/}
+          VERSION=${VERSION#v}
+          [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
           echo "Build version is $VERSION"
           sed -i "s/\"version\": \".*\"/\"version\": \"$VERSION\"/" library.json
+          sed -i "s/^version=.*/version=$VERSION/" library.properties
           cat library.json
+
+      - name: Verify package contents
+        run: |
+          pio package pack .
+          archive=$(find . -maxdepth 1 -type f -name 'Nostrduino-*.tar.gz' -print -quit)
+          test -n "$archive"
+          tar -tzf "$archive" > package-contents.txt
+          rg 'src/crypto/UBitcoinBackend\.cpp$' package-contents.txt
+          rg 'src/uBitcoin/src/Bitcoin\.cpp$' package-contents.txt
+          if rg 'src/(esp8266|picow|unor4|crypto/libsecp256k1)/|src/uBitcoin/(examples|tests)/' package-contents.txt; then
+            echo 'unexpected platform, backend, or submodule test source in package' >&2
+            exit 1
+          fi
 
       - name: Publish to PlatformIO Registry
         env:
           PLATFORMIO_AUTH_TOKEN: ${{ secrets.PLATFORMIO_AUTH_TOKEN }}
         run: |
-          pio package publish --no-interactive
+          pio package publish . --no-interactive

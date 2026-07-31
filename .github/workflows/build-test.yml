@@ -2,26 +2,75 @@ name: Build
 
 on:
   push:
+  pull_request:
         
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
-          submodules: true
           fetch-depth: 0
+          submodules: recursive
           
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: '3.11'
 
       - name: Install PlatformIO
-        run: pip install -U platformio
+        run: python -m pip install platformio==6.1.18
+
+      - name: Install ESP32 dependencies
+        run: pio pkg install -e ESP32TestNip01
+
+      - name: Native sanitizer tests
+        run: bash tests/native/run.sh
+
+      - name: Check ESP32-only source tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e src/esp8266
+          test ! -e src/picow
+          test ! -e src/unor4
+          test ! -e examples/ArduinoESP8266TestNip01
+          test ! -e examples/ArduinoRaspberryPiPicoWTestNip01
+          test ! -e examples/ArduinoUnoR4TestNip01
+          test -f src/uBitcoin/src/Bitcoin.h
+          test "$(git -C src/uBitcoin rev-parse HEAD)" = "877542fdc16319dd92a7d2a679ea9dacce474bd2"
+          test "$(git ls-files --stage src/uBitcoin | awk '{print $1}')" = "160000"
+          rg -F '#include "../uBitcoin/src/Bitcoin.h"' src/crypto/UBitcoinBackend.cpp
+          test ! -e src/crypto/libsecp256k1
+          test ! -e src/crypto/Secp256k1Backend.cpp
+          if rg -n 'Hash\.h|Bitcoin\.h' src --glob '!src/uBitcoin/**' --glob '!src/crypto/UBitcoinBackend.cpp'; then
+            echo 'uBitcoin must only be called through UBitcoinBackend' >&2
+            exit 1
+          fi
+          if rg -n 'bootloader_random_enable|\b(byte|uint8_t|char)[[:space:]]+[A-Za-z_][A-Za-z0-9_]*\[[[:space:]]*(byteSize|messageSize|contentLength|encodedSize|length|NostrString_length)' src examples; then
+            echo 'legacy entropy hook or VLA-like declaration found' >&2
+            exit 1
+          fi
+          test "$(rg -c --no-filename '^\[env:ESP32' platformio.ini | awk '{s+=$1} END {print s+0}')" -eq 4
+
+      - name: Check release metadata
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          metadata = json.loads(Path("library.json").read_text())
+          properties = dict(line.split("=", 1) for line in Path("library.properties").read_text().splitlines() if "=" in line)
+          assert metadata["version"] == properties["version"]
+          assert metadata["platforms"] == "espressif32"
+          assert "uBitcoin" not in metadata["dependencies"]
+          assert "uBitcoin" not in properties["depends"]
+          assert "uBitcoin@" not in Path("platformio.ini").read_text()
+          PY
+          test "$(wc -l < tests/native/bip340_test_vectors.csv)" -eq 20
         
       - name: Build
         run: |
             pio run -e ESP32TestNip01
             pio run -e ESP32TestNip04
             pio run -e ESP32TestNWC
+            pio run -e ESP32TestNip01Filter
