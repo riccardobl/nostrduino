@@ -50,7 +50,18 @@ void NostrPool::onEvent(NostrRelay *relay, NostrString message) {
             return;
         }
         NostrSubscription *sub = &it->second;
-        if (!sub->eose) {
+        std::map<NostrString, bool>::iterator relayEose = sub->relayEose.find(relay->url);
+        if (relayEose == sub->relayEose.end()) return;
+        relayEose->second = true;
+
+        bool allRelaysReachedEose = !sub->relayEose.empty();
+        for (const auto &entry : sub->relayEose) {
+            if (!entry.second) {
+                allRelaysReachedEose = false;
+                break;
+            }
+        }
+        if (allRelaysReachedEose && !sub->eose) {
             sub->eose = true;
             if (sub->eoseCallback != nullptr) {
                 sub->eoseCallback(subId);
@@ -92,12 +103,15 @@ void NostrPool::onEvent(NostrRelay *relay, NostrString message) {
         if (it == this->subscriptions.end()) {
             return;
         }
-        NostrSubscription sub = it->second;
+        NostrSubscription &sub = it->second;
+        std::map<NostrString, bool>::const_iterator relayEose = sub.relayEose.find(relay->url);
+        if (relayEose == sub.relayEose.end()) return;
+        NostrEventCallback eventCallback = sub.eventCallback;
         SignedNostrEvent event;
         if (!SignedNostrEvent::parseRelayFrame(doc.as<JsonArrayConst>(), event, limits)) return;
-        event.stored = !sub.eose;
-        if (sub.eventCallback != nullptr) {
-            sub.eventCallback(subId, &event);
+        event.stored = !relayEose->second;
+        if (eventCallback != nullptr) {
+            eventCallback(subId, &event);
         }
     }
     doc.clear();
@@ -195,6 +209,10 @@ NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, Js
     this->subscriptions[subId].closeCallback = closeCallback;
     this->subscriptions[subId].eoseCallback = eoseCallback;
     this->subscriptions[subId].eventCallback = eventCallback;
+    this->subscriptions[subId].request = json;
+    for (auto url : urls) {
+        this->subscriptions[subId].relayEose[url] = false;
+    }
 
     for (auto url : urls) {
         NostrRelay *r = this->ensureRelay(url);
@@ -224,6 +242,15 @@ void NostrPool::closeSubscription(NostrString subId) {
     this->subscriptions.erase(subId);
 }
 
+const NostrSubscription *NostrPool::getSubscription(const NostrString &subId) const {
+    auto it = this->subscriptions.find(subId);
+    return it == this->subscriptions.end() ? nullptr : &it->second;
+}
+
+bool NostrPool::hasSubscription(const NostrString &subId) const {
+    return this->subscriptions.find(subId) != this->subscriptions.end();
+}
+
 NostrRelay *NostrPool::ensureRelay(NostrString url) {
     NostrRelay *relay = NULL;
     for (auto &r : this->relays) {
@@ -238,6 +265,27 @@ NostrRelay *NostrPool::ensureRelay(NostrString url) {
         relay = new NostrRelay(conn, url);
         this->relays.push_back(relay);
         relay->conn->addMessageListener([this, relay](NostrString message) { this->onEvent(relay, message); });
+        relay->conn->addConnectionStatusListener([this, relay](ConnectionStatus status) {
+            if (status == ConnectionStatus::DISCONNECTED) {
+                relay->restoreSubscriptions = relay->connectedOnce;
+                return;
+            }
+            if (status != ConnectionStatus::CONNECTED) return;
+
+            const bool shouldRestoreSubscriptions = relay->restoreSubscriptions;
+            relay->connectedOnce = true;
+            relay->restoreSubscriptions = false;
+            if (!shouldRestoreSubscriptions) return;
+
+            for (auto &entry : this->subscriptions) {
+                NostrSubscription &subscription = entry.second;
+                std::map<NostrString, bool>::iterator relayEose = subscription.relayEose.find(relay->url);
+                if (relayEose == subscription.relayEose.end()) continue;
+                relayEose->second = false;
+                subscription.eose = false;
+                relay->send(subscription.request);
+            }
+        });
     }
     return relay;
 }

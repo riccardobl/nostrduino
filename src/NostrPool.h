@@ -32,6 +32,11 @@ namespace nostr {
         NostrEOSECallback eoseCallback = nullptr;
         NostrEventCallback eventCallback = nullptr;
         NostrEventStatusCallback statusCallback = nullptr;
+
+       private:
+        friend class NostrPool;
+        NostrString request;
+        std::map<NostrString, bool> relayEose;
     };
 
     typedef struct s_EventStatusCallbackEntry {
@@ -57,6 +62,8 @@ namespace nostr {
          Connection *conn;
          NostrString url;
          std::vector<NostrString> messageQueue;
+         bool connectedOnce = false;
+         bool restoreSubscriptions = false;
          void processQueue();
     };
 
@@ -132,6 +139,16 @@ namespace nostr {
          * @param subId The subscription ID
          */
         void closeSubscription(NostrString subId);
+
+        /**
+         * Get a subscription by ID, or nullptr if it does not exist
+         */
+        const NostrSubscription *getSubscription(const NostrString &subId) const;
+
+        /**
+         * Check whether a subscription with the given ID exists
+         */
+        bool hasSubscription(const NostrString &subId) const;
 
         /**
          * Ensure the connection to the specified relay is open

@@ -26,10 +26,11 @@ class UtilsSubscriptionStateGuard {
 
 class MockConnection : public nostr::Connection {
   public:
-    bool ready = true;
+    bool ready = false;
     std::vector<String> sent;
     std::vector<String> incoming;
     std::vector<std::function<void(String)>> messageListeners;
+    std::vector<std::function<void(nostr::ConnectionStatus)>> statusListeners;
 
     void addMessageListener(std::function<void(String)> listener) override { messageListeners.push_back(listener); }
     void send(String message) override { sent.push_back(message); }
@@ -42,8 +43,14 @@ class MockConnection : public nostr::Connection {
         }
     }
     bool isReady() override { return ready; }
-    void addConnectionStatusListener(std::function<void(nostr::ConnectionStatus)>) override {}
+    void addConnectionStatusListener(std::function<void(nostr::ConnectionStatus)> listener) override {
+        statusListeners.push_back(listener);
+    }
     void queue(String message) { incoming.push_back(message); }
+    void status(nostr::ConnectionStatus value) {
+        ready = value == nostr::ConnectionStatus::CONNECTED;
+        for (const auto &listener : statusListeners) listener(value);
+    }
 };
 
 class MockTransport : public nostr::Transport {
@@ -81,7 +88,7 @@ class MockTransport : public nostr::Transport {
 bool testPoolQueueAndTransport() {
     MockTransport transport;
     nostr::NostrPool pool(&transport, 600);
-    bool eoseCalled = false;
+    int eoseCount = 0;
     bool eventCalled = false;
     bool storedEvent = false;
     bool statusCalled = false;
@@ -94,12 +101,18 @@ bool testPoolQueueAndTransport() {
             if (event != nullptr) storedEvent = event->isStored();
         },
         nullptr,
-        [&](const String &id) { eoseCalled = id == subId; });
+        [&](const String &id) {
+            if (id == subId) ++eoseCount;
+        });
     CHECK(subId.length() == 64);
+    CHECK(pool.hasSubscription(subId));
+    CHECK(pool.getSubscription(subId) != nullptr);
     CHECK(transport.lastConnection != nullptr);
     MockConnection *connection = transport.lastConnection;
+    CHECK(connection->sent.empty());
+    connection->status(nostr::ConnectionStatus::CONNECTED);
     pool.loop();
-    CHECK(!connection->sent.empty() && connection->sent.back().indexOf("\"REQ\"") >= 0);
+    CHECK(connection->sent.size() == 1 && connection->sent.back().indexOf("\"REQ\"") >= 0);
 
     nostr::UnsignedNostrEvent unsignedEvent(1, "pool event", 1700000000);
     nostr::SignedNostrEvent event = unsignedEvent.sign(
@@ -118,7 +131,25 @@ bool testPoolQueueAndTransport() {
 
     connection->queue(String("[\"EOSE\",\"") + subId + "\"]");
     pool.loop();
-    CHECK(eoseCalled);
+    CHECK(eoseCount == 1);
+    CHECK(pool.getSubscription(subId)->eose);
+
+    const size_t sentBeforeReconnect = connection->sent.size();
+    connection->status(nostr::ConnectionStatus::DISCONNECTED);
+    connection->status(nostr::ConnectionStatus::CONNECTED);
+    CHECK(connection->sent.size() == sentBeforeReconnect);
+    pool.loop();
+    CHECK(connection->sent.size() == sentBeforeReconnect + 1);
+    CHECK(!pool.getSubscription(subId)->eose);
+
+    eventCalled = false;
+    storedEvent = false;
+    connection->queue(eventFrame);
+    pool.loop();
+    CHECK(eventCalled && storedEvent);
+    connection->queue(String("[\"EOSE\",\"") + subId + "\"]");
+    pool.loop();
+    CHECK(eoseCount == 2);
 
     pool.publish({"ws://relay.example"}, &event,
                  [&](const String &id, bool ok, const String &message) {
@@ -134,9 +165,76 @@ bool testPoolQueueAndTransport() {
     pool.closeSubscription(subId);
     pool.loop();
     CHECK(connection->sent.back().indexOf("\"CLOSE\"") >= 0);
+    CHECK(!pool.hasSubscription(subId));
+    CHECK(pool.getSubscription(subId) == nullptr);
     CHECK(pool.getRelays().size() == 1 && pool.getConnectedRelays()->size() == 1);
     pool.disconnectRelay("ws://relay.example");
     CHECK(pool.getRelays().empty() && transport.connections.empty());
+
+    MockTransport multiRelayTransport;
+    nostr::NostrPool multiRelayPool(&multiRelayTransport, 600);
+    bool multiRelayStoredEvent = false;
+    int multiRelayEventCount = 0;
+    int multiRelayEoseCount = 0;
+    String multiRelaySubId = multiRelayPool.subscribeMany(
+        {"ws://relay-a.example", "ws://relay-b.example"},
+        {{{"kinds", {"1"}}}},
+        [&](const String &, nostr::SignedNostrEvent *receivedEvent) {
+            ++multiRelayEventCount;
+            multiRelayStoredEvent = receivedEvent != nullptr && receivedEvent->isStored();
+        },
+        nullptr,
+        [&](const String &id) {
+            if (id == multiRelaySubId) ++multiRelayEoseCount;
+        });
+    CHECK(multiRelayTransport.connections.size() == 2);
+    MockConnection *relayA = multiRelayTransport.connections[0];
+    MockConnection *relayB = multiRelayTransport.connections[1];
+    relayA->status(nostr::ConnectionStatus::CONNECTED);
+    relayB->status(nostr::ConnectionStatus::CONNECTED);
+    multiRelayPool.loop();
+    CHECK(relayA->sent.size() == 1 && relayB->sent.size() == 1);
+
+    JsonDocument multiRelayEventDocument;
+    JsonArray multiRelayEventArray = multiRelayEventDocument.to<JsonArray>();
+    multiRelayEventArray.add("EVENT");
+    multiRelayEventArray.add(multiRelaySubId);
+    JsonObject multiRelayEventObject = multiRelayEventArray.add<JsonObject>();
+    event.toJson(multiRelayEventObject);
+    String multiRelayEventFrame;
+    nostr::Utils::jsonStringify(multiRelayEventArray, &multiRelayEventFrame);
+
+    relayA->queue(String("[\"EOSE\",\"") + multiRelaySubId + "\"]");
+    multiRelayPool.loop();
+    CHECK(multiRelayEoseCount == 0);
+    CHECK(!multiRelayPool.getSubscription(multiRelaySubId)->eose);
+
+    relayA->queue(multiRelayEventFrame);
+    multiRelayPool.loop();
+    CHECK(multiRelayEventCount == 1 && !multiRelayStoredEvent);
+    relayB->queue(multiRelayEventFrame);
+    multiRelayPool.loop();
+    CHECK(multiRelayEventCount == 2 && multiRelayStoredEvent);
+
+    relayB->queue(String("[\"EOSE\",\"") + multiRelaySubId + "\"]");
+    multiRelayPool.loop();
+    CHECK(multiRelayEoseCount == 1);
+    CHECK(multiRelayPool.getSubscription(multiRelaySubId)->eose);
+
+    relayA->status(nostr::ConnectionStatus::DISCONNECTED);
+    relayA->status(nostr::ConnectionStatus::CONNECTED);
+    multiRelayPool.loop();
+    CHECK(relayA->sent.size() == 2);
+    CHECK(relayB->sent.size() == 1);
+    CHECK(!multiRelayPool.getSubscription(multiRelaySubId)->eose);
+
+    relayB->queue(multiRelayEventFrame);
+    multiRelayPool.loop();
+    CHECK(multiRelayEventCount == 3 && !multiRelayStoredEvent);
+    relayA->queue(multiRelayEventFrame);
+    multiRelayPool.loop();
+    CHECK(multiRelayEventCount == 4 && multiRelayStoredEvent);
+    multiRelayPool.close();
 
     size_t randomSample = 0;
     UtilsSubscriptionStateGuard utilsStateGuard;
