@@ -38,7 +38,8 @@ void NostrPool::onEvent(NostrRelay *relay, NostrString message) {
             if (it->second.closeCallback != nullptr) {
                 it->second.closeCallback(subId, reason);
             }
-            this->subscriptions.erase(it);
+            // The callback may close and erase its own subscription.
+            this->subscriptions.erase(subId);
         }
     } else if (std::strcmp(doc[0].as<const char *>(), "EOSE") == 0) {
         if (doc.size() != 2 || !doc[1].is<const char *>() ||
