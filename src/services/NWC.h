@@ -79,6 +79,9 @@ class NWC {
      */
     bool isReady() const { return encryptionReady; }
 
+    /** Whether the supplied NWC connection string is valid. */
+    bool isValid() const { return validConnection; }
+
     /**
      * The encryption selected from the wallet info event.
      */
@@ -227,6 +230,7 @@ class NWC {
     unsigned int poolDispatchDepth = 0;
     bool deferredClose = false;
     bool closed = false;
+    bool validConnection = false;
     unsigned long long discoveryStartedAt = 0;
 };
 } 

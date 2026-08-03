@@ -132,6 +132,7 @@ typedef struct s_GetInfoResponse {
 
 typedef struct s_NWCData {
     NostrString relay;
+    std::vector<NostrString> relays;
     NostrString pubkey;
     NostrString secret;
 } NWCData;
@@ -187,7 +188,7 @@ class Nip47 {
     void parseResponse(SignedNostrEvent *response, Nip47Response<GetBalanceResponse> &out);
     void parseResponse(SignedNostrEvent *response, Nip47Response<GetInfoResponse> &out);
     void parseResponse(SignedNostrEvent *response, Nip47Response<NotificationResponse> &out);
-    static void parseNWC(NostrString, NWCData &);
+    static bool parseNWC(NostrString, NWCData &);
 
   private:
     NostrString servicePubKey;

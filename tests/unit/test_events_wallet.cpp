@@ -97,10 +97,11 @@ bool testEventsAndWalletApi() {
     CHECK(nip04Plaintext.indexOf("\"method\":\"get_balance\"") >= 0);
 
     nostr::NWCData nwc;
-    nostr::Nip47::parseNWC("nostr+walletconnect://" + servicePublicKey +
-                           "?relay=wss%3A%2F%2Frelay.example%2Fv1&secret=" + userPrivateKey, nwc);
+    CHECK(nostr::Nip47::parseNWC("nostr+walletconnect://" + servicePublicKey +
+                                 "?relay=wss%3A%2F%2Frelay.example%2Fv1&secret=" + userPrivateKey, nwc));
     CHECK(nwc.pubkey == servicePublicKey && nwc.secret == userPrivateKey);
     CHECK(nwc.relay == "wss://relay.example/v1");
+    CHECK(nwc.relays.size() == 1 && nwc.relays[0] == nwc.relay);
 
     JsonDocument responseDocument;
     responseDocument["result_type"] = "get_balance";

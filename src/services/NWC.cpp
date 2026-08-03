@@ -24,8 +24,9 @@ NWC::~NWC() {
 
 NWC::NWC(Transport *transport, NostrString nwcUrl, const NostrLimits &limits)
     : transport(transport), limits(limits) {
+    this->validConnection = Nip47::parseNWC(nwcUrl, this->nwc);
+    if (!this->validConnection) return;
     this->pool = std::unique_ptr<NostrPool>(new NostrPool(transport, NWC_DEFAULT_TIMEOUT, limits));
-    Nip47::parseNWC(nwcUrl, this->nwc);
 
     Utils::log("NWC RELAY: " + this->nwc.relay);
     Utils::log("NWC PUBKEY: " + this->nwc.pubkey);
@@ -35,6 +36,11 @@ NWC::NWC(Transport *transport, NostrString nwcUrl, const NostrLimits &limits)
 
     this->nip47 = Nip47(Nip04(), this->nwc.pubkey, accountSecret);
     this->accountPubKey = Utils::getPublicKey(accountSecret);
+    if (NostrString_length(this->accountPubKey) != 64) {
+        this->validConnection = false;
+        this->pool.reset();
+        return;
+    }
     this->discoveryStartedAt = Utils::unixTimeSeconds();
     this->discoverEncryption();
 }
@@ -84,7 +90,7 @@ void NWC::discoverEncryption() {
 }
 
 void NWC::finishInfoSubscription() {
-    if (NostrString_length(this->infoSubId) > 0) {
+    if (this->pool != nullptr && NostrString_length(this->infoSubId) > 0) {
         NostrString subscription = this->infoSubId;
         this->infoSubId = "";
         this->pool->closeSubscription(subscription);
@@ -125,6 +131,10 @@ void NWC::failEncryption(NostrString errorCode, NostrString errorMessage) {
 
 bool NWC::deferUntilEncryptionReady(std::function<void()> send,
     std::function<void(NostrString, NostrString)> onErr) {
+    if (!this->validConnection) {
+        if (onErr) onErr("INVALID_CONNECTION", "Invalid NWC connection string");
+        return true;
+    }
     if (this->encryptionReady) return false;
     if (this->encryptionFailed) {
         if (onErr) onErr(this->encryptionErrorCode, this->encryptionErrorMessage);
@@ -157,7 +167,7 @@ void NWC::performClose() {
     if (this->closed) return;
     this->closed = true;
     this->deferredClose = false;
-    this->pool->close();
+    if (this->pool != nullptr) this->pool->close();
     this->pendingRequests.clear();
     this->callbacks.clear();
 }
@@ -169,7 +179,7 @@ void NWC::removeCallback(const std::shared_ptr<NWCResponseCallbackBase> &callbac
 }
 
 void NWC::loop() {
-    if (this->closed) return;
+    if (this->closed || !this->validConnection || this->pool == nullptr) return;
     ++this->poolDispatchDepth;
     this->pool->loop();
     --this->poolDispatchDepth;
@@ -284,6 +294,10 @@ void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes
 }
 
 void NWC::payInvoice(NostrString invoice, MilliSats amount, std::function<void(PayInvoiceResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
+    if (!this->validConnection) {
+        if (onErr) onErr("INVALID_CONNECTION", "Invalid NWC connection string");
+        return;
+    }
     if (!isOptionalMilliSatsValid(amount)) {
         if (onErr) onErr("INVALID_AMOUNT", "Invalid millisatoshi amount");
         return;
@@ -309,6 +323,10 @@ void NWC::multiPayInvoice(std::initializer_list<Invoice> invoices, std::function
 
 void NWC::multiPayInvoice(const std::vector<Invoice> &invoices, std::function<void(MultiPayInvoiceResponse)> onRes,
                           std::function<void(NostrString, NostrString)> onErr) {
+    if (!this->validConnection) {
+        if (onErr) onErr("INVALID_CONNECTION", "Invalid NWC connection string");
+        return;
+    }
     for (const Invoice &invoice : invoices) {
         if (!isRequiredMilliSatsValid(invoice.amount)) {
             if (onErr) onErr("INVALID_AMOUNT", "Invalid millisatoshi amount");
@@ -338,6 +356,10 @@ void NWC::payKeySend(NostrString pubkey, MilliSats amount, NostrString preimage,
 void NWC::payKeySend(NostrString pubkey, MilliSats amount, NostrString preimage,
                      const std::vector<TLVRecords> &tlv, std::function<void(PayKeySendResponse)> onRes,
                      std::function<void(NostrString, NostrString)> onErr) {
+    if (!this->validConnection) {
+        if (onErr) onErr("INVALID_CONNECTION", "Invalid NWC connection string");
+        return;
+    }
     if (!isRequiredMilliSatsValid(amount)) {
         if (onErr) onErr("INVALID_AMOUNT", "Invalid millisatoshi amount");
         return;
@@ -365,6 +387,10 @@ void NWC::multiPayKeySend(std::initializer_list<KeySend> keySends, std::function
 
 void NWC::multiPayKeySend(const std::vector<KeySend> &keySends, std::function<void(MultiPayKeySendResponse)> onRes,
                           std::function<void(NostrString, NostrString)> onErr) {
+    if (!this->validConnection) {
+        if (onErr) onErr("INVALID_CONNECTION", "Invalid NWC connection string");
+        return;
+    }
     for (const KeySend &keySend : keySends) {
         if (!isRequiredMilliSatsValid(keySend.amount)) {
             if (onErr) onErr("INVALID_AMOUNT", "Invalid millisatoshi amount");
@@ -388,6 +414,10 @@ void NWC::multiPayKeySend(const std::vector<KeySend> &keySends, std::function<vo
 
 void NWC::makeInvoice(MilliSats amount, NostrString description, NostrString descriptionHash, unsigned long expiry, std::function<void(MakeInvoiceResponse)> onRes,
                       std::function<void(NostrString, NostrString)> onErr) {
+    if (!this->validConnection) {
+        if (onErr) onErr("INVALID_CONNECTION", "Invalid NWC connection string");
+        return;
+    }
     if (!isRequiredMilliSatsValid(amount)) {
         if (onErr) onErr("INVALID_AMOUNT", "Invalid millisatoshi amount");
         return;

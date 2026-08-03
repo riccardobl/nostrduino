@@ -68,7 +68,8 @@ void MockTransport::getInvoiceFromLNAddr(String, nostr::MilliSats, String,
     if (callback) callback("");
 }
 
-nostr::Connection *MockTransport::connect(String) {
+nostr::Connection *MockTransport::connect(String url) {
+    connectedUrls.push_back(url);
     if (connection == nullptr) connection = new MockConnection();
     return connection;
 }

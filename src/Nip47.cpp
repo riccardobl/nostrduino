@@ -1,4 +1,6 @@
 #include "Nip47.h"
+#include "NostrUrl.h"
+#include <cctype>
 #include <cstring>
 
 using namespace nostr;
@@ -72,6 +74,25 @@ bool readStringArray(JsonVariantConst source, std::vector<NostrString> &destinat
     for (JsonVariantConst value : source.as<JsonArrayConst>()) {
         if (!value.is<const char *>()) return false;
         destination.push_back(value.as<NostrString>());
+    }
+    return true;
+}
+
+bool strictQueryDecode(const NostrString &encoded, NostrString &decoded) {
+    const long length = NostrString_length(encoded);
+    if (length < 0) return false;
+    for (long i = 0; i < length; ++i) {
+        if (encoded[i] != '%') continue;
+        if (i + 2 >= length ||
+            !std::isxdigit(static_cast<unsigned char>(encoded[i + 1])) ||
+            !std::isxdigit(static_cast<unsigned char>(encoded[i + 2]))) return false;
+        i += 2;
+    }
+    decoded = NostrString_urlDecode(encoded);
+    if (length > 0 && NostrString_length(decoded) == 0) return false;
+    for (long i = 0; i < NostrString_length(decoded); ++i) {
+        const unsigned char value = static_cast<unsigned char>(decoded[i]);
+        if (value == 0 || value < 0x20 || value == 0x7f) return false;
     }
     return true;
 }
@@ -516,30 +537,60 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<GetInfoRespo
     }
 }
 
-void Nip47::parseNWC(NostrString nwc, NWCData &data) {
-    NostrString prefix = "nostr+walletconnect://";
-    int prefixPos = NostrString_indexOf(nwc, prefix.c_str());
-    if (prefixPos != -1) {
-        NostrString withoutPrefix = NostrString_substring(nwc, prefixPos + NostrString_length(prefix));
-        int queryPos = NostrString_indexOf(withoutPrefix, "?");
-        if (queryPos != -1) {
-            data.pubkey = NostrString_substring(withoutPrefix, 0, queryPos);
-            NostrString queryParams = NostrString_substring(withoutPrefix, queryPos + 1);
-            std::vector<NostrString> paramsXvals;
-            NostrString_split(queryParams, '&', paramsXvals);
-            for (NostrString paramXval : paramsXvals) {
-                std::vector<NostrString> paramXvalSplit;
-                NostrString_split(paramXval, '=', paramXvalSplit);
-                if (paramXvalSplit.size() == 2) {
-                    if (NostrString_equals(paramXvalSplit[0], "relay")) {
-                        data.relay = NostrString_urlDecode(paramXvalSplit[1]);
-                    } else if (NostrString_equals(paramXvalSplit[0], "secret")) {
-                        data.secret = NostrString_urlDecode(paramXvalSplit[1]);
-                    }
+bool Nip47::parseNWC(NostrString nwc, NWCData &data) {
+    const NostrString prefix = "nostr+walletconnect://";
+    if (!NostrString_startsWith(nwc, NostrString_toChars(prefix))) return false;
+    const NostrString withoutPrefix = NostrString_substring(nwc, NostrString_length(prefix));
+    const int queryPos = NostrString_indexOf(withoutPrefix, "?");
+    if (queryPos <= 0) return false;
+
+    NWCData parsed;
+    parsed.pubkey = NostrString_substring(withoutPrefix, 0, queryPos);
+    uint8_t publicKey[32] = {};
+    if (!Utils::decodeHexExact(parsed.pubkey, publicKey, sizeof(publicKey))) return false;
+
+    const NostrString query = NostrString_substring(withoutPrefix, queryPos + 1);
+    if (NostrString_length(query) == 0) return false;
+    std::vector<NostrString> parameters;
+    NostrString_split(query, '&', parameters);
+    bool hasSecret = false;
+    for (const NostrString &parameter : parameters) {
+        const int equals = NostrString_indexOf(parameter, "=");
+        if (equals <= 0 || NostrString_indexOf(NostrString_substring(parameter, equals + 1), "=") != -1) return false;
+        const NostrString key = NostrString_substring(parameter, 0, equals);
+        const NostrString encodedValue = NostrString_substring(parameter, equals + 1);
+        NostrString value;
+        if (!strictQueryDecode(encodedValue, value)) return false;
+        if (key == "relay") {
+            ParsedUrl relayUrl;
+            if (!parseWebSocketUrl(value, relayUrl)) return false;
+            bool duplicate = false;
+            for (const NostrString &relay : parsed.relays) {
+                if (NostrString_equals(relay, value)) {
+                    duplicate = true;
+                    break;
                 }
             }
+            if (!duplicate) parsed.relays.push_back(value);
+        } else if (key == "secret") {
+            if (hasSecret) return false;
+            hasSecret = true;
+            parsed.secret = value;
         }
     }
+    if (!hasSecret || parsed.relays.empty()) return false;
+
+    uint8_t secret[32] = {};
+    uint8_t shared[32] = {};
+    const bool validKeys = Utils::decodeHexExact(parsed.secret, secret, sizeof(secret)) &&
+                           Utils::ecdh(parsed.secret, parsed.pubkey, shared);
+    for (size_t i = 0; i < sizeof(secret); ++i) secret[i] = 0;
+    for (size_t i = 0; i < sizeof(shared); ++i) shared[i] = 0;
+    if (!validKeys) return false;
+
+    parsed.relay = parsed.relays.front();
+    data = parsed;
+    return true;
 }
 
 void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<NotificationResponse> &out) {
