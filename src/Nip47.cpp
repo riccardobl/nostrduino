@@ -2,14 +2,36 @@
 
 using namespace nostr;
 
+void Nip47::setEncryption(Nip47Encryption selectedEncryption, bool shouldIncludeEncryptionTag) {
+    this->encryption = selectedEncryption;
+    this->includeEncryptionTag = shouldIncludeEncryptionTag;
+}
+
+NostrString Nip47::encryptContent(NostrString content) {
+    if (this->encryption == Nip47Encryption::Nip44V2) {
+        return this->nip44.encrypt(this->userPrivKey, this->servicePubKey, content);
+    }
+    return this->nip04.encrypt(this->userPrivKey, this->servicePubKey, content);
+}
+
+NostrString Nip47::decryptContent(NostrString content) {
+    if (this->encryption == Nip47Encryption::Nip44V2) {
+        return this->nip44.decrypt(this->userPrivKey, this->servicePubKey, content);
+    }
+    return this->nip04.decrypt(this->userPrivKey, this->servicePubKey, content);
+}
+
 SignedNostrEvent Nip47::createEvent(NostrString method, JsonDocument doc) {
     doc["method"] = method;
     NostrString contentString;
     Utils::jsonStringify(doc, &contentString);
     doc.clear();
-    contentString = this->nip04.encrypt(this->userPrivKey, this->servicePubKey, contentString);
+    contentString = this->encryptContent(contentString);
     UnsignedNostrEvent event(23194, contentString, Utils::unixTimeSeconds());
     NostrEventTags *tags = event.getTags();
+    if (this->includeEncryptionTag) {
+        tags->addTag("encryption", {this->encryption == Nip47Encryption::Nip44V2 ? "nip44_v2" : "nip04"});
+    }
     tags->addTag("p", {this->servicePubKey});
     return event.sign(this->userPrivKey);
 }
@@ -67,6 +89,10 @@ SignedNostrEvent Nip47::getInfo() {
 }
 
 SignedNostrEvent Nip47::multiPayInvoice(std::initializer_list<Invoice> invoices) {
+    return this->multiPayInvoice(std::vector<Invoice>(invoices));
+}
+
+SignedNostrEvent Nip47::multiPayInvoice(const std::vector<Invoice> &invoices) {
     JsonDocument doc;
     JsonObject params = doc["params"].to<JsonObject>();
     JsonArray iv = params["invoices"].to<JsonArray>();
@@ -79,6 +105,11 @@ SignedNostrEvent Nip47::multiPayInvoice(std::initializer_list<Invoice> invoices)
 }
 
 SignedNostrEvent Nip47::payKeySend(NostrString pubkey, unsigned long amount, NostrString preimage, std::initializer_list<TLVRecords> tlv) {
+    return this->payKeySend(pubkey, amount, preimage, std::vector<TLVRecords>(tlv));
+}
+
+SignedNostrEvent Nip47::payKeySend(NostrString pubkey, unsigned long amount, NostrString preimage,
+                                    const std::vector<TLVRecords> &tlv) {
     JsonDocument doc;
     JsonObject params = doc["params"].to<JsonObject>();
     params["pubkey"] = pubkey;
@@ -98,6 +129,10 @@ SignedNostrEvent Nip47::payKeySend(NostrString pubkey, unsigned long amount, Nos
 }
 
 SignedNostrEvent Nip47::multiPayKeySend(std::initializer_list<KeySend> keySends) {
+    return this->multiPayKeySend(std::vector<KeySend>(keySends));
+}
+
+SignedNostrEvent Nip47::multiPayKeySend(const std::vector<KeySend> &keySends) {
     JsonDocument doc;
     JsonObject params = doc["params"].to<JsonObject>();
     JsonArray ks = params["key_sends"].to<JsonArray>();
@@ -147,7 +182,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<PayInvoiceRe
     out.errorMessage = "";
     Utils::log("NWC: received pay_invoice response");
     if (response->verify()) {
-        NostrString content = this->nip04.decrypt(this->userPrivKey, this->servicePubKey, response->getContent());
+        NostrString content = this->decryptContent(response->getContent());
         JsonDocument doc;
         Utils::jsonParse(&content, &doc);
         JsonObject error = doc["error"];
@@ -176,7 +211,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MultiPayInvo
     out.errorMessage = "";
     Utils::log("NWC: received multi_pay_invoice response");
     if (response->verify()) {
-        NostrString content = this->nip04.decrypt(this->userPrivKey, this->servicePubKey, response->getContent());
+        NostrString content = this->decryptContent(response->getContent());
         JsonDocument doc;
         Utils::jsonParse(&content, &doc);
         JsonObject error = doc["error"];
@@ -209,7 +244,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<PayKeySendRe
     out.errorMessage = "";
     Utils::log("NWC: received pay_keysend response");
     if (response->verify()) {
-        NostrString content = this->nip04.decrypt(this->userPrivKey, this->servicePubKey, response->getContent());
+        NostrString content = this->decryptContent(response->getContent());
         JsonDocument doc;
         Utils::jsonParse(&content, &doc);
         JsonObject error = doc["error"];
@@ -238,7 +273,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MultiPayKeyS
     out.errorMessage = "";
     Utils::log("NWC: received multi_pay_keysend response");
     if (response->verify()) {
-        NostrString content = this->nip04.decrypt(this->userPrivKey, this->servicePubKey, response->getContent());
+        NostrString content = this->decryptContent(response->getContent());
         JsonDocument doc;
         Utils::jsonParse(&content, &doc);
         JsonObject error = doc["error"];
@@ -271,7 +306,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MakeInvoiceR
     out.errorMessage = "";
     Utils::log("NWC: received make_invoice response");
     if (response->verify()) {
-        NostrString content = this->nip04.decrypt(this->userPrivKey, this->servicePubKey, response->getContent());
+        NostrString content = this->decryptContent(response->getContent());
         JsonDocument doc;
         Utils::jsonParse(&content, &doc);
         JsonObject error = doc["error"];
@@ -314,7 +349,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<LookUpInvoic
     out.errorMessage = "";
     Utils::log("NWC: received lookup_invoice response");
     if (response->verify()) {
-        NostrString content = this->nip04.decrypt(this->userPrivKey, this->servicePubKey, response->getContent());
+        NostrString content = this->decryptContent(response->getContent());
         JsonDocument doc;
         Utils::jsonParse(&content, &doc);
         JsonObject error = doc["error"];
@@ -358,7 +393,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<ListTransact
     out.errorMessage = "";
     Utils::log("NWC: received list_transactions response");
     if (response->verify()) {
-        NostrString content = this->nip04.decrypt(this->userPrivKey, this->servicePubKey, response->getContent());
+        NostrString content = this->decryptContent(response->getContent());
         JsonDocument doc;
         Utils::jsonParse(&content, &doc);
         JsonObject error = doc["error"];
@@ -406,7 +441,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<GetBalanceRe
     out.errorMessage = "";
     Utils::log("NWC: received get_balance response");
     if (response->verify()) {
-        NostrString content = this->nip04.decrypt(this->userPrivKey, this->servicePubKey, response->getContent());
+        NostrString content = this->decryptContent(response->getContent());
         JsonDocument doc;
         Utils::jsonParse(&content, &doc);
         JsonObject error = doc["error"];
@@ -435,7 +470,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<GetInfoRespo
     out.errorMessage = "";
     Utils::log("NWC: received get_info response");
     if (response->verify()) {
-        NostrString content = this->nip04.decrypt(this->userPrivKey, this->servicePubKey, response->getContent());
+        NostrString content = this->decryptContent(response->getContent());
         JsonDocument doc;
         Utils::jsonParse(&content, &doc);
         JsonObject error = doc["error"];
@@ -505,7 +540,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<Notification
     Utils::log("NWC: received notification response");
 
     if (response->verify()) {
-        NostrString content = this->nip04.decrypt(this->userPrivKey, this->servicePubKey, response->getContent());
+        NostrString content = this->decryptContent(response->getContent());
         JsonDocument doc;
         Utils::jsonParse(&content, &doc);
 

@@ -3,12 +3,18 @@
 #include <Arduino.h>
 #include "ArduinoJson.h"
 #include "Nip04.h"
+#include "Nip44.h"
 #include "NostrEvent.h"
 #include "NostrString.h"
 #include "NostrUtils.h"
 #include <initializer_list>
 #include <vector>
 namespace nostr {
+
+enum class Nip47Encryption {
+    Nip04,
+    Nip44V2
+};
 
 typedef struct s_Invoice {
     NostrString invoice;
@@ -24,7 +30,7 @@ typedef struct s_KeySend {
     NostrString pubkey;
     unsigned long amount;
     NostrString preimage;
-    std::initializer_list<TLVRecords> tlv;
+    std::vector<TLVRecords> tlv;
 } KeySend;
 
 template <typename T> class Nip47Response {
@@ -153,10 +159,16 @@ class Nip47 {
   public:
     Nip47(){};
     Nip47(Nip04 nip04, NostrString servicePubKey, NostrString userPrivKey) : servicePubKey(servicePubKey), userPrivKey(userPrivKey), nip04(nip04) {}
+    void setEncryption(Nip47Encryption encryption, bool includeEncryptionTag = true);
+    Nip47Encryption getEncryption() const { return encryption; }
     SignedNostrEvent payInvoice(NostrString invoice, unsigned long amount = -1);
     SignedNostrEvent multiPayInvoice(std::initializer_list<Invoice> invoices);
+    SignedNostrEvent multiPayInvoice(const std::vector<Invoice> &invoices);
     SignedNostrEvent payKeySend(NostrString pubkey, unsigned long amount, NostrString preimage = "", std::initializer_list<TLVRecords> tlv = {});
+    SignedNostrEvent payKeySend(NostrString pubkey, unsigned long amount, NostrString preimage,
+                                const std::vector<TLVRecords> &tlv);
     SignedNostrEvent multiPayKeySend(std::initializer_list<KeySend> keySends);
+    SignedNostrEvent multiPayKeySend(const std::vector<KeySend> &keySends);
     SignedNostrEvent makeInvoice(unsigned long amount, NostrString description = "", NostrString descriptionHash = "", unsigned long expiry = 0);
     SignedNostrEvent lookUpPaymentHash(NostrString paymentHash);
     SignedNostrEvent lookUpInvoice(NostrString invoice);
@@ -180,7 +192,12 @@ class Nip47 {
     NostrString servicePubKey;
     NostrString userPrivKey;
     Nip04 nip04;
+    Nip44 nip44;
+    Nip47Encryption encryption = Nip47Encryption::Nip04;
+    bool includeEncryptionTag = false;
     SignedNostrEvent createEvent(NostrString method, JsonDocument doc);
+    NostrString encryptContent(NostrString content);
+    NostrString decryptContent(NostrString content);
     std::function<void(Nip47Notification)> notificationCallback;
 };
 } 

@@ -2,6 +2,7 @@
 #define _NOSTR_NWC_H
 #include <functional>
 #include <memory>
+#include <vector>
 
 #include "ArduinoJson.h"
 #include "Nip47.h"
@@ -11,6 +12,7 @@
 #include "NostrTransport.h"
 #include "NostrUtils.h"
 
+#define NWC_INFO_KIND "13194"
 #define NWC_RESPONSE_KIND "23195"
 #define NWC_NOTIFICATION_KIND "23196"
 
@@ -72,6 +74,16 @@ class NWC {
     void close();
 
     /**
+     * Whether the wallet info event has been processed and requests can be sent.
+     */
+    bool isReady() const { return encryptionReady; }
+
+    /**
+     * The encryption selected from the wallet info event.
+     */
+    Nip47Encryption getEncryption() const { return nip47.getEncryption(); }
+
+    /**
      * Pay a lightning invoice
      * @param invoice The invoice to pay
      * @param amount The amount to pay, if not specified the full amount will be paid (optional)
@@ -88,6 +100,8 @@ class NWC {
      * @param onErr A callback that will be called when the payment fails (optional)
      */
     void multiPayInvoice(std::initializer_list<Invoice> invoices, std::function<void(MultiPayInvoiceResponse)> onRes = nullptr, std::function<void(NostrString, NostrString)> onErr = nullptr);
+    void multiPayInvoice(const std::vector<Invoice> &invoices, std::function<void(MultiPayInvoiceResponse)> onRes = nullptr,
+                         std::function<void(NostrString, NostrString)> onErr = nullptr);
 
     /**
      * Send a keysend payment
@@ -100,6 +114,9 @@ class NWC {
      */
     void payKeySend(NostrString pubkey, unsigned long amount, NostrString preimage = "", std::initializer_list<TLVRecords> tlv = {}, std::function<void(PayKeySendResponse)> onRes = nullptr,
                     std::function<void(NostrString, NostrString)> onErr = nullptr);
+    void payKeySend(NostrString pubkey, unsigned long amount, NostrString preimage, const std::vector<TLVRecords> &tlv,
+                    std::function<void(PayKeySendResponse)> onRes = nullptr,
+                    std::function<void(NostrString, NostrString)> onErr = nullptr);
 
     /**
      * Send multiple keysend payments
@@ -108,6 +125,8 @@ class NWC {
      * @param onErr A callback that will be called when the payment fails (optional)
      */
     void multiPayKeySend(std::initializer_list<KeySend> keySends, std::function<void(MultiPayKeySendResponse)> onRes = nullptr, std::function<void(NostrString, NostrString)> onErr = nullptr);
+    void multiPayKeySend(const std::vector<KeySend> &keySends, std::function<void(MultiPayKeySendResponse)> onRes = nullptr,
+                         std::function<void(NostrString, NostrString)> onErr = nullptr);
 
     /**
      * Create a lightning invoice
@@ -173,12 +192,30 @@ class NWC {
     void subscribeNotifications(std::function<void(NotificationResponse)> onRes, std::function<void(NostrString, NostrString)> onErr);
 
   private:
+    struct PendingRequest {
+        std::function<void()> send;
+        std::function<void(NostrString, NostrString)> onErr;
+    };
+
     Transport *transport;
     NostrString sendEvent(SignedNostrEvent *ev);
+    void discoverEncryption();
+    void selectEncryption(Nip47Encryption encryption, bool includeEncryptionTag);
+    void rejectUnsupportedEncryption();
+    void failEncryption(NostrString errorCode, NostrString errorMessage);
+    bool deferUntilEncryptionReady(std::function<void()> send,
+                                   std::function<void(NostrString, NostrString)> onErr);
+    void finishInfoSubscription();
     std::unique_ptr<NostrPool> pool;
     NWCData nwc;
     Nip47 nip47;
     NostrString accountPubKey;
+    NostrString infoSubId;
+    bool encryptionReady = false;
+    bool encryptionFailed = false;
+    NostrString encryptionErrorCode;
+    NostrString encryptionErrorMessage;
+    std::vector<PendingRequest> pendingRequests;
     std::vector<std::unique_ptr<NWCResponseCallbackBase>> callbacks;
 };
 } 
