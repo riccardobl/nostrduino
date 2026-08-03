@@ -171,8 +171,12 @@ NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, st
 }
 
 NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, JsonArray filters, NostrEventCallback eventCallback, NostrCloseCallback closeCallback, NostrEOSECallback eoseCallback) {
-    NostrString subId = Utils::getNewSubscriptionId();
-    if (NostrString_length(subId) <= 0 || static_cast<size_t>(NostrString_length(subId)) > limits.maxSubscriptionIdBytes) return "";
+    NostrString subId;
+    do {
+        subId = Utils::getNewSubscriptionId();
+        if (NostrString_length(subId) <= 0 || static_cast<size_t>(NostrString_length(subId)) > limits.maxSubscriptionIdBytes) return "";
+    } while (this->subscriptions.find(subId) != this->subscriptions.end());
+
     JsonDocument doc;
     JsonArray req = doc["req"].to<JsonArray>();
     req.add("REQ");
@@ -186,13 +190,10 @@ NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, Js
     Utils::jsonStringify(req, &json);
     doc.clear();
 
-    if (this->subscriptions.find(subId) == this->subscriptions.end()) {
-        // if subscription does not exist, create it
-        this->subscriptions[subId] = NostrSubscription();
-        this->subscriptions[subId].closeCallback = closeCallback;
-        this->subscriptions[subId].eoseCallback = eoseCallback;
-        this->subscriptions[subId].eventCallback = eventCallback;
-    }
+    this->subscriptions[subId] = NostrSubscription();
+    this->subscriptions[subId].closeCallback = closeCallback;
+    this->subscriptions[subId].eoseCallback = eoseCallback;
+    this->subscriptions[subId].eventCallback = eventCallback;
 
     for (auto url : urls) {
         NostrRelay *r = this->ensureRelay(url);

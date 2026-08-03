@@ -10,6 +10,20 @@
 
 namespace unit_test {
 
+class UtilsSubscriptionStateGuard {
+  public:
+    UtilsSubscriptionStateGuard()
+        : randomBytesProvider(nostr::Utils::randomBytesProvider), subscriptions(nostr::Utils::subs) {}
+    ~UtilsSubscriptionStateGuard() {
+        nostr::Utils::setRandomBytesProvider(randomBytesProvider);
+        nostr::Utils::subs = subscriptions;
+    }
+
+  private:
+    std::function<bool(uint8_t *, size_t)> randomBytesProvider;
+    unsigned long long subscriptions;
+};
+
 class MockConnection : public nostr::Connection {
   public:
     bool ready = true;
@@ -123,6 +137,31 @@ bool testPoolQueueAndTransport() {
     CHECK(pool.getRelays().size() == 1 && pool.getConnectedRelays()->size() == 1);
     pool.disconnectRelay("ws://relay.example");
     CHECK(pool.getRelays().empty() && transport.connections.empty());
+
+    size_t randomSample = 0;
+    UtilsSubscriptionStateGuard utilsStateGuard;
+    nostr::Utils::subs = 1;
+    nostr::Utils::setRandomBytesProvider([&](uint8_t *output, size_t size) {
+        for (size_t i = 0; i < size; ++i) output[i] = randomSample++ == 0 ? 52 : 0;
+        return true;
+    });
+
+    MockTransport collisionTransport;
+    nostr::NostrPool collisionPool(&collisionTransport, 600);
+    JsonDocument filtersDocument;
+    JsonArray filters = filtersDocument.to<JsonArray>();
+    String firstSubId = collisionPool.subscribeMany({}, filters);
+
+    nostr::Utils::subs = 10;
+    nostr::Utils::setRandomBytesProvider([](uint8_t *output, size_t size) {
+        for (size_t i = 0; i < size; ++i) output[i] = 0;
+        return true;
+    });
+    String regeneratedSubId = collisionPool.subscribeMany({}, filters);
+
+    CHECK(firstSubId.startsWith("10"));
+    CHECK(regeneratedSubId.startsWith("11"));
+    CHECK(regeneratedSubId != firstSubId);
     return true;
 }
 
