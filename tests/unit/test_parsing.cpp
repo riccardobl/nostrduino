@@ -14,6 +14,25 @@ bool parseRelayFrame(const char *json, nostr::SignedNostrEvent &event,
 }
 
 bool testParsing() {
+    nostr::NostrEventTags tags;
+    tags.addTag("p", {"one"});
+    tags.addTag("e", {"two"});
+    tags.addTag("a", {"three"});
+    CHECK(tags.removeTag(0));
+    CHECK(tags.count() == 2);
+    CHECK(tags.removeTag(1));
+    CHECK(tags.count() == 1);
+    tags.addTag("p", {"four"});
+    tags.addTag("e", {"five"});
+    CHECK(tags.removeTag(1));
+    CHECK(tags.count() == 2);
+    CHECK(!tags.removeTag(tags.count()));
+    CHECK(!tags.removeTag(tags.count() + 10));
+    CHECK(tags.count() == 2);
+    nostr::NostrEventTags emptyTags;
+    CHECK(!emptyTags.removeTag(0));
+    CHECK(emptyTags.count() == 0);
+
     nostr::SignedNostrEvent event;
     String valid = "[\"EVENT\",\"sub\",{\"id\":\"";
     valid += repeatChar('a', 64);

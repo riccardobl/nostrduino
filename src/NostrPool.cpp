@@ -1,4 +1,5 @@
 #include "NostrPool.h"
+#include "NostrNumeric.h"
 #include <cstring>
 
 using namespace nostr;
@@ -175,18 +176,27 @@ NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, st
                     key = NostrString_substring(key, 7);
                 }else if(NostrString_startsWith(key,"string[] ")){
                     key = NostrString_substring(key, 9);
+                } else {
+                    return "";
                 }
             }
             if (isInt) {
                 std::initializer_list<NostrString> values = pair.second;
+                if (values.size() != 1) return "";
                 NostrString value = *values.begin();
-                filterObj[key] = NostrString_toInt(value);
+                int64_t parsed = 0;
+                if (!detail::parseIntegerStrict(value, parsed)) return "";
+                filterObj[key] = parsed;
             } else if(isFloat){
                 std::initializer_list<NostrString> values = pair.second;
+                if (values.size() != 1) return "";
                 NostrString value = *values.begin();
-                filterObj[key] = NostrString_toFloat(value);            
+                double parsed = 0;
+                if (!detail::parseFloatStrict(value, parsed)) return "";
+                filterObj[key] = parsed;
             } else if(isString){
                 std::initializer_list<NostrString> values = pair.second;
+                if (values.size() != 1) return "";
                 NostrString value = *values.begin();
                 filterObj[key] = value;                
             }else {
@@ -194,10 +204,14 @@ NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, st
                 for (const auto &value : pair.second) {
                     if (isIntList) {
                         NostrString vStr = value;
-                        arr.add(NostrString_toInt(vStr));
+                        int64_t parsed = 0;
+                        if (!detail::parseIntegerStrict(vStr, parsed)) return "";
+                        arr.add(parsed);
                     } else if(isFloatList){
                         NostrString vStr = value;
-                        arr.add(NostrString_toFloat(vStr));
+                        double parsed = 0;
+                        if (!detail::parseFloatStrict(vStr, parsed)) return "";
+                        arr.add(parsed);
                     }else {
                         arr.add(value);
                     }
@@ -212,6 +226,9 @@ NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, st
 }
 
 NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, JsonArray filters, NostrEventCallback eventCallback, NostrCloseCallback closeCallback, NostrEOSECallback eoseCallback) {
+    for (JsonVariant filter : filters) {
+        if (!filter.is<JsonObject>()) return "";
+    }
     NostrString subId;
     do {
         subId = Utils::getNewSubscriptionId();

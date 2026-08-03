@@ -32,7 +32,6 @@ jobs:
           : > "$NATIVE_UNIT_TEST_OUTPUT_FILE"
           compiled="FALSE"
           executed="FALSE"
-          correct="FALSE"
           status="FALSE"
           if pio run -e NativeUnitTests; then
             compiled="OK"
@@ -41,14 +40,23 @@ jobs:
             executed="OK"
             if (( native_test_exit == 0 )); then
               if grep -Fq 'NATIVE_TEST amounts PASS' "$NATIVE_UNIT_TEST_OUTPUT_FILE" &&
+                 grep -Fq 'NATIVE_TEST numeric PASS' "$NATIVE_UNIT_TEST_OUTPUT_FILE" &&
                  grep -Fq 'NATIVE_TESTS PASSED' "$NATIVE_UNIT_TEST_OUTPUT_FILE"; then
-                correct="OK"
                 status="OK"
               fi
             fi
           fi
-          printf 'native_amounts\t%s\t%s\t%s\t%s\n' \
-            "$compiled" "$executed" "$correct" "$status" > "$NATIVE_UNIT_TEST_RESULTS_FILE"
+          for native_test in amounts numeric; do
+            correct="FALSE"
+            test_status="FALSE"
+            if grep -Fq "NATIVE_TEST $native_test PASS" "$NATIVE_UNIT_TEST_OUTPUT_FILE"; then
+              correct="OK"
+              test_status="OK"
+            fi
+            printf 'native_%s\t%s\t%s\t%s\t%s\n' \
+              "$native_test" "$compiled" "$executed" "$correct" "$test_status" \
+              >> "$NATIVE_UNIT_TEST_RESULTS_FILE"
+          done
           test "$status" = "OK"
 
       - name: Check ESP32-only source tree

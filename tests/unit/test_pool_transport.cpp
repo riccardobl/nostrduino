@@ -335,6 +335,50 @@ bool testPoolQueueAndTransport() {
     CHECK(firstSubId.startsWith("10"));
     CHECK(regeneratedSubId.startsWith("11"));
     CHECK(regeneratedSubId != firstSubId);
+
+    MockTransport invalidFilterTransport;
+    nostr::NostrPool invalidFilterPool(&invalidFilterTransport, 600);
+    CHECK(invalidFilterPool.subscribeMany(
+              {"ws://invalid.example"}, {{{"since", {}}}}) == "");
+    CHECK(invalidFilterPool.subscribeMany(
+              {"ws://invalid.example"}, {{{"until", {}}}}) == "");
+    CHECK(invalidFilterPool.subscribeMany(
+              {"ws://invalid.example"}, {{{"limit", {}}}}) == "");
+    CHECK(invalidFilterPool.subscribeMany(
+              {"ws://invalid.example"}, {{{"int score", {}}}}) == "");
+    CHECK(invalidFilterPool.subscribeMany(
+              {"ws://invalid.example"}, {{{"float score", {}}}}) == "");
+    CHECK(invalidFilterPool.subscribeMany(
+              {"ws://invalid.example"}, {{{"string name", {}}}}) == "");
+    CHECK(invalidFilterPool.subscribeMany(
+              {"ws://invalid.example"}, {{{"until", {"12x"}}}}) == "");
+    CHECK(invalidFilterPool.subscribeMany(
+              {"ws://invalid.example"}, {{{"int score", {"9223372036854775808"}}}}) == "");
+    CHECK(invalidFilterPool.subscribeMany(
+              {"ws://invalid.example"}, {{{"int score", {"-9223372036854775809"}}}}) == "");
+    CHECK(invalidFilterPool.subscribeMany(
+              {"ws://invalid.example"}, {{{"kinds", {"1", "bad"}}}}) == "");
+    CHECK(invalidFilterPool.subscribeMany(
+              {"ws://invalid.example"}, {{{"float score", {"nan"}}}}) == "");
+    CHECK(invalidFilterPool.subscribeMany(
+              {"ws://invalid.example"}, {{{"float score", {"1e999"}}}}) == "");
+    CHECK(invalidFilterPool.subscribeMany(
+              {"ws://invalid.example"}, {{{"bogus scalar", {"1"}}}}) == "");
+    CHECK(invalidFilterTransport.connections.empty());
+    CHECK(invalidFilterPool.getRelays().empty());
+
+    String boundaryFilterSubId = invalidFilterPool.subscribeMany(
+        {}, {{{"int minimum", {"-9223372036854775808"}},
+              {"int maximum", {"9223372036854775807"}},
+              {"float score", {"1.25"}}}});
+    CHECK(boundaryFilterSubId.length() == 64);
+    invalidFilterPool.closeSubscription(boundaryFilterSubId);
+
+    JsonDocument invalidJsonFilterDocument;
+    JsonArray invalidJsonFilters = invalidJsonFilterDocument.to<JsonArray>();
+    invalidJsonFilters.add(1);
+    CHECK(invalidFilterPool.subscribeMany({"ws://invalid.example"}, invalidJsonFilters) == "");
+    CHECK(invalidFilterTransport.connections.empty());
     return true;
 }
 

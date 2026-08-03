@@ -37,8 +37,10 @@ unsigned int NostrEventTags::addTag(NostrString key, std::vector<NostrString> va
     return tags.size();
 }
 
-void NostrEventTags::removeTag(unsigned int index) {
+bool NostrEventTags::removeTag(size_t index) {
+    if (index >= tags.size()) return false;
     tags.erase(tags.begin() + index);
+    return true;
 }
 
 void NostrEventTags::removeTags(NostrString key) {

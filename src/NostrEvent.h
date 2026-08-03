@@ -58,7 +58,7 @@ class NostrEventTags {
     /**
      * Remove a tag at a given index
      */
-    void removeTag(unsigned int index);
+    bool removeTag(size_t index);
 
     /**
      * Remove all occurrences of a tag with the given key
