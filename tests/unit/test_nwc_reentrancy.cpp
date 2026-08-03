@@ -98,7 +98,7 @@ bool testNwcReentrancy() {
         if (!nostr::Utils::jsonParse(&copy, &frameDocument) || !frameDocument.is<JsonArray>()) continue;
         JsonArray frame = frameDocument.as<JsonArray>();
         if (frame.size() >= 3 && frame[0].as<String>() == "REQ" &&
-            frame[2]["kinds"][0].as<unsigned int>() == 23196) {
+            frame[2]["kinds"][0].as<unsigned int>() == 23197) {
             ++notificationSubscriptions;
         }
     }

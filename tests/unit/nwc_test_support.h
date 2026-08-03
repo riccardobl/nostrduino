@@ -18,6 +18,7 @@ class MockConnection : public nostr::Connection {
     std::vector<String> sent;
     std::vector<String> incoming;
     std::vector<std::function<void(String)>> messageListeners;
+    std::vector<std::function<void(nostr::ConnectionStatus)>> statusListeners;
 
     void addMessageListener(std::function<void(String)> listener) override;
     void send(String message) override;
@@ -26,6 +27,7 @@ class MockConnection : public nostr::Connection {
     bool isReady() override;
     void addConnectionStatusListener(std::function<void(nostr::ConnectionStatus)> listener) override;
     void queue(const String &message);
+    void status(nostr::ConnectionStatus value);
 };
 
 class MockTransport : public nostr::Transport {
@@ -74,7 +76,7 @@ class Fixture {
                        const String &signingPrivateKey = "", unsigned int kind = 23195,
                        const String &targetPublicKey = "");
     bool queueNotification(JsonDocument &notification, const String &signingPrivateKey = "",
-                           unsigned int kind = 23196, const String &targetPublicKey = "");
+                           unsigned int kind = 0, const String &targetPublicKey = "");
     bool subscriptionWasClosed(const String &subscriptionId) const;
 
   private:

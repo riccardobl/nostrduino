@@ -50,10 +50,17 @@ bool MockConnection::isReady() {
     return ready;
 }
 
-void MockConnection::addConnectionStatusListener(std::function<void(nostr::ConnectionStatus)>) {}
+void MockConnection::addConnectionStatusListener(std::function<void(nostr::ConnectionStatus)> listener) {
+    statusListeners.push_back(listener);
+}
 
 void MockConnection::queue(const String &message) {
     incoming.push_back(message);
+}
+
+void MockConnection::status(nostr::ConnectionStatus value) {
+    ready = value == nostr::ConnectionStatus::CONNECTED;
+    for (const auto &listener : statusListeners) listener(value);
 }
 
 void MockTransport::getInvoiceFromLNAddr(String, nostr::MilliSats, String,
@@ -99,6 +106,9 @@ Fixture::Fixture()
       otherPublicKey(nostr::Utils::getPublicKey(otherPrivateKey)),
       transport(), client(&transport, makeNwcUrl(servicePublicKey, userPrivateKey)) {
     setUnixTime(1700000000ULL);
+    if (transport.connection != nullptr) {
+        transport.connection->status(nostr::ConnectionStatus::CONNECTED);
+    }
 }
 
 void Fixture::loop() {
@@ -255,7 +265,11 @@ bool Fixture::queueResponse(size_t requestIndex, JsonDocument &response, const S
 
 bool Fixture::queueNotification(JsonDocument &notification, const String &signingPrivateKey,
                                 unsigned int kind, const String &targetPublicKey) {
-    const String subscriptionId = subscriptionIdForKind(23196);
+    const unsigned int expectedKind = client.getEncryption() == nostr::Nip47Encryption::Nip44V2
+                                          ? 23197
+                                          : 23196;
+    const unsigned int selectedKind = kind != 0 ? kind : expectedKind;
+    const String subscriptionId = subscriptionIdForKind(expectedKind);
     String plaintext;
     nostr::Utils::jsonStringify(notification.as<JsonVariantConst>(), &plaintext);
     String signer = signingPrivateKey.length() > 0 ? signingPrivateKey : servicePrivateKey;
@@ -263,7 +277,7 @@ bool Fixture::queueNotification(JsonDocument &notification, const String &signin
     const String encryption = client.getEncryption() == nostr::Nip47Encryption::Nip44V2
                                   ? "nip44_v2"
                                   : "nip04";
-    return queueWalletEvent(subscriptionId, kind, encryptForClient(plaintext, encryption),
+    return queueWalletEvent(subscriptionId, selectedKind, encryptForClient(plaintext, encryption),
                             "", "", signer, target);
 }
 

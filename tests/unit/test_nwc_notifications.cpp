@@ -32,7 +32,7 @@ bool testNwcNotifications() {
             errorMessage = message;
         });
     fixture.loop();
-    const String notificationSub = fixture.subscriptionIdForKind(23196);
+    const String notificationSub = fixture.subscriptionIdForKind(23197);
     CHECK(notificationSub.length() == 64);
 
     JsonDocument notification;
@@ -51,7 +51,7 @@ bool testNwcNotifications() {
 
     CHECK(fixture.queueNotification(notification, fixture.otherPrivateKey));
     CHECK(fixture.queueNotification(notification, "", 1));
-    CHECK(fixture.queueNotification(notification, "", 23196, fixture.otherPublicKey));
+    CHECK(fixture.queueNotification(notification, "", 23197, fixture.otherPublicKey));
     CHECK(fixture.queueNotification(notification));
     fixture.loop();
     CHECK(notificationCallbacks == 1);
@@ -67,12 +67,39 @@ bool testNwcNotifications() {
     CHECK(errorCode == "INTERNAL");
     CHECK(errorMessage == "wallet unavailable");
 
+    const size_t sentBeforeReconnect = fixture.transport.connection->sent.size();
+    fixture.transport.connection->status(nostr::ConnectionStatus::DISCONNECTED);
+    fixture.transport.connection->status(nostr::ConnectionStatus::CONNECTED);
+    fixture.loop();
+    CHECK(fixture.transport.connection->sent.size() == sentBeforeReconnect + 1);
+    CHECK(fixture.subscriptionIdForKind(23197) == notificationSub);
+
     setUnixTime(1700000000ULL + 1000000ULL);
     fixture.loop();
     CHECK(!fixture.subscriptionWasClosed(notificationSub));
 
     fixture.client.close();
     CHECK(fixture.transport.connection == nullptr);
+
+    Fixture nip04Fixture;
+    CHECK(nip04Fixture.negotiate("nip04"));
+    int nip04Callbacks = 0;
+    nip04Fixture.client.subscribeNotifications(
+        [&](nostr::NotificationResponse) { ++nip04Callbacks; }, nullptr);
+    nip04Fixture.loop();
+    CHECK(nip04Fixture.subscriptionIdForKind(23196).length() == 64);
+    CHECK(nip04Fixture.subscriptionIdForKind(23197) == "");
+    notification.clear();
+    notification["notification_type"] = "payment_received";
+    notification["notification"]["type"] = "incoming";
+    notification["notification"]["amount"] = 1;
+    notification["notification"]["fees_paid"] = 0;
+    notification["notification"]["created_at"] = 1;
+    notification["notification"]["settled_at"] = 1;
+    CHECK(nip04Fixture.queueNotification(notification, "", 23197));
+    CHECK(nip04Fixture.queueNotification(notification));
+    nip04Fixture.loop();
+    CHECK(nip04Callbacks == 1);
     return true;
 }
 

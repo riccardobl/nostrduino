@@ -14,7 +14,8 @@
 
 #define NWC_INFO_KIND "13194"
 #define NWC_RESPONSE_KIND "23195"
-#define NWC_NOTIFICATION_KIND "23196"
+#define NWC_NIP04_NOTIFICATION_KIND "23196"
+#define NWC_NIP44_NOTIFICATION_KIND "23197"
 
 #define NWC_DEFAULT_TIMEOUT (60 * 10) // 10 minutes in seconds
 #define NWC_INFINITE_TIMEOUT (0xFFFFFFFF) // Max unsigned int, ~136 years
@@ -215,6 +216,7 @@ class NWC {
     NostrString infoSubId;
     bool encryptionReady = false;
     bool encryptionFailed = false;
+    unsigned int notificationKind = 0;
     NostrString encryptionErrorCode;
     NostrString encryptionErrorMessage;
     std::vector<PendingRequest> pendingRequests;

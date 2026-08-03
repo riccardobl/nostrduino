@@ -92,6 +92,7 @@ void NWC::finishInfoSubscription() {
 void NWC::selectEncryption(Nip47Encryption selectedEncryption, bool includeEncryptionTag) {
     if (this->encryptionReady || this->encryptionFailed) return;
     this->nip47.setEncryption(selectedEncryption, includeEncryptionTag);
+    this->notificationKind = selectedEncryption == Nip47Encryption::Nip44V2 ? 23197 : 23196;
     this->encryptionReady = true;
     this->finishInfoSubscription();
 
@@ -228,10 +229,13 @@ void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes
     callback->onErr = onErr;
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->timeoutSeconds = NWC_INFINITE_TIMEOUT; // notification subscriptions don't timeout, they can come after any amount of time
+    const NostrString notificationKindString = this->notificationKind == 23197
+                                                   ? NWC_NIP44_NOTIFICATION_KIND
+                                                   : NWC_NIP04_NOTIFICATION_KIND;
     callback->subId = pool->subscribeMany(
-        {this->nwc.relay}, {{{"kinds", {NWC_NOTIFICATION_KIND}}, {"authors", {this->nwc.pubkey}}, {"#p", {this->accountPubKey}}}},
+        {this->nwc.relay}, {{{"kinds", {notificationKindString}}, {"authors", {this->nwc.pubkey}}, {"#p", {this->accountPubKey}}}},
         [&](const NostrString &subId, SignedNostrEvent *event) {
-            if (event->getKind() != 23196) return;
+            if (event->getKind() != this->notificationKind) return;
             if (!NostrString_equals(event->getPubkey(), this->nwc.pubkey))  return;
             if (!event->verify()) return;
             if (!hasSingleTagValue(event, "p", this->accountPubKey)) return;

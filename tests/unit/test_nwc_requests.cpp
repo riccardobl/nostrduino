@@ -27,9 +27,10 @@ bool testNwcRequests() {
     fixture.loop();
     CHECK(fixture.requestCount() == 0);
     CHECK(fixture.subscriptionIdForKind(23196) == "");
+    CHECK(fixture.subscriptionIdForKind(23197) == "");
     CHECK(fixture.negotiate());
     CHECK(fixture.requestCount() == 10);
-    CHECK(fixture.subscriptionIdForKind(23196).length() == 64);
+    CHECK(fixture.subscriptionIdForKind(23197).length() == 64);
 
     for (size_t index = 0; index < fixture.requestCount(); ++index) {
         PublishedRequest request;
