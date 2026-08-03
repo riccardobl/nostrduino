@@ -209,6 +209,7 @@ bool testPoolQueueAndTransport() {
     bool multiRelayStoredEvent = false;
     int multiRelayEventCount = 0;
     int multiRelayEoseCount = 0;
+    int multiRelayCloseCount = 0;
     String multiRelaySubId = multiRelayPool.subscribeMany(
         {"ws://relay-a.example", "ws://relay-b.example"},
         {{{"kinds", {"1"}}}},
@@ -216,7 +217,9 @@ bool testPoolQueueAndTransport() {
             ++multiRelayEventCount;
             multiRelayStoredEvent = receivedEvent != nullptr && receivedEvent->isStored();
         },
-        nullptr,
+        [&](const String &id, const String &) {
+            if (id == multiRelaySubId) ++multiRelayCloseCount;
+        },
         [&](const String &id) {
             if (id == multiRelaySubId) ++multiRelayEoseCount;
         });
@@ -267,7 +270,46 @@ bool testPoolQueueAndTransport() {
     relayA->queue(multiRelayEventFrame);
     multiRelayPool.loop();
     CHECK(multiRelayEventCount == 4 && multiRelayStoredEvent);
+
+    relayA->queue(String("[\"CLOSED\",\"") + multiRelaySubId + "\",\"relay-a rejected\"]");
+    multiRelayPool.loop();
+    CHECK(multiRelayCloseCount == 1);
+    CHECK(multiRelayPool.hasSubscription(multiRelaySubId));
+    CHECK(multiRelayEoseCount == 2);
+    relayA->queue(multiRelayEventFrame);
+    multiRelayPool.loop();
+    CHECK(multiRelayEventCount == 4);
+    relayB->queue(multiRelayEventFrame);
+    multiRelayPool.loop();
+    CHECK(multiRelayEventCount == 5 && !multiRelayStoredEvent);
+    relayB->queue(String("[\"CLOSED\",\"") + multiRelaySubId + "\",\"relay-b rejected\"]");
+    multiRelayPool.loop();
+    CHECK(multiRelayCloseCount == 2);
+    CHECK(!multiRelayPool.hasSubscription(multiRelaySubId));
     multiRelayPool.close();
+
+    MockTransport disconnectTransport;
+    nostr::NostrPool disconnectPool(&disconnectTransport, 600);
+    int disconnectEoseCount = 0;
+    String disconnectSubId = disconnectPool.subscribeMany(
+        {"ws://relay-a.example", "ws://relay-b.example"},
+        {{{"kinds", {"1"}}}}, nullptr, nullptr,
+        [&](const String &id) {
+            ++disconnectEoseCount;
+            disconnectPool.closeSubscription(id);
+        });
+    MockConnection *disconnectA = disconnectTransport.connections[0];
+    MockConnection *disconnectB = disconnectTransport.connections[1];
+    disconnectA->status(nostr::ConnectionStatus::CONNECTED);
+    disconnectB->status(nostr::ConnectionStatus::CONNECTED);
+    disconnectPool.loop();
+    disconnectA->queue(String("[\"EOSE\",\"") + disconnectSubId + "\"]");
+    disconnectPool.loop();
+    CHECK(disconnectEoseCount == 0);
+    disconnectB->status(nostr::ConnectionStatus::DISCONNECTED);
+    CHECK(disconnectEoseCount == 1);
+    CHECK(!disconnectPool.hasSubscription(disconnectSubId));
+    disconnectPool.close();
 
     size_t randomSample = 0;
     UtilsSubscriptionStateGuard utilsStateGuard;

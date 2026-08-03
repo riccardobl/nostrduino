@@ -34,13 +34,24 @@ void NostrPool::onEvent(NostrRelay *relay, NostrString message) {
         NostrString subId = doc[1].as<const char *>();
         NostrString reason = doc.size() > 2 ? doc[2].as<const char *>() : "";
         std::map<NostrString, NostrSubscription>::iterator it = this->subscriptions.find(subId);
-        if (it != this->subscriptions.end()) {
-            if (it->second.closeCallback != nullptr) {
-                it->second.closeCallback(subId, reason);
+        if (it == this->subscriptions.end()) return;
+        std::map<NostrString, NostrRelaySubscriptionState>::iterator relayState =
+            it->second.relayStates.find(relay->url);
+        if (relayState == it->second.relayStates.end()) return;
+        relayState->second.active = false;
+        relayState->second.closed = true;
+        relayState->second.disconnected = false;
+        NostrCloseCallback closeCallback = it->second.closeCallback;
+        bool allClosed = !it->second.relayStates.empty();
+        for (const auto &entry : it->second.relayStates) {
+            if (!entry.second.closed) {
+                allClosed = false;
+                break;
             }
-            // The callback may close and erase its own subscription.
-            this->subscriptions.erase(subId);
         }
+        if (allClosed) this->subscriptions.erase(subId);
+        if (closeCallback != nullptr) closeCallback(subId, reason);
+        if (!allClosed) this->recomputeSubscriptionEose(subId);
     } else if (std::strcmp(doc[0].as<const char *>(), "EOSE") == 0) {
         if (doc.size() != 2 || !doc[1].is<const char *>() ||
             std::strlen(doc[1].as<const char *>()) > limits.maxSubscriptionIdBytes) return;
@@ -49,24 +60,12 @@ void NostrPool::onEvent(NostrRelay *relay, NostrString message) {
         if (it == this->subscriptions.end()) {
             return;
         }
-        NostrSubscription *sub = &it->second;
-        std::map<NostrString, bool>::iterator relayEose = sub->relayEose.find(relay->url);
-        if (relayEose == sub->relayEose.end()) return;
-        relayEose->second = true;
-
-        bool allRelaysReachedEose = !sub->relayEose.empty();
-        for (const auto &entry : sub->relayEose) {
-            if (!entry.second) {
-                allRelaysReachedEose = false;
-                break;
-            }
-        }
-        if (allRelaysReachedEose && !sub->eose) {
-            sub->eose = true;
-            if (sub->eoseCallback != nullptr) {
-                sub->eoseCallback(subId);
-            }
-        }
+        std::map<NostrString, NostrRelaySubscriptionState>::iterator relayState =
+            it->second.relayStates.find(relay->url);
+        if (relayState == it->second.relayStates.end() || !relayState->second.active ||
+            relayState->second.closed || relayState->second.disconnected) return;
+        relayState->second.eose = true;
+        this->recomputeSubscriptionEose(subId);
     } else if (std::strcmp(doc[0].as<const char *>(), "OK") == 0) {
         if ((doc.size() != 3 && doc.size() != 4) || !doc[1].is<const char *>() || !doc[2].is<bool>() ||
             (doc.size() == 4 && !doc[3].is<const char *>()) ||
@@ -104,18 +103,44 @@ void NostrPool::onEvent(NostrRelay *relay, NostrString message) {
             return;
         }
         NostrSubscription &sub = it->second;
-        std::map<NostrString, bool>::const_iterator relayEose = sub.relayEose.find(relay->url);
-        if (relayEose == sub.relayEose.end()) return;
+        std::map<NostrString, NostrRelaySubscriptionState>::const_iterator relayState =
+            sub.relayStates.find(relay->url);
+        if (relayState == sub.relayStates.end() || !relayState->second.active ||
+            relayState->second.closed || relayState->second.disconnected) return;
         NostrEventCallback eventCallback = sub.eventCallback;
         SignedNostrEvent event;
         if (!SignedNostrEvent::parseRelayFrame(doc.as<JsonArrayConst>(), event, limits)) return;
         if (verifyIncomingEvents && !event.verify()) return;
-        event.stored = !relayEose->second;
+        event.stored = !relayState->second.eose;
         if (eventCallback != nullptr) {
             eventCallback(subId, &event);
         }
     }
     doc.clear();
+}
+
+void NostrPool::recomputeSubscriptionEose(const NostrString &subId) {
+    std::map<NostrString, NostrSubscription>::iterator it = this->subscriptions.find(subId);
+    if (it == this->subscriptions.end()) return;
+
+    bool hasEligibleRelay = false;
+    bool allEligibleRelaysReachedEose = true;
+    for (const auto &entry : it->second.relayStates) {
+        const NostrRelaySubscriptionState &state = entry.second;
+        if (!state.active || state.closed || state.disconnected) continue;
+        hasEligibleRelay = true;
+        if (!state.eose) allEligibleRelaysReachedEose = false;
+    }
+
+    const bool reachedEose = hasEligibleRelay && allEligibleRelaysReachedEose;
+    if (!reachedEose) {
+        it->second.eose = false;
+        return;
+    }
+    if (it->second.eose) return;
+    it->second.eose = true;
+    NostrEOSECallback callback = it->second.eoseCallback;
+    if (callback != nullptr) callback(subId);
 }
 
 NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, std::initializer_list<std::map<NostrString, std::initializer_list<NostrString>>> filters,
@@ -212,7 +237,7 @@ NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, Js
     this->subscriptions[subId].eventCallback = eventCallback;
     this->subscriptions[subId].request = json;
     for (auto url : urls) {
-        this->subscriptions[subId].relayEose[url] = false;
+        this->subscriptions[subId].relayStates[url] = NostrRelaySubscriptionState();
     }
 
     for (auto url : urls) {
@@ -269,6 +294,18 @@ NostrRelay *NostrPool::ensureRelay(NostrString url) {
         relay->conn->addConnectionStatusListener([this, relay](ConnectionStatus status) {
             if (status == ConnectionStatus::DISCONNECTED) {
                 relay->restoreSubscriptions = relay->connectedOnce;
+                std::vector<NostrString> affectedSubscriptions;
+                for (auto &entry : this->subscriptions) {
+                    std::map<NostrString, NostrRelaySubscriptionState>::iterator relayState =
+                        entry.second.relayStates.find(relay->url);
+                    if (relayState == entry.second.relayStates.end() || relayState->second.closed) continue;
+                    relayState->second.active = false;
+                    relayState->second.disconnected = true;
+                    affectedSubscriptions.push_back(entry.first);
+                }
+                for (const NostrString &subId : affectedSubscriptions) {
+                    this->recomputeSubscriptionEose(subId);
+                }
                 return;
             }
             if (status != ConnectionStatus::CONNECTED) return;
@@ -280,9 +317,12 @@ NostrRelay *NostrPool::ensureRelay(NostrString url) {
 
             for (auto &entry : this->subscriptions) {
                 NostrSubscription &subscription = entry.second;
-                std::map<NostrString, bool>::iterator relayEose = subscription.relayEose.find(relay->url);
-                if (relayEose == subscription.relayEose.end()) continue;
-                relayEose->second = false;
+                std::map<NostrString, NostrRelaySubscriptionState>::iterator relayState =
+                    subscription.relayStates.find(relay->url);
+                if (relayState == subscription.relayStates.end() || relayState->second.closed) continue;
+                relayState->second.active = true;
+                relayState->second.disconnected = false;
+                relayState->second.eose = false;
                 subscription.eose = false;
                 relay->send(subscription.request);
             }
@@ -292,6 +332,18 @@ NostrRelay *NostrPool::ensureRelay(NostrString url) {
 }
 
 void NostrPool::disconnectRelay(NostrString url) {
+    std::vector<NostrString> affectedSubscriptions;
+    for (auto &entry : this->subscriptions) {
+        std::map<NostrString, NostrRelaySubscriptionState>::iterator relayState =
+            entry.second.relayStates.find(url);
+        if (relayState == entry.second.relayStates.end() || relayState->second.closed) continue;
+        relayState->second.active = false;
+        relayState->second.disconnected = true;
+        affectedSubscriptions.push_back(entry.first);
+    }
+    for (const NostrString &subId : affectedSubscriptions) {
+        this->recomputeSubscriptionEose(subId);
+    }
     for (size_t i = 0; i < this->relays.size(); i++) {
         if (NostrString_equals(this->relays[i]->url, url)) {
             this->transport->disconnect(this->relays[i]->conn);

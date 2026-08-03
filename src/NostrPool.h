@@ -25,6 +25,13 @@ namespace nostr {
         std::function<void(const NostrString &, SignedNostrEvent *event)>;
     using NostrEventStatusCallback =
         std::function<void(const NostrString &, bool, const NostrString& )>;
+    struct NostrRelaySubscriptionState {
+        bool active = true;
+        bool eose = false;
+        bool closed = false;
+        bool disconnected = false;
+    };
+
     class NostrSubscription {
        public:
         bool eose = false;
@@ -36,7 +43,7 @@ namespace nostr {
        private:
         friend class NostrPool;
         NostrString request;
-        std::map<NostrString, bool> relayEose;
+        std::map<NostrString, NostrRelaySubscriptionState> relayStates;
     };
 
     typedef struct s_EventStatusCallbackEntry {
@@ -197,6 +204,7 @@ namespace nostr {
         std::map<NostrString, NostrSubscription> subscriptions;
         std::vector<NostrRelay *> relays;
         void onEvent(NostrRelay *relay, NostrString message);
+        void recomputeSubscriptionEose(const NostrString &subId);
         int eventStatusTimeoutSeconds = 60 * 10;
         std::vector<EventStatusCallbackEntry> eventStatusCallbackEntries;
         Transport *transport;
