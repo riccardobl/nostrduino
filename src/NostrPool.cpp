@@ -192,6 +192,10 @@ NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, Js
         this->subscriptions[subId].closeCallback = closeCallback;
         this->subscriptions[subId].eoseCallback = eoseCallback;
         this->subscriptions[subId].eventCallback = eventCallback;
+        this->subscriptions[subId].request = json;
+        for (auto url : urls) {
+            this->subscriptions[subId].relayUrls.push_back(url);
+        }
     }
 
     for (auto url : urls) {
@@ -222,6 +226,15 @@ void NostrPool::closeSubscription(NostrString subId) {
     this->subscriptions.erase(subId);
 }
 
+NostrSubscription *NostrPool::getSubscription(NostrString subId) {
+    auto it = this->subscriptions.find(subId);
+    return it == this->subscriptions.end() ? nullptr : &it->second;
+}
+
+bool NostrPool::hasSubscription(NostrString subId) {
+    return this->subscriptions.find(subId) != this->subscriptions.end();
+}
+
 NostrRelay *NostrPool::ensureRelay(NostrString url) {
     NostrRelay *relay = NULL;
     for (auto &r : this->relays) {
@@ -236,6 +249,19 @@ NostrRelay *NostrPool::ensureRelay(NostrString url) {
         relay = new NostrRelay(conn, url);
         this->relays.push_back(relay);
         relay->conn->addMessageListener([this, relay](NostrString message) { this->onEvent(relay, message); });
+        relay->conn->addConnectionStatusListener([this, relay](ConnectionStatus status) {
+            if (status != ConnectionStatus::CONNECTED) return;
+            for (auto &entry : this->subscriptions) {
+                NostrSubscription &subscription = entry.second;
+                for (const auto &subscriptionUrl : subscription.relayUrls) {
+                    if (NostrString_equals(subscriptionUrl, relay->url)) {
+                        subscription.eose = false;
+                        relay->send(subscription.request);
+                        break;
+                    }
+                }
+            }
+        });
     }
     return relay;
 }

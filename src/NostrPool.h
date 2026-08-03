@@ -32,6 +32,8 @@ namespace nostr {
         NostrEOSECallback eoseCallback = nullptr;
         NostrEventCallback eventCallback = nullptr;
         NostrEventStatusCallback statusCallback = nullptr;
+        NostrString request;
+        std::vector<NostrString> relayUrls;
     };
 
     typedef struct s_EventStatusCallbackEntry {
@@ -132,6 +134,16 @@ namespace nostr {
          * @param subId The subscription ID
          */
         void closeSubscription(NostrString subId);
+
+        /**
+         * Get a subscription by ID, or nullptr if it does not exist
+         */
+        NostrSubscription *getSubscription(NostrString subId);
+
+        /**
+         * Check whether a subscription with the given ID exists
+         */
+        bool hasSubscription(NostrString subId);
 
         /**
          * Ensure the connection to the specified relay is open

@@ -16,6 +16,7 @@ class MockConnection : public nostr::Connection {
     std::vector<String> sent;
     std::vector<String> incoming;
     std::vector<std::function<void(String)>> messageListeners;
+    std::vector<std::function<void(nostr::ConnectionStatus)>> statusListeners;
 
     void addMessageListener(std::function<void(String)> listener) override { messageListeners.push_back(listener); }
     void send(String message) override { sent.push_back(message); }
@@ -28,8 +29,13 @@ class MockConnection : public nostr::Connection {
         }
     }
     bool isReady() override { return ready; }
-    void addConnectionStatusListener(std::function<void(nostr::ConnectionStatus)>) override {}
+    void addConnectionStatusListener(std::function<void(nostr::ConnectionStatus)> listener) override {
+        statusListeners.push_back(listener);
+    }
     void queue(String message) { incoming.push_back(message); }
+    void status(nostr::ConnectionStatus value) {
+        for (const auto &listener : statusListeners) listener(value);
+    }
 };
 
 class MockTransport : public nostr::Transport {
@@ -82,10 +88,16 @@ bool testPoolQueueAndTransport() {
         nullptr,
         [&](const String &id) { eoseCalled = id == subId; });
     CHECK(subId.length() == 64);
+    CHECK(pool.hasSubscription(subId));
+    CHECK(pool.getSubscription(subId) != nullptr);
     CHECK(transport.lastConnection != nullptr);
     MockConnection *connection = transport.lastConnection;
     pool.loop();
     CHECK(!connection->sent.empty() && connection->sent.back().indexOf("\"REQ\"") >= 0);
+    const size_t sentBeforeReconnect = connection->sent.size();
+    connection->status(nostr::ConnectionStatus::DISCONNECTED);
+    connection->status(nostr::ConnectionStatus::CONNECTED);
+    CHECK(connection->sent.size() == sentBeforeReconnect + 1);
 
     nostr::UnsignedNostrEvent unsignedEvent(1, "pool event", 1700000000);
     nostr::SignedNostrEvent event = unsignedEvent.sign(
@@ -120,6 +132,8 @@ bool testPoolQueueAndTransport() {
     pool.closeSubscription(subId);
     pool.loop();
     CHECK(connection->sent.back().indexOf("\"CLOSE\"") >= 0);
+    CHECK(!pool.hasSubscription(subId));
+    CHECK(pool.getSubscription(subId) == nullptr);
     CHECK(pool.getRelays().size() == 1 && pool.getConnectedRelays()->size() == 1);
     pool.disconnectRelay("ws://relay.example");
     CHECK(pool.getRelays().empty() && transport.connections.empty());
