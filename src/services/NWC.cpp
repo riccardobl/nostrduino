@@ -1,5 +1,6 @@
 #include "NWC.h"
 #include "Nip47.h"
+#include <algorithm>
 
 using namespace nostr;
 
@@ -131,29 +132,55 @@ bool NWC::deferUntilEncryptionReady(std::function<void()> send,
 }
 
 void NWC::close() {
+    if (this->closed) return;
+    if (this->poolDispatchDepth > 0) {
+        this->deferredClose = true;
+        return;
+    }
+    this->performClose();
+}
+
+void NWC::performClose() {
+    if (this->closed) return;
+    this->closed = true;
+    this->deferredClose = false;
     this->pool->close();
     this->pendingRequests.clear();
     this->callbacks.clear();
 }
 
+void NWC::removeCallback(const std::shared_ptr<NWCResponseCallbackBase> &callback) {
+    this->callbacks.erase(
+        std::remove(this->callbacks.begin(), this->callbacks.end(), callback),
+        this->callbacks.end());
+}
+
 void NWC::loop() {
+    if (this->closed) return;
+    ++this->poolDispatchDepth;
     this->pool->loop();
-    for (auto it = this->callbacks.begin(); it != this->callbacks.end();) {
-        if (it->get()->n == 0) {
-            NostrString subId = it->get()->subId;
+    --this->poolDispatchDepth;
+    if (this->deferredClose) {
+        this->performClose();
+        return;
+    }
+
+    const std::vector<std::shared_ptr<NWCResponseCallbackBase>> snapshot = this->callbacks;
+    for (const std::shared_ptr<NWCResponseCallbackBase> &callback : snapshot) {
+        if (this->closed) break;
+        if (std::find(this->callbacks.begin(), this->callbacks.end(), callback) == this->callbacks.end()) continue;
+        if (callback->n == 0) {
+            NostrString subId = callback->subId;
+            this->removeCallback(callback);
             this->pool->closeSubscription(subId);
-            it = this->callbacks.erase(it);
             continue;
         }
-        if (Utils::unixTimeSeconds() - it->get()->timestampSeconds > it->get()->timeoutSeconds) {
-            NostrString subId = it->get()->subId;
+        if (Utils::unixTimeSeconds() - callback->timestampSeconds > callback->timeoutSeconds) {
+            NostrString subId = callback->subId;
+            std::function<void(NostrString, NostrString)> onErr = callback->onErr;
+            this->removeCallback(callback);
             this->pool->closeSubscription(subId);
-            if (it->get()->onErr != nullptr) {
-                it->get()->onErr("OTHER", "timeout");
-            }
-            it = this->callbacks.erase(it);
-        } else {
-            it++;
+            if (onErr != nullptr) onErr("OTHER", "timeout");
         }
     }
 }
@@ -167,11 +194,17 @@ NostrString NWC::sendEvent(SignedNostrEvent *event) {
             if (!event->verify()) return;
             if (!hasSingleTagValue(event, "p", this->accountPubKey)) return;
 
-            for (auto it = this->callbacks.begin(); it != this->callbacks.end(); it++) {
-                if (hasSingleTagValue(event, "e", it->get()->eventId)) {
-                    if (it->get()->n == 0) break;
-                    it->get()->call(&this->nip47, event);
-                    --it->get()->n;
+            const std::vector<std::shared_ptr<NWCResponseCallbackBase>> snapshot = this->callbacks;
+            for (const std::shared_ptr<NWCResponseCallbackBase> &callback : snapshot) {
+                if (hasSingleTagValue(event, "e", callback->eventId)) {
+                    if (callback->n == 0) break;
+                    --callback->n;
+                    if (callback->n == 0) {
+                        NostrString responseSubId = callback->subId;
+                        this->removeCallback(callback);
+                        this->pool->closeSubscription(responseSubId);
+                    }
+                    callback->call(&this->nip47, event);
                     break;
                 }
             }
@@ -190,7 +223,7 @@ NostrString NWC::sendEvent(SignedNostrEvent *event) {
 void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
     if (this->deferUntilEncryptionReady(
             [this, onRes, onErr]() { this->subscribeNotifications(onRes, onErr); }, onErr)) return;
-    std::unique_ptr<NWCResponseCallback<NotificationResponse>> callback(new NWCResponseCallback<NotificationResponse>());
+    std::shared_ptr<NWCResponseCallback<NotificationResponse>> callback(new NWCResponseCallback<NotificationResponse>());
     callback->onRes = onRes;
     callback->onErr = onErr;
     callback->timestampSeconds = Utils::unixTimeSeconds();
@@ -203,15 +236,16 @@ void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes
             if (!event->verify()) return;
             if (!hasSingleTagValue(event, "p", this->accountPubKey)) return;
             NostrString subRef = event->getSubId();
-            for (auto it = this->callbacks.begin(); it != this->callbacks.end(); it++) {
-                if (NostrString_equals(it->get()->subId, subRef)) {
-                    it->get()->call(&this->nip47, event);
+            const std::vector<std::shared_ptr<NWCResponseCallbackBase>> snapshot = this->callbacks;
+            for (const std::shared_ptr<NWCResponseCallbackBase> &callback : snapshot) {
+                if (NostrString_equals(callback->subId, subRef)) {
+                    callback->call(&this->nip47, event);
                     break;
                 }
             }
         },
         [&](const String &subId, const String &reason) { Utils::log("NWC: closed notification subscription: " + reason); }, [&](const String &subId) { Utils::log("NWC: notification EOS"); });
-    this->callbacks.push_back(std::move(callback));
+    this->callbacks.push_back(callback);
 }
 
 void NWC::payInvoice(NostrString invoice, MilliSats amount, std::function<void(PayInvoiceResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
@@ -222,14 +256,14 @@ void NWC::payInvoice(NostrString invoice, MilliSats amount, std::function<void(P
     if (this->deferUntilEncryptionReady(
             [this, invoice, amount, onRes, onErr]() { this->payInvoice(invoice, amount, onRes, onErr); }, onErr)) return;
     SignedNostrEvent ev = this->nip47.payInvoice(invoice, amount);
-    std::unique_ptr<NWCResponseCallback<PayInvoiceResponse>> callback(new NWCResponseCallback<PayInvoiceResponse>());
+    std::shared_ptr<NWCResponseCallback<PayInvoiceResponse>> callback(new NWCResponseCallback<PayInvoiceResponse>());
     callback->onRes = onRes;
     callback->onErr = onErr;
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->eventId = ev.getId();
     callback->n = 1;
     callback->subId = this->sendEvent(&ev);
-    this->callbacks.push_back(std::move(callback));
+    this->callbacks.push_back(callback);
 }
 
 void NWC::multiPayInvoice(std::initializer_list<Invoice> invoices, std::function<void(MultiPayInvoiceResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
@@ -247,14 +281,14 @@ void NWC::multiPayInvoice(const std::vector<Invoice> &invoices, std::function<vo
     if (this->deferUntilEncryptionReady(
             [this, invoices, onRes, onErr]() { this->multiPayInvoice(invoices, onRes, onErr); }, onErr)) return;
     SignedNostrEvent ev = this->nip47.multiPayInvoice(invoices);
-    std::unique_ptr<NWCResponseCallback<MultiPayInvoiceResponse>> callback(new NWCResponseCallback<MultiPayInvoiceResponse>());
+    std::shared_ptr<NWCResponseCallback<MultiPayInvoiceResponse>> callback(new NWCResponseCallback<MultiPayInvoiceResponse>());
     callback->onRes = onRes;
     callback->onErr = onErr;
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->eventId = ev.getId();
     callback->n = invoices.size();
     callback->subId = this->sendEvent(&ev);
-    this->callbacks.push_back(std::move(callback));
+    this->callbacks.push_back(callback);
 }
 
 void NWC::payKeySend(NostrString pubkey, MilliSats amount, NostrString preimage, std::initializer_list<TLVRecords> tlv, std::function<void(PayKeySendResponse)> onRes,
@@ -274,14 +308,14 @@ void NWC::payKeySend(NostrString pubkey, MilliSats amount, NostrString preimage,
                 this->payKeySend(pubkey, amount, preimage, tlv, onRes, onErr);
             }, onErr)) return;
     SignedNostrEvent ev = this->nip47.payKeySend(pubkey, amount, preimage, tlv);
-    std::unique_ptr<NWCResponseCallback<PayKeySendResponse>> callback(new NWCResponseCallback<PayKeySendResponse>());
+    std::shared_ptr<NWCResponseCallback<PayKeySendResponse>> callback(new NWCResponseCallback<PayKeySendResponse>());
     callback->onRes = onRes;
     callback->onErr = onErr;
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->eventId = ev.getId();
     callback->n = 1;
     callback->subId = this->sendEvent(&ev);
-    this->callbacks.push_back(std::move(callback));
+    this->callbacks.push_back(callback);
 }
 
 void NWC::multiPayKeySend(std::initializer_list<KeySend> keySends, std::function<void(MultiPayKeySendResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
@@ -299,14 +333,14 @@ void NWC::multiPayKeySend(const std::vector<KeySend> &keySends, std::function<vo
     if (this->deferUntilEncryptionReady(
             [this, keySends, onRes, onErr]() { this->multiPayKeySend(keySends, onRes, onErr); }, onErr)) return;
     SignedNostrEvent ev = this->nip47.multiPayKeySend(keySends);
-    std::unique_ptr<NWCResponseCallback<MultiPayKeySendResponse>> callback(new NWCResponseCallback<MultiPayKeySendResponse>());
+    std::shared_ptr<NWCResponseCallback<MultiPayKeySendResponse>> callback(new NWCResponseCallback<MultiPayKeySendResponse>());
     callback->onRes = onRes;
     callback->onErr = onErr;
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->eventId = ev.getId();
     callback->n = keySends.size();
     callback->subId = this->sendEvent(&ev);
-    this->callbacks.push_back(std::move(callback));
+    this->callbacks.push_back(callback);
 }
 
 void NWC::makeInvoice(MilliSats amount, NostrString description, NostrString descriptionHash, unsigned long expiry, std::function<void(MakeInvoiceResponse)> onRes,
@@ -320,42 +354,42 @@ void NWC::makeInvoice(MilliSats amount, NostrString description, NostrString des
                 this->makeInvoice(amount, description, descriptionHash, expiry, onRes, onErr);
             }, onErr)) return;
     SignedNostrEvent ev = this->nip47.makeInvoice(amount, description, descriptionHash, expiry);
-    std::unique_ptr<NWCResponseCallback<MakeInvoiceResponse>> callback(new NWCResponseCallback<MakeInvoiceResponse>());
+    std::shared_ptr<NWCResponseCallback<MakeInvoiceResponse>> callback(new NWCResponseCallback<MakeInvoiceResponse>());
     callback->onRes = onRes;
     callback->onErr = onErr;
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->eventId = ev.getId();
     callback->n = 1;
     callback->subId = this->sendEvent(&ev);
-    this->callbacks.push_back(std::move(callback));
+    this->callbacks.push_back(callback);
 }
 
 void NWC::lookUpPaymentHash(NostrString paymentHash, std::function<void(LookUpInvoiceResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
     if (this->deferUntilEncryptionReady(
             [this, paymentHash, onRes, onErr]() { this->lookUpPaymentHash(paymentHash, onRes, onErr); }, onErr)) return;
     SignedNostrEvent ev = this->nip47.lookUpPaymentHash(paymentHash);
-    std::unique_ptr<NWCResponseCallback<LookUpInvoiceResponse>> callback(new NWCResponseCallback<LookUpInvoiceResponse>());
+    std::shared_ptr<NWCResponseCallback<LookUpInvoiceResponse>> callback(new NWCResponseCallback<LookUpInvoiceResponse>());
     callback->onRes = onRes;
     callback->onErr = onErr;
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->eventId = ev.getId();
     callback->n = 1;
     callback->subId = this->sendEvent(&ev);
-    this->callbacks.push_back(std::move(callback));
+    this->callbacks.push_back(callback);
 }
 
 void NWC::lookUpInvoice(NostrString invoice, std::function<void(LookUpInvoiceResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
     if (this->deferUntilEncryptionReady(
             [this, invoice, onRes, onErr]() { this->lookUpInvoice(invoice, onRes, onErr); }, onErr)) return;
     SignedNostrEvent ev = this->nip47.lookUpInvoice(invoice);
-    std::unique_ptr<NWCResponseCallback<LookUpInvoiceResponse>> callback(new NWCResponseCallback<LookUpInvoiceResponse>());
+    std::shared_ptr<NWCResponseCallback<LookUpInvoiceResponse>> callback(new NWCResponseCallback<LookUpInvoiceResponse>());
     callback->onRes = onRes;
     callback->onErr = onErr;
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->eventId = ev.getId();
     callback->n = 1;
     callback->subId = this->sendEvent(&ev);
-    this->callbacks.push_back(std::move(callback));
+    this->callbacks.push_back(callback);
 }
 
 void NWC::listTransactions(unsigned long from, unsigned long until, int limit, int offset, bool unpaid, NostrString type, std::function<void(ListTransactionsResponse)> onRes,
@@ -365,40 +399,40 @@ void NWC::listTransactions(unsigned long from, unsigned long until, int limit, i
                 this->listTransactions(from, until, limit, offset, unpaid, type, onRes, onErr);
             }, onErr)) return;
     SignedNostrEvent ev = this->nip47.listTransactions(from, until, limit, offset, unpaid, type);
-    std::unique_ptr<NWCResponseCallback<ListTransactionsResponse>> callback(new NWCResponseCallback<ListTransactionsResponse>());
+    std::shared_ptr<NWCResponseCallback<ListTransactionsResponse>> callback(new NWCResponseCallback<ListTransactionsResponse>());
     callback->onRes = onRes;
     callback->onErr = onErr;
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->eventId = ev.getId();
     callback->n = 1;
     callback->subId = this->sendEvent(&ev);
-    this->callbacks.push_back(std::move(callback));
+    this->callbacks.push_back(callback);
 }
 
 void NWC::getBalance(std::function<void(GetBalanceResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
     if (this->deferUntilEncryptionReady(
             [this, onRes, onErr]() { this->getBalance(onRes, onErr); }, onErr)) return;
     SignedNostrEvent ev = this->nip47.getBalance();
-    std::unique_ptr<NWCResponseCallback<GetBalanceResponse>> callback(new NWCResponseCallback<GetBalanceResponse>());
+    std::shared_ptr<NWCResponseCallback<GetBalanceResponse>> callback(new NWCResponseCallback<GetBalanceResponse>());
     callback->onRes = onRes;
     callback->onErr = onErr;
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->eventId = ev.getId();
     callback->n = 1;
     callback->subId = this->sendEvent(&ev);
-    this->callbacks.push_back(std::move(callback));
+    this->callbacks.push_back(callback);
 }
 
 void NWC::getInfo(std::function<void(GetInfoResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
     if (this->deferUntilEncryptionReady(
             [this, onRes, onErr]() { this->getInfo(onRes, onErr); }, onErr)) return;
     SignedNostrEvent ev = this->nip47.getInfo();
-    std::unique_ptr<NWCResponseCallback<GetInfoResponse>> callback(new NWCResponseCallback<GetInfoResponse>());
+    std::shared_ptr<NWCResponseCallback<GetInfoResponse>> callback(new NWCResponseCallback<GetInfoResponse>());
     callback->onRes = onRes;
     callback->onErr = onErr;
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->eventId = ev.getId();
     callback->n = 1;
     callback->subId = this->sendEvent(&ev);
-    this->callbacks.push_back(std::move(callback));
+    this->callbacks.push_back(callback);
 }

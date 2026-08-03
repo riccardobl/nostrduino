@@ -206,6 +206,8 @@ class NWC {
     bool deferUntilEncryptionReady(std::function<void()> send,
                                    std::function<void(NostrString, NostrString)> onErr);
     void finishInfoSubscription();
+    void performClose();
+    void removeCallback(const std::shared_ptr<NWCResponseCallbackBase> &callback);
     std::unique_ptr<NostrPool> pool;
     NWCData nwc;
     Nip47 nip47;
@@ -216,7 +218,10 @@ class NWC {
     NostrString encryptionErrorCode;
     NostrString encryptionErrorMessage;
     std::vector<PendingRequest> pendingRequests;
-    std::vector<std::unique_ptr<NWCResponseCallbackBase>> callbacks;
+    std::vector<std::shared_ptr<NWCResponseCallbackBase>> callbacks;
+    unsigned int poolDispatchDepth = 0;
+    bool deferredClose = false;
+    bool closed = false;
 };
 } 
 
