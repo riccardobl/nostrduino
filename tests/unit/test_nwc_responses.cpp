@@ -7,18 +7,25 @@ namespace unit_test {
 bool testNwcResponses() {
     using namespace nwc_mock;
 
+    const String payPreimage = repeatChar('a', 64);
+    const String multiPreimageA = repeatChar('b', 64);
+    const String multiPreimageB = repeatChar('c', 64);
+    const String keysendPreimage = repeatChar('d', 64);
+    const String multiKeysendPreimage = repeatChar('e', 64);
+    const String invoicePreimage = repeatChar('f', 64);
+
     Fixture fixture;
     CHECK(fixture.negotiate());
 
     size_t requestIndex = fixture.requestCount();
     bool payInvoiceOk = false;
     fixture.client.payInvoice("lnbc-pay", 1, [&](nostr::PayInvoiceResponse result) {
-        payInvoiceOk = result.preimage == "pay-preimage";
+        payInvoiceOk = result.preimage == payPreimage;
     });
     fixture.loop();
     JsonDocument response;
     response["result_type"] = "pay_invoice";
-    response["result"]["preimage"] = "pay-preimage";
+    response["result"]["preimage"] = payPreimage;
     CHECK(fixture.queueResponse(requestIndex, response));
     fixture.loop();
     CHECK(payInvoiceOk);
@@ -40,27 +47,27 @@ bool testNwcResponses() {
     const String multiInvoiceSub = fixture.subscriptionIdForKind(23195, multiInvoiceRequest.eventId);
     response.clear();
     response["result_type"] = "multi_pay_invoice";
-    response["result"]["preimage"] = "multi-preimage-a";
+    response["result"]["preimage"] = multiPreimageA;
     CHECK(fixture.queueResponse(requestIndex, response, "invoice-a"));
-    response["result"]["preimage"] = "multi-preimage-b";
+    response["result"]["preimage"] = multiPreimageB;
     CHECK(fixture.queueResponse(requestIndex, response, "invoice-b"));
-    response["result"]["preimage"] = "duplicate";
+    response["result"]["preimage"] = repeatChar('0', 64);
     CHECK(fixture.queueResponse(requestIndex, response, "invoice-duplicate"));
     fixture.loop();
     CHECK(multiInvoiceCallbacks == 2);
-    CHECK(multiInvoiceDs.indexOf("invoice-a:multi-preimage-a") >= 0);
-    CHECK(multiInvoiceDs.indexOf("invoice-b:multi-preimage-b") >= 0);
+    CHECK(multiInvoiceDs.indexOf("invoice-a:" + multiPreimageA) >= 0);
+    CHECK(multiInvoiceDs.indexOf("invoice-b:" + multiPreimageB) >= 0);
     fixture.loop();
     CHECK(fixture.subscriptionWasClosed(multiInvoiceSub));
 
     requestIndex = fixture.requestCount();
     bool keySendOk = false;
     fixture.client.payKeySend(fixture.servicePublicKey, 3, "", {},
-        [&](nostr::PayKeySendResponse result) { keySendOk = result.preimage == "keysend-preimage"; });
+        [&](nostr::PayKeySendResponse result) { keySendOk = result.preimage == keysendPreimage; });
     fixture.loop();
     response.clear();
     response["result_type"] = "pay_keysend";
-    response["result"]["preimage"] = "keysend-preimage";
+    response["result"]["preimage"] = keysendPreimage;
     CHECK(fixture.queueResponse(requestIndex, response));
     fixture.loop();
     CHECK(keySendOk);
@@ -69,12 +76,12 @@ bool testNwcResponses() {
     bool multiKeySendOk = false;
     fixture.client.multiPayKeySend({{fixture.servicePublicKey, 4, "", {}}},
         [&](nostr::MultiPayKeySendResponse result) {
-            multiKeySendOk = result.preimage == "multi-keysend-preimage" && result.d == "keysend-a";
+            multiKeySendOk = result.preimage == multiKeysendPreimage && result.d == "keysend-a";
         });
     fixture.loop();
     response.clear();
     response["result_type"] = "multi_pay_keysend";
-    response["result"]["preimage"] = "multi-keysend-preimage";
+    response["result"]["preimage"] = multiKeysendPreimage;
     CHECK(fixture.queueResponse(requestIndex, response, "keysend-a"));
     fixture.loop();
     CHECK(multiKeySendOk);
@@ -84,7 +91,7 @@ bool testNwcResponses() {
     fixture.client.makeInvoice(5, "memo", "", 60, [&](nostr::MakeInvoiceResponse result) {
         makeInvoiceOk = result.type == "incoming" && result.invoice == "lnbc-created" &&
                         result.description == "created invoice" && result.descriptionHash == "desc-hash" &&
-                        result.preimage == "created-preimage" && result.paymentHash == "created-hash" &&
+                        result.preimage == invoicePreimage && result.paymentHash == "created-hash" &&
                         result.amount == 5000 && result.feesPaid == 50 && result.createdAt == 100 &&
                         result.expiresAt == 200 && result.metadata["source"].as<String>() == "mock";
     });
@@ -96,7 +103,7 @@ bool testNwcResponses() {
     made["invoice"] = "lnbc-created";
     made["description"] = "created invoice";
     made["description_hash"] = "desc-hash";
-    made["preimage"] = "created-preimage";
+    made["preimage"] = invoicePreimage;
     made["payment_hash"] = "created-hash";
     made["amount"] = 5000;
     made["fees_paid"] = 50;
@@ -115,7 +122,7 @@ bool testNwcResponses() {
         result["invoice"] = invoice;
         result["description"] = "lookup description";
         result["description_hash"] = "lookup-description-hash";
-        result["preimage"] = "lookup-preimage";
+        result["preimage"] = invoicePreimage;
         result["payment_hash"] = paymentHash;
         result["amount"] = 7000;
         result["fees_paid"] = 70;
@@ -168,7 +175,7 @@ bool testNwcResponses() {
     transaction["invoice"] = "lnbc-list";
     transaction["description"] = "listed";
     transaction["description_hash"] = "listed-description-hash";
-    transaction["preimage"] = "listed-preimage";
+    transaction["preimage"] = invoicePreimage;
     transaction["payment_hash"] = "listed-hash";
     transaction["amount"] = 8000;
     transaction["fees_paid"] = 80;
@@ -229,6 +236,68 @@ bool testNwcResponses() {
     CHECK(fixture.queueResponse(requestIndex, response));
     fixture.loop();
     CHECK(infoOk);
+
+    nostr::Nip47 strictParser(nostr::Nip04(), fixture.servicePublicKey, fixture.userPrivateKey);
+    strictParser.setEncryption(nostr::Nip47Encryption::Nip44V2, true);
+    nostr::SignedNostrEvent parsedEvent;
+    nostr::Nip47Response<nostr::GetInfoResponse> reusableInfo;
+    CHECK(fixture.makeResponseEvent(requestIndex, response, parsedEvent));
+    strictParser.parseResponse(&parsedEvent, reusableInfo);
+    CHECK(reusableInfo.errorCode == "");
+    CHECK(reusableInfo.result.methods.size() == 2);
+    response["result"]["methods"].as<JsonArray>().add(7);
+    CHECK(fixture.makeResponseEvent(requestIndex, response, parsedEvent));
+    strictParser.parseResponse(&parsedEvent, reusableInfo);
+    CHECK(reusableInfo.errorCode == "OTHER");
+    CHECK(reusableInfo.result.methods.empty());
+    CHECK(reusableInfo.result.notifications.empty());
+
+    requestIndex = fixture.requestCount();
+    fixture.client.getBalance();
+    fixture.loop();
+    nostr::Nip47Response<nostr::GetBalanceResponse> strictBalance;
+    response.clear();
+    response["result_type"] = "get_balance";
+    response["result"]["balance"] = nostr::MAX_MILLISATS + 1;
+    CHECK(fixture.makeResponseEvent(requestIndex, response, parsedEvent));
+    strictParser.parseResponse(&parsedEvent, strictBalance);
+    CHECK(strictBalance.errorCode == "");
+    CHECK(strictBalance.result.balance == nostr::MAX_MILLISATS + 1);
+
+    response["result"]["balance"] = "9000";
+    CHECK(fixture.makeResponseEvent(requestIndex, response, parsedEvent));
+    strictParser.parseResponse(&parsedEvent, strictBalance);
+    CHECK(strictBalance.errorCode == "OTHER" && strictBalance.result.balance == 0);
+    response["result"]["balance"] = 1.5;
+    CHECK(fixture.makeResponseEvent(requestIndex, response, parsedEvent));
+    strictParser.parseResponse(&parsedEvent, strictBalance);
+    CHECK(strictBalance.errorCode == "OTHER" && strictBalance.result.balance == 0);
+    response["result"]["balance"] = -1;
+    CHECK(fixture.makeResponseEvent(requestIndex, response, parsedEvent));
+    strictParser.parseResponse(&parsedEvent, strictBalance);
+    CHECK(strictBalance.errorCode == "OTHER" && strictBalance.result.balance == 0);
+    response["result"]["balance"] = UINT64_MAX;
+    CHECK(fixture.makeResponseEvent(requestIndex, response, parsedEvent));
+    strictParser.parseResponse(&parsedEvent, strictBalance);
+    CHECK(strictBalance.errorCode == "OTHER" && strictBalance.result.balance == 0);
+
+    nostr::Nip47Response<nostr::PayInvoiceResponse> strictPayment;
+    strictPayment.result.preimage = "stale";
+    response.clear();
+    response["result_type"] = "pay_invoice";
+    response["result"]["preimage"] = "not-hex";
+    CHECK(fixture.makeResponseEvent(0, response, parsedEvent));
+    strictParser.parseResponse(&parsedEvent, strictPayment);
+    CHECK(strictPayment.errorCode == "OTHER");
+    CHECK(strictPayment.result.preimage == "");
+
+    response.clear();
+    response["result_type"] = "get_balance";
+    response["error"]["code"] = 7;
+    response["error"]["message"] = "bad";
+    CHECK(fixture.makeResponseEvent(requestIndex, response, parsedEvent));
+    strictParser.parseResponse(&parsedEvent, strictBalance);
+    CHECK(strictBalance.errorCode == "OTHER");
 
     requestIndex = fixture.requestCount();
     String walletErrorCode;

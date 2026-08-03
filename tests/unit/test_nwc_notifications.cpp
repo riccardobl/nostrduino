@@ -7,6 +7,8 @@ namespace unit_test {
 bool testNwcNotifications() {
     using namespace nwc_mock;
 
+    const String notificationPreimage = repeatChar('a', 64);
+
     Fixture fixture;
     CHECK(fixture.negotiate());
 
@@ -22,7 +24,7 @@ bool testNwcNotifications() {
                              notification.type == "incoming" && notification.invoice == "lnbc-notification" &&
                              notification.description == "notification description" &&
                              notification.descriptionHash == "notification-description-hash" &&
-                             notification.preimage == "notification-preimage" &&
+                             notification.preimage == notificationPreimage &&
                              notification.paymentHash == "notification-payment-hash" &&
                              notification.amount == 10000 && notification.feesPaid == 100 &&
                              notification.createdAt == 800 && notification.settledAt == 900;
@@ -42,7 +44,7 @@ bool testNwcNotifications() {
     data["invoice"] = "lnbc-notification";
     data["description"] = "notification description";
     data["description_hash"] = "notification-description-hash";
-    data["preimage"] = "notification-preimage";
+    data["preimage"] = notificationPreimage;
     data["payment_hash"] = "notification-payment-hash";
     data["amount"] = 10000;
     data["fees_paid"] = 100;
@@ -58,12 +60,36 @@ bool testNwcNotifications() {
     CHECK(notificationOk);
     CHECK(errorCode == "");
 
+    data["amount"] = nostr::MAX_MILLISATS + 1;
+    CHECK(fixture.queueNotification(notification));
+    fixture.loop();
+    CHECK(notificationCallbacks == 2);
+
+    data["amount"] = "10000";
+    CHECK(fixture.queueNotification(notification));
+    fixture.loop();
+    CHECK(notificationCallbacks == 2);
+    CHECK(errorCode == "OTHER");
+    data["amount"] = 1.5;
+    CHECK(fixture.queueNotification(notification));
+    fixture.loop();
+    CHECK(notificationCallbacks == 2);
+    data["amount"] = UINT64_MAX;
+    CHECK(fixture.queueNotification(notification));
+    fixture.loop();
+    CHECK(notificationCallbacks == 2);
+    data["amount"] = 10000;
+    data["preimage"] = "bad-preimage";
+    CHECK(fixture.queueNotification(notification));
+    fixture.loop();
+    CHECK(notificationCallbacks == 2);
+
     notification.clear();
     notification["error"]["code"] = "INTERNAL";
     notification["error"]["message"] = "wallet unavailable";
     CHECK(fixture.queueNotification(notification));
     fixture.loop();
-    CHECK(notificationCallbacks == 1);
+    CHECK(notificationCallbacks == 2);
     CHECK(errorCode == "INTERNAL");
     CHECK(errorMessage == "wallet unavailable");
 

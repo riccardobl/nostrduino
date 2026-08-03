@@ -36,13 +36,13 @@ typedef struct s_KeySend {
 
 template <typename T> class Nip47Response {
   public:
-    Nip47Response() {}
+    Nip47Response() : result{} {}
 
     Nip47Response(NostrString errorCode, NostrString errorMessage, NostrString resultType, T result) : errorCode(errorCode), errorMessage(errorMessage), resultType(resultType), result(result) {}
     NostrString errorCode = "";
     NostrString errorMessage = "";
     NostrString resultType = "";
-    T result;
+    T result{};
 };
 
 typedef struct s_PayInvoiceResponse {
@@ -199,6 +199,9 @@ class Nip47 {
     SignedNostrEvent createEvent(NostrString method, JsonDocument doc);
     NostrString encryptContent(NostrString content);
     NostrString decryptContent(NostrString content);
+    bool parseResponseEnvelope(SignedNostrEvent *response, const char *expectedResultType,
+                               JsonDocument &document, JsonObjectConst &result,
+                               NostrString &errorCode, NostrString &errorMessage);
     std::function<void(Nip47Notification)> notificationCallback;
 };
 } 

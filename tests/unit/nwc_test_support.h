@@ -75,6 +75,8 @@ class Fixture {
     bool queueResponse(size_t requestIndex, JsonDocument &response, const String &dTag = "",
                        const String &signingPrivateKey = "", unsigned int kind = 23195,
                        const String &targetPublicKey = "");
+    bool makeResponseEvent(size_t requestIndex, JsonDocument &response,
+                           nostr::SignedNostrEvent &event, const String &dTag = "");
     bool queueNotification(JsonDocument &notification, const String &signingPrivateKey = "",
                            unsigned int kind = 0, const String &targetPublicKey = "");
     bool subscriptionWasClosed(const String &subscriptionId) const;

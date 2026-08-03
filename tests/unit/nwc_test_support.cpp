@@ -263,6 +263,21 @@ bool Fixture::queueResponse(size_t requestIndex, JsonDocument &response, const S
                             request.eventId, dTag, signer, target);
 }
 
+bool Fixture::makeResponseEvent(size_t requestIndex, JsonDocument &response,
+                                nostr::SignedNostrEvent &event, const String &dTag) {
+    PublishedRequest request;
+    if (!requestAt(requestIndex, request)) return false;
+    String plaintext;
+    nostr::Utils::jsonStringify(response.as<JsonVariantConst>(), &plaintext);
+    nostr::UnsignedNostrEvent unsignedEvent(
+        23195, encryptForClient(plaintext, request.encryption), currentUnixTime);
+    unsignedEvent.getTags()->addTag("p", {userPublicKey});
+    unsignedEvent.getTags()->addTag("e", {request.eventId});
+    if (dTag.length() > 0) unsignedEvent.getTags()->addTag("d", {dTag});
+    event = unsignedEvent.sign(servicePrivateKey);
+    return event.isValid();
+}
+
 bool Fixture::queueNotification(JsonDocument &notification, const String &signingPrivateKey,
                                 unsigned int kind, const String &targetPublicKey) {
     const unsigned int expectedKind = client.getEncryption() == nostr::Nip47Encryption::Nip44V2

@@ -1,6 +1,82 @@
 #include "Nip47.h"
+#include <cstring>
 
 using namespace nostr;
+
+namespace {
+
+template <typename T>
+void resetResponse(Nip47Response<T> &out) {
+    out.errorCode = "";
+    out.errorMessage = "";
+    out.resultType = "";
+    out.result = T{};
+}
+
+bool readStringField(JsonObjectConst object, const char *key, NostrString &out,
+                     bool required = false) {
+    JsonVariantConst value = object[key];
+    if (value.isNull()) {
+        out = "";
+        return !required;
+    }
+    if (!value.is<const char *>()) return false;
+    out = value.as<NostrString>();
+    return !required || NostrString_length(out) > 0;
+}
+
+bool readUnsignedInteger(JsonVariantConst value, unsigned long long &out,
+                         bool required = true) {
+    if (value.isNull()) {
+        out = 0;
+        return !required;
+    }
+    if (!value.is<uint64_t>()) return false;
+    out = value.as<uint64_t>();
+    return true;
+}
+
+bool readMilliSats(JsonVariantConst value, MilliSats &out, bool required = true) {
+    if (value.isNull()) {
+        out = 0;
+        return !required;
+    }
+    if (!value.is<int64_t>()) return false;
+    out = value.as<int64_t>();
+    return out >= 0;
+}
+
+bool isExactHexString(const NostrString &value, size_t byteCount) {
+    if (NostrString_length(value) != static_cast<long>(byteCount * 2)) return false;
+    std::vector<uint8_t> bytes(byteCount);
+    return Utils::decodeHexExact(NostrString_toChars(value), bytes.data(), bytes.size());
+}
+
+bool readPreimage(JsonObjectConst object, NostrString &out, bool required) {
+    if (!readStringField(object, "preimage", out, required)) return false;
+    if (NostrString_length(out) == 0) return !required;
+    return isExactHexString(out, 32);
+}
+
+bool copyMetadata(JsonVariantConst source, JsonDocument &destination) {
+    destination.clear();
+    if (source.isNull()) return true;
+    if (!source.is<JsonObjectConst>()) return false;
+    destination.set(source);
+    return true;
+}
+
+bool readStringArray(JsonVariantConst source, std::vector<NostrString> &destination) {
+    destination.clear();
+    if (!source.is<JsonArrayConst>()) return false;
+    for (JsonVariantConst value : source.as<JsonArrayConst>()) {
+        if (!value.is<const char *>()) return false;
+        destination.push_back(value.as<NostrString>());
+    }
+    return true;
+}
+
+} // namespace
 
 void Nip47::setEncryption(Nip47Encryption selectedEncryption, bool shouldIncludeEncryptionTag) {
     this->encryption = selectedEncryption;
@@ -19,6 +95,33 @@ NostrString Nip47::decryptContent(NostrString content) {
         return this->nip44.decrypt(this->userPrivKey, this->servicePubKey, content);
     }
     return this->nip04.decrypt(this->userPrivKey, this->servicePubKey, content);
+}
+
+bool Nip47::parseResponseEnvelope(SignedNostrEvent *response, const char *expectedResultType,
+                                  JsonDocument &document, JsonObjectConst &result,
+                                  NostrString &errorCode, NostrString &errorMessage) {
+    if (response == nullptr || !response->verify()) return false;
+    NostrString content = this->decryptContent(response->getContent());
+    if (!Utils::jsonParse(&content, &document) || !document.is<JsonObject>()) return false;
+    JsonObjectConst root = document.as<JsonObjectConst>();
+    if (!root["result_type"].is<const char *>() ||
+        std::strcmp(root["result_type"].as<const char *>(), expectedResultType) != 0) return false;
+
+    JsonVariantConst errorValue = root["error"];
+    JsonVariantConst resultValue = root["result"];
+    if (!errorValue.isNull()) {
+        if (!errorValue.is<JsonObjectConst>() || !resultValue.isNull()) return false;
+        JsonObjectConst error = errorValue.as<JsonObjectConst>();
+        if (!readStringField(error, "code", errorCode, true) ||
+            !readStringField(error, "message", errorMessage, true)) {
+            errorCode = "";
+            errorMessage = "";
+        }
+        return false;
+    }
+    if (!resultValue.is<JsonObjectConst>()) return false;
+    result = resultValue.as<JsonObjectConst>();
+    return true;
 }
 
 SignedNostrEvent Nip47::createEvent(NostrString method, JsonDocument doc) {
@@ -187,27 +290,16 @@ SignedNostrEvent Nip47::listTransactions(unsigned long from, unsigned long until
 }
 
 void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<PayInvoiceResponse> &out) {
-    out.errorCode = "";
-    out.errorMessage = "";
+    resetResponse(out);
     Utils::log("NWC: received pay_invoice response");
-    if (response->verify()) {
-        NostrString content = this->decryptContent(response->getContent());
-        JsonDocument doc;
-        Utils::jsonParse(&content, &doc);
-        JsonObject error = doc["error"];
-        if (!error.isNull()) {
-            out.errorCode = error["code"].as<NostrString>();
-            out.errorMessage = error["message"].as<NostrString>();
-        } else {
-            if (doc["result"].is<JsonObject>() && doc["result_type"].is<const char *>()) {
-                NostrString resultType = doc["result_type"].as<NostrString>();
-                JsonObject data = doc["result"];
-                if (NostrString_equals(resultType, "pay_invoice")) {
-                    out.result.preimage = data["preimage"].as<NostrString>();
-                    return;
-                }
-            }
-        }
+    JsonDocument document;
+    JsonObjectConst result;
+    NostrString preimage;
+    if (this->parseResponseEnvelope(response, "pay_invoice", document, result,
+                                    out.errorCode, out.errorMessage) &&
+        readPreimage(result, preimage, true)) {
+        out.result.preimage = preimage;
+        return;
     }
     if (NostrString_length(out.errorCode) == 0) {
         out.errorCode = "OTHER";
@@ -216,31 +308,21 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<PayInvoiceRe
 }
 
 void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MultiPayInvoiceResponse> &out) {
-    out.errorCode = "";
-    out.errorMessage = "";
+    resetResponse(out);
     Utils::log("NWC: received multi_pay_invoice response");
-    if (response->verify()) {
-        NostrString content = this->decryptContent(response->getContent());
-        JsonDocument doc;
-        Utils::jsonParse(&content, &doc);
-        JsonObject error = doc["error"];
-        if (!error.isNull()) {
-            out.errorCode = error["code"].as<NostrString>();
-            out.errorMessage = error["message"].as<NostrString>();
-        } else {
-            if (doc["result"].is<JsonObject>() && doc["result_type"].is<const char *>()) {
-                NostrString resultType = doc["result_type"].as<NostrString>();
-                JsonObject data = doc["result"];
-                if (NostrString_equals(resultType, "multi_pay_invoice")) {
-                    const std::vector<NostrString> &dTags = response->getTags()->getTag("d");
-                    if (dTags.size() > 0) {
-                        out.result.preimage = data["preimage"].as<NostrString>();
-                        out.result.d = dTags[0];
-                        return;
-                    }
-                }
-            }
-        }
+    JsonDocument document;
+    JsonObjectConst result;
+    NostrString preimage;
+    const std::vector<NostrString> &dTags = response != nullptr
+                                                ? response->getTags()->getTag("d")
+                                                : NostrEventTags::emptyTags;
+    if (this->parseResponseEnvelope(response, "multi_pay_invoice", document, result,
+                                    out.errorCode, out.errorMessage) &&
+        dTags.size() == 1 && NostrString_length(dTags[0]) > 0 &&
+        readPreimage(result, preimage, true)) {
+        out.result.preimage = preimage;
+        out.result.d = dTags[0];
+        return;
     }
     if (NostrString_length(out.errorCode) == 0) {
         out.errorCode = "OTHER";
@@ -249,27 +331,16 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MultiPayInvo
 }
 
 void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<PayKeySendResponse> &out) {
-    out.errorCode = "";
-    out.errorMessage = "";
+    resetResponse(out);
     Utils::log("NWC: received pay_keysend response");
-    if (response->verify()) {
-        NostrString content = this->decryptContent(response->getContent());
-        JsonDocument doc;
-        Utils::jsonParse(&content, &doc);
-        JsonObject error = doc["error"];
-        if (!error.isNull()) {
-            out.errorCode = error["code"].as<NostrString>();
-            out.errorMessage = error["message"].as<NostrString>();
-        } else {
-            if (doc["result"].is<JsonObject>() && doc["result_type"].is<const char *>()) {
-                NostrString resultType = doc["result_type"].as<NostrString>();
-                JsonObject data = doc["result"];
-                if (NostrString_equals(resultType, "pay_keysend")) {
-                    out.result.preimage = data["preimage"].as<NostrString>();
-                    return;
-                }
-            }
-        }
+    JsonDocument document;
+    JsonObjectConst result;
+    NostrString preimage;
+    if (this->parseResponseEnvelope(response, "pay_keysend", document, result,
+                                    out.errorCode, out.errorMessage) &&
+        readPreimage(result, preimage, true)) {
+        out.result.preimage = preimage;
+        return;
     }
     if (NostrString_length(out.errorCode) == 0) {
         out.errorCode = "OTHER";
@@ -278,31 +349,21 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<PayKeySendRe
 }
 
 void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MultiPayKeySendResponse> &out) {
-    out.errorCode = "";
-    out.errorMessage = "";
+    resetResponse(out);
     Utils::log("NWC: received multi_pay_keysend response");
-    if (response->verify()) {
-        NostrString content = this->decryptContent(response->getContent());
-        JsonDocument doc;
-        Utils::jsonParse(&content, &doc);
-        JsonObject error = doc["error"];
-        if (!error.isNull()) {
-            out.errorCode = error["code"].as<NostrString>();
-            out.errorMessage = error["message"].as<NostrString>();
-        } else {
-            if (doc["result"].is<JsonObject>() && doc["result_type"].is<const char *>()) {
-                NostrString resultType = doc["result_type"].as<NostrString>();
-                JsonObject data = doc["result"];
-                if (NostrString_equals(resultType, "multi_pay_keysend")) {
-                    const std::vector<NostrString> &dTags = response->getTags()->getTag("d");
-                    if (dTags.size() > 0) {
-                        out.result.preimage = data["preimage"].as<NostrString>();
-                        out.result.d = dTags[0];
-                        return;
-                    }
-                }
-            }
-        }
+    JsonDocument document;
+    JsonObjectConst result;
+    NostrString preimage;
+    const std::vector<NostrString> &dTags = response != nullptr
+                                                ? response->getTags()->getTag("d")
+                                                : NostrEventTags::emptyTags;
+    if (this->parseResponseEnvelope(response, "multi_pay_keysend", document, result,
+                                    out.errorCode, out.errorMessage) &&
+        dTags.size() == 1 && NostrString_length(dTags[0]) > 0 &&
+        readPreimage(result, preimage, true)) {
+        out.result.preimage = preimage;
+        out.result.d = dTags[0];
+        return;
     }
     if (NostrString_length(out.errorCode) == 0) {
         out.errorCode = "OTHER";
@@ -311,41 +372,26 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MultiPayKeyS
 }
 
 void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MakeInvoiceResponse> &out) {
-    out.errorCode = "";
-    out.errorMessage = "";
+    resetResponse(out);
     Utils::log("NWC: received make_invoice response");
-    if (response->verify()) {
-        NostrString content = this->decryptContent(response->getContent());
-        JsonDocument doc;
-        Utils::jsonParse(&content, &doc);
-        JsonObject error = doc["error"];
-        if (!error.isNull()) {
-            out.errorCode = error["code"].as<NostrString>();
-            out.errorMessage = error["message"].as<NostrString>();
-        } else {
-            if (doc["result"].is<JsonObject>() && doc["result_type"].is<const char *>()) {
-                NostrString resultType = doc["result_type"].as<NostrString>();
-                JsonObject data = doc["result"];
-                if (NostrString_equals(resultType, "make_invoice")) {
-                    out.result.type = data["type"].as<NostrString>();
-                    out.result.invoice = data["invoice"].as<NostrString>();
-                    out.result.description = data["description"].as<NostrString>();
-                    out.result.descriptionHash = data["description_hash"].as<NostrString>();
-                    out.result.preimage = data["preimage"].as<NostrString>();
-                    out.result.paymentHash = data["payment_hash"].as<NostrString>();
-                    out.result.amount = data["amount"].as<MilliSats>();
-                    out.result.feesPaid = data["fees_paid"].as<MilliSats>();
-                    out.result.createdAt = data["created_at"].as<unsigned long long>();
-                    out.result.expiresAt = data["expires_at"].as<unsigned long long>();
-                    out.result.metadata.clear();
-                    JsonObject metadataObject = out.result.metadata.to<JsonObject>();
-                    for (JsonPair kv : data["metadata"].as<JsonObject>()) {
-                        metadataObject[kv.key().c_str()] = kv.value().as<NostrString>();
-                    }
-                    return;
-                }
-            }
-        }
+    JsonDocument document;
+    JsonObjectConst result;
+    MakeInvoiceResponse parsed{};
+    if (this->parseResponseEnvelope(response, "make_invoice", document, result,
+                                    out.errorCode, out.errorMessage) &&
+        readStringField(result, "type", parsed.type, true) &&
+        readStringField(result, "invoice", parsed.invoice, true) &&
+        readStringField(result, "description", parsed.description) &&
+        readStringField(result, "description_hash", parsed.descriptionHash) &&
+        readPreimage(result, parsed.preimage, false) &&
+        readStringField(result, "payment_hash", parsed.paymentHash, true) &&
+        readMilliSats(result["amount"], parsed.amount) &&
+        readMilliSats(result["fees_paid"], parsed.feesPaid, false) &&
+        readUnsignedInteger(result["created_at"], parsed.createdAt) &&
+        readUnsignedInteger(result["expires_at"], parsed.expiresAt) &&
+        copyMetadata(result["metadata"], parsed.metadata)) {
+        out.result = parsed;
+        return;
     }
     if (NostrString_length(out.errorCode) == 0) {
         out.errorCode = "OTHER";
@@ -354,42 +400,27 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MakeInvoiceR
 }
 
 void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<LookUpInvoiceResponse> &out) {
-    out.errorCode = "";
-    out.errorMessage = "";
+    resetResponse(out);
     Utils::log("NWC: received lookup_invoice response");
-    if (response->verify()) {
-        NostrString content = this->decryptContent(response->getContent());
-        JsonDocument doc;
-        Utils::jsonParse(&content, &doc);
-        JsonObject error = doc["error"];
-        if (!error.isNull()) {
-            out.errorCode = error["code"].as<NostrString>();
-            out.errorMessage = error["message"].as<NostrString>();
-        } else {
-            if (doc["result"].is<JsonObject>() && doc["result_type"].is<const char *>()) {
-                NostrString resultType = doc["result_type"].as<NostrString>();
-                JsonObject data = doc["result"];
-                if (NostrString_equals(resultType, "lookup_invoice")) {
-                    out.result.type = data["type"].as<NostrString>();
-                    out.result.invoice = data["invoice"].as<NostrString>();
-                    out.result.description = data["description"].as<NostrString>();
-                    out.result.descriptionHash = data["description_hash"].as<NostrString>();
-                    out.result.preimage = data["preimage"].as<NostrString>();
-                    out.result.paymentHash = data["payment_hash"].as<NostrString>();
-                    out.result.amount = data["amount"].as<MilliSats>();
-                    out.result.feesPaid = data["fees_paid"].as<MilliSats>();
-                    out.result.createdAt = data["created_at"].as<unsigned long long>();
-                    out.result.expiresAt = data["expires_at"].as<unsigned long long>();
-                    out.result.settledAt = data["settled_at"].as<unsigned long long>();
-                    out.result.metadata.clear();
-                    JsonObject metadataObject = out.result.metadata.to<JsonObject>();
-                    for (JsonPair kv : data["metadata"].as<JsonObject>()) {
-                        metadataObject[kv.key().c_str()] = kv.value().as<NostrString>();
-                    }
-                    return;
-                }
-            }
-        }
+    JsonDocument document;
+    JsonObjectConst result;
+    LookUpInvoiceResponse parsed{};
+    if (this->parseResponseEnvelope(response, "lookup_invoice", document, result,
+                                    out.errorCode, out.errorMessage) &&
+        readStringField(result, "type", parsed.type, true) &&
+        readStringField(result, "invoice", parsed.invoice) &&
+        readStringField(result, "description", parsed.description) &&
+        readStringField(result, "description_hash", parsed.descriptionHash) &&
+        readPreimage(result, parsed.preimage, false) &&
+        readStringField(result, "payment_hash", parsed.paymentHash, true) &&
+        readMilliSats(result["amount"], parsed.amount) &&
+        readMilliSats(result["fees_paid"], parsed.feesPaid, false) &&
+        readUnsignedInteger(result["created_at"], parsed.createdAt) &&
+        readUnsignedInteger(result["expires_at"], parsed.expiresAt, false) &&
+        readUnsignedInteger(result["settled_at"], parsed.settledAt, false) &&
+        copyMetadata(result["metadata"], parsed.metadata)) {
+        out.result = parsed;
+        return;
     }
     if (NostrString_length(out.errorCode) == 0) {
         out.errorCode = "OTHER";
@@ -398,45 +429,42 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<LookUpInvoic
 }
 
 void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<ListTransactionsResponse> &out) {
-    out.errorCode = "";
-    out.errorMessage = "";
+    resetResponse(out);
     Utils::log("NWC: received list_transactions response");
-    if (response->verify()) {
-        NostrString content = this->decryptContent(response->getContent());
-        JsonDocument doc;
-        Utils::jsonParse(&content, &doc);
-        JsonObject error = doc["error"];
-        if (!error.isNull()) {
-            out.errorCode = error["code"].as<NostrString>();
-            out.errorMessage = error["message"].as<NostrString>();
-        } else {
-            if (doc["result"].is<JsonObject>() && doc["result_type"].is<const char *>()) {
-                NostrString resultType = doc["result_type"].as<NostrString>();
-                JsonObject data = doc["result"];
-                if (NostrString_equals(resultType, "list_transactions")) {
-                    for (JsonObject transactionJson : data["transactions"].as<JsonArray>()) {
-                        Transaction transaction;
-                        transaction.type = transactionJson["type"].as<NostrString>();
-                        transaction.invoice = transactionJson["invoice"].as<NostrString>();
-                        transaction.description = transactionJson["description"].as<NostrString>();
-                        transaction.descriptionHash = transactionJson["description_hash"].as<NostrString>();
-                        transaction.preimage = transactionJson["preimage"].as<NostrString>();
-                        transaction.paymentHash = transactionJson["payment_hash"].as<NostrString>();
-                        transaction.amount = transactionJson["amount"].as<MilliSats>();
-                        transaction.feesPaid = transactionJson["fees_paid"].as<MilliSats>();
-                        transaction.createdAt = transactionJson["created_at"].as<unsigned long long>();
-                        transaction.expiresAt = transactionJson["expires_at"].as<unsigned long long>();
-                        transaction.settledAt = transactionJson["settled_at"].as<unsigned long long>();
-                        transaction.metadata.clear();
-                        JsonObject metadataObject = transaction.metadata.to<JsonObject>();
-                        for (JsonPair kv : transactionJson["metadata"].as<JsonObject>()) {
-                            metadataObject[kv.key().c_str()] = kv.value().as<NostrString>();
-                        }
-                        out.result.transactions.push_back(transaction);
-                    }
-                    return;
-                }
+    JsonDocument document;
+    JsonObjectConst result;
+    std::vector<Transaction> parsedTransactions;
+    if (this->parseResponseEnvelope(response, "list_transactions", document, result,
+                                    out.errorCode, out.errorMessage) &&
+        result["transactions"].is<JsonArrayConst>()) {
+        bool valid = true;
+        for (JsonVariantConst value : result["transactions"].as<JsonArrayConst>()) {
+            if (!value.is<JsonObjectConst>()) {
+                valid = false;
+                break;
             }
+            JsonObjectConst transactionJson = value.as<JsonObjectConst>();
+            Transaction transaction{};
+            if (!readStringField(transactionJson, "type", transaction.type, true) ||
+                !readStringField(transactionJson, "invoice", transaction.invoice) ||
+                !readStringField(transactionJson, "description", transaction.description) ||
+                !readStringField(transactionJson, "description_hash", transaction.descriptionHash) ||
+                !readPreimage(transactionJson, transaction.preimage, false) ||
+                !readStringField(transactionJson, "payment_hash", transaction.paymentHash, true) ||
+                !readMilliSats(transactionJson["amount"], transaction.amount) ||
+                !readMilliSats(transactionJson["fees_paid"], transaction.feesPaid, false) ||
+                !readUnsignedInteger(transactionJson["created_at"], transaction.createdAt) ||
+                !readUnsignedInteger(transactionJson["expires_at"], transaction.expiresAt, false) ||
+                !readUnsignedInteger(transactionJson["settled_at"], transaction.settledAt, false) ||
+                !copyMetadata(transactionJson["metadata"], transaction.metadata)) {
+                valid = false;
+                break;
+            }
+            parsedTransactions.push_back(transaction);
+        }
+        if (valid) {
+            out.result.transactions = parsedTransactions;
+            return;
         }
     }
     if (NostrString_length(out.errorCode) == 0) {
@@ -446,27 +474,16 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<ListTransact
 }
 
 void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<GetBalanceResponse> &out) {
-    out.errorCode = "";
-    out.errorMessage = "";
+    resetResponse(out);
     Utils::log("NWC: received get_balance response");
-    if (response->verify()) {
-        NostrString content = this->decryptContent(response->getContent());
-        JsonDocument doc;
-        Utils::jsonParse(&content, &doc);
-        JsonObject error = doc["error"];
-        if (!error.isNull()) {
-            out.errorCode = error["code"].as<NostrString>();
-            out.errorMessage = error["message"].as<NostrString>();
-        } else {
-            if (doc["result"].is<JsonObject>() && doc["result_type"].is<const char *>()) {
-                NostrString resultType = doc["result_type"].as<NostrString>();
-                JsonObject data = doc["result"];
-                if (NostrString_equals(resultType, "get_balance")) {
-                    out.result.balance = data["balance"];
-                    return;
-                }
-            }
-        }
+    JsonDocument document;
+    JsonObjectConst result;
+    MilliSats balance = 0;
+    if (this->parseResponseEnvelope(response, "get_balance", document, result,
+                                    out.errorCode, out.errorMessage) &&
+        readMilliSats(result["balance"], balance)) {
+        out.result.balance = balance;
+        return;
     }
     if (NostrString_length(out.errorCode) == 0) {
         out.errorCode = "OTHER";
@@ -475,40 +492,23 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<GetBalanceRe
 }
 
 void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<GetInfoResponse> &out) {
-    out.errorCode = "";
-    out.errorMessage = "";
+    resetResponse(out);
     Utils::log("NWC: received get_info response");
-    if (response->verify()) {
-        NostrString content = this->decryptContent(response->getContent());
-        JsonDocument doc;
-        Utils::jsonParse(&content, &doc);
-        JsonObject error = doc["error"];
-        if (!error.isNull()) {
-            out.errorCode = error["code"].as<NostrString>();
-            out.errorMessage = error["message"].as<NostrString>();
-        } else {
-            if (doc["result"].is<JsonObject>() && doc["result_type"].is<const char *>()) {
-                NostrString resultType = doc["result_type"].as<NostrString>();
-                JsonObject data = doc["result"];
-                if (NostrString_equals(resultType, "get_info")) {
-                    out.result.alias = data["alias"].as<NostrString>();
-                    out.result.color = data["color"].as<NostrString>();
-                    out.result.pubkey = data["pubkey"].as<NostrString>();
-                    out.result.network = data["network"].as<NostrString>();
-                    out.result.blockHeight = data["block_height"].as<unsigned long long>();
-                    out.result.blockHash = data["block_hash"].as<NostrString>();
-                    JsonArray methodsObj = data["methods"].as<JsonArray>();
-                    for (JsonVariant v : methodsObj) {
-                        out.result.methods.push_back(v.as<NostrString>());
-                    }
-                    JsonArray notificationsObj = data["notifications"].as<JsonArray>();
-                    for (JsonVariant v : notificationsObj) {
-                        out.result.notifications.push_back(v.as<NostrString>());
-                    }
-                    return;
-                }
-            }
-        }
+    JsonDocument document;
+    JsonObjectConst result;
+    GetInfoResponse parsed{};
+    if (this->parseResponseEnvelope(response, "get_info", document, result,
+                                    out.errorCode, out.errorMessage) &&
+        readStringField(result, "alias", parsed.alias) &&
+        readStringField(result, "color", parsed.color) &&
+        readStringField(result, "pubkey", parsed.pubkey, true) &&
+        readStringField(result, "network", parsed.network, true) &&
+        readUnsignedInteger(result["block_height"], parsed.blockHeight) &&
+        readStringField(result, "block_hash", parsed.blockHash, true) &&
+        readStringArray(result["methods"], parsed.methods) &&
+        readStringArray(result["notifications"], parsed.notifications)) {
+        out.result = parsed;
+        return;
     }
     if (NostrString_length(out.errorCode) == 0) {
         out.errorCode = "OTHER";
@@ -543,40 +543,43 @@ void Nip47::parseNWC(NostrString nwc, NWCData &data) {
 }
 
 void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<NotificationResponse> &out) {
-    out.errorCode = "";
-    out.errorMessage = "";
-    out.resultType = "";
+    resetResponse(out);
     Utils::log("NWC: received notification response");
-
-    if (response->verify()) {
+    if (response != nullptr && response->verify()) {
         NostrString content = this->decryptContent(response->getContent());
-        JsonDocument doc;
-        Utils::jsonParse(&content, &doc);
-
-        JsonObject error = doc["error"];
-        if (!error.isNull()) {
-            out.errorCode = error["code"].as<NostrString>();
-            out.errorMessage = error["message"].as<NostrString>();
-        } else {
-            NostrString notificationType = doc["notification_type"].as<NostrString>();
-            JsonObject notification = doc["notification"].as<JsonObject>();
-            if (NostrString_length(notificationType) > 0 && notification) {
-                Nip47Notification nip47Notification = {};
-                nip47Notification.notificationType = notificationType;
-                nip47Notification.type = notification["type"].as<NostrString>();
-                nip47Notification.invoice = notification["invoice"].as<NostrString>();
-                nip47Notification.description = notification["description"].as<NostrString>();
-                nip47Notification.descriptionHash = notification["description_hash"].as<NostrString>();
-                nip47Notification.preimage = notification["preimage"].as<NostrString>();
-                nip47Notification.paymentHash = notification["payment_hash"].as<NostrString>();
-                nip47Notification.amount = notification["amount"].as<MilliSats>();
-                nip47Notification.feesPaid = notification["fees_paid"].as<MilliSats>();
-                nip47Notification.createdAt = notification["created_at"].as<uint64_t>();
-                nip47Notification.settledAt = notification["settled_at"].as<uint64_t>();
-
-                out.resultType = notificationType;
-                out.result.notification = nip47Notification;
-                return;
+        JsonDocument document;
+        if (Utils::jsonParse(&content, &document) && document.is<JsonObject>()) {
+            JsonObjectConst root = document.as<JsonObjectConst>();
+            JsonVariantConst errorValue = root["error"];
+            if (!errorValue.isNull()) {
+                if (errorValue.is<JsonObjectConst>() && root["notification"].isNull()) {
+                    JsonObjectConst error = errorValue.as<JsonObjectConst>();
+                    if (readStringField(error, "code", out.errorCode, true) &&
+                        readStringField(error, "message", out.errorMessage, true)) return;
+                }
+                out.errorCode = "";
+                out.errorMessage = "";
+            } else if (root["notification_type"].is<const char *>() &&
+                       root["notification"].is<JsonObjectConst>()) {
+                NostrString notificationType = root["notification_type"].as<NostrString>();
+                JsonObjectConst notification = root["notification"].as<JsonObjectConst>();
+                Nip47Notification parsed{};
+                parsed.notificationType = notificationType;
+                if (NostrString_length(notificationType) > 0 &&
+                    readStringField(notification, "type", parsed.type, true) &&
+                    readStringField(notification, "invoice", parsed.invoice) &&
+                    readStringField(notification, "description", parsed.description) &&
+                    readStringField(notification, "description_hash", parsed.descriptionHash) &&
+                    readPreimage(notification, parsed.preimage, false) &&
+                    readStringField(notification, "payment_hash", parsed.paymentHash) &&
+                    readMilliSats(notification["amount"], parsed.amount) &&
+                    readMilliSats(notification["fees_paid"], parsed.feesPaid, false) &&
+                    readUnsignedInteger(notification["created_at"], parsed.createdAt) &&
+                    readUnsignedInteger(notification["settled_at"], parsed.settledAt, false)) {
+                    out.resultType = notificationType;
+                    out.result.notification = parsed;
+                    return;
+                }
             }
         }
     }

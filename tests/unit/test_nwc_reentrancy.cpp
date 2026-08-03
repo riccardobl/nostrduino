@@ -21,7 +21,7 @@ bool testNwcReentrancy() {
     responseFixture.loop();
     JsonDocument response;
     response["result_type"] = "pay_invoice";
-    response["result"]["preimage"] = "reentrant-preimage";
+    response["result"]["preimage"] = repeatChar('a', 64);
     CHECK(responseFixture.queueResponse(requestIndex, response));
     responseFixture.loop();
     CHECK(firstResponseCalls == 1);
@@ -45,7 +45,7 @@ bool testNwcReentrancy() {
     closeFixture.loop();
     response.clear();
     response["result_type"] = "pay_invoice";
-    response["result"]["preimage"] = "close-preimage";
+    response["result"]["preimage"] = repeatChar('b', 64);
     CHECK(closeFixture.queueResponse(requestIndex, response));
     closeFixture.loop();
     CHECK(closeCalls == 1);
