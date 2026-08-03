@@ -254,11 +254,19 @@ size_t Utils::toBase64(const uint8_t *array, size_t arraySize, char *output, siz
 }
 
 size_t Utils::sha256(NostrString message, uint8_t *hash) {
+    return sha256(reinterpret_cast<const uint8_t *>(message.c_str()), static_cast<size_t>(message.length()), hash);
+}
+
+size_t Utils::sha256(const uint8_t *message, size_t messageSize, uint8_t *hash) {
     if (hash == nullptr) return 0;
+    if (message == nullptr && messageSize != 0) {
+        wipe(hash, NOSTR_DIGEST_SIZE);
+        return 0;
+    }
     mbedtls_sha256_context context;
     mbedtls_sha256_init(&context);
     const bool ok = mbedtls_sha256_starts_ret(&context, 0) == 0 &&
-                    mbedtls_sha256_update_ret(&context, reinterpret_cast<const unsigned char *>(message.c_str()), message.length()) == 0 &&
+                    mbedtls_sha256_update_ret(&context, message, messageSize) == 0 &&
                     mbedtls_sha256_finish_ret(&context, hash) == 0;
     mbedtls_sha256_free(&context);
     if (!ok) wipe(hash, NOSTR_DIGEST_SIZE);
