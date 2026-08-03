@@ -47,8 +47,8 @@ jobs:
             echo 'uBitcoin must only be called through UBitcoinBackend' >&2
             exit 1
           fi
-          if rg -n 'bootloader_random_enable|\b(byte|uint8_t|char)[[:space:]]+[A-Za-z_][A-Za-z0-9_]*\[[[:space:]]*(byteSize|messageSize|contentLength|encodedSize|length|NostrString_length)' src examples; then
-            echo 'legacy entropy hook or VLA-like declaration found' >&2
+          if rg -n '\b(byte|uint8_t|char)[[:space:]]+[A-Za-z_][A-Za-z0-9_]*\[[[:space:]]*(byteSize|messageSize|contentLength|encodedSize|length|NostrString_length)' src examples; then
+            echo 'VLA-like declaration found' >&2
             exit 1
           fi
           test "$(rg -c --no-filename '^\[env:ESP32' platformio.ini | awk '{s+=$1} END {print s+0}')" -eq 4
@@ -60,7 +60,7 @@ jobs:
           from pathlib import Path
           metadata = json.loads(Path("library.json").read_text())
           properties = dict(line.split("=", 1) for line in Path("library.properties").read_text().splitlines() if "=" in line)
-          assert metadata["version"] == properties["version"]
+          assert metadata["version"] == properties["version"] == "2.0.0"
           assert metadata["platforms"] == "espressif32"
           assert "uBitcoin" not in metadata["dependencies"]
           assert "uBitcoin" not in properties["depends"]

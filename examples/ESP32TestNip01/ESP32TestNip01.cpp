@@ -66,7 +66,18 @@ void testNIP01() {
     try {
         String relay = RELAY;
         String privKey = PRIVKEY;
-        transport = nostr::esp32::ESP32Platform::getTransport();
+        nostr::esp32::ESP32TransportConfig transportConfig;
+#ifdef NOSTR_ROOT_CA_PEM
+        // Verified mode: NOSTR_ROOT_CA_PEM must remain valid for as long as
+        // this transport and its connections exist.
+        transportConfig.tls.caCertificatePem = NOSTR_ROOT_CA_PEM;
+        transportConfig.tls.requireCertificateValidation = true;
+#else
+        // Compatibility mode: TLS is encrypted but the peer certificate is
+        // not validated. The transport logs this once when TLS is first used.
+        transportConfig.tls.requireCertificateValidation = false;
+#endif
+        transport = nostr::esp32::ESP32Platform::getTransport(transportConfig);
 
         // We need a NostrPool instance that will handle all the communication
         nostr::NostrPool *pool = new nostr::NostrPool(transport);

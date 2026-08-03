@@ -1,6 +1,6 @@
 # Nostrduino
 
-A [nostr-tools](https://github.com/nbd-wtf/nostr-tools) inspired library for Arduino (and others).
+A [nostr-tools](https://github.com/nbd-wtf/nostr-tools) inspired Nostr library for Arduino ESP32.
 
 This was created using [arduino-nostr](https://github.com/lnbits/arduino-nostr) as starting point, most of the code was rewritten and the library was expanded to include more features.
 
@@ -26,10 +26,57 @@ In addition to that, the library provides some "managed" services (in `src/servi
 Check the [platformio registry page](https://registry.platformio.org/libraries/rblb/Nostrduino/installation) for instructions.
 
 ### ESP32 dependencies
-This library depends on the following additional libraries for the esp32 platform:
+This library depends on the following libraries for the ESP32 platform:
 - ArduinoJson (>=7.1.0)
-- uBitcoin (>=0.2.0)
 - WebSockets (>=2.4.1)
+
+uBitcoin is the only elliptic-curve backend. Version 0.2.0 is pinned as the
+`src/uBitcoin` git submodule.
+
+When building from a git checkout, initialize the pinned source with:
+
+```bash
+git submodule update --init src/uBitcoin
+```
+
+Registry packages already contain the required submodule sources.
+
+### ESP32 entropy modes
+
+`ESP32Platform::initNostr(bool withLogger, bool initializeRngWithoutRadio = false)`
+
+when initializing the library, leave the second argument at `false` when the
+application uses or will start Wi-Fi or Bluetooth.
+
+Firmware that does not use and will not start Wi-Fi or Bluetooth must enable the
+explicit offline mode:
+
+```cpp
+nostr::esp32::ESP32Platform::initNostr(true, true);
+```
+
+With this option, Nostrduino calls `bootloader_random_enable()` before the
+normal initialization so `esp_fill_random` has the offline entropy source
+needed by cryptographic operations. 
+
+**This is a radio-free/offline mode only, when using Wi-Fi or Bluetooth the entropy source is provided by the ESP32 radio and the second argument must be `false`.**
+
+Do not start Wi-Fi, Bluetooth, ADC or I2S after enabling it without first
+calling `bootloader_random_disable()` and handling the transition required by
+the installed ESP-IDF; that lifecycle remains the application's responsibility.
+
+### TLS configuration
+
+The default ESP32 transport accepts TLS connections without certificate
+validation.
+For certificate validation, provide a PEM CA and require it:
+
+```cpp
+nostr::esp32::ESP32TransportConfig config;
+config.tls.caCertificatePem = MY_ROOT_CA_PEM;
+config.tls.requireCertificateValidation = true;
+nostr::Transport *transport = nostr::esp32::ESP32Platform::getTransport(config);
+```
 
 
 ## Usage
@@ -45,7 +92,7 @@ python3 -m venv venv
 # activate venv
 source venv/bin/activate
 # install platformio
-pip install platformio
+pip install platformio==6.1.18
 ```
 
 

@@ -2,9 +2,8 @@
 //
 // Tested on the Arduino IDE 1.8.13 with the following libraries installed:
 // - ArduinoJson (>=7.1.0)
-// - uBitcoin (>=0.2.0)
 // - WebSockets (>=2.4.1)
-// - Nostrduino (>= 1.3.6)
+// - Nostrduino (>= 2.0.0)
 //
 // Inspired by nostrduino/examples/ESP32TestNWC/ESP32TestNWC.cpp
 #include <NostrCommon.h>
