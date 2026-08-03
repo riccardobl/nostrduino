@@ -7,6 +7,7 @@
 #include "NostrString.h"
 #include "NostrUtils.h"
 #include "WiFi.h"
+#include "bootloader_random.h"
 #include "esp_random.h"
 #include "esp_wifi.h"
 #include "time.h"
@@ -64,8 +65,14 @@ void initTime(const char *ntpServer, long unused1 = 0, int unused2 = 3600) {
 
 /**
  * Initialize platform specific code for the nostr library
+ *
+ * Set initializeRngWithoutRadio only for firmware that will never use
+ * Wi-Fi/Bluetooth or the peripherals that share the offline RNG source. The
+ * application must call bootloader_random_disable() before initializing RF,
+ * ADC or I2S, as required by ESP-IDF.
  */
-void initNostr(bool withLogger) {
+void initNostr(bool withLogger, bool initializeRngWithoutRadio = false) {
+    if (initializeRngWithoutRadio) bootloader_random_enable();
     nostr::Utils::setRandomBytesProvider(fillRandom);
     Utils::init();
     nostr::Utils::setUnixTimeSecondsProvider(getUnixTimestamp);
