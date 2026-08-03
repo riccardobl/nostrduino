@@ -22,8 +22,9 @@ NWC::~NWC() {
     this->close();
 }
 
-NWC::NWC(Transport *transport, NostrString nwcUrl) {
-    this->pool = std::unique_ptr<NostrPool>(new NostrPool(transport));
+NWC::NWC(Transport *transport, NostrString nwcUrl, const NostrLimits &limits)
+    : transport(transport), limits(limits) {
+    this->pool = std::unique_ptr<NostrPool>(new NostrPool(transport, NWC_DEFAULT_TIMEOUT, limits));
     Nip47::parseNWC(nwcUrl, this->nwc);
 
     Utils::log("NWC RELAY: " + this->nwc.relay);
@@ -34,6 +35,7 @@ NWC::NWC(Transport *transport, NostrString nwcUrl) {
 
     this->nip47 = Nip47(Nip04(), this->nwc.pubkey, accountSecret);
     this->accountPubKey = Utils::getPublicKey(accountSecret);
+    this->discoveryStartedAt = Utils::unixTimeSeconds();
     this->discoverEncryption();
 }
 
@@ -128,7 +130,17 @@ bool NWC::deferUntilEncryptionReady(std::function<void()> send,
         if (onErr) onErr(this->encryptionErrorCode, this->encryptionErrorMessage);
         return true;
     }
+    if (this->pendingRequests.size() >= this->limits.maxNwcPendingRequests) {
+        if (onErr) onErr("QUEUE_FULL", "NWC pending request queue is full");
+        return true;
+    }
     this->pendingRequests.push_back({send, onErr});
+    return true;
+}
+
+bool NWC::rejectIfCallbackQueueFull(std::function<void(NostrString, NostrString)> onErr) {
+    if (this->callbacks.size() < this->limits.maxNwcPendingRequests) return false;
+    if (onErr) onErr("QUEUE_FULL", "NWC callback queue is full");
     return true;
 }
 
@@ -165,6 +177,11 @@ void NWC::loop() {
         this->performClose();
         return;
     }
+    if (!this->encryptionReady && !this->encryptionFailed &&
+        Utils::unixTimeSeconds() - this->discoveryStartedAt > NWC_DEFAULT_TIMEOUT) {
+        this->failEncryption("OTHER", "timeout");
+        return;
+    }
 
     const std::vector<std::shared_ptr<NWCResponseCallbackBase>> snapshot = this->callbacks;
     for (const std::shared_ptr<NWCResponseCallbackBase> &callback : snapshot) {
@@ -186,7 +203,8 @@ void NWC::loop() {
     }
 }
 
-NostrString NWC::sendEvent(SignedNostrEvent *event) {
+NostrString NWC::sendEvent(SignedNostrEvent *event,
+                           std::function<void(NostrString, NostrString)> onErr) {
     NostrString subId = this->pool->subscribeMany(
         {this->nwc.relay}, {{{"kinds", {NWC_RESPONSE_KIND}}, {"authors", {this->nwc.pubkey}}, {"#p", {this->accountPubKey}}, {"#e", {event->getId()}}}},
         [&](const String &subId, nostr::SignedNostrEvent *event) {
@@ -211,19 +229,28 @@ NostrString NWC::sendEvent(SignedNostrEvent *event) {
             }
         },
         [&](const String &subId, const String &reason) { Utils::log("NWC: closed subscription: " + reason); }, [&](const String &subId) { Utils::log("NWC: EOS"); });
-    this->pool->publish({this->nwc.relay}, event, [&](const NostrString &eventId, bool status, const NostrString &msg) {
+    if (NostrString_length(subId) == 0) {
+        if (onErr) onErr("QUEUE_FULL", "Relay queue is full");
+        return "";
+    }
+    if (!this->pool->publish({this->nwc.relay}, event, [&](const NostrString &eventId, bool status, const NostrString &msg) {
         if (!status) {
             Utils::log("NWC: error sending event: " + msg);
         } else {
             Utils::log("NWC: event sent: " + eventId);
         }
-    });
+    })) {
+        this->pool->closeSubscription(subId);
+        if (onErr) onErr("QUEUE_FULL", "Relay queue is full");
+        return "";
+    }
     return subId;
 }
 
 void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
     if (this->deferUntilEncryptionReady(
             [this, onRes, onErr]() { this->subscribeNotifications(onRes, onErr); }, onErr)) return;
+    if (this->rejectIfCallbackQueueFull(onErr)) return;
     std::shared_ptr<NWCResponseCallback<NotificationResponse>> callback(new NWCResponseCallback<NotificationResponse>());
     callback->onRes = onRes;
     callback->onErr = onErr;
@@ -249,6 +276,10 @@ void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes
             }
         },
         [&](const String &subId, const String &reason) { Utils::log("NWC: closed notification subscription: " + reason); }, [&](const String &subId) { Utils::log("NWC: notification EOS"); });
+    if (NostrString_length(callback->subId) == 0) {
+        if (onErr) onErr("QUEUE_FULL", "Relay queue is full");
+        return;
+    }
     this->callbacks.push_back(callback);
 }
 
@@ -259,6 +290,7 @@ void NWC::payInvoice(NostrString invoice, MilliSats amount, std::function<void(P
     }
     if (this->deferUntilEncryptionReady(
             [this, invoice, amount, onRes, onErr]() { this->payInvoice(invoice, amount, onRes, onErr); }, onErr)) return;
+    if (this->rejectIfCallbackQueueFull(onErr)) return;
     SignedNostrEvent ev = this->nip47.payInvoice(invoice, amount);
     std::shared_ptr<NWCResponseCallback<PayInvoiceResponse>> callback(new NWCResponseCallback<PayInvoiceResponse>());
     callback->onRes = onRes;
@@ -266,7 +298,8 @@ void NWC::payInvoice(NostrString invoice, MilliSats amount, std::function<void(P
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->eventId = ev.getId();
     callback->n = 1;
-    callback->subId = this->sendEvent(&ev);
+    callback->subId = this->sendEvent(&ev, onErr);
+    if (NostrString_length(callback->subId) == 0) return;
     this->callbacks.push_back(callback);
 }
 
@@ -284,6 +317,7 @@ void NWC::multiPayInvoice(const std::vector<Invoice> &invoices, std::function<vo
     }
     if (this->deferUntilEncryptionReady(
             [this, invoices, onRes, onErr]() { this->multiPayInvoice(invoices, onRes, onErr); }, onErr)) return;
+    if (this->rejectIfCallbackQueueFull(onErr)) return;
     SignedNostrEvent ev = this->nip47.multiPayInvoice(invoices);
     std::shared_ptr<NWCResponseCallback<MultiPayInvoiceResponse>> callback(new NWCResponseCallback<MultiPayInvoiceResponse>());
     callback->onRes = onRes;
@@ -291,7 +325,8 @@ void NWC::multiPayInvoice(const std::vector<Invoice> &invoices, std::function<vo
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->eventId = ev.getId();
     callback->n = invoices.size();
-    callback->subId = this->sendEvent(&ev);
+    callback->subId = this->sendEvent(&ev, onErr);
+    if (NostrString_length(callback->subId) == 0) return;
     this->callbacks.push_back(callback);
 }
 
@@ -311,6 +346,7 @@ void NWC::payKeySend(NostrString pubkey, MilliSats amount, NostrString preimage,
             [this, pubkey, amount, preimage, tlv, onRes, onErr]() {
                 this->payKeySend(pubkey, amount, preimage, tlv, onRes, onErr);
             }, onErr)) return;
+    if (this->rejectIfCallbackQueueFull(onErr)) return;
     SignedNostrEvent ev = this->nip47.payKeySend(pubkey, amount, preimage, tlv);
     std::shared_ptr<NWCResponseCallback<PayKeySendResponse>> callback(new NWCResponseCallback<PayKeySendResponse>());
     callback->onRes = onRes;
@@ -318,7 +354,8 @@ void NWC::payKeySend(NostrString pubkey, MilliSats amount, NostrString preimage,
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->eventId = ev.getId();
     callback->n = 1;
-    callback->subId = this->sendEvent(&ev);
+    callback->subId = this->sendEvent(&ev, onErr);
+    if (NostrString_length(callback->subId) == 0) return;
     this->callbacks.push_back(callback);
 }
 
@@ -336,6 +373,7 @@ void NWC::multiPayKeySend(const std::vector<KeySend> &keySends, std::function<vo
     }
     if (this->deferUntilEncryptionReady(
             [this, keySends, onRes, onErr]() { this->multiPayKeySend(keySends, onRes, onErr); }, onErr)) return;
+    if (this->rejectIfCallbackQueueFull(onErr)) return;
     SignedNostrEvent ev = this->nip47.multiPayKeySend(keySends);
     std::shared_ptr<NWCResponseCallback<MultiPayKeySendResponse>> callback(new NWCResponseCallback<MultiPayKeySendResponse>());
     callback->onRes = onRes;
@@ -343,7 +381,8 @@ void NWC::multiPayKeySend(const std::vector<KeySend> &keySends, std::function<vo
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->eventId = ev.getId();
     callback->n = keySends.size();
-    callback->subId = this->sendEvent(&ev);
+    callback->subId = this->sendEvent(&ev, onErr);
+    if (NostrString_length(callback->subId) == 0) return;
     this->callbacks.push_back(callback);
 }
 
@@ -357,6 +396,7 @@ void NWC::makeInvoice(MilliSats amount, NostrString description, NostrString des
             [this, amount, description, descriptionHash, expiry, onRes, onErr]() {
                 this->makeInvoice(amount, description, descriptionHash, expiry, onRes, onErr);
             }, onErr)) return;
+    if (this->rejectIfCallbackQueueFull(onErr)) return;
     SignedNostrEvent ev = this->nip47.makeInvoice(amount, description, descriptionHash, expiry);
     std::shared_ptr<NWCResponseCallback<MakeInvoiceResponse>> callback(new NWCResponseCallback<MakeInvoiceResponse>());
     callback->onRes = onRes;
@@ -364,13 +404,15 @@ void NWC::makeInvoice(MilliSats amount, NostrString description, NostrString des
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->eventId = ev.getId();
     callback->n = 1;
-    callback->subId = this->sendEvent(&ev);
+    callback->subId = this->sendEvent(&ev, onErr);
+    if (NostrString_length(callback->subId) == 0) return;
     this->callbacks.push_back(callback);
 }
 
 void NWC::lookUpPaymentHash(NostrString paymentHash, std::function<void(LookUpInvoiceResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
     if (this->deferUntilEncryptionReady(
             [this, paymentHash, onRes, onErr]() { this->lookUpPaymentHash(paymentHash, onRes, onErr); }, onErr)) return;
+    if (this->rejectIfCallbackQueueFull(onErr)) return;
     SignedNostrEvent ev = this->nip47.lookUpPaymentHash(paymentHash);
     std::shared_ptr<NWCResponseCallback<LookUpInvoiceResponse>> callback(new NWCResponseCallback<LookUpInvoiceResponse>());
     callback->onRes = onRes;
@@ -378,13 +420,15 @@ void NWC::lookUpPaymentHash(NostrString paymentHash, std::function<void(LookUpIn
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->eventId = ev.getId();
     callback->n = 1;
-    callback->subId = this->sendEvent(&ev);
+    callback->subId = this->sendEvent(&ev, onErr);
+    if (NostrString_length(callback->subId) == 0) return;
     this->callbacks.push_back(callback);
 }
 
 void NWC::lookUpInvoice(NostrString invoice, std::function<void(LookUpInvoiceResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
     if (this->deferUntilEncryptionReady(
             [this, invoice, onRes, onErr]() { this->lookUpInvoice(invoice, onRes, onErr); }, onErr)) return;
+    if (this->rejectIfCallbackQueueFull(onErr)) return;
     SignedNostrEvent ev = this->nip47.lookUpInvoice(invoice);
     std::shared_ptr<NWCResponseCallback<LookUpInvoiceResponse>> callback(new NWCResponseCallback<LookUpInvoiceResponse>());
     callback->onRes = onRes;
@@ -392,7 +436,8 @@ void NWC::lookUpInvoice(NostrString invoice, std::function<void(LookUpInvoiceRes
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->eventId = ev.getId();
     callback->n = 1;
-    callback->subId = this->sendEvent(&ev);
+    callback->subId = this->sendEvent(&ev, onErr);
+    if (NostrString_length(callback->subId) == 0) return;
     this->callbacks.push_back(callback);
 }
 
@@ -402,6 +447,7 @@ void NWC::listTransactions(unsigned long from, unsigned long until, int limit, i
             [this, from, until, limit, offset, unpaid, type, onRes, onErr]() {
                 this->listTransactions(from, until, limit, offset, unpaid, type, onRes, onErr);
             }, onErr)) return;
+    if (this->rejectIfCallbackQueueFull(onErr)) return;
     SignedNostrEvent ev = this->nip47.listTransactions(from, until, limit, offset, unpaid, type);
     std::shared_ptr<NWCResponseCallback<ListTransactionsResponse>> callback(new NWCResponseCallback<ListTransactionsResponse>());
     callback->onRes = onRes;
@@ -409,13 +455,15 @@ void NWC::listTransactions(unsigned long from, unsigned long until, int limit, i
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->eventId = ev.getId();
     callback->n = 1;
-    callback->subId = this->sendEvent(&ev);
+    callback->subId = this->sendEvent(&ev, onErr);
+    if (NostrString_length(callback->subId) == 0) return;
     this->callbacks.push_back(callback);
 }
 
 void NWC::getBalance(std::function<void(GetBalanceResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
     if (this->deferUntilEncryptionReady(
             [this, onRes, onErr]() { this->getBalance(onRes, onErr); }, onErr)) return;
+    if (this->rejectIfCallbackQueueFull(onErr)) return;
     SignedNostrEvent ev = this->nip47.getBalance();
     std::shared_ptr<NWCResponseCallback<GetBalanceResponse>> callback(new NWCResponseCallback<GetBalanceResponse>());
     callback->onRes = onRes;
@@ -423,13 +471,15 @@ void NWC::getBalance(std::function<void(GetBalanceResponse)> onRes, std::functio
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->eventId = ev.getId();
     callback->n = 1;
-    callback->subId = this->sendEvent(&ev);
+    callback->subId = this->sendEvent(&ev, onErr);
+    if (NostrString_length(callback->subId) == 0) return;
     this->callbacks.push_back(callback);
 }
 
 void NWC::getInfo(std::function<void(GetInfoResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
     if (this->deferUntilEncryptionReady(
             [this, onRes, onErr]() { this->getInfo(onRes, onErr); }, onErr)) return;
+    if (this->rejectIfCallbackQueueFull(onErr)) return;
     SignedNostrEvent ev = this->nip47.getInfo();
     std::shared_ptr<NWCResponseCallback<GetInfoResponse>> callback(new NWCResponseCallback<GetInfoResponse>());
     callback->onRes = onRes;
@@ -437,6 +487,7 @@ void NWC::getInfo(std::function<void(GetInfoResponse)> onRes, std::function<void
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->eventId = ev.getId();
     callback->n = 1;
-    callback->subId = this->sendEvent(&ev);
+    callback->subId = this->sendEvent(&ev, onErr);
+    if (NostrString_length(callback->subId) == 0) return;
     this->callbacks.push_back(callback);
 }

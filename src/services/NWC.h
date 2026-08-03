@@ -62,7 +62,7 @@ class NWC {
      * @param transport A transport object, you can get one for the esp32 platform using nostr::esp32::ESP32Platform::getTransport() , for other platforms you need to implement the Transport interface
      * @param nwcUrl The NWC connection URL
      */
-    NWC(Transport *transport, NostrString nwcUrl);
+    NWC(Transport *transport, NostrString nwcUrl, const NostrLimits &limits = NostrLimits());
 
     /**
      * Tick the main loop. This should be called in the loop() function of your sketch
@@ -199,13 +199,16 @@ class NWC {
     };
 
     Transport *transport;
-    NostrString sendEvent(SignedNostrEvent *ev);
+    NostrLimits limits;
+    NostrString sendEvent(SignedNostrEvent *ev,
+                          std::function<void(NostrString, NostrString)> onErr);
     void discoverEncryption();
     void selectEncryption(Nip47Encryption encryption, bool includeEncryptionTag);
     void rejectUnsupportedEncryption();
     void failEncryption(NostrString errorCode, NostrString errorMessage);
     bool deferUntilEncryptionReady(std::function<void()> send,
                                    std::function<void(NostrString, NostrString)> onErr);
+    bool rejectIfCallbackQueueFull(std::function<void(NostrString, NostrString)> onErr);
     void finishInfoSubscription();
     void performClose();
     void removeCallback(const std::shared_ptr<NWCResponseCallbackBase> &callback);
@@ -224,6 +227,7 @@ class NWC {
     unsigned int poolDispatchDepth = 0;
     bool deferredClose = false;
     bool closed = false;
+    unsigned long long discoveryStartedAt = 0;
 };
 } 
 

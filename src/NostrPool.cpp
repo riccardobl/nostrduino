@@ -4,8 +4,18 @@
 
 using namespace nostr;
 
-void NostrRelay::send(NostrString message) {
+bool NostrRelay::send(NostrString message) {
+    const long messageLength = NostrString_length(message);
+    if (messageLength < 0) return false;
+    const size_t messageBytes = static_cast<size_t>(messageLength);
+    if (this->messageQueue.size() >= this->limits.maxRelayQueuedMessages ||
+        messageBytes > this->limits.maxRelayQueuedBytes ||
+        this->queuedMessageBytes > this->limits.maxRelayQueuedBytes - messageBytes) {
+        return false;
+    }
     this->messageQueue.push_back(message);
+    this->queuedMessageBytes += messageBytes;
+    return true;
 }
 
 void NostrRelay::processQueue() {
@@ -17,6 +27,7 @@ void NostrRelay::processQueue() {
             this->conn->send(message);
         }
         this->messageQueue.clear();
+        this->queuedMessageBytes = 0;
     }
 }
 
@@ -257,10 +268,22 @@ NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, Js
         this->subscriptions[subId].relayStates[url] = NostrRelaySubscriptionState();
     }
 
+    bool acceptedByAnyRelay = urls.size() == 0;
     for (auto url : urls) {
         NostrRelay *r = this->ensureRelay(url);
         Utils::log("Subscribe to " + url + " with " + json);
-        r->send(json);
+        if (r->send(json)) {
+            acceptedByAnyRelay = true;
+        } else {
+            NostrRelaySubscriptionState &state = this->subscriptions[subId].relayStates[url];
+            state.active = false;
+            state.closed = true;
+        }
+    }
+
+    if (!acceptedByAnyRelay) {
+        this->subscriptions.erase(subId);
+        return "";
     }
 
     return subId;
@@ -305,7 +328,7 @@ NostrRelay *NostrPool::ensureRelay(NostrString url) {
     if (relay == NULL) {
         Utils::log("Creating new relay for " + url);
         Connection *conn = this->transport->connect(url);
-        relay = new NostrRelay(conn, url);
+        relay = new NostrRelay(conn, url, this->limits);
         this->relays.push_back(relay);
         relay->conn->addMessageListener([this, relay](NostrString message) { this->onEvent(relay, message); });
         relay->conn->addConnectionStatusListener([this, relay](ConnectionStatus status) {
@@ -380,25 +403,28 @@ void NostrPool::close() {
     relays.clear();
 }
 
-void NostrPool::publish(std::initializer_list<NostrString> rs, SignedNostrEvent *event, NostrEventStatusCallback statusCallback) {
+bool NostrPool::publish(std::initializer_list<NostrString> rs, SignedNostrEvent *event, NostrEventStatusCallback statusCallback) {
+    if (event == nullptr || !event->isValid()) return false;
     JsonDocument doc;
     JsonArray ev = doc.add<JsonArray>();
     event->toSendableEvent(ev);
     NostrString evJson;
     Utils::jsonStringify(ev, &evJson);
     doc.clear();
+    bool acceptedByAnyRelay = rs.size() == 0;
     for (auto &r : rs) {
         NostrRelay *relay = this->ensureRelay(r);
         Utils::log("Sending event to relay: " + r + " with payload: " + evJson);
-        relay->send(evJson);
+        if (relay->send(evJson)) acceptedByAnyRelay = true;
     }
-    if (statusCallback) {
+    if (statusCallback && acceptedByAnyRelay) {
         EventStatusCallbackEntry entry;
         entry.statusCallback = statusCallback;
         entry.timestampSeconds = Utils::unixTimeSeconds();
         entry.eventId = event->getId();
         this->eventStatusCallbackEntries.push_back(entry);
     }
+    return acceptedByAnyRelay;
 }
 void NostrPool::loop() {
     if (!this->transport->isReady()) {

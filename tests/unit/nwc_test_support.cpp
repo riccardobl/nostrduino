@@ -97,15 +97,15 @@ void setUnixTime(unsigned long long value) {
     nostr::Utils::setUnixTimeSecondsProvider([]() -> unsigned long long { return currentUnixTime; });
 }
 
-Fixture::Fixture()
+Fixture::Fixture(const nostr::NostrLimits &limits)
     : userPrivateKey("0000000000000000000000000000000000000000000000000000000000000001"),
       servicePrivateKey("0000000000000000000000000000000000000000000000000000000000000002"),
       otherPrivateKey("0000000000000000000000000000000000000000000000000000000000000003"),
       userPublicKey(nostr::Utils::getPublicKey(userPrivateKey)),
       servicePublicKey(nostr::Utils::getPublicKey(servicePrivateKey)),
       otherPublicKey(nostr::Utils::getPublicKey(otherPrivateKey)),
-      transport(), client(&transport, makeNwcUrl(servicePublicKey, userPrivateKey)) {
-    setUnixTime(1700000000ULL);
+      transport(), client((setUnixTime(1700000000ULL), &transport),
+                          makeNwcUrl(servicePublicKey, userPrivateKey), limits) {
     if (transport.connection != nullptr) {
         transport.connection->status(nostr::ConnectionStatus::CONNECTED);
     }

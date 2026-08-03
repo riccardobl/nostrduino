@@ -20,6 +20,9 @@ struct NostrLimits {
     size_t maxNip04CiphertextBytes;
     size_t maxNip44PlaintextBytes;
     size_t maxNip44PayloadBytes;
+    size_t maxRelayQueuedMessages;
+    size_t maxRelayQueuedBytes;
+    size_t maxNwcPendingRequests;
 
     NostrLimits()
         : maxWebSocketMessageBytes(64 * 1024), maxHttpResponseBytes(64 * 1024),
@@ -27,7 +30,8 @@ struct NostrLimits {
           maxEventContentBytes(32 * 1024), maxTagCount(256), maxTagElements(64),
           maxTagElementBytes(4096), maxNip04PlaintextBytes(32 * 1024),
           maxNip04CiphertextBytes(64 * 1024), maxNip44PlaintextBytes(128 * 1024),
-          maxNip44PayloadBytes(192 * 1024) {}
+          maxNip44PayloadBytes(192 * 1024), maxRelayQueuedMessages(64),
+          maxRelayQueuedBytes(256 * 1024), maxNwcPendingRequests(32) {}
 };
 
 }

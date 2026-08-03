@@ -379,6 +379,40 @@ bool testPoolQueueAndTransport() {
     invalidJsonFilters.add(1);
     CHECK(invalidFilterPool.subscribeMany({"ws://invalid.example"}, invalidJsonFilters) == "");
     CHECK(invalidFilterTransport.connections.empty());
+
+    nostr::NostrLimits queueLimits;
+    queueLimits.maxRelayQueuedMessages = 1;
+    queueLimits.maxRelayQueuedBytes = 5;
+    MockTransport queueTransport;
+    nostr::NostrPool queuePool(&queueTransport, 600, queueLimits);
+    nostr::NostrRelay *boundedRelay = queuePool.ensureRelay("ws://queue.example");
+    CHECK(boundedRelay->send("12345"));
+    CHECK(!boundedRelay->send("6"));
+    CHECK(!boundedRelay->send("123456"));
+    queueTransport.lastConnection->status(nostr::ConnectionStatus::CONNECTED);
+    queuePool.loop();
+    CHECK(queueTransport.lastConnection->sent.size() == 1);
+    CHECK(queueTransport.lastConnection->sent[0] == "12345");
+    queuePool.close();
+
+    nostr::NostrLimits partialLimits;
+    partialLimits.maxRelayQueuedMessages = 1;
+    MockTransport partialTransport;
+    nostr::NostrPool partialPool(&partialTransport, 600, partialLimits);
+    nostr::NostrRelay *fullRelay = partialPool.ensureRelay("ws://full.example");
+    CHECK(fullRelay->send("older-message"));
+    String partialSubId = partialPool.subscribeMany(
+        {"ws://full.example", "ws://available.example"}, {{{"kinds", {"1"}}}});
+    CHECK(partialSubId.length() == 64);
+    CHECK(partialTransport.connections.size() == 2);
+    partialTransport.connections[0]->status(nostr::ConnectionStatus::CONNECTED);
+    partialTransport.connections[1]->status(nostr::ConnectionStatus::CONNECTED);
+    partialPool.loop();
+    CHECK(partialTransport.connections[0]->sent.size() == 1);
+    CHECK(partialTransport.connections[0]->sent[0] == "older-message");
+    CHECK(partialTransport.connections[1]->sent.size() == 1);
+    CHECK(partialTransport.connections[1]->sent[0].indexOf("\"REQ\"") >= 0);
+    partialPool.close();
     return true;
 }
 

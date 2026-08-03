@@ -62,7 +62,7 @@ class Fixture {
     MockTransport transport;
     nostr::NWC client;
 
-    Fixture();
+    explicit Fixture(const nostr::NostrLimits &limits = nostr::NostrLimits());
 
     void loop();
     bool negotiate(const String &advertisedModes = "nip44_v2 nip04", bool includeEncryptionTag = true);

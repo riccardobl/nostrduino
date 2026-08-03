@@ -59,8 +59,9 @@ namespace nostr {
         /**
          * Send a message to the relay
          */
-        void send(NostrString message);
-        NostrRelay(Connection *conn, NostrString url) : conn(conn), url(url){};
+        bool send(NostrString message);
+        NostrRelay(Connection *conn, NostrString url, const NostrLimits &limits)
+            : conn(conn), url(url), limits(limits){};
         Connection *getConnection() const { return conn; }
         NostrString getUrl() const{
             return url;
@@ -69,6 +70,8 @@ namespace nostr {
          Connection *conn;
          NostrString url;
          std::vector<NostrString> messageQueue;
+         size_t queuedMessageBytes = 0;
+         NostrLimits limits;
          bool connectedOnce = false;
          bool restoreSubscriptions = false;
          void processQueue();
@@ -132,7 +135,7 @@ namespace nostr {
          * @param event The event to publish
          * @param statusCallback A callback to be called when the event status is known (optional)
          */
-        void publish(std::initializer_list<NostrString> rs,
+        bool publish(std::initializer_list<NostrString> rs,
                      SignedNostrEvent *event,
                      NostrEventStatusCallback statusCallback = nullptr);
 
