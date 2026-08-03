@@ -11,6 +11,7 @@ This library supports ESP32 boards using the Arduino framework.
 
 + [Nip01](https://github.com/nostr-protocol/nips/blob/master/01.md) : Basic protocol flow
 + [Nip04](https://github.com/nostr-protocol/nips/blob/master/04.md) : Encrypted messages
++ [Nip44](https://github.com/nostr-protocol/nips/blob/master/44.md) : Version 2 encrypted messages
 + [Nip47](https://github.com/nostr-protocol/nips/blob/master/47.md) : Nostr Wallet Connect
 + [(bonus) Lightning Address](https://lightningaddress.com/) : Can request invoices from lightning addresses
 + [NWC managed service](src/services/NWC.h) : A managed service to interact with NWC 
@@ -97,9 +98,12 @@ pip install platformio==6.1.18
 
 
 
-### Compiling Tests
+### Example firmware builds
 
-#### Test NIP01
+The following commands only build the example firmware; they are not the
+unit-test gate.
+
+#### NIP01 example
 Edit `examples/ESP32TestNip01/ESP32TestNip01.cpp` and set the `WIFI_SSID`,  `WIFI_PASS` and `WIFI_CHANNEL`.
 
 Then compile with:
@@ -108,7 +112,7 @@ pio run -e ESP32TestNip01
 ```
 
 
-### Test NIP04
+### NIP04 example
 
 Compile with:
 ```
@@ -116,7 +120,7 @@ pio run -e ESP32TestNip04
 ```
 
 
-### Test NWC
+### NWC example
 Edit `examples/ESP32TestNWC/ESP32TestNWC.cpp` and set the `WIFI_SSID`,  `WIFI_PASS` , `WIFI_CHANNEL` and `NWC_URL`.
 NB: you can get a nwc url from [https://nwc.getalby.com/](https://nwc.getalby.com/) or [https://app.mutinywallet.com/settings/connections](https://app.mutinywallet.com/settings/connections).
 
@@ -125,10 +129,9 @@ Then compile with:
 pio run -e ESP32TestNWC
 ```
 
-### Running tests
-You can upload the compiled tests to your ESP32 with:
-```
-pio run -e TEST_NAME -t upload
-```
+### Running the unit tests
 
-or use an emulator like [wokwi](https://wokwi.com/).
+
+```bash
+bash tests/unit/run.sh
+```

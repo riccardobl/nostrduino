@@ -1,10 +1,21 @@
 #include "Nip04.h"
 #include <limits>
+#include <new>
 #include <vector>
 
 using namespace nostr;
 
+#ifdef NOSTRDUINO_UNIT_TEST_HOOKS
+extern "C" bool nostrduinoUnitTestFailNip04Allocation();
+#endif
+
 namespace {
+void checkTestAllocationFailure() {
+#ifdef NOSTRDUINO_UNIT_TEST_HOOKS
+    if (nostrduinoUnitTestFailNip04Allocation()) throw std::bad_alloc();
+#endif
+}
+
 void wipe(void *memory, size_t size) {
     if (memory == nullptr) return;
     volatile uint8_t *p = static_cast<volatile uint8_t *>(memory);
@@ -26,6 +37,7 @@ bool decodeStandardBase64(const NostrString &encoded, size_t maxDecodedSize, std
     size_t capacity = 0;
     if (!base64Capacity(static_cast<size_t>(encodedLength), maxDecodedSize, capacity)) return false;
     try {
+        checkTestAllocationFailure();
         decoded.assign(capacity, 0);
         const size_t decodedSize = Utils::fromBase64(encoded.c_str(), static_cast<size_t>(encodedLength),
                                                      decoded.data(), decoded.size(), BASE64_STANDARD);
@@ -55,6 +67,7 @@ NostrString encodeStandardBase64(const uint8_t *bytes, size_t byteSize) {
     size_t capacity = 0;
     if (!encodedCapacity(byteSize, capacity)) return "";
     try {
+        checkTestAllocationFailure();
         std::vector<char> encoded(capacity + 1, 0);
         const size_t encodedSize = Utils::toBase64(bytes, byteSize, encoded.data(), encoded.size(), BASE64_STANDARD);
         if (encodedSize == 0 && byteSize != 0) return "";
@@ -129,6 +142,7 @@ NostrString Nip04::encryptData(const uint8_t key[32], const uint8_t iv[16], cons
     std::vector<uint8_t> buffer;
     AES_ctx ctx = {};
     try {
+        checkTestAllocationFailure();
         buffer.assign(ciphertextSize, static_cast<uint8_t>(padding));
         for (size_t i = 0; i < messageSize; ++i) buffer[i] = static_cast<uint8_t>(message[i]);
         AES_init_ctx_iv(&ctx, key, iv);
@@ -149,6 +163,7 @@ NostrString Nip04::decryptData(const uint8_t key[32], const uint8_t iv[16], cons
         ciphertextSize % AES_BLOCKLEN != 0 || ciphertextSize > limits.maxNip04CiphertextBytes) return "";
     std::vector<uint8_t> buffer;
     try {
+        checkTestAllocationFailure();
         buffer.assign(ciphertext, ciphertext + ciphertextSize);
         AES_ctx ctx;
         AES_init_ctx_iv(&ctx, key, iv);

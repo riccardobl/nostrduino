@@ -1,31 +1,25 @@
-name: Build
+name: ESP32 CI
 
 on:
   push:
   pull_request:
         
 jobs:
-  build:
+  unit-tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           submodules: recursive
           
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
       - name: Install PlatformIO
         run: python -m pip install platformio==6.1.18
-
-      - name: Install ESP32 dependencies
-        run: pio pkg install -e ESP32TestNip01
-
-      - name: Native sanitizer tests
-        run: bash tests/native/run.sh
 
       - name: Check ESP32-only source tree
         shell: bash
@@ -40,18 +34,18 @@ jobs:
           test -f src/uBitcoin/src/Bitcoin.h
           test "$(git -C src/uBitcoin rev-parse HEAD)" = "877542fdc16319dd92a7d2a679ea9dacce474bd2"
           test "$(git ls-files --stage src/uBitcoin | awk '{print $1}')" = "160000"
-          rg -F '#include "../uBitcoin/src/Bitcoin.h"' src/crypto/UBitcoinBackend.cpp
+          grep -F '#include "../uBitcoin/src/Bitcoin.h"' src/crypto/UBitcoinBackend.cpp
           test ! -e src/crypto/libsecp256k1
           test ! -e src/crypto/Secp256k1Backend.cpp
-          if rg -n 'Hash\.h|Bitcoin\.h' src --glob '!src/uBitcoin/**' --glob '!src/crypto/UBitcoinBackend.cpp'; then
+          if grep -RInE --exclude-dir=uBitcoin --exclude=UBitcoinBackend.cpp 'Hash\.h|Bitcoin\.h' src; then
             echo 'uBitcoin must only be called through UBitcoinBackend' >&2
             exit 1
           fi
-          if rg -n '\b(byte|uint8_t|char)[[:space:]]+[A-Za-z_][A-Za-z0-9_]*\[[[:space:]]*(byteSize|messageSize|contentLength|encodedSize|length|NostrString_length)' src examples; then
+          if grep -RInE '(^|[^[:alnum:]_])(byte|uint8_t|char)[[:space:]]+[A-Za-z_][A-Za-z0-9_]*\[[[:space:]]*(byteSize|messageSize|contentLength|encodedSize|length|NostrString_length)' src examples; then
             echo 'VLA-like declaration found' >&2
             exit 1
           fi
-          test "$(rg -c --no-filename '^\[env:ESP32' platformio.ini | awk '{s+=$1} END {print s+0}')" -eq 4
+          test "$(grep -Ec '^\[env:ESP32' platformio.ini)" -eq 4
 
       - name: Check release metadata
         run: |
@@ -66,11 +60,58 @@ jobs:
           assert "uBitcoin" not in properties["depends"]
           assert "uBitcoin@" not in Path("platformio.ini").read_text()
           PY
-          test "$(wc -l < tests/native/bip340_test_vectors.csv)" -eq 20
-        
-      - name: Build
+
+      - name: Install Espressif QEMU dependencies
         run: |
-            pio run -e ESP32TestNip01
-            pio run -e ESP32TestNip04
-            pio run -e ESP32TestNWC
-            pio run -e ESP32TestNip01Filter
+          sudo apt-get update
+          sudo apt-get install -y libgcrypt20 libglib2.0-0 libpixman-1-0 libsdl2-2.0-0 libslirp0
+
+      - name: Install Espressif QEMU
+        env:
+          QEMU_RELEASE: esp-develop-9.2.2-20260417
+          QEMU_ASSET: qemu-xtensa-softmmu-esp_develop_9.2.2_20260417-x86_64-linux-gnu.tar.xz
+          QEMU_SHA256: 0eecb2a34a5586c0e59110f77b9343b7b336e82fdb0e1a30e1dc1bab8a547e35
+        run: |
+          set -euo pipefail
+          qemu_root="$RUNNER_TEMP/espressif-qemu"
+          mkdir -p "$qemu_root"
+          curl --fail --location --silent --show-error --output "$qemu_root/$QEMU_ASSET" \
+            "https://github.com/espressif/qemu/releases/download/$QEMU_RELEASE/$QEMU_ASSET"
+          printf '%s  %s\n' "$QEMU_SHA256" "$qemu_root/$QEMU_ASSET" | sha256sum --check
+          tar -xJf "$qemu_root/$QEMU_ASSET" -C "$qemu_root"
+          echo "$qemu_root/qemu/bin" >> "$GITHUB_PATH"
+
+      - name: ESP32 QEMU unit tests
+        env:
+          UNIT_TEST_EMULATOR: qemu
+          UNIT_TEST_RESULTS_FILE: ${{ runner.temp }}/unit-test-results.tsv
+          UNIT_TEST_OUTPUT_FILE: ${{ runner.temp }}/unit-test-output.log
+        run: bash tests/unit/run.sh
+
+      - name: Compile ESP32 examples
+        if: always()
+        shell: bash
+        env:
+          EXAMPLE_RESULTS_FILE: ${{ runner.temp }}/example-results.tsv
+        run: |
+          set -uo pipefail
+          : > "$EXAMPLE_RESULTS_FILE"
+          example_build_failed=0
+          while IFS= read -r example_environment; do
+            if pio run -e "$example_environment"; then
+              example_compiled="OK"
+            else
+              example_compiled="FALSE"
+              example_build_failed=1
+            fi
+            printf '%s\t%s\n' "$example_environment" "$example_compiled" >> "$EXAMPLE_RESULTS_FILE"
+          done < <(sed -nE 's/^\[env:(ESP32[^]]*)\]$/\1/p' platformio.ini)
+          exit "$example_build_failed"
+
+      - name: Publish test and example summary
+        if: always()
+        env:
+          UNIT_TEST_RESULTS_FILE: ${{ runner.temp }}/unit-test-results.tsv
+          UNIT_TEST_OUTPUT_FILE: ${{ runner.temp }}/unit-test-output.log
+          EXAMPLE_RESULTS_FILE: ${{ runner.temp }}/example-results.tsv
+        run: python .github/scripts/write_ci_summary.py

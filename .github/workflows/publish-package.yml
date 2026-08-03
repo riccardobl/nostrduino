@@ -8,12 +8,12 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
@@ -36,9 +36,9 @@ jobs:
           archive=$(find . -maxdepth 1 -type f -name 'Nostrduino-*.tar.gz' -print -quit)
           test -n "$archive"
           tar -tzf "$archive" > package-contents.txt
-          rg 'src/crypto/UBitcoinBackend\.cpp$' package-contents.txt
-          rg 'src/uBitcoin/src/Bitcoin\.cpp$' package-contents.txt
-          if rg 'src/(esp8266|picow|unor4|crypto/libsecp256k1)/|src/uBitcoin/(examples|tests)/' package-contents.txt; then
+          grep -E 'src/crypto/UBitcoinBackend\.cpp$' package-contents.txt
+          grep -E 'src/uBitcoin/src/Bitcoin\.cpp$' package-contents.txt
+          if grep -E 'src/(esp8266|picow|unor4|crypto/libsecp256k1)/|src/uBitcoin/(examples|tests)/' package-contents.txt; then
             echo 'unexpected platform, backend, or submodule test source in package' >&2
             exit 1
           fi

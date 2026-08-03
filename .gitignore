@@ -2,6 +2,7 @@ docs/html
 docs/xml_output
 venv
 .pio
+tests/unit/test_registry.generated.inc
 .vscode
 docs
 bin
