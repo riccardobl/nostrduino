@@ -135,6 +135,15 @@ namespace nostr {
         void loop();
 
         /**
+         * Enable or disable cryptographic verification of subscription events.
+         * Disabled by default for backwards compatibility.
+         */
+        void setVerifyIncomingEvents(bool verify) { verifyIncomingEvents = verify; }
+
+        /** Return whether incoming subscription events are verified. */
+        bool getVerifyIncomingEvents() const { return verifyIncomingEvents; }
+
+        /**
          * Close the subscription with the given ID
          * @param subId The subscription ID
          */
@@ -192,6 +201,7 @@ namespace nostr {
         std::vector<EventStatusCallbackEntry> eventStatusCallbackEntries;
         Transport *transport;
         NostrLimits limits;
+        bool verifyIncomingEvents = false;
     };
 }  // namespace nostr
 #endif

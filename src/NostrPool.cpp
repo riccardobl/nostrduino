@@ -109,6 +109,7 @@ void NostrPool::onEvent(NostrRelay *relay, NostrString message) {
         NostrEventCallback eventCallback = sub.eventCallback;
         SignedNostrEvent event;
         if (!SignedNostrEvent::parseRelayFrame(doc.as<JsonArrayConst>(), event, limits)) return;
+        if (verifyIncomingEvents && !event.verify()) return;
         event.stored = !relayEose->second;
         if (eventCallback != nullptr) {
             eventCallback(subId, &event);

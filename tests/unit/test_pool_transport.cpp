@@ -110,6 +110,7 @@ bool testPoolQueueAndTransport() {
     CHECK(transport.lastConnection != nullptr);
     MockConnection *connection = transport.lastConnection;
     CHECK(connection->sent.empty());
+    CHECK(!pool.getVerifyIncomingEvents());
     connection->status(nostr::ConnectionStatus::CONNECTED);
     pool.loop();
     CHECK(connection->sent.size() == 1 && connection->sent.back().indexOf("\"REQ\"") >= 0);
@@ -128,6 +129,38 @@ bool testPoolQueueAndTransport() {
     connection->queue(eventFrame);
     pool.loop();
     CHECK(eventCalled && storedEvent);
+
+    JsonDocument invalidEventDocument;
+    JsonArray invalidFrame = invalidEventDocument.to<JsonArray>();
+    invalidFrame.add("EVENT");
+    invalidFrame.add(subId);
+    JsonObject invalidEventObject = invalidFrame.add<JsonObject>();
+    event.toJson(invalidEventObject);
+    invalidEventObject["sig"] = repeatChar('0', 128);
+    String invalidEventFrame;
+    nostr::Utils::jsonStringify(invalidFrame, &invalidEventFrame);
+
+    eventCalled = false;
+    connection->queue(invalidEventFrame);
+    pool.loop();
+    CHECK(eventCalled);
+
+    pool.setVerifyIncomingEvents(true);
+    CHECK(pool.getVerifyIncomingEvents());
+    eventCalled = false;
+    connection->queue(invalidEventFrame);
+    pool.loop();
+    CHECK(!eventCalled);
+    connection->queue(eventFrame);
+    pool.loop();
+    CHECK(eventCalled);
+
+    pool.setVerifyIncomingEvents(false);
+    CHECK(!pool.getVerifyIncomingEvents());
+    eventCalled = false;
+    connection->queue(invalidEventFrame);
+    pool.loop();
+    CHECK(eventCalled);
 
     connection->queue(String("[\"EOSE\",\"") + subId + "\"]");
     pool.loop();
