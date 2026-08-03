@@ -5,6 +5,7 @@
 #include <cctype>
 #include <cstdio>
 #include <cstdlib>
+#include <inttypes.h>
 #include <sstream>
 
 #ifdef ARDUINO
@@ -45,6 +46,12 @@ String NostrString_substring(const String &str, int start) {
 String NostrString_fromUInt(unsigned long long i) {
     char value[21] = {};
     snprintf(value, sizeof(value), "%llu", i);
+    return String(value);
+}
+
+String NostrString_fromMilliSats(nostr::MilliSats i) {
+    char value[21] = {};
+    snprintf(value, sizeof(value), "%" PRId64, i);
     return String(value);
 }
 
@@ -224,6 +231,9 @@ std::string NostrString_urlDecode(const std::string &encoded) {
     return decoded;
 }
 std::string NostrString_fromUInt(unsigned long long i) {
+    return std::to_string(i);
+}
+std::string NostrString_fromMilliSats(nostr::MilliSats i) {
     return std::to_string(i);
 }
 std::string NostrString_urlEncode(const std::string &str) {

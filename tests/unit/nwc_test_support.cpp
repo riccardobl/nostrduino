@@ -56,7 +56,7 @@ void MockConnection::queue(const String &message) {
     incoming.push_back(message);
 }
 
-void MockTransport::getInvoiceFromLNAddr(String, unsigned long long, String,
+void MockTransport::getInvoiceFromLNAddr(String, nostr::MilliSats, String,
                                          std::function<void(String)> callback) {
     if (callback) callback("");
 }

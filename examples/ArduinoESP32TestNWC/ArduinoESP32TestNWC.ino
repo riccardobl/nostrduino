@@ -78,7 +78,7 @@ void testNWC() {
         transport = nostr::esp32::ESP32Platform::getTransport();
         nwc = new nostr::NWC(transport, NWC_URL);
 
-        nwc->getBalance([&](nostr::GetBalanceResponse resp) { Serial.println("[!] Balance: " + String(resp.balance) + " msatoshis"); },
+        nwc->getBalance([&](nostr::GetBalanceResponse resp) { Serial.println("[!] Balance: " + NostrString_fromMilliSats(resp.balance) + " msatoshis"); },
                         [](String err, String errMsg) { Serial.println("[!] Error: " + err + " " + errMsg); });
         nwc->getInfo(
             [&](nostr::GetInfoResponse resp) {
@@ -122,13 +122,13 @@ void subscribeNWC() {
             nostr::Nip47Notification notification = res.notification;
             Serial.println("Notification Type: " + notification.notificationType);
             Serial.println("Type: " + notification.type);
-            Serial.println("Amount: " + NostrString_fromUInt(notification.amount));
+            Serial.println("Amount: " + NostrString_fromMilliSats(notification.amount));
             Serial.println("Payment Hash: " + notification.paymentHash);
             Serial.println("Description: " + notification.description);
             Serial.println("Description Hash: " + notification.descriptionHash);
             Serial.println("Invoice: " + notification.invoice);
             Serial.println("Preimage: " + notification.preimage);
-            Serial.println("Fees Paid: " + NostrString_fromUInt(notification.feesPaid));
+            Serial.println("Fees Paid: " + NostrString_fromMilliSats(notification.feesPaid));
             Serial.println("Created At: " + NostrString_fromUInt(notification.createdAt));
             Serial.println("Settled At: " + NostrString_fromUInt(notification.settledAt));
         },
@@ -149,7 +149,7 @@ void listTransaction() {
     nwc->listTransactions(0,listTransactionsUntilTime,1,0,false,"incoming", [&](nostr::ListTransactionsResponse resp) {
         Serial.println("[!] Received listTransactions result from until listTransactionsUntilTime " + String(listTransactionsUntilTime) + ":");
         for (auto transaction : resp.transactions) {
-          Serial.println("=> Got transaction: " + String(transaction.amount) + " msat createdAt: " + String(transaction.createdAt) + " with description: '" + transaction.description + "'");
+          Serial.println("=> Got transaction: " + NostrString_fromMilliSats(transaction.amount) + " msat createdAt: " + String(transaction.createdAt) + " with description: '" + transaction.description + "'");
           listTransactionsUntilTime = transaction.createdAt-1; // prepare for the next listTransactions() call by lowering the "until" time
         }
     },

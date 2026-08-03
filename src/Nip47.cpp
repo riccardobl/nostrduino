@@ -36,7 +36,8 @@ SignedNostrEvent Nip47::createEvent(NostrString method, JsonDocument doc) {
     return event.sign(this->userPrivKey);
 }
 
-SignedNostrEvent Nip47::payInvoice(NostrString invoice, unsigned long amount) {
+SignedNostrEvent Nip47::payInvoice(NostrString invoice, MilliSats amount) {
+    if (!isOptionalMilliSatsValid(amount)) return SignedNostrEvent();
     JsonDocument doc;
     JsonObject params = doc["params"].to<JsonObject>();
     params["invoice"] = invoice;
@@ -46,7 +47,8 @@ SignedNostrEvent Nip47::payInvoice(NostrString invoice, unsigned long amount) {
     return this->createEvent("pay_invoice", doc);
 }
 
-SignedNostrEvent Nip47::makeInvoice(unsigned long amount, NostrString description, NostrString descriptionHash, unsigned long expiry) {
+SignedNostrEvent Nip47::makeInvoice(MilliSats amount, NostrString description, NostrString descriptionHash, unsigned long expiry) {
+    if (!isRequiredMilliSatsValid(amount)) return SignedNostrEvent();
     JsonDocument doc;
     JsonObject params = doc["params"].to<JsonObject>();
     params["amount"] = amount;
@@ -93,6 +95,9 @@ SignedNostrEvent Nip47::multiPayInvoice(std::initializer_list<Invoice> invoices)
 }
 
 SignedNostrEvent Nip47::multiPayInvoice(const std::vector<Invoice> &invoices) {
+    for (const Invoice &invoice : invoices) {
+        if (!isRequiredMilliSatsValid(invoice.amount)) return SignedNostrEvent();
+    }
     JsonDocument doc;
     JsonObject params = doc["params"].to<JsonObject>();
     JsonArray iv = params["invoices"].to<JsonArray>();
@@ -104,12 +109,13 @@ SignedNostrEvent Nip47::multiPayInvoice(const std::vector<Invoice> &invoices) {
     return this->createEvent("multi_pay_invoice", doc);
 }
 
-SignedNostrEvent Nip47::payKeySend(NostrString pubkey, unsigned long amount, NostrString preimage, std::initializer_list<TLVRecords> tlv) {
+SignedNostrEvent Nip47::payKeySend(NostrString pubkey, MilliSats amount, NostrString preimage, std::initializer_list<TLVRecords> tlv) {
     return this->payKeySend(pubkey, amount, preimage, std::vector<TLVRecords>(tlv));
 }
 
-SignedNostrEvent Nip47::payKeySend(NostrString pubkey, unsigned long amount, NostrString preimage,
+SignedNostrEvent Nip47::payKeySend(NostrString pubkey, MilliSats amount, NostrString preimage,
                                     const std::vector<TLVRecords> &tlv) {
+    if (!isRequiredMilliSatsValid(amount)) return SignedNostrEvent();
     JsonDocument doc;
     JsonObject params = doc["params"].to<JsonObject>();
     params["pubkey"] = pubkey;
@@ -133,6 +139,9 @@ SignedNostrEvent Nip47::multiPayKeySend(std::initializer_list<KeySend> keySends)
 }
 
 SignedNostrEvent Nip47::multiPayKeySend(const std::vector<KeySend> &keySends) {
+    for (const KeySend &keySend : keySends) {
+        if (!isRequiredMilliSatsValid(keySend.amount)) return SignedNostrEvent();
+    }
     JsonDocument doc;
     JsonObject params = doc["params"].to<JsonObject>();
     JsonArray ks = params["key_sends"].to<JsonArray>();
@@ -324,8 +333,8 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MakeInvoiceR
                     out.result.descriptionHash = data["description_hash"].as<NostrString>();
                     out.result.preimage = data["preimage"].as<NostrString>();
                     out.result.paymentHash = data["payment_hash"].as<NostrString>();
-                    out.result.amount = data["amount"].as<unsigned long long>();
-                    out.result.feesPaid = data["fees_paid"].as<unsigned long long>();
+                    out.result.amount = data["amount"].as<MilliSats>();
+                    out.result.feesPaid = data["fees_paid"].as<MilliSats>();
                     out.result.createdAt = data["created_at"].as<unsigned long long>();
                     out.result.expiresAt = data["expires_at"].as<unsigned long long>();
                     out.result.metadata.clear();
@@ -367,8 +376,8 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<LookUpInvoic
                     out.result.descriptionHash = data["description_hash"].as<NostrString>();
                     out.result.preimage = data["preimage"].as<NostrString>();
                     out.result.paymentHash = data["payment_hash"].as<NostrString>();
-                    out.result.amount = data["amount"].as<unsigned long long>();
-                    out.result.feesPaid = data["fees_paid"].as<unsigned long long>();
+                    out.result.amount = data["amount"].as<MilliSats>();
+                    out.result.feesPaid = data["fees_paid"].as<MilliSats>();
                     out.result.createdAt = data["created_at"].as<unsigned long long>();
                     out.result.expiresAt = data["expires_at"].as<unsigned long long>();
                     out.result.settledAt = data["settled_at"].as<unsigned long long>();
@@ -413,8 +422,8 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<ListTransact
                         transaction.descriptionHash = transactionJson["description_hash"].as<NostrString>();
                         transaction.preimage = transactionJson["preimage"].as<NostrString>();
                         transaction.paymentHash = transactionJson["payment_hash"].as<NostrString>();
-                        transaction.amount = transactionJson["amount"].as<unsigned long long>();
-                        transaction.feesPaid = transactionJson["fees_paid"].as<unsigned long long>();
+                        transaction.amount = transactionJson["amount"].as<MilliSats>();
+                        transaction.feesPaid = transactionJson["fees_paid"].as<MilliSats>();
                         transaction.createdAt = transactionJson["created_at"].as<unsigned long long>();
                         transaction.expiresAt = transactionJson["expires_at"].as<unsigned long long>();
                         transaction.settledAt = transactionJson["settled_at"].as<unsigned long long>();
@@ -560,8 +569,8 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<Notification
                 nip47Notification.descriptionHash = notification["description_hash"].as<NostrString>();
                 nip47Notification.preimage = notification["preimage"].as<NostrString>();
                 nip47Notification.paymentHash = notification["payment_hash"].as<NostrString>();
-                nip47Notification.amount = notification["amount"].as<uint64_t>();
-                nip47Notification.feesPaid = notification["fees_paid"].as<uint64_t>();
+                nip47Notification.amount = notification["amount"].as<MilliSats>();
+                nip47Notification.feesPaid = notification["fees_paid"].as<MilliSats>();
                 nip47Notification.createdAt = notification["created_at"].as<uint64_t>();
                 nip47Notification.settledAt = notification["settled_at"].as<uint64_t>();
 

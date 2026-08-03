@@ -182,7 +182,7 @@ bool testNwcResponses() {
 
     requestIndex = fixture.requestCount();
     int balanceCallbacks = 0;
-    unsigned long long balance = 0;
+    nostr::MilliSats balance = 0;
     fixture.client.getBalance([&](nostr::GetBalanceResponse result) {
         ++balanceCallbacks;
         balance = result.balance;

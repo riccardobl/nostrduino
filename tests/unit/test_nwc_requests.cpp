@@ -42,18 +42,21 @@ bool testNwcRequests() {
     CHECK(fixture.decryptRequest(0, request));
     CHECK(request["method"].as<String>() == "pay_invoice");
     CHECK(request["params"]["invoice"].as<String>() == "lnbc-pay");
-    CHECK(request["params"]["amount"].as<unsigned long>() == 2100);
+    CHECK(request["params"]["amount"].is<int64_t>());
+    CHECK(request["params"]["amount"].as<int64_t>() == 2100);
 
     CHECK(fixture.decryptRequest(1, request));
     CHECK(request["method"].as<String>() == "multi_pay_invoice");
     CHECK(request["params"]["invoices"].size() == 2);
     CHECK(request["params"]["invoices"][0]["invoice"].as<String>() == "lnbc-a");
-    CHECK(request["params"]["invoices"][1]["amount"].as<unsigned long>() == 200);
+    CHECK(request["params"]["invoices"][1]["amount"].is<int64_t>());
+    CHECK(request["params"]["invoices"][1]["amount"].as<int64_t>() == 200);
 
     CHECK(fixture.decryptRequest(2, request));
     CHECK(request["method"].as<String>() == "pay_key_send");
     CHECK(request["params"]["pubkey"].as<String>() == fixture.servicePublicKey);
-    CHECK(request["params"]["amount"].as<unsigned long>() == 3000);
+    CHECK(request["params"]["amount"].is<int64_t>());
+    CHECK(request["params"]["amount"].as<int64_t>() == 3000);
     CHECK(request["params"]["preimage"].as<String>() == "preimage-a");
     CHECK(request["params"]["tlv_records"][0]["type"].as<String>() == "5482373484");
     CHECK(request["params"]["tlv_records"][0]["value"].as<String>() == "value-a");
@@ -69,7 +72,8 @@ bool testNwcRequests() {
 
     CHECK(fixture.decryptRequest(4, request));
     CHECK(request["method"].as<String>() == "make_invoice");
-    CHECK(request["params"]["amount"].as<unsigned long>() == 6000);
+    CHECK(request["params"]["amount"].is<int64_t>());
+    CHECK(request["params"]["amount"].as<int64_t>() == 6000);
     CHECK(request["params"]["description"].as<String>() == "description");
     CHECK(request["params"]["description_hash"].as<String>() == "description-hash");
     CHECK(request["params"]["expiry"].as<unsigned long>() == 90);

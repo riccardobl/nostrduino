@@ -60,7 +60,7 @@ void testNWC() {
         transport = nostr::esp32::ESP32Platform::getTransport();
         nwc = new nostr::NWC(transport, NWC_URL);
 
-        nwc->getBalance([&](nostr::GetBalanceResponse resp) { Serial.println("[!] Balance: " + String(resp.balance) + " msatoshis"); },
+        nwc->getBalance([&](nostr::GetBalanceResponse resp) { Serial.println("[!] Balance: " + NostrString_fromMilliSats(resp.balance) + " msatoshis"); },
                         [](String err, String errMsg) { Serial.println("[!] Error: " + err + " " + errMsg); });
         nwc->getInfo(
             [&](nostr::GetInfoResponse resp) {

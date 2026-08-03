@@ -5,6 +5,7 @@
 #include "Nip04.h"
 #include "Nip44.h"
 #include "NostrEvent.h"
+#include "NostrAmount.h"
 #include "NostrString.h"
 #include "NostrUtils.h"
 #include <initializer_list>
@@ -18,7 +19,7 @@ enum class Nip47Encryption {
 
 typedef struct s_Invoice {
     NostrString invoice;
-    unsigned long amount;
+    MilliSats amount;
 } Invoice;
 
 typedef struct s_TLVRecords {
@@ -28,7 +29,7 @@ typedef struct s_TLVRecords {
 
 typedef struct s_KeySend {
     NostrString pubkey;
-    unsigned long amount;
+    MilliSats amount;
     NostrString preimage;
     std::vector<TLVRecords> tlv;
 } KeySend;
@@ -70,8 +71,8 @@ typedef struct s_MakeInvoiceResponse {
     NostrString descriptionHash;
     NostrString preimage;
     NostrString paymentHash;
-    unsigned long long amount;
-    unsigned long long feesPaid;
+    MilliSats amount;
+    MilliSats feesPaid;
     unsigned long long createdAt;
     unsigned long long expiresAt;
     JsonDocument metadata;
@@ -84,8 +85,8 @@ typedef struct s_LookUpInvoiceResponse {
     NostrString descriptionHash;
     NostrString preimage;
     NostrString paymentHash;
-    unsigned long long amount;
-    unsigned long long feesPaid;
+    MilliSats amount;
+    MilliSats feesPaid;
     unsigned long long createdAt;
     unsigned long long expiresAt;
     unsigned long long settledAt;
@@ -100,8 +101,8 @@ typedef struct s_Transaction {
     NostrString descriptionHash;
     NostrString preimage;
     NostrString paymentHash;
-    unsigned long long amount;
-    unsigned long long feesPaid;
+    MilliSats amount;
+    MilliSats feesPaid;
     unsigned long long createdAt;
     unsigned long long expiresAt;
     unsigned long long settledAt;
@@ -115,7 +116,7 @@ typedef struct s_ListTransactionsResponse {
 } ListTransactionsResponse;
 
 typedef struct s_GetBalanceResponse {
-    unsigned long long balance;
+    MilliSats balance;
 } GetBalanceResponse;
 
 typedef struct s_GetInfoResponse {
@@ -144,8 +145,8 @@ typedef struct s_Nip47Notification {
     NostrString descriptionHash;
     NostrString preimage;
     NostrString paymentHash;
-    unsigned long long amount;
-    unsigned long long feesPaid;
+    MilliSats amount;
+    MilliSats feesPaid;
     unsigned long long createdAt;
     unsigned long long settledAt;
 } Nip47Notification;
@@ -161,15 +162,15 @@ class Nip47 {
     Nip47(Nip04 nip04, NostrString servicePubKey, NostrString userPrivKey) : servicePubKey(servicePubKey), userPrivKey(userPrivKey), nip04(nip04) {}
     void setEncryption(Nip47Encryption encryption, bool includeEncryptionTag = true);
     Nip47Encryption getEncryption() const { return encryption; }
-    SignedNostrEvent payInvoice(NostrString invoice, unsigned long amount = -1);
+    SignedNostrEvent payInvoice(NostrString invoice, MilliSats amount = MILLISATS_UNSPECIFIED);
     SignedNostrEvent multiPayInvoice(std::initializer_list<Invoice> invoices);
     SignedNostrEvent multiPayInvoice(const std::vector<Invoice> &invoices);
-    SignedNostrEvent payKeySend(NostrString pubkey, unsigned long amount, NostrString preimage = "", std::initializer_list<TLVRecords> tlv = {});
-    SignedNostrEvent payKeySend(NostrString pubkey, unsigned long amount, NostrString preimage,
+    SignedNostrEvent payKeySend(NostrString pubkey, MilliSats amount, NostrString preimage = "", std::initializer_list<TLVRecords> tlv = {});
+    SignedNostrEvent payKeySend(NostrString pubkey, MilliSats amount, NostrString preimage,
                                 const std::vector<TLVRecords> &tlv);
     SignedNostrEvent multiPayKeySend(std::initializer_list<KeySend> keySends);
     SignedNostrEvent multiPayKeySend(const std::vector<KeySend> &keySends);
-    SignedNostrEvent makeInvoice(unsigned long amount, NostrString description = "", NostrString descriptionHash = "", unsigned long expiry = 0);
+    SignedNostrEvent makeInvoice(MilliSats amount, NostrString description = "", NostrString descriptionHash = "", unsigned long expiry = 0);
     SignedNostrEvent lookUpPaymentHash(NostrString paymentHash);
     SignedNostrEvent lookUpInvoice(NostrString invoice);
     SignedNostrEvent listTransactions(unsigned long from = 0, unsigned long until = 0, int limit = 0, int offset = 0, bool unpaid = false, NostrString type = "");

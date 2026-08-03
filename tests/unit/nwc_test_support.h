@@ -32,7 +32,7 @@ class MockTransport : public nostr::Transport {
   public:
     MockConnection *connection = nullptr;
 
-    void getInvoiceFromLNAddr(String address, unsigned long long amount, String comment,
+    void getInvoiceFromLNAddr(String address, nostr::MilliSats amount, String comment,
                               std::function<void(String)> callback) override;
     nostr::Connection *connect(String url) override;
     void disconnect(nostr::Connection *connection) override;

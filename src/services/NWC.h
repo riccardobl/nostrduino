@@ -90,7 +90,7 @@ class NWC {
      * @param onRes A callback that will be called when the payment is successful (optional)
      * @param onErr A callback that will be called when the payment fails (optional)
      */
-    void payInvoice(NostrString invoice, unsigned long amount = static_cast<unsigned long>(-1), std::function<void(PayInvoiceResponse)> onRes = nullptr,
+    void payInvoice(NostrString invoice, MilliSats amount = MILLISATS_UNSPECIFIED, std::function<void(PayInvoiceResponse)> onRes = nullptr,
                     std::function<void(NostrString, NostrString)> onErr = nullptr);
 
     /**
@@ -112,9 +112,9 @@ class NWC {
      * @param onRes A callback that will be called when the payment is successful (optional)
      * @param onErr A callback that will be called when the payment fails (optional) 
      */
-    void payKeySend(NostrString pubkey, unsigned long amount, NostrString preimage = "", std::initializer_list<TLVRecords> tlv = {}, std::function<void(PayKeySendResponse)> onRes = nullptr,
+    void payKeySend(NostrString pubkey, MilliSats amount, NostrString preimage = "", std::initializer_list<TLVRecords> tlv = {}, std::function<void(PayKeySendResponse)> onRes = nullptr,
                     std::function<void(NostrString, NostrString)> onErr = nullptr);
-    void payKeySend(NostrString pubkey, unsigned long amount, NostrString preimage, const std::vector<TLVRecords> &tlv,
+    void payKeySend(NostrString pubkey, MilliSats amount, NostrString preimage, const std::vector<TLVRecords> &tlv,
                     std::function<void(PayKeySendResponse)> onRes = nullptr,
                     std::function<void(NostrString, NostrString)> onErr = nullptr);
 
@@ -137,7 +137,7 @@ class NWC {
      * @param onRes A callback that will be called when the invoice is created (optional)
      * @param onErr A callback that will be called when the invoice creation fails (optional)
      */
-    void makeInvoice(unsigned long amount, NostrString description = "", NostrString descriptionHash = "", unsigned long expiry = 0, std::function<void(MakeInvoiceResponse)> onRes = nullptr,
+    void makeInvoice(MilliSats amount, NostrString description = "", NostrString descriptionHash = "", unsigned long expiry = 0, std::function<void(MakeInvoiceResponse)> onRes = nullptr,
                      std::function<void(NostrString, NostrString)> onErr = nullptr);
 
     /**

@@ -214,7 +214,11 @@ void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes
     this->callbacks.push_back(std::move(callback));
 }
 
-void NWC::payInvoice(NostrString invoice, unsigned long amount, std::function<void(PayInvoiceResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
+void NWC::payInvoice(NostrString invoice, MilliSats amount, std::function<void(PayInvoiceResponse)> onRes, std::function<void(NostrString, NostrString)> onErr) {
+    if (!isOptionalMilliSatsValid(amount)) {
+        if (onErr) onErr("INVALID_AMOUNT", "Invalid millisatoshi amount");
+        return;
+    }
     if (this->deferUntilEncryptionReady(
             [this, invoice, amount, onRes, onErr]() { this->payInvoice(invoice, amount, onRes, onErr); }, onErr)) return;
     SignedNostrEvent ev = this->nip47.payInvoice(invoice, amount);
@@ -234,6 +238,12 @@ void NWC::multiPayInvoice(std::initializer_list<Invoice> invoices, std::function
 
 void NWC::multiPayInvoice(const std::vector<Invoice> &invoices, std::function<void(MultiPayInvoiceResponse)> onRes,
                           std::function<void(NostrString, NostrString)> onErr) {
+    for (const Invoice &invoice : invoices) {
+        if (!isRequiredMilliSatsValid(invoice.amount)) {
+            if (onErr) onErr("INVALID_AMOUNT", "Invalid millisatoshi amount");
+            return;
+        }
+    }
     if (this->deferUntilEncryptionReady(
             [this, invoices, onRes, onErr]() { this->multiPayInvoice(invoices, onRes, onErr); }, onErr)) return;
     SignedNostrEvent ev = this->nip47.multiPayInvoice(invoices);
@@ -247,14 +257,18 @@ void NWC::multiPayInvoice(const std::vector<Invoice> &invoices, std::function<vo
     this->callbacks.push_back(std::move(callback));
 }
 
-void NWC::payKeySend(NostrString pubkey, unsigned long amount, NostrString preimage, std::initializer_list<TLVRecords> tlv, std::function<void(PayKeySendResponse)> onRes,
+void NWC::payKeySend(NostrString pubkey, MilliSats amount, NostrString preimage, std::initializer_list<TLVRecords> tlv, std::function<void(PayKeySendResponse)> onRes,
                      std::function<void(NostrString, NostrString)> onErr) {
     this->payKeySend(pubkey, amount, preimage, std::vector<TLVRecords>(tlv), onRes, onErr);
 }
 
-void NWC::payKeySend(NostrString pubkey, unsigned long amount, NostrString preimage,
+void NWC::payKeySend(NostrString pubkey, MilliSats amount, NostrString preimage,
                      const std::vector<TLVRecords> &tlv, std::function<void(PayKeySendResponse)> onRes,
                      std::function<void(NostrString, NostrString)> onErr) {
+    if (!isRequiredMilliSatsValid(amount)) {
+        if (onErr) onErr("INVALID_AMOUNT", "Invalid millisatoshi amount");
+        return;
+    }
     if (this->deferUntilEncryptionReady(
             [this, pubkey, amount, preimage, tlv, onRes, onErr]() {
                 this->payKeySend(pubkey, amount, preimage, tlv, onRes, onErr);
@@ -276,6 +290,12 @@ void NWC::multiPayKeySend(std::initializer_list<KeySend> keySends, std::function
 
 void NWC::multiPayKeySend(const std::vector<KeySend> &keySends, std::function<void(MultiPayKeySendResponse)> onRes,
                           std::function<void(NostrString, NostrString)> onErr) {
+    for (const KeySend &keySend : keySends) {
+        if (!isRequiredMilliSatsValid(keySend.amount)) {
+            if (onErr) onErr("INVALID_AMOUNT", "Invalid millisatoshi amount");
+            return;
+        }
+    }
     if (this->deferUntilEncryptionReady(
             [this, keySends, onRes, onErr]() { this->multiPayKeySend(keySends, onRes, onErr); }, onErr)) return;
     SignedNostrEvent ev = this->nip47.multiPayKeySend(keySends);
@@ -289,8 +309,12 @@ void NWC::multiPayKeySend(const std::vector<KeySend> &keySends, std::function<vo
     this->callbacks.push_back(std::move(callback));
 }
 
-void NWC::makeInvoice(unsigned long amount, NostrString description, NostrString descriptionHash, unsigned long expiry, std::function<void(MakeInvoiceResponse)> onRes,
+void NWC::makeInvoice(MilliSats amount, NostrString description, NostrString descriptionHash, unsigned long expiry, std::function<void(MakeInvoiceResponse)> onRes,
                       std::function<void(NostrString, NostrString)> onErr) {
+    if (!isRequiredMilliSatsValid(amount)) {
+        if (onErr) onErr("INVALID_AMOUNT", "Invalid millisatoshi amount");
+        return;
+    }
     if (this->deferUntilEncryptionReady(
             [this, amount, description, descriptionHash, expiry, onRes, onErr]() {
                 this->makeInvoice(amount, description, descriptionHash, expiry, onRes, onErr);

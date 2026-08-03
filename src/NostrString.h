@@ -12,6 +12,7 @@
 
 
 #include <vector>
+#include "NostrAmount.h"
 
 #ifdef ARDUINO
 double NostrString_toFloat(const String &str);
@@ -31,6 +32,7 @@ const char *NostrString_toChars(const String &str);
 String NostrString_trim(const String &s);
 void NostrString_split(const String &str, const char separator, std::vector<String> &result);
 String NostrString_fromUInt(unsigned long long i);
+String NostrString_fromMilliSats(nostr::MilliSats i);
 String NostrString_urlEncode(const String &str);
 #else
 double NostrString_toFloat(const std::string &str);
@@ -50,6 +52,7 @@ void NostrString_split(const std::string &str, const char separator, std::vector
 std::string NostrString_urlDecode(const std::string &encoded);
 bool NostrString_equals(const std::string &str1, const std::string &str2);
 std::string NostrString_fromUInt(unsigned long long i);
+std::string NostrString_fromMilliSats(nostr::MilliSats i);
 std::string NostrString_urlEncode(const std::string &str);
 #endif
 

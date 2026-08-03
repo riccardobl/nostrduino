@@ -21,6 +21,36 @@ jobs:
       - name: Install PlatformIO
         run: python -m pip install platformio==6.1.18
 
+      - name: Native unit tests
+        shell: bash
+        env:
+          NATIVE_UNIT_TEST_RESULTS_FILE: ${{ runner.temp }}/native-unit-test-results.tsv
+          NATIVE_UNIT_TEST_OUTPUT_FILE: ${{ runner.temp }}/native-unit-test-output.log
+        run: |
+          set -uo pipefail
+          : > "$NATIVE_UNIT_TEST_RESULTS_FILE"
+          : > "$NATIVE_UNIT_TEST_OUTPUT_FILE"
+          compiled="FALSE"
+          executed="FALSE"
+          correct="FALSE"
+          status="FALSE"
+          if pio run -e NativeUnitTests; then
+            compiled="OK"
+            .pio/build/NativeUnitTests/program > "$NATIVE_UNIT_TEST_OUTPUT_FILE" 2>&1
+            native_test_exit=$?
+            executed="OK"
+            if (( native_test_exit == 0 )); then
+              if grep -Fq 'NATIVE_TEST amounts PASS' "$NATIVE_UNIT_TEST_OUTPUT_FILE" &&
+                 grep -Fq 'NATIVE_TESTS PASSED' "$NATIVE_UNIT_TEST_OUTPUT_FILE"; then
+                correct="OK"
+                status="OK"
+              fi
+            fi
+          fi
+          printf 'native_amounts\t%s\t%s\t%s\t%s\n' \
+            "$compiled" "$executed" "$correct" "$status" > "$NATIVE_UNIT_TEST_RESULTS_FILE"
+          test "$status" = "OK"
+
       - name: Check ESP32-only source tree
         shell: bash
         run: |
@@ -88,6 +118,14 @@ jobs:
           UNIT_TEST_OUTPUT_FILE: ${{ runner.temp }}/unit-test-output.log
         run: bash tests/unit/run.sh
 
+      - name: ESP32 QEMU unit tests without amount guards
+        env:
+          UNIT_TEST_EMULATOR: qemu
+          UNIT_TEST_ENV: UnitTestsNoAmountGuards
+          UNIT_TEST_RESULTS_FILE: ${{ runner.temp }}/unit-test-no-guards-results.tsv
+          UNIT_TEST_OUTPUT_FILE: ${{ runner.temp }}/unit-test-no-guards-output.log
+        run: bash tests/unit/run.sh
+
       - name: Compile ESP32 examples
         if: always()
         shell: bash
@@ -113,5 +151,9 @@ jobs:
         env:
           UNIT_TEST_RESULTS_FILE: ${{ runner.temp }}/unit-test-results.tsv
           UNIT_TEST_OUTPUT_FILE: ${{ runner.temp }}/unit-test-output.log
+          NO_GUARD_UNIT_TEST_RESULTS_FILE: ${{ runner.temp }}/unit-test-no-guards-results.tsv
+          NO_GUARD_UNIT_TEST_OUTPUT_FILE: ${{ runner.temp }}/unit-test-no-guards-output.log
+          NATIVE_UNIT_TEST_RESULTS_FILE: ${{ runner.temp }}/native-unit-test-results.tsv
+          NATIVE_UNIT_TEST_OUTPUT_FILE: ${{ runner.temp }}/native-unit-test-output.log
           EXAMPLE_RESULTS_FILE: ${{ runner.temp }}/example-results.tsv
         run: python .github/scripts/write_ci_summary.py

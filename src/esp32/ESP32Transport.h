@@ -69,7 +69,7 @@ class ESP32Connection : public Connection {
 class ESP32Transport : public Transport {
     friend class ESP32Connection;
   public:
-    void getInvoiceFromLNAddr(NostrString addr, unsigned long long amountMSats, NostrString comment, std::function<void(NostrString)> callback);
+    void getInvoiceFromLNAddr(NostrString addr, MilliSats amountMSats, NostrString comment, std::function<void(NostrString)> callback);
     Connection *connect(NostrString url) override;
     void close();
     void disconnect(Connection *conn) override;

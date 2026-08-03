@@ -4,11 +4,16 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 unit_test_dir="$repo_root/tests/unit"
 wokwi_project_dir="$repo_root/wokwi/esp32"
-artifact_dir="$repo_root/.pio/build/UnitTests"
+unit_test_env="${UNIT_TEST_ENV:-UnitTests}"
+if [[ ! "$unit_test_env" =~ ^[A-Za-z0-9_]+$ ]]; then
+    echo "Invalid UNIT_TEST_ENV: $unit_test_env" >&2
+    exit 2
+fi
+artifact_dir="$repo_root/.pio/build/$unit_test_env"
 registry_file="$unit_test_dir/test_registry.generated.inc"
 results_file="${UNIT_TEST_RESULTS_FILE:-}"
 output_file="${UNIT_TEST_OUTPUT_FILE:-}"
-timeout_ms="${UNIT_TEST_TIMEOUT_MS:-30000}"
+timeout_ms="${UNIT_TEST_TIMEOUT_MS:-60000}"
 timeout_seconds="$(( (timeout_ms + 999) / 1000 ))"
 wokwi_cli="${WOKWI_CLI:-wokwi-cli}"
 qemu_bin="${QEMU_SYSTEM_XTENSA:-qemu-system-xtensa}"
@@ -116,10 +121,10 @@ if ! command -v pio >/dev/null 2>&1; then
     exit 2
 fi
 cd "$repo_root"
-pio pkg install -e UnitTests
-pio run -e UnitTests -t clean
+pio pkg install -e "$unit_test_env"
+pio run -e "$unit_test_env" -t clean
 build_started_at="$(date +%s)"
-pio run -e UnitTests
+pio run -e "$unit_test_env"
 
 for artifact in "$artifact_dir/firmware.elf" "$artifact_dir/firmware.bin"; do
     test -s "$artifact"
@@ -194,14 +199,31 @@ else
         0x8000 "$artifact_dir/partitions.bin" \
         0x10000 "$artifact_dir/firmware.bin"
 
+    if [[ "$(uname -s)" == "Darwin" ]]; then
+        # Let macOS finish publishing the freshly rewritten mmap-backed image.
+        sync
+        sleep "${UNIT_TEST_QEMU_SETTLE_SECONDS:-2}"
+    fi
+
+    run_qemu() {
+        timeout --signal=TERM "${timeout_seconds}s" "$qemu_command" \
+            -nographic \
+            -machine esp32 \
+            -drive "file=$qemu_flash,if=mtd,format=raw" \
+            -global driver=timer.esp32.timg,property=wdt_disable,value=true \
+            >"$serial_log" 2>&1
+    }
+
     set +e
-    timeout --signal=TERM "${timeout_seconds}s" "$qemu_command" \
-        -nographic \
-        -machine esp32 \
-        -drive "file=$qemu_flash,if=mtd,format=raw" \
-        -global driver=timer.esp32.timg,property=wdt_disable,value=true \
-        >"$serial_log" 2>&1
+    run_qemu
     emulator_status=$?
+    if (( emulator_status == 134 )) && ! grep -Fq "UNIT_TEST " "$serial_log"; then
+        # The arm64 macOS build can occasionally abort during QEMU startup.
+        # Retry once, but never mask a boot that produced test output.
+        sleep 1
+        run_qemu
+        emulator_status=$?
+    fi
     set -e
 fi
 

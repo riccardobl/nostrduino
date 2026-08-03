@@ -80,7 +80,11 @@ void esp32::ESP32Transport::httpsGet(NostrString url, std::function<void(NostrSt
     cb(str);
 }
 
-void esp32::ESP32Transport::getInvoiceFromLNAddr(NostrString addr, unsigned long long amount, NostrString comment, std::function<void(NostrString)> cb) {
+void esp32::ESP32Transport::getInvoiceFromLNAddr(NostrString addr, MilliSats amount, NostrString comment, std::function<void(NostrString)> cb) {
+    if (!isRequiredMilliSatsValid(amount)) {
+        if (cb) cb("");
+        return;
+    }
     // username@domain.com
     // becomes https://domain.com/.well-known/lnurlp/username
     int atpos = NostrString_indexOf(addr, "@");
@@ -118,7 +122,7 @@ void esp32::ESP32Transport::getInvoiceFromLNAddr(NostrString addr, unsigned long
         } else {
             lnurlp += "?";
         }
-        lnurlp += "amount=" + NostrString_fromUInt(amount);
+        lnurlp += "amount=" + NostrString_fromMilliSats(amount);
         if (NostrString_length(comment) > 0) {
             lnurlp += "&comment=" + NostrString_urlEncode(comment);
         }

@@ -2,6 +2,7 @@
 #define _NOSTR_TRANSPORT_H
 #include <Arduino.h>
 #include "NostrString.h"
+#include "NostrAmount.h"
 #include <functional>
 
 namespace nostr {
@@ -19,7 +20,7 @@ class Connection {
 };
 class Transport {
   public:
-    virtual void getInvoiceFromLNAddr(NostrString addr, unsigned long long amountMSats, NostrString comment, std::function<void(NostrString)> callback) = 0;
+    virtual void getInvoiceFromLNAddr(NostrString addr, MilliSats amountMSats, NostrString comment, std::function<void(NostrString)> callback) = 0;
     virtual Connection *connect(NostrString url) = 0;
     virtual ~Transport() = default;
     Transport() = default;

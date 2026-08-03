@@ -58,7 +58,7 @@ class MockTransport : public nostr::Transport {
     std::vector<MockConnection *> connections;
     MockConnection *lastConnection = nullptr;
 
-    void getInvoiceFromLNAddr(String, unsigned long long, String, std::function<void(String)> callback) override {
+    void getInvoiceFromLNAddr(String, nostr::MilliSats, String, std::function<void(String)> callback) override {
         if (callback) callback("");
     }
     nostr::Connection *connect(String) override {
