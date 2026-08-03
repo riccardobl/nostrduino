@@ -129,7 +129,7 @@ bool Fixture::queueInfoEvent(const String &advertisedModes, bool includeEncrypti
     if (subscriptionId.length() != 64 || transport.connection == nullptr) return false;
     nostr::UnsignedNostrEvent unsignedInfo(
         13194,
-        "pay_invoice multi_pay_invoice pay_key_send multi_pay_key_send make_invoice lookup_invoice list_transactions get_balance get_info",
+        "pay_invoice multi_pay_invoice pay_keysend multi_pay_keysend make_invoice lookup_invoice list_transactions get_balance get_info",
         1700000000);
     if (includeEncryptionTag) unsignedInfo.getTags()->addTag("encryption", {advertisedModes});
     String signer = signingPrivateKey.length() > 0 ? signingPrivateKey : servicePrivateKey;

@@ -11,10 +11,10 @@ bool testNwcRequests() {
     fixture.client.payInvoice("lnbc-pay", 2100);
     fixture.client.multiPayInvoice({{"lnbc-a", 100}, {"lnbc-b", 200}});
     fixture.client.payKeySend(fixture.servicePublicKey, 3000, "preimage-a",
-                              {{"5482373484", "value-a"}});
+                              {{UINT64_C(5482373484), "value-a"}, {UINT64_MAX, "max-type"}});
     fixture.client.multiPayKeySend({
-        {fixture.servicePublicKey, 4000, "preimage-b", {{"1", "one"}}},
-        {fixture.otherPublicKey, 5000, "", {{"2", "two"}}},
+        {fixture.servicePublicKey, 4000, "preimage-b", {{UINT64_C(1), "one"}}},
+        {fixture.otherPublicKey, 5000, "", {{UINT64_C(2), "two"}}},
     });
     fixture.client.makeInvoice(6000, "description", "description-hash", 90);
     fixture.client.lookUpPaymentHash("payment-hash");
@@ -53,22 +53,38 @@ bool testNwcRequests() {
     CHECK(request["params"]["invoices"][1]["amount"].as<int64_t>() == 200);
 
     CHECK(fixture.decryptRequest(2, request));
-    CHECK(request["method"].as<String>() == "pay_key_send");
+    CHECK(request["method"].as<String>() == "pay_keysend");
     CHECK(request["params"]["pubkey"].as<String>() == fixture.servicePublicKey);
     CHECK(request["params"]["amount"].is<int64_t>());
     CHECK(request["params"]["amount"].as<int64_t>() == 3000);
     CHECK(request["params"]["preimage"].as<String>() == "preimage-a");
-    CHECK(request["params"]["tlv_records"][0]["type"].as<String>() == "5482373484");
+    CHECK(request["params"]["tlv_records"][0]["type"].is<uint64_t>());
+    CHECK(request["params"]["tlv_records"][0]["type"].as<uint64_t>() == UINT64_C(5482373484));
     CHECK(request["params"]["tlv_records"][0]["value"].as<String>() == "value-a");
+    CHECK(request["params"]["tlv_records"][1]["type"].is<uint64_t>());
+    CHECK(request["params"]["tlv_records"][1]["type"].as<uint64_t>() == UINT64_MAX);
 
     CHECK(fixture.decryptRequest(3, request));
-    CHECK(request["method"].as<String>() == "multi_pay_key_send");
+    CHECK(request["method"].as<String>() == "multi_pay_keysend");
     CHECK(request["params"]["key_sends"].size() == 2);
     CHECK(request["params"]["key_sends"][0]["preimage"].as<String>() == "preimage-b");
     CHECK(request["params"]["key_sends"][0]["tlv_records"][0]["value"].as<String>() == "one");
     CHECK(request["params"]["key_sends"][1]["pubkey"].as<String>() == fixture.otherPublicKey);
     CHECK(request["params"]["key_sends"][1]["preimage"].isNull());
-    CHECK(request["params"]["key_sends"][1]["tlv_records"][0]["type"].as<String>() == "2");
+    CHECK(request["params"]["key_sends"][1]["tlv_records"][0]["type"].as<uint64_t>() == UINT64_C(2));
+
+#if NOSTRDUINO_ENABLE_AMOUNT_GUARDS
+    const size_t requestsBeforeInvalidKeysend = fixture.requestCount();
+    int invalidKeysendErrors = 0;
+    fixture.client.payKeySend(
+        fixture.servicePublicKey, nostr::MAX_MILLISATS + 1, "", {}, nullptr,
+        [&](String code, String) {
+            if (code == "INVALID_AMOUNT") ++invalidKeysendErrors;
+        });
+    fixture.loop();
+    CHECK(invalidKeysendErrors == 1);
+    CHECK(fixture.requestCount() == requestsBeforeInvalidKeysend);
+#endif
 
     CHECK(fixture.decryptRequest(4, request));
     CHECK(request["method"].as<String>() == "make_invoice");

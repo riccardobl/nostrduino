@@ -131,7 +131,7 @@ SignedNostrEvent Nip47::payKeySend(NostrString pubkey, MilliSats amount, NostrSt
             tlvRecord["value"] = record.value;
         }
     }
-    return this->createEvent("pay_key_send", doc);
+    return this->createEvent("pay_keysend", doc);
 }
 
 SignedNostrEvent Nip47::multiPayKeySend(std::initializer_list<KeySend> keySends) {
@@ -161,7 +161,7 @@ SignedNostrEvent Nip47::multiPayKeySend(const std::vector<KeySend> &keySends) {
             }
         }
     }
-    return this->createEvent("multi_pay_key_send", doc);
+    return this->createEvent("multi_pay_keysend", doc);
 }
 
 SignedNostrEvent Nip47::listTransactions(unsigned long from, unsigned long until, int limit, int offset, bool unpaid, NostrString type) {

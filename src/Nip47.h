@@ -23,7 +23,7 @@ typedef struct s_Invoice {
 } Invoice;
 
 typedef struct s_TLVRecords {
-    NostrString type;
+    uint64_t type;
     NostrString value;
 } TLVRecords;
 

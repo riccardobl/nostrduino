@@ -68,8 +68,8 @@ bool testEventsAndWalletApi() {
     };
     CHECK(checkMethod(nip47.payInvoice("lnbc-test", 21), "pay_invoice"));
     CHECK(checkMethod(nip47.multiPayInvoice({{"lnbc-a", 1}, {"lnbc-b", 2}}), "multi_pay_invoice"));
-    CHECK(checkMethod(nip47.payKeySend(servicePublicKey, 1000, "preimage", {{"6969", "value"}}), "pay_key_send"));
-    CHECK(checkMethod(nip47.multiPayKeySend({{servicePublicKey, 1000, "", {}}}), "multi_pay_key_send"));
+    CHECK(checkMethod(nip47.payKeySend(servicePublicKey, 1000, "preimage", {{6969, "value"}}), "pay_keysend"));
+    CHECK(checkMethod(nip47.multiPayKeySend({{servicePublicKey, 1000, "", {}}}), "multi_pay_keysend"));
     CHECK(checkMethod(nip47.makeInvoice(1000, "description", "hash", 60), "make_invoice"));
     CHECK(checkMethod(nip47.lookUpPaymentHash("payment-hash"), "lookup_invoice"));
     CHECK(checkMethod(nip47.lookUpInvoice("lnbc-lookup"), "lookup_invoice"));
