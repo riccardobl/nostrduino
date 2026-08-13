@@ -8,6 +8,7 @@
 #include "NostrString.h"
 #include "NostrLimits.h"
 #include "NostrTransport.h"
+#include "NostrUrl.h"
 #include "NostrUtils.h"
 #include "WiFi.h"
 #include <WiFiClientSecure.h>
@@ -33,9 +34,15 @@ struct ESP32TransportConfig {
     uint16_t connectTimeoutMs;
     uint16_t readTimeoutMs;
     uint8_t maxProtocolViolations;
+    // Empty means every syntactically valid HTTPS callback is allowed.
+    std::function<bool(const ParsedUrl &)> lnurlCallbackFilter;
+    // Empty accepts any standard Bitcoin BOLT11 network; use "bc", "tb",
+    // "tbs" or "bcrt" to bind LNURL invoices to one network.
+    NostrString expectedBolt11Currency;
 
     ESP32TransportConfig()
-        : tls(), limits(), connectTimeoutMs(10000), readTimeoutMs(15000), maxProtocolViolations(3) {}
+        : tls(), limits(), connectTimeoutMs(10000), readTimeoutMs(15000), maxProtocolViolations(3),
+          lnurlCallbackFilter(), expectedBolt11Currency("") {}
 };
 
 class ESP32Transport;

@@ -98,7 +98,7 @@ void setUnixTime(unsigned long long value) {
     nostr::Utils::setUnixTimeSecondsProvider([]() -> unsigned long long { return currentUnixTime; });
 }
 
-Fixture::Fixture(const nostr::NostrLimits &limits)
+Fixture::Fixture(const nostr::NostrLimits &limits, nostr::NWCEncryptionPolicy encryptionPolicy)
     : userPrivateKey("0000000000000000000000000000000000000000000000000000000000000001"),
       servicePrivateKey("0000000000000000000000000000000000000000000000000000000000000002"),
       otherPrivateKey("0000000000000000000000000000000000000000000000000000000000000003"),
@@ -106,7 +106,7 @@ Fixture::Fixture(const nostr::NostrLimits &limits)
       servicePublicKey(nostr::Utils::getPublicKey(servicePrivateKey)),
       otherPublicKey(nostr::Utils::getPublicKey(otherPrivateKey)),
       transport(), client((setUnixTime(1700000000ULL), &transport),
-                          makeNwcUrl(servicePublicKey, userPrivateKey), limits) {
+                          makeNwcUrl(servicePublicKey, userPrivateKey), limits, encryptionPolicy) {
     if (transport.connection != nullptr) {
         transport.connection->status(nostr::ConnectionStatus::CONNECTED);
     }
@@ -159,8 +159,17 @@ bool Fixture::queueInfoEvent(const String &advertisedModes, bool includeEncrypti
 
 bool Fixture::negotiate(const String &advertisedModes, bool includeEncryptionTag) {
     if (!queueInfoEvent(advertisedModes, includeEncryptionTag)) return false;
+    if (!queueInfoEose()) return false;
     loop();
     return client.isReady();
+}
+
+bool Fixture::queueInfoEose() {
+    loop();
+    const String subscriptionId = subscriptionIdForKind(13194);
+    if (subscriptionId.length() != 64 || transport.connection == nullptr) return false;
+    transport.connection->queue(String("[\"EOSE\",\"") + subscriptionId + "\"]");
+    return true;
 }
 
 size_t Fixture::requestCount() const {

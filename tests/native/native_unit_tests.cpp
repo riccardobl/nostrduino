@@ -87,14 +87,23 @@ bool testNumericParsing() {
     return true;
 }
 
+bool testExactProtocolComparison() {
+    NATIVE_CHECK(NostrString_equals("nip44_v2", "nip44_v2"));
+    NATIVE_CHECK(!NostrString_equals("nip44_v2 ", "nip44_v2"));
+    NATIVE_CHECK(!NostrString_equals(std::string("nip44_v2\x01", 9), "nip44_v2"));
+    return true;
+}
+
 } // namespace
 
 int main() {
     const bool amountsPassed = testAmounts();
     const bool numericPassed = testNumericParsing();
+    const bool comparisonPassed = testExactProtocolComparison();
     std::cout << "NATIVE_TEST amounts " << (amountsPassed ? "PASS" : "FAIL") << '\n';
     std::cout << "NATIVE_TEST numeric " << (numericPassed ? "PASS" : "FAIL") << '\n';
-    const bool allPassed = amountsPassed && numericPassed;
+    std::cout << "NATIVE_TEST exact_comparison " << (comparisonPassed ? "PASS" : "FAIL") << '\n';
+    const bool allPassed = amountsPassed && numericPassed && comparisonPassed;
     std::cout << (allPassed ? "NATIVE_TESTS PASSED" : "NATIVE_TESTS FAILED") << '\n';
     return allPassed ? 0 : 1;
 }

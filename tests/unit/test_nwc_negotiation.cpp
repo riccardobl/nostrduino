@@ -25,7 +25,7 @@ bool testNwcNegotiation() {
     }
 
     {
-        Fixture fixture;
+        Fixture fixture(nostr::NostrLimits(), nostr::NWCEncryptionPolicy::AllowLegacyNip04);
         fixture.client.getBalance();
         CHECK(fixture.negotiate("nip04"));
         CHECK(fixture.client.getEncryption() == nostr::Nip47Encryption::Nip04);
@@ -35,7 +35,7 @@ bool testNwcNegotiation() {
     }
 
     {
-        Fixture fixture;
+        Fixture fixture(nostr::NostrLimits(), nostr::NWCEncryptionPolicy::AllowLegacyNip04);
         fixture.client.getBalance();
         CHECK(fixture.negotiate("", false));
         CHECK(fixture.client.getEncryption() == nostr::Nip47Encryption::Nip04);
@@ -50,12 +50,39 @@ bool testNwcNegotiation() {
         String secondError;
         fixture.client.getBalance(nullptr, [&](String code, String) { firstError = code; });
         CHECK(fixture.queueInfoEvent("future_mode"));
+        CHECK(fixture.queueInfoEose());
         fixture.loop();
         CHECK(!fixture.client.isReady());
         CHECK(firstError == "UNSUPPORTED_ENCRYPTION");
         fixture.client.getInfo(nullptr, [&](String code, String) { secondError = code; });
         CHECK(secondError == "UNSUPPORTED_ENCRYPTION");
         CHECK(fixture.requestCount() == 0);
+    }
+
+    {
+        Fixture fixture;
+        String errorCode;
+        fixture.client.getBalance(nullptr, [&](String code, String) { errorCode = code; });
+        CHECK(fixture.queueInfoEvent("nip04"));
+        CHECK(fixture.queueInfoEose());
+        fixture.loop();
+        CHECK(!fixture.client.isReady());
+        CHECK(errorCode == "UNSUPPORTED_ENCRYPTION");
+        CHECK(fixture.requestCount() == 0);
+    }
+
+    {
+        Fixture fixture;
+        fixture.client.getBalance();
+        CHECK(fixture.queueInfoEvent("nip04"));
+        CHECK(fixture.queueInfoEvent("nip44_v2 nip04"));
+        CHECK(fixture.queueInfoEose());
+        fixture.loop();
+        CHECK(fixture.client.isReady());
+        CHECK(fixture.client.getEncryption() == nostr::Nip47Encryption::Nip44V2);
+        PublishedRequest request;
+        CHECK(fixture.requestAt(0, request));
+        CHECK(request.encryption == "nip44_v2");
     }
 
     {

@@ -1,5 +1,6 @@
 #include "ESP32Transport.h"
 #include "NostrCommon.h"
+#include "NostrBolt11.h"
 #include "NostrUrl.h"
 #include <algorithm>
 
@@ -105,14 +106,74 @@ void esp32::ESP32Transport::getInvoiceFromLNAddr(NostrString addr, MilliSats amo
             return;
         }
         NostrString status = doc["status"];
-        if (!NostrString_equals(status,"null") && !NostrString_equals(status, "OK")) {
+        if (!doc["status"].isNull() && !NostrString_equals(status, "OK")) {
             Utils::log("LNURLP status is set but not OK, status is: '" + status + "'");
+            cb("");
+            return;
+        }
+        if (!doc["tag"].is<const char *>() ||
+            !NostrString_equals(doc["tag"].as<NostrString>(), "payRequest") ||
+            !doc["metadata"].is<const char *>() ||
+            !doc["minSendable"].is<int64_t>() || !doc["maxSendable"].is<int64_t>()) {
+            Utils::log("LNURLP response is missing required fields");
+            cb("");
+            return;
+        }
+        JsonDocument metadataDoc;
+        if (deserializeJson(metadataDoc, doc["metadata"].as<const char *>()) ||
+            !metadataDoc.is<JsonArray>()) {
+            Utils::log("LNURLP metadata is not a JSON array");
+            cb("");
+            return;
+        }
+        size_t textPlainEntries = 0;
+        for (JsonVariant entry : metadataDoc.as<JsonArray>()) {
+            if (!entry.is<JsonArray>()) {
+                Utils::log("LNURLP metadata contains a non-array entry");
+                cb("");
+                return;
+            }
+            JsonArray fields = entry.as<JsonArray>();
+            if (fields.size() == 0 || !fields[0].is<const char *>()) {
+                Utils::log("LNURLP metadata entry has no string media type");
+                cb("");
+                return;
+            }
+            if (NostrString_equals(fields[0].as<NostrString>(), "text/plain")) ++textPlainEntries;
+        }
+        if (textPlainEntries != 1) {
+            Utils::log("LNURLP metadata must contain exactly one text/plain entry");
+            cb("");
+            return;
+        }
+        const int64_t minimum = doc["minSendable"].as<int64_t>();
+        const int64_t maximum = doc["maxSendable"].as<int64_t>();
+        if (minimum <= 0 || maximum < minimum || amount < minimum || amount > maximum) {
+            Utils::log("LNURLP amount is outside the advertised range");
+            cb("");
+            return;
+        }
+        const int64_t commentAllowed = doc["commentAllowed"] | INT64_C(0);
+        if (commentAllowed < 0 || (NostrString_length(comment) > 0 &&
+            (commentAllowed == 0 || NostrString_length(comment) > commentAllowed))) {
+            Utils::log("LNURLP comment is not allowed or is too long");
             cb("");
             return;
         }
         NostrString callback = doc["callback"];
         if (NostrString_length(callback) == 0) {
             Utils::log("LNURLP callback not found");
+            cb("");
+            return;
+        }
+        ParsedUrl parsedCallback;
+        if (!parseHttpsUrl(callback, parsedCallback)) {
+            Utils::log("LNURLP callback is not a valid HTTPS URL");
+            cb("");
+            return;
+        }
+        if (config.lnurlCallbackFilter && !config.lnurlCallbackFilter(parsedCallback)) {
+            Utils::log("LNURLP callback was rejected by the configured filter");
             cb("");
             return;
         }
@@ -127,7 +188,7 @@ void esp32::ESP32Transport::getInvoiceFromLNAddr(NostrString addr, MilliSats amo
             lnurlp += "&comment=" + NostrString_urlEncode(comment);
         }
         doc.clear();
-        this->httpsGet(lnurlp, [cb](NostrString json) {
+        this->httpsGet(lnurlp, [this, amount, cb](NostrString json) {
             JsonDocument doc;
 
             DeserializationError error = deserializeJson(doc, json);
@@ -137,7 +198,7 @@ void esp32::ESP32Transport::getInvoiceFromLNAddr(NostrString addr, MilliSats amo
                 return;
             }
             NostrString callbackStatus = doc["status"];
-            if (!NostrString_equals(callbackStatus,"null") && !NostrString_equals(callbackStatus, "OK")) {
+            if (!doc["status"].isNull() && !NostrString_equals(callbackStatus, "OK")) {
                 Utils::log("LNURLP callback status is set but not OK, status is: '" + callbackStatus + "'");
                 cb("");
                 return;
@@ -145,6 +206,12 @@ void esp32::ESP32Transport::getInvoiceFromLNAddr(NostrString addr, MilliSats amo
             NostrString invoice = doc["pr"];
             if (NostrString_length(invoice) == 0) {
                 Utils::log("LNURLP invoice not found");
+                cb("");
+                return;
+            }
+            if (!validateBolt11Invoice(invoice, amount, config.expectedBolt11Currency,
+                                       Utils::unixTimeSeconds())) {
+                Utils::log("LNURLP returned an invalid, expired or mismatched BOLT11 invoice");
                 cb("");
                 return;
             }

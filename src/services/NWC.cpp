@@ -22,8 +22,9 @@ NWC::~NWC() {
     this->close();
 }
 
-NWC::NWC(Transport *transport, NostrString nwcUrl, const NostrLimits &limits)
-    : transport(transport), limits(limits) {
+NWC::NWC(Transport *transport, NostrString nwcUrl, const NostrLimits &limits,
+         NWCEncryptionPolicy encryptionPolicy)
+    : transport(transport), limits(limits), encryptionPolicy(encryptionPolicy) {
     this->validConnection = Nip47::parseNWC(nwcUrl, this->nwc);
     if (!this->validConnection) return;
     this->pool = std::unique_ptr<NostrPool>(new NostrPool(transport, NWC_DEFAULT_TIMEOUT, limits));
@@ -48,10 +49,12 @@ NWC::NWC(Transport *transport, NostrString nwcUrl, const NostrLimits &limits)
 void NWC::discoverEncryption() {
     this->infoSubId = this->pool->subscribeMany(
         {this->nwc.relay},
-        {{{"kinds", {NWC_INFO_KIND}}, {"authors", {this->nwc.pubkey}}, {"limit", {"1"}}}},
+        {{{"kinds", {NWC_INFO_KIND}}, {"authors", {this->nwc.pubkey}}}},
         [this](const NostrString &, SignedNostrEvent *event) {
             if (event == nullptr || event->getKind() != 13194 ||
                 !NostrString_equals(event->getPubkey(), this->nwc.pubkey) || !event->verify()) return;
+
+            this->sawInfoEvent = true;
 
             bool hasEncryptionTag = false;
             bool supportsNip44 = false;
@@ -69,24 +72,43 @@ void NWC::discoverEncryption() {
                 }
             }
 
-            if (supportsNip44) {
-                this->selectEncryption(Nip47Encryption::Nip44V2, true);
-            } else if (supportsNip04) {
-                this->selectEncryption(Nip47Encryption::Nip04, true);
-            } else if (!hasEncryptionTag) {
-                this->selectEncryption(Nip47Encryption::Nip04, false);
-            } else {
-                this->rejectUnsupportedEncryption();
-            }
+            this->sawNip44 = this->sawNip44 || supportsNip44;
+            this->sawNip04 = this->sawNip04 || supportsNip04;
+            this->sawLegacyWithoutTag = this->sawLegacyWithoutTag || !hasEncryptionTag;
         },
         [this](const NostrString &, const NostrString &reason) {
+            if (this->sawInfoEvent) this->finishEncryptionDiscovery();
+            if (this->encryptionReady || this->encryptionFailed) return;
             NostrString message = "Unable to read wallet info event";
             if (NostrString_length(reason) > 0) message += ": " + reason;
             this->failEncryption("OTHER", message);
         },
         [this](const NostrString &) {
-            this->failEncryption("OTHER", "Wallet info event was not found");
+            this->finishEncryptionDiscovery();
         });
+}
+
+void NWC::finishEncryptionDiscovery() {
+    if (this->encryptionReady || this->encryptionFailed) return;
+    if (this->sawNip44) {
+        this->selectEncryption(Nip47Encryption::Nip44V2, true);
+        return;
+    }
+    if (this->encryptionPolicy == NWCEncryptionPolicy::AllowLegacyNip04) {
+        if (this->sawNip04) {
+            this->selectEncryption(Nip47Encryption::Nip04, true);
+            return;
+        }
+        if (this->sawLegacyWithoutTag) {
+            this->selectEncryption(Nip47Encryption::Nip04, false);
+            return;
+        }
+    }
+    if (this->sawInfoEvent) {
+        this->rejectUnsupportedEncryption();
+    } else {
+        this->failEncryption("OTHER", "Wallet info event was not found");
+    }
 }
 
 void NWC::finishInfoSubscription() {
@@ -189,7 +211,10 @@ void NWC::loop() {
     }
     if (!this->encryptionReady && !this->encryptionFailed &&
         Utils::unixTimeSeconds() - this->discoveryStartedAt > NWC_DEFAULT_TIMEOUT) {
-        this->failEncryption("OTHER", "timeout");
+        this->finishEncryptionDiscovery();
+        if (!this->encryptionReady && !this->encryptionFailed) {
+            this->failEncryption("OTHER", "timeout");
+        }
         return;
     }
 

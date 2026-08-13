@@ -3,11 +3,13 @@
 #include "NostrEncoding.h"
 #include "NostrUtils.h"
 #include "crypto/UBitcoinBackend.h"
+#include "crypto/CryptoLock.h"
 #include "uBitcoin/src/utility/trezor/hmac.h"
 
 #include <mbedtls/base64.h>
 #include <cstring>
 #include <limits>
+#include <mutex>
 #include <vector>
 
 namespace {
@@ -113,6 +115,7 @@ bool hmacParts(const uint8_t *key, size_t keySize, const uint8_t *first, size_t 
         wipe(output, 32);
         return false;
     }
+    std::lock_guard<std::mutex> lock(nostr::crypto::uBitcoinMutex());
     HMAC_SHA256_CTX context;
     ubtc_hmac_sha256_Init(&context, key, static_cast<uint32_t>(keySize));
     if (firstSize != 0) ubtc_hmac_sha256_Update(&context, first, static_cast<uint32_t>(firstSize));
@@ -131,6 +134,7 @@ bool hkdfExpand(const uint8_t prk[32], const uint8_t info[32], size_t outputSize
         wipe(output, outputSize);
         return false;
     }
+    std::lock_guard<std::mutex> lock(nostr::crypto::uBitcoinMutex());
     uint8_t previous[32] = {};
     size_t previousSize = 0;
     size_t written = 0;

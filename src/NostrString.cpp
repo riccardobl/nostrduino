@@ -114,10 +114,7 @@ String NostrString_trim(const String &s) {
     return ss;
 }
 bool NostrString_equals(const String &str1, const String &str2) {
-
-    String s1 = NostrString_trim(str1);
-    String s2 = NostrString_trim(str2);
-    return s1 == s2;
+    return str1 == str2;
 }
 
 String NostrString_urlEncode(const String &str) {
@@ -185,10 +182,7 @@ long int NostrString_length(const std::string &str) {
 }
 
 bool NostrString_equals(const std::string &str1, const std::string &str2) {
-
-    std::string s1 = NostrString_trim(str1);
-    std::string s2 = NostrString_trim(str2);
-    return s1 == s2;
+    return str1 == str2;
 }
 
 const char *NostrString_toChars(const std::string &str) {

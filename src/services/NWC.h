@@ -21,6 +21,11 @@
 #define NWC_INFINITE_TIMEOUT (0xFFFFFFFF) // Max unsigned int, ~136 years
 
 namespace nostr {
+enum class NWCEncryptionPolicy {
+    RequireNip44,
+    AllowLegacyNip04
+};
+
 class NWCResponseCallbackBase {
   public:
     virtual ~NWCResponseCallbackBase() = default;
@@ -62,7 +67,8 @@ class NWC {
      * @param transport A transport object, you can get one for the esp32 platform using nostr::esp32::ESP32Platform::getTransport() , for other platforms you need to implement the Transport interface
      * @param nwcUrl The NWC connection URL
      */
-    NWC(Transport *transport, NostrString nwcUrl, const NostrLimits &limits = NostrLimits());
+    NWC(Transport *transport, NostrString nwcUrl, const NostrLimits &limits = NostrLimits(),
+        NWCEncryptionPolicy encryptionPolicy = NWCEncryptionPolicy::RequireNip44);
 
     /**
      * Tick the main loop. This should be called in the loop() function of your sketch
@@ -203,9 +209,11 @@ class NWC {
 
     Transport *transport;
     NostrLimits limits;
+    NWCEncryptionPolicy encryptionPolicy;
     NostrString sendEvent(SignedNostrEvent *ev,
                           std::function<void(NostrString, NostrString)> onErr);
     void discoverEncryption();
+    void finishEncryptionDiscovery();
     void selectEncryption(Nip47Encryption encryption, bool includeEncryptionTag);
     void rejectUnsupportedEncryption();
     void failEncryption(NostrString errorCode, NostrString errorMessage);
@@ -232,6 +240,10 @@ class NWC {
     bool closed = false;
     bool validConnection = false;
     unsigned long long discoveryStartedAt = 0;
+    bool sawInfoEvent = false;
+    bool sawNip44 = false;
+    bool sawNip04 = false;
+    bool sawLegacyWithoutTag = false;
 };
 } 
 

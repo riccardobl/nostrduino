@@ -3,6 +3,7 @@
 #include "NostrLimits.h"
 #include "NostrString.h"
 #include "NostrUrl.h"
+#include "esp32/ESP32Transport.h"
 
 namespace unit_test {
 
@@ -23,6 +24,11 @@ bool testTransport() {
     CHECK(NostrString_urlDecode(urlDecoded) == expectedDecoded);
     CHECK(NostrString_urlDecode("%") == "");
     CHECK(NostrString_fromUInt(18446744073709551615ULL) == "18446744073709551615");
+    CHECK(NostrString_equals("nip44_v2", "nip44_v2"));
+    CHECK(!NostrString_equals("nip44_v2 ", "nip44_v2"));
+    String embeddedControl = "nip44_v2";
+    embeddedControl += static_cast<char>(1);
+    CHECK(!NostrString_equals(embeddedControl, "nip44_v2"));
 
     nostr::ParsedUrl parsed;
     CHECK(nostr::parseWebSocketUrl("wss://relay.example.com", parsed));
@@ -36,6 +42,17 @@ bool testTransport() {
                              "ws://bad_host/", "https://host path/"};
     for (const char *value : invalid) CHECK(!nostr::parseWebSocketUrl(value, parsed));
     CHECK(!nostr::parseHttpsUrl("http://example.com", parsed));
+
+    nostr::esp32::ESP32TransportConfig transportConfig;
+    CHECK(!transportConfig.lnurlCallbackFilter);
+    transportConfig.expectedBolt11Currency = "bc";
+    transportConfig.lnurlCallbackFilter = [](const nostr::ParsedUrl &url) {
+        return url.host == "example.com" && url.port == 443;
+    };
+    CHECK(transportConfig.expectedBolt11Currency == "bc");
+    nostr::ParsedUrl callbackUrl;
+    CHECK(nostr::parseHttpsUrl("https://example.com/pay", callbackUrl));
+    CHECK(transportConfig.lnurlCallbackFilter(callbackUrl));
 
     nostr::NostrLimits limits;
     CHECK(limits.maxWebSocketMessageBytes == 64 * 1024);

@@ -1,7 +1,11 @@
 #include "UBitcoinBackend.h"
+#include "CryptoLock.h"
 #include "../uBitcoin/src/Bitcoin.h"
+#include "../uBitcoin/src/utility/trezor/ecdsa.h"
+#include "../uBitcoin/src/utility/trezor/secp256k1.h"
 #include "../uBitcoin/src/utility/trezor/sha2.h"
 #include <cstring>
+#include <mutex>
 
 namespace {
 nostr::crypto::UBitcoinBackend::RandomProvider randomProvider;
@@ -106,21 +110,25 @@ extern "C" uint32_t random32(void) {
 }
 
 bool nostr::crypto::UBitcoinBackend::initialize(const RandomProvider &provider) {
+    std::lock_guard<std::mutex> lock(uBitcoinMutex());
     randomProvider = provider;
     randomFailure = false;
     return static_cast<bool>(randomProvider);
 }
 
 void nostr::crypto::UBitcoinBackend::shutdown() {
+    std::lock_guard<std::mutex> lock(uBitcoinMutex());
     randomProvider = RandomProvider();
     randomFailure = false;
 }
 
 bool nostr::crypto::UBitcoinBackend::isInitialized() {
+    std::lock_guard<std::mutex> lock(uBitcoinMutex());
     return static_cast<bool>(randomProvider);
 }
 
 bool nostr::crypto::UBitcoinBackend::publicKey(const uint8_t privateKey[32], uint8_t xOnlyPublicKey[32]) {
+    std::lock_guard<std::mutex> lock(uBitcoinMutex());
     if (xOnlyPublicKey == nullptr) return false;
     wipe(xOnlyPublicKey, 32);
     if (!validSecret(privateKey) || !beginOperation()) return false;
@@ -136,6 +144,7 @@ bool nostr::crypto::UBitcoinBackend::publicKey(const uint8_t privateKey[32], uin
 bool nostr::crypto::UBitcoinBackend::sign(const uint8_t privateKey[32], const uint8_t *message,
                                           size_t messageSize, const uint8_t auxiliaryRandomness[32],
                                           uint8_t signature[64]) {
+    std::lock_guard<std::mutex> lock(uBitcoinMutex());
     if (signature == nullptr) return false;
     wipe(signature, 64);
     if (!validSecret(privateKey) || (message == nullptr && messageSize != 0) ||
@@ -193,6 +202,7 @@ cleanup:
 
 bool nostr::crypto::UBitcoinBackend::verify(const uint8_t xOnlyPublicKey[32], const uint8_t *message,
                                             size_t messageSize, const uint8_t signature[64]) {
+    std::lock_guard<std::mutex> lock(uBitcoinMutex());
     if (xOnlyPublicKey == nullptr || (message == nullptr && messageSize != 0) || signature == nullptr ||
         !validFieldElement(signature) || !lessThan(signature + 32, curveOrder) || !beginOperation()) return false;
 
@@ -217,8 +227,36 @@ bool nostr::crypto::UBitcoinBackend::verify(const uint8_t xOnlyPublicKey[32], co
     return result;
 }
 
+bool nostr::crypto::UBitcoinBackend::verifyRecoverableEcdsa(
+    const uint8_t digest[32], const uint8_t signature[64], uint8_t recoveryId,
+    const uint8_t compressedPublicKey[33]) {
+    std::lock_guard<std::mutex> lock(uBitcoinMutex());
+    static const uint8_t halfCurveOrder[32] = {
+        0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+        0x5d, 0x57, 0x6e, 0x73, 0x57, 0xa4, 0x50, 0x1d,
+        0xdf, 0xe9, 0x2f, 0x46, 0x68, 0x1b, 0x20, 0xa0
+    };
+    if (digest == nullptr || signature == nullptr || recoveryId > 3 ||
+        (compressedPublicKey != nullptr && std::memcmp(signature + 32, halfCurveOrder, 32) > 0) ||
+        !beginOperation()) return false;
+    uint8_t recovered[65] = {};
+    bool result = ecdsa_recover_pub_from_sig(&secp256k1, recovered, signature, digest,
+                                             recoveryId) == 0 &&
+                  ecdsa_verify_digest(&secp256k1, recovered, signature, digest) == 0 &&
+                  !randomFailure;
+    if (result && compressedPublicKey != nullptr) {
+        result = (compressedPublicKey[0] == 0x02 || compressedPublicKey[0] == 0x03) &&
+                 std::memcmp(compressedPublicKey + 1, recovered + 1, 32) == 0 &&
+                 ((recovered[64] & 1) == (compressedPublicKey[0] & 1));
+    }
+    wipe(recovered, sizeof(recovered));
+    return result;
+}
+
 bool nostr::crypto::UBitcoinBackend::ecdhRawX(const uint8_t privateKey[32],
                                               const uint8_t xOnlyPublicKey[32], uint8_t sharedX[32]) {
+    std::lock_guard<std::mutex> lock(uBitcoinMutex());
     if (sharedX == nullptr) return false;
     wipe(sharedX, 32);
     if (!validSecret(privateKey) || xOnlyPublicKey == nullptr || !beginOperation()) return false;

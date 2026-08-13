@@ -20,6 +20,9 @@ class UBitcoinBackend {
                      const uint8_t auxiliaryRandomness[32], uint8_t signature[64]);
     static bool verify(const uint8_t xOnlyPublicKey[32], const uint8_t *message, size_t messageSize,
                        const uint8_t signature[64]);
+    static bool verifyRecoverableEcdsa(const uint8_t digest[32], const uint8_t signature[64],
+                                       uint8_t recoveryId,
+                                       const uint8_t compressedPublicKey[33] = nullptr);
     static bool ecdhRawX(const uint8_t privateKey[32], const uint8_t xOnlyPublicKey[32],
                          uint8_t sharedX[32]);
 };

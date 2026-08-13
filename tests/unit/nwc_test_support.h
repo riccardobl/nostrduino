@@ -63,12 +63,15 @@ class Fixture {
     MockTransport transport;
     nostr::NWC client;
 
-    explicit Fixture(const nostr::NostrLimits &limits = nostr::NostrLimits());
+    explicit Fixture(const nostr::NostrLimits &limits = nostr::NostrLimits(),
+                     nostr::NWCEncryptionPolicy encryptionPolicy =
+                         nostr::NWCEncryptionPolicy::RequireNip44);
 
     void loop();
     bool negotiate(const String &advertisedModes = "nip44_v2 nip04", bool includeEncryptionTag = true);
     bool queueInfoEvent(const String &advertisedModes, bool includeEncryptionTag = true,
                         const String &signingPrivateKey = "");
+    bool queueInfoEose();
     String subscriptionIdForKind(unsigned int kind, const String &eventId = "") const;
     size_t requestCount() const;
     bool requestAt(size_t index, PublishedRequest &request) const;
