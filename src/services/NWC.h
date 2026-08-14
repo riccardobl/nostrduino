@@ -21,6 +21,20 @@
 #define NWC_INFINITE_TIMEOUT (0xFFFFFFFF) // Max unsigned int, ~136 years
 
 namespace nostr {
+
+/**
+ * Selects the encryption modes that the managed NWC service may use after
+ * reading verified NIP-47 info events. Requests queued before discovery are
+ * sent only after an encryption mode has been selected.
+ *
+ * RequireNip44 is the default and requires nip44_v2; it does not downgrade
+ * when an older signed info event is replayed. AllowLegacyNip04 explicitly
+ * enables legacy NIP-04 when the wallet does not advertise NIP-44.
+ *
+ * Legacy NIP-04 preserves NIP-04 wire compatibility and therefore does not
+ * add a MAC that the specification does not define. Use it only when this
+ * protocol limitation is acceptable.
+ */
 enum class NWCEncryptionPolicy {
     RequireNip44,
     AllowLegacyNip04
@@ -66,6 +80,16 @@ class NWC {
      * Initialize a standalone NWC service
      * @param transport A transport object, you can get one for the esp32 platform using nostr::esp32::ESP32Platform::getTransport() , for other platforms you need to implement the Transport interface
      * @param nwcUrl The NWC connection URL
+     * @param limits Resource and protocol limits
+     * @param encryptionPolicy Encryption policy used after the verified NIP-47
+     *                         info event has been processed
+     *
+     * The default NWCEncryptionPolicy::RequireNip44 requires nip44_v2. A
+     * legacy wallet can be enabled explicitly:
+     * @code
+     * nostr::NWC client(transport, nwcUrl, nostr::NostrLimits(),
+     *                   nostr::NWCEncryptionPolicy::AllowLegacyNip04);
+     * @endcode
      */
     NWC(Transport *transport, NostrString nwcUrl, const NostrLimits &limits = NostrLimits(),
         NWCEncryptionPolicy encryptionPolicy = NWCEncryptionPolicy::RequireNip44);

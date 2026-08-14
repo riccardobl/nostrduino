@@ -21,6 +21,12 @@ namespace nostr {
     using NostrNoticeCallback =
         std::function<void(NostrRelay *, const NostrString &)>;
     using NostrEOSECallback = std::function<void(const NostrString &)>;
+
+    /**
+     * The SignedNostrEvent pointer passed to this callback is borrowed and is
+     * valid only for the duration of the callback. Copy any data that must
+     * outlive the callback.
+     */
     using NostrEventCallback =
         std::function<void(const NostrString &, SignedNostrEvent *event)>;
     using NostrEventStatusCallback =

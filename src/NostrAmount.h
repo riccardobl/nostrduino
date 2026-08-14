@@ -15,6 +15,14 @@
 
 namespace nostr {
 
+/**
+ * Millisatoshi amounts use the signed 64-bit MilliSats type.
+ * MILLISATS_UNSPECIFIED (-1) is the only omission sentinel for optional
+ * amounts; zero also omits the optional pay_invoice amount. Required amounts
+ * must be positive. Amount guards are enabled by default and cap outgoing
+ * values at 1000 BTC (100000000000000 msat). Builds may override
+ * NOSTRDUINO_MAX_AMOUNT_MSATS or set NOSTRDUINO_ENABLE_AMOUNT_GUARDS=0.
+ */
 using MilliSats = int64_t;
 
 static constexpr MilliSats MILLISATS_UNSPECIFIED = INT64_C(-1);

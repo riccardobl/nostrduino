@@ -68,8 +68,9 @@ the installed ESP-IDF; that lifecycle remains the application's responsibility.
 
 ### TLS configuration
 
-The default ESP32 transport accepts TLS connections without certificate
-validation.
+The default ESP32 transport accepts TLS connections without
+certificate validation to keep CA provisioning optional on constrained ESP32
+deployments.
 For certificate validation, provide a PEM CA and require it:
 
 ```cpp
@@ -82,6 +83,13 @@ nostr::Transport *transport = nostr::esp32::ESP32Platform::getTransport(config);
 
 ## Usage
 See the example scripts in `examples/` for simple examples of how to use this library.
+> [!IMPORTANT]
+> `NostrPool` deliberately accepts structurally valid relay events without cryptographic verification by default. 
+> Applications that use author identity or event contents as a security boundary should enable automatic verification with
+`pool.setVerifyIncomingEvents(true)` or call `SignedNostrEvent::verify()` explicitly.
+>
+> **Managed NWC responses are verified explicitly regardless of this pool setting.**
+
 
 
 ## Development

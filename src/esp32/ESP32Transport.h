@@ -29,6 +29,24 @@ struct ESP32TlsConfig {
 };
 
 struct ESP32TransportConfig {
+    /**
+     * Lightning Address responses are checked for the required LNURL-pay
+     * fields, and the returned BOLT11 invoice is validated for checksum,
+     * signature, amount and expiry. Network binding and callback-host
+     * filtering are optional.
+     *
+     * Example:
+     * @code
+     * nostr::esp32::ESP32TransportConfig config;
+     * config.expectedBolt11Currency = "bc"; // mainnet; empty accepts any standard network
+     * config.lnurlCallbackFilter = [](const nostr::ParsedUrl &url) {
+     *     return url.host == "pay.example.com" && url.port == 443;
+     * };
+     * @endcode
+     *
+     * An empty lnurlCallbackFilter allows every syntactically valid HTTPS
+     * callback, preserving the previous behavior.
+     */
     ESP32TlsConfig tls;
     NostrLimits limits;
     uint16_t connectTimeoutMs;
