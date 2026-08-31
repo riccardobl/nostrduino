@@ -31,7 +31,23 @@ unsigned long getUnixTimestamp() {
 bool fillRandom(uint8_t *output, size_t outputSize) {
     if (output == nullptr && outputSize != 0) return false;
     if (outputSize == 0) return true;
-    esp_fill_random(output, outputSize);
+    // The ESP32 hardware RNG exposes only a 32-bit state register that is
+    // refilled by the physical entropy source at a limited rate; draining it
+    // in one shot (esp_fill_random) can outpace the refill and produce
+    // correlated words, especially when Wi-Fi/BT are off and no RF noise is
+    // mixed in (see Espressif's esp_random docs). Pull one 32-bit word per
+    // esp_random() call and yield ~1 ms between reads so the source can
+    // refill; the yield also adds scheduler timing jitter. Same mitigation
+    // as Blockstream Jade 1.0.41.
+    size_t offset = 0;
+    while (offset < outputSize) {
+        uint32_t word = esp_random();
+        for (size_t i = 0; i < sizeof(word) && offset < outputSize; ++i) {
+            output[offset++] = static_cast<uint8_t>(word & 0xFF);
+            word >>= 8;
+        }
+        if (offset < outputSize) delay(1);
+    }
     return true;
 }
 void serialLogger(const NostrString &str) {
