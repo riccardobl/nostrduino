@@ -107,7 +107,7 @@ bool testNwcNotifications() {
     fixture.client.close();
     CHECK(fixture.transport.connection == nullptr);
 
-    Fixture nip04Fixture;
+    Fixture nip04Fixture(nostr::NostrLimits(), nostr::NWCEncryptionPolicy::AllowLegacyNip04);
     CHECK(nip04Fixture.negotiate("nip04"));
     int nip04Callbacks = 0;
     nip04Fixture.client.subscribeNotifications(

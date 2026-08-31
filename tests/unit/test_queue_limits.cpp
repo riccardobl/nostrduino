@@ -57,6 +57,7 @@ bool testQueueLimits() {
         relayFixture.client.close();
     });
     CHECK(relayFixture.queueInfoEvent("nip44_v2"));
+    CHECK(relayFixture.queueInfoEose());
     relayFixture.loop();
     CHECK(relayQueueErrors == 1);
     CHECK(relayFixture.transport.connection == nullptr);

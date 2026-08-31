@@ -211,7 +211,7 @@ void NWC::loop() {
     }
     if (!this->encryptionReady && !this->encryptionFailed &&
         Utils::unixTimeSeconds() - this->discoveryStartedAt > NWC_DEFAULT_TIMEOUT) {
-        this->finishEncryptionDiscovery();
+        if (this->sawInfoEvent) this->finishEncryptionDiscovery();
         if (!this->encryptionReady && !this->encryptionFailed) {
             this->failEncryption("OTHER", "timeout");
         }
