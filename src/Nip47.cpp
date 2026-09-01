@@ -123,7 +123,9 @@ NostrString Nip47::decryptContent(NostrString content) {
 bool Nip47::parseResponseEnvelope(SignedNostrEvent *response, const char *expectedResultType,
                                   JsonDocument &document, JsonObjectConst &result,
                                   NostrString &errorCode, NostrString &errorMessage) {
-    if (response == nullptr || !response->verify()) return false;
+    if (response == nullptr || response->getKind() != 23195 ||
+        !NostrString_equals(response->getPubkey(), this->servicePubKey) ||
+        !response->verify()) return false;
     NostrString content = this->decryptContent(response->getContent());
     if (!Utils::jsonParse(&content, &document) || !document.is<JsonObject>()) return false;
     JsonObjectConst root = document.as<JsonObjectConst>();

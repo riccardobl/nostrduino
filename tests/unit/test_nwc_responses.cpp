@@ -302,6 +302,16 @@ bool testNwcResponses() {
     strictParser.parseResponse(&parsedEvent, strictBalance);
     CHECK(strictBalance.errorCode == "");
     CHECK(strictBalance.result.balance == nostr::MAX_MILLISATS + 1);
+    nostr::UnsignedNostrEvent attackerEnvelope(23195, parsedEvent.getContent(), 1700000000);
+    attackerEnvelope.getTags()->addTag("p", {fixture.userPublicKey});
+    nostr::SignedNostrEvent attackerResponse = attackerEnvelope.sign(fixture.otherPrivateKey);
+    strictParser.parseResponse(&attackerResponse, strictBalance);
+    CHECK(strictBalance.errorCode == "OTHER" && strictBalance.result.balance == 0);
+    nostr::UnsignedNostrEvent wrongKindEnvelope(1, parsedEvent.getContent(), 1700000000);
+    wrongKindEnvelope.getTags()->addTag("p", {fixture.userPublicKey});
+    nostr::SignedNostrEvent wrongKindResponse = wrongKindEnvelope.sign(fixture.servicePrivateKey);
+    strictParser.parseResponse(&wrongKindResponse, strictBalance);
+    CHECK(strictBalance.errorCode == "OTHER" && strictBalance.result.balance == 0);
 
     response["result"]["balance"] = "9000";
     CHECK(fixture.makeResponseEvent(requestIndex, response, parsedEvent));
