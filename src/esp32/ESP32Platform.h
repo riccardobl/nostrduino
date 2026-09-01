@@ -17,7 +17,7 @@ namespace nostr {
 namespace esp32 {
 namespace ESP32Platform {
 
-unsigned long getUnixTimestamp() {
+inline unsigned long getUnixTimestamp() {
     time_t now;
     struct tm timeinfo;
     while (!getLocalTime(&timeinfo)) {
@@ -28,7 +28,7 @@ unsigned long getUnixTimestamp() {
     return now;
 }
 
-bool fillRandom(uint8_t *output, size_t outputSize) {
+inline bool fillRandom(uint8_t *output, size_t outputSize) {
     if (output == nullptr && outputSize != 0) return false;
     if (outputSize == 0) return true;
     // The ESP32 hardware RNG exposes only a 32-bit state register that is
@@ -50,14 +50,14 @@ bool fillRandom(uint8_t *output, size_t outputSize) {
     }
     return true;
 }
-void serialLogger(const NostrString &str) {
+inline void serialLogger(const NostrString &str) {
     Serial.println(str.c_str());
 }
 
 /**
  * Initialize the WiFi connection
  */
-void initWifi(NostrString ssid, NostrString passphrase, int unused = 6) {
+inline void initWifi(NostrString ssid, NostrString passphrase, int unused = 6) {
     esp_wifi_start();
     WiFi.persistent(false); // don't wear out the flash by writing wifi credentials to it (also fixes wifi connection on a159x36's QEMU for ESP32)
     WiFi.begin(ssid, passphrase);
@@ -75,7 +75,7 @@ void initWifi(NostrString ssid, NostrString passphrase, int unused = 6) {
 /**
  * Initialize the time service
  */
-void initTime(const char *ntpServer, long unused1 = 0, int unused2 = 3600) {
+inline void initTime(const char *ntpServer, long unused1 = 0, int unused2 = 3600) {
     configTime(0, 0, ntpServer);
 }
 
@@ -87,7 +87,7 @@ void initTime(const char *ntpServer, long unused1 = 0, int unused2 = 3600) {
  * application must call bootloader_random_disable() before initializing RF,
  * ADC or I2S, as required by ESP-IDF.
  */
-void initNostr(bool withLogger, bool initializeRngWithoutRadio = false) {
+inline void initNostr(bool withLogger, bool initializeRngWithoutRadio = false) {
     if (initializeRngWithoutRadio) bootloader_random_enable();
     nostr::Utils::setRandomBytesProvider(fillRandom);
     Utils::init();
@@ -96,17 +96,17 @@ void initNostr(bool withLogger, bool initializeRngWithoutRadio = false) {
         nostr::Utils::setLogger(serialLogger);
 }
 
-void close() {
+inline void close() {
     Utils::close();
 }
 
 /**
  * Get a platform specific transport
  */
-ESP32Transport *getTransport() {
+inline ESP32Transport *getTransport() {
     return new nostr::esp32::ESP32Transport();
 }
-ESP32Transport *getTransport(const ESP32TransportConfig &config) {
+inline ESP32Transport *getTransport(const ESP32TransportConfig &config) {
     return new nostr::esp32::ESP32Transport(config);
 }
 } // namespace ESP32Platform
