@@ -129,6 +129,14 @@ namespace nostr {
             NostrEOSECallback eoseCallback = nullptr
       
         );
+        NostrString subscribeMany(
+            const std::vector<NostrString> &urls,
+            std::initializer_list<
+                std::map<NostrString, std::initializer_list<NostrString>>>
+                filters,
+            NostrEventCallback eventCallback = nullptr,
+            NostrCloseCallback closeCallback = nullptr,
+            NostrEOSECallback eoseCallback = nullptr);
 
         /**
          * Subscribe to events from one or more relays
@@ -143,6 +151,10 @@ namespace nostr {
                                   NostrEventCallback eventCallback = nullptr, NostrCloseCallback closeCallback = nullptr, NostrEOSECallback eoseCallback = nullptr
 
         );
+        NostrString subscribeMany(const std::vector<NostrString> &urls, JsonArray filters,
+                                  NostrEventCallback eventCallback = nullptr,
+                                  NostrCloseCallback closeCallback = nullptr,
+                                  NostrEOSECallback eoseCallback = nullptr);
         /**
          * Publish a signed event to one or more relays. The pool will automatically start listening to the specified relays after publishing.
          * @param rs The relays to publish to
@@ -151,6 +163,8 @@ namespace nostr {
          */
         bool publish(std::initializer_list<NostrString> rs,
                      SignedNostrEvent *event,
+                     NostrEventStatusCallback statusCallback = nullptr);
+        bool publish(const std::vector<NostrString> &rs, SignedNostrEvent *event,
                      NostrEventStatusCallback statusCallback = nullptr);
 
         /**

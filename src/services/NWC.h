@@ -231,6 +231,11 @@ class NWC {
      */
     void subscribeNotifications(std::function<void(NotificationResponse)> onRes, std::function<void(NostrString, NostrString)> onErr);
 
+    /** Set the event tracking policy used by the managed pool. */
+    void setSeenTracker(NostrSeenCallback callback) {
+        if (this->pool != nullptr) this->pool->setSeenTracker(callback);
+    }
+
   private:
     struct PendingRequest {
         std::function<void()> send;

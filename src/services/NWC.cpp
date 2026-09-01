@@ -72,7 +72,7 @@ NWC::NWC(Transport *transport, NostrString nwcUrl, const NostrLimits &limits,
 
 void NWC::discoverEncryption() {
     this->infoSubId = this->pool->subscribeMany(
-        {this->nwc.relay},
+        this->nwc.relays,
         {{{"kinds", {NWC_INFO_KIND}}, {"authors", {this->nwc.pubkey}}}},
         [this](const NostrString &, SignedNostrEvent *event) {
             if (event == nullptr || event->getKind() != 13194 ||
@@ -277,7 +277,7 @@ NostrString NWC::sendEvent(SignedNostrEvent *event,
         return "";
     }
     NostrString subId = this->pool->subscribeMany(
-        {this->nwc.relay}, {{{"kinds", {NWC_RESPONSE_KIND}}, {"authors", {this->nwc.pubkey}}, {"#p", {this->accountPubKey}}, {"#e", {event->getId()}}}},
+        this->nwc.relays, {{{"kinds", {NWC_RESPONSE_KIND}}, {"authors", {this->nwc.pubkey}}, {"#p", {this->accountPubKey}}, {"#e", {event->getId()}}}},
         [&](const String &subId, nostr::SignedNostrEvent *event) {
             if (event->getKind() != 23195) return;
             if (!NostrString_equals(event->getPubkey(), this->nwc.pubkey)) return;
@@ -304,7 +304,7 @@ NostrString NWC::sendEvent(SignedNostrEvent *event,
         if (onErr) onErr("QUEUE_FULL", "Relay queue is full");
         return "";
     }
-    if (!this->pool->publish({this->nwc.relay}, event, [&](const NostrString &eventId, bool status, const NostrString &msg) {
+    if (!this->pool->publish(this->nwc.relays, event, [&](const NostrString &eventId, bool status, const NostrString &msg) {
         if (!status) {
             Utils::log("NWC: error sending event: " + msg);
         } else {
@@ -331,7 +331,7 @@ void NWC::subscribeNotifications(std::function<void(NotificationResponse)> onRes
                                                    ? NWC_NIP44_NOTIFICATION_KIND
                                                    : NWC_NIP04_NOTIFICATION_KIND;
     callback->subId = pool->subscribeMany(
-        {this->nwc.relay}, {{{"kinds", {notificationKindString}}, {"authors", {this->nwc.pubkey}}, {"#p", {this->accountPubKey}}}},
+        this->nwc.relays, {{{"kinds", {notificationKindString}}, {"authors", {this->nwc.pubkey}}, {"#p", {this->accountPubKey}}}},
         [&](const NostrString &subId, SignedNostrEvent *event) {
             if (event->getKind() != this->notificationKind) return;
             if (!NostrString_equals(event->getPubkey(), this->nwc.pubkey))  return;

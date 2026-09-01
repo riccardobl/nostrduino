@@ -70,14 +70,20 @@ void MockTransport::getInvoiceFromLNAddr(String, nostr::MilliSats, String,
 
 nostr::Connection *MockTransport::connect(String url) {
     connectedUrls.push_back(url);
-    if (connection == nullptr) connection = new MockConnection();
-    return connection;
+    MockConnection *created = new MockConnection();
+    connections.push_back(created);
+    if (connection == nullptr) connection = created;
+    return created;
 }
 
 void MockTransport::disconnect(nostr::Connection *target) {
-    if (target != connection) return;
-    delete connection;
-    connection = nullptr;
+    for (size_t i = 0; i < connections.size(); ++i) {
+        if (connections[i] != target) continue;
+        delete connections[i];
+        connections.erase(connections.begin() + i);
+        connection = connections.empty() ? nullptr : connections[0];
+        return;
+    }
 }
 
 bool MockTransport::isReady() {
@@ -85,7 +91,8 @@ bool MockTransport::isReady() {
 }
 
 void MockTransport::close() {
-    delete connection;
+    for (MockConnection *entry : connections) delete entry;
+    connections.clear();
     connection = nullptr;
 }
 

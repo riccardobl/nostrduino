@@ -33,6 +33,7 @@ class MockConnection : public nostr::Connection {
 class MockTransport : public nostr::Transport {
   public:
     MockConnection *connection = nullptr;
+    std::vector<MockConnection *> connections;
     std::vector<String> connectedUrls;
 
     void getInvoiceFromLNAddr(String address, nostr::MilliSats amount, String comment,

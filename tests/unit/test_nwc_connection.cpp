@@ -62,8 +62,9 @@ bool testNwcConnection() {
     MockTransport validTransport;
     nostr::NWC validClient(&validTransport, validUrl);
     CHECK(validClient.isValid());
-    CHECK(validTransport.connectedUrls.size() == 1);
+    CHECK(validTransport.connectedUrls.size() == 2);
     CHECK(validTransport.connectedUrls[0] == "wss://relay-one.example/v1");
+    CHECK(validTransport.connectedUrls[1] == "ws://relay-two.example:8080");
     validClient.close();
 
     return true;

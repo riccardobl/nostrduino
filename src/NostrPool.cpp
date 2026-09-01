@@ -170,6 +170,12 @@ void NostrPool::recomputeSubscriptionEose(const NostrString &subId) {
 
 NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, std::initializer_list<std::map<NostrString, std::initializer_list<NostrString>>> filters,
                                      NostrEventCallback eventCallback, NostrCloseCallback closeCallback, NostrEOSECallback eoseCallback) {
+    return this->subscribeMany(std::vector<NostrString>(urls), filters, eventCallback,
+                               closeCallback, eoseCallback);
+}
+
+NostrString NostrPool::subscribeMany(const std::vector<NostrString> &urls, std::initializer_list<std::map<NostrString, std::initializer_list<NostrString>>> filters,
+                                     NostrEventCallback eventCallback, NostrCloseCallback closeCallback, NostrEOSECallback eoseCallback) {
     JsonDocument doc;
     JsonArray filtersArray = doc["filtersArray"].to<JsonArray>();
     for (const auto &filter : filters) {
@@ -250,6 +256,14 @@ NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, st
 }
 
 NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, JsonArray filters, NostrEventCallback eventCallback, NostrCloseCallback closeCallback, NostrEOSECallback eoseCallback) {
+    return this->subscribeMany(std::vector<NostrString>(urls), filters, eventCallback,
+                               closeCallback, eoseCallback);
+}
+
+NostrString NostrPool::subscribeMany(const std::vector<NostrString> &urls, JsonArray filters,
+                                     NostrEventCallback eventCallback,
+                                     NostrCloseCallback closeCallback,
+                                     NostrEOSECallback eoseCallback) {
     if (urls.size() == 0) return "";
     for (JsonVariant filter : filters) {
         if (!filter.is<JsonObject>()) return "";
@@ -451,6 +465,11 @@ void NostrPool::flushDeferredMutations() {
 }
 
 bool NostrPool::publish(std::initializer_list<NostrString> rs, SignedNostrEvent *event, NostrEventStatusCallback statusCallback) {
+    return this->publish(std::vector<NostrString>(rs), event, statusCallback);
+}
+
+bool NostrPool::publish(const std::vector<NostrString> &rs, SignedNostrEvent *event,
+                        NostrEventStatusCallback statusCallback) {
     if (rs.size() == 0 || event == nullptr || !event->isValid()) return false;
     JsonDocument doc;
     JsonArray ev = doc.add<JsonArray>();
