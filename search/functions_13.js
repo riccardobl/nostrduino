@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['_7econnection_0',['~Connection',['../classnostr_1_1Connection.html#a8b3ae539c84b9de24c5db2071885b2c9',1,'nostr::Connection']]],
-  ['_7enostrevent_1',['~NostrEvent',['../classnostr_1_1NostrEvent.html#a0e5d5662e539f439e9071459a4d9dad5',1,'nostr::NostrEvent']]],
-  ['_7enwc_2',['~NWC',['../classnostr_1_1NWC.html#aa776fd16b22ee081a1ba837f7498edd2',1,'nostr::NWC']]],
-  ['_7enwcresponsecallbackbase_3',['~NWCResponseCallbackBase',['../classnostr_1_1NWCResponseCallbackBase.html#afe923535525c206b1c4a51b15a51ffa2',1,'nostr::NWCResponseCallbackBase']]],
-  ['_7etransport_4',['~Transport',['../classnostr_1_1Transport.html#af063ade88c53338ad4d7489c59b39625',1,'nostr::Transport']]]
+  ['validatebase64encoding_0',['validateBase64Encoding',['../namespacenostr.html#a2868159cff7eb9138cfa3782525e6c77',1,'nostr']]],
+  ['validatebolt11invoice_1',['validateBolt11Invoice',['../namespacenostr.html#a51b2e0e751307f3caa5eb02d785b9d91',1,'nostr']]],
+  ['verify_2',['verify',['../classnostr_1_1crypto_1_1UBitcoinBackend.html#a8c1423bb45afef4b733b6e6e21cacc57',1,'nostr::crypto::UBitcoinBackend::verify()'],['../classnostr_1_1SignedNostrEvent.html#a3b4d5bdc0c1799b97cdff7198c0de2ad',1,'nostr::SignedNostrEvent::verify()'],['../classnostr_1_1Utils.html#af0a29ee035dafd0a57c3a98ef10fb1f2',1,'nostr::Utils::verify()']]],
+  ['verifyrecoverableecdsa_3',['verifyRecoverableEcdsa',['../classnostr_1_1crypto_1_1UBitcoinBackend.html#a1e905db9da75ca3a41e0a183faaa4378',1,'nostr::crypto::UBitcoinBackend']]]
 ];

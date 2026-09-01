@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['getsboxinvert_0',['getSBoxInvert',['../NostrAES_8cpp.html#a4223d41bc5587f9c0b6e499004403967',1,'NostrAES.cpp']]],
-  ['getsboxvalue_1',['getSBoxValue',['../NostrAES_8cpp.html#a5e1678341a98f95d48365ed9ccaa3586',1,'NostrAES.cpp']]]
+  ['ecb_0',['ECB',['../NostrAES_8h.html#ab80203aded373ef3e2695b0903b53471',1,'NostrAES.h']]]
 ];

@@ -1,8 +1,22 @@
 var searchData=
 [
-  ['n_0',['n',['../classnostr_1_1NWCResponseCallbackBase.html#a3ab0eff64ab942a724e9744520f0c964',1,'nostr::NWCResponseCallbackBase']]],
-  ['network_1',['network',['../structnostr_1_1s__GetInfoResponse.html#ab731456e15cf89796232608fd69d81ec',1,'nostr::s_GetInfoResponse']]],
-  ['notification_2',['notification',['../structnostr_1_1s__NotificationResponse.html#a91b04d3a5ae0b3654110a09bf41f9fab',1,'nostr::s_NotificationResponse']]],
-  ['notifications_3',['notifications',['../structnostr_1_1s__GetInfoResponse.html#a8a2004e32540c472007d8511daafa5d9',1,'nostr::s_GetInfoResponse']]],
-  ['notificationtype_4',['notificationType',['../structnostr_1_1s__Nip47Notification.html#ac96c965a7939051e2c6d5a96aee4b0e5',1,'nostr::s_Nip47Notification']]]
+  ['maxeventcontentbytes_0',['maxEventContentBytes',['../structnostr_1_1NostrLimits.html#a2a6f0fe41f16c58a781fb8419c9f3484',1,'nostr::NostrLimits']]],
+  ['maxhttpresponsebytes_1',['maxHttpResponseBytes',['../structnostr_1_1NostrLimits.html#a6980e75494f6798814f85910f4db0754',1,'nostr::NostrLimits']]],
+  ['maxnip04ciphertextbytes_2',['maxNip04CiphertextBytes',['../structnostr_1_1NostrLimits.html#a7e512e0f77344ff64b3c43ee03e42a72',1,'nostr::NostrLimits']]],
+  ['maxnip04plaintextbytes_3',['maxNip04PlaintextBytes',['../structnostr_1_1NostrLimits.html#a3707feebe7a3c8f20392cb2579461d4b',1,'nostr::NostrLimits']]],
+  ['maxnip44payloadbytes_4',['maxNip44PayloadBytes',['../structnostr_1_1NostrLimits.html#a212d226eaebb40e849cc855de76f015c',1,'nostr::NostrLimits']]],
+  ['maxnip44plaintextbytes_5',['maxNip44PlaintextBytes',['../structnostr_1_1NostrLimits.html#a033bf43033604b6f3c565065d8331ff5',1,'nostr::NostrLimits']]],
+  ['maxnwcpendingrequests_6',['maxNwcPendingRequests',['../structnostr_1_1NostrLimits.html#a29f43b3a3691d165ef0bcb6de87be4eb',1,'nostr::NostrLimits']]],
+  ['maxrelaymessagebytes_7',['maxRelayMessageBytes',['../structnostr_1_1NostrLimits.html#a4e6b7f0557695d3de2b4ab1396b8fe7e',1,'nostr::NostrLimits']]],
+  ['maxrelayqueuedbytes_8',['maxRelayQueuedBytes',['../structnostr_1_1NostrLimits.html#a7a336798f213423d57f14d42123e7110',1,'nostr::NostrLimits']]],
+  ['maxrelayqueuedmessages_9',['maxRelayQueuedMessages',['../structnostr_1_1NostrLimits.html#adafccd7d8f08eaf84bfc5981cf8fe941',1,'nostr::NostrLimits']]],
+  ['maxsubscriptionidbytes_10',['maxSubscriptionIdBytes',['../structnostr_1_1NostrLimits.html#af48518faa38a9bc1f98ef5788f6996e2',1,'nostr::NostrLimits']]],
+  ['maxtagcount_11',['maxTagCount',['../structnostr_1_1NostrLimits.html#aa7befb278ec27b8db2c31029d3cd6885',1,'nostr::NostrLimits']]],
+  ['maxtagelementbytes_12',['maxTagElementBytes',['../structnostr_1_1NostrLimits.html#ab97eb0658864904cb9121570b5d8c374',1,'nostr::NostrLimits']]],
+  ['maxtagelements_13',['maxTagElements',['../structnostr_1_1NostrLimits.html#af7b1cc7c22b1cd07ff3cd8ebbad23660',1,'nostr::NostrLimits']]],
+  ['maxurlbytes_14',['maxUrlBytes',['../structnostr_1_1NostrLimits.html#a43dba53608bc206045e841e159f48fc7',1,'nostr::NostrLimits']]],
+  ['maxwebsocketmessagebytes_15',['maxWebSocketMessageBytes',['../structnostr_1_1NostrLimits.html#ae74d2720487dfae02af125d49ef875c8',1,'nostr::NostrLimits']]],
+  ['messagequeue_16',['messageQueue',['../classnostr_1_1NostrRelay.html#a0c9e582eb5dc99a49ae4bf496052f89c',1,'nostr::NostrRelay']]],
+  ['metadata_17',['metadata',['../structnostr_1_1s__MakeInvoiceResponse.html#ad2241bf2c41a0e0ba53739fae06a926b',1,'nostr::s_MakeInvoiceResponse::metadata'],['../structnostr_1_1s__LookUpInvoiceResponse.html#a5727912bcb707575f87296f87dff7ae5',1,'nostr::s_LookUpInvoiceResponse::metadata'],['../structnostr_1_1s__Transaction.html#ae8f0f65c8cf78a8a0e953319fecee35c',1,'nostr::s_Transaction::metadata'],['../structnostr_1_1s__Nip47Notification.html#a00c5d0c2fc0e14b644a69b674d556836',1,'nostr::s_Nip47Notification::metadata']]],
+  ['methods_18',['methods',['../structnostr_1_1s__GetInfoResponse.html#a8d8341c772deb30a61202afbd19b6e1d',1,'nostr::s_GetInfoResponse']]]
 ];

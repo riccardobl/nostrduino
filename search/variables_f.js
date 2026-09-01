@@ -1,10 +1,11 @@
 var searchData=
 [
-  ['tags_0',['tags',['../classnostr_1_1NostrEventTags.html#a5732417af566a9d62a268aa414153662',1,'nostr::NostrEventTags::tags'],['../classnostr_1_1NostrEvent.html#af3336c27b5d4158c9f20f42de5606bd5',1,'nostr::NostrEvent::tags']]],
-  ['timeoutseconds_1',['timeoutSeconds',['../classnostr_1_1NWCResponseCallbackBase.html#a439a4746e2ad063eb80595ab9a2dbb74',1,'nostr::NWCResponseCallbackBase']]],
-  ['timesecondsprovider_2',['timeSecondsProvider',['../classnostr_1_1Utils.html#a2b6c177c1e6138d0fbce8cf1f9db828a',1,'nostr::Utils']]],
-  ['timestampseconds_3',['timestampseconds',['../structnostr_1_1s__EventStatusCallbackEntry.html#a28d65d5353e527cdc50053bf10561625',1,'nostr::s_EventStatusCallbackEntry::timestampSeconds'],['../classnostr_1_1NWCResponseCallbackBase.html#a9cc13df78749e62d5c2f967bba5e30de',1,'nostr::NWCResponseCallbackBase::timestampSeconds']]],
-  ['tlv_4',['tlv',['../structnostr_1_1s__KeySend.html#a3a8b4e86ea8de97c704e9ed2b0df2c54',1,'nostr::s_KeySend']]],
-  ['transactions_5',['transactions',['../structnostr_1_1s__ListTransactionsResponse.html#a7fd6e179ba28b6f24b589921083e9697',1,'nostr::s_ListTransactionsResponse']]],
-  ['type_6',['type',['../structnostr_1_1s__TLVRecords.html#ae70d4a2a9a54e2e241d72216664dcd9c',1,'nostr::s_TLVRecords::type'],['../structnostr_1_1s__MakeInvoiceResponse.html#a1c2af5e4a031832157918c116d282573',1,'nostr::s_MakeInvoiceResponse::type'],['../structnostr_1_1s__LookUpInvoiceResponse.html#a2f09c87cb594d572f34c586b2df46cc6',1,'nostr::s_LookUpInvoiceResponse::type'],['../structnostr_1_1s__Transaction.html#a4d7ee082010c57d95e5916f4b0de0c65',1,'nostr::s_Transaction::type'],['../structnostr_1_1s__Nip47Notification.html#af500583cf81afab73c107ec1a4b426c8',1,'nostr::s_Nip47Notification::type']]]
+  ['randombytesprovider_0',['randomBytesProvider',['../classnostr_1_1Utils.html#af4eec5d485ec4f103b6f6c24a847d027',1,'nostr::Utils']]],
+  ['relay_1',['relay',['../structnostr_1_1s__NWCData.html#a70082c745e79ea268c3c64c327887460',1,'nostr::s_NWCData']]],
+  ['relays_2',['relays',['../structnostr_1_1s__NWCData.html#a2c04b785ac57a71e508cfbb94068f6be',1,'nostr::s_NWCData']]],
+  ['requiresitemid_3',['requiresItemId',['../classnostr_1_1NWCResponseCallbackBase.html#ab7be93a2e192fb45992fff8060581935',1,'nostr::NWCResponseCallbackBase']]],
+  ['restoresubscriptions_4',['restoreSubscriptions',['../classnostr_1_1NostrRelay.html#a828df80bf8fe00ca9953b8847a346f5a',1,'nostr::NostrRelay']]],
+  ['result_5',['result',['../classnostr_1_1Nip47Response.html#a4a1f71e17c1e175256f4927a8294bfe8',1,'nostr::Nip47Response']]],
+  ['resulttype_6',['resultType',['../classnostr_1_1Nip47Response.html#aee914909ea62c8ddd6f18e93aa6adb30',1,'nostr::Nip47Response']]],
+  ['roundkey_7',['RoundKey',['../structAES__ctx.html#aa475fe62fd5774891c7a42596f6d9c2e',1,'AES_ctx']]]
 ];

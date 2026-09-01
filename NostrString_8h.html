@@ -80,8 +80,8 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;string&gt;</code><br />
-<code>#include &quot;<a class="el" href="NostrUtils_8h_source.html">NostrUtils.h</a>&quot;</code><br />
 <code>#include &lt;vector&gt;</code><br />
+<code>#include &quot;<a class="el" href="NostrAmount_8h_source.html">NostrAmount.h</a>&quot;</code><br />
 </div>
 <p><a href="NostrString_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -98,6 +98,10 @@ Functions</h2></td></tr>
 <tr class="separator:a3601961133b29733de310240c5054e23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aabf2c99bb9529aee18b26f94a87170ad" id="r_aabf2c99bb9529aee18b26f94a87170ad"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NostrString_8h.html#aabf2c99bb9529aee18b26f94a87170ad">NostrString_fromChars</a> (char *chars)</td></tr>
 <tr class="separator:aabf2c99bb9529aee18b26f94a87170ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a18a4011b98bcfb9233066d70e524bd" id="r_a0a18a4011b98bcfb9233066d70e524bd"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NostrString_8h.html#a0a18a4011b98bcfb9233066d70e524bd">NostrString_fromBytes</a> (const char *bytes, size_t byteCount)</td></tr>
+<tr class="separator:a0a18a4011b98bcfb9233066d70e524bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0f85ae0c45d8139977fc10226003e2e" id="r_ae0f85ae0c45d8139977fc10226003e2e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NostrString_8h.html#ae0f85ae0c45d8139977fc10226003e2e">NostrString_appendBytes</a> (std::string &amp;target, const char *bytes, size_t byteCount, size_t maxSize)</td></tr>
+<tr class="separator:ae0f85ae0c45d8139977fc10226003e2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5037c7ee5549e19e5995aaa5c2af139e" id="r_a5037c7ee5549e19e5995aaa5c2af139e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NostrString_8h.html#a5037c7ee5549e19e5995aaa5c2af139e">NostrString_startsWith</a> (const std::string &amp;str, const char *prefix)</td></tr>
 <tr class="separator:a5037c7ee5549e19e5995aaa5c2af139e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81ec406c3051526110d2ebc3b158a15e" id="r_a81ec406c3051526110d2ebc3b158a15e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NostrString_8h.html#a81ec406c3051526110d2ebc3b158a15e">NostrString_substring</a> (const std::string &amp;str, int start, int end)</td></tr>
@@ -122,6 +126,8 @@ Functions</h2></td></tr>
 <tr class="separator:a85ae5d4bec40327bb0516a4fe73157d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:accc0ef4e3f552087b0258bb29b32ec7c" id="r_accc0ef4e3f552087b0258bb29b32ec7c"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NostrString_8h.html#accc0ef4e3f552087b0258bb29b32ec7c">NostrString_fromUInt</a> (unsigned long long i)</td></tr>
 <tr class="separator:accc0ef4e3f552087b0258bb29b32ec7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4de0a42ca2b2f97c32ec89425a346f3" id="r_ab4de0a42ca2b2f97c32ec89425a346f3"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NostrString_8h.html#ab4de0a42ca2b2f97c32ec89425a346f3">NostrString_fromMilliSats</a> (<a class="el" href="namespacenostr.html#acbec7058b7c6b677933281b17e03e509">nostr::MilliSats</a> i)</td></tr>
+<tr class="separator:ab4de0a42ca2b2f97c32ec89425a346f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60ee1251d0db15fb2f301a182aa9f6b1" id="r_a60ee1251d0db15fb2f301a182aa9f6b1"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NostrString_8h.html#a60ee1251d0db15fb2f301a182aa9f6b1">NostrString_urlEncode</a> (const std::string &amp;str)</td></tr>
 <tr class="separator:a60ee1251d0db15fb2f301a182aa9f6b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -141,6 +147,46 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="ae0f85ae0c45d8139977fc10226003e2e" name="ae0f85ae0c45d8139977fc10226003e2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0f85ae0c45d8139977fc10226003e2e">&#9670;&#160;</a></span>NostrString_appendBytes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool NostrString_appendBytes </td>
+          <td>(</td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>target</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>bytes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>byteCount</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>maxSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a85ae5d4bec40327bb0516a4fe73157d3" name="a85ae5d4bec40327bb0516a4fe73157d3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a85ae5d4bec40327bb0516a4fe73157d3">&#9670;&#160;</a></span>NostrString_equals()</h2>
 
@@ -169,6 +215,34 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a0a18a4011b98bcfb9233066d70e524bd" name="a0a18a4011b98bcfb9233066d70e524bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a18a4011b98bcfb9233066d70e524bd">&#9670;&#160;</a></span>NostrString_fromBytes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string NostrString_fromBytes </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>bytes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>byteCount</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aabf2c99bb9529aee18b26f94a87170ad" name="aabf2c99bb9529aee18b26f94a87170ad"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aabf2c99bb9529aee18b26f94a87170ad">&#9670;&#160;</a></span>NostrString_fromChars()</h2>
 
@@ -180,6 +254,24 @@ Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">char *&#160;</td>
           <td class="paramname"><em>chars</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab4de0a42ca2b2f97c32ec89425a346f3" name="ab4de0a42ca2b2f97c32ec89425a346f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4de0a42ca2b2f97c32ec89425a346f3">&#9670;&#160;</a></span>NostrString_fromMilliSats()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string NostrString_fromMilliSats </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacenostr.html#acbec7058b7c6b677933281b17e03e509">nostr::MilliSats</a>&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
           <td></td>
         </tr>
       </table>

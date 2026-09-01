@@ -7,6 +7,7 @@ var searchData=
   ['nostreventstatuscallback_4',['NostrEventStatusCallback',['../namespacenostr.html#a83396304773c199d3c6613e50113ac71',1,'nostr']]],
   ['nostreventtag_5',['NostrEventTag',['../namespacenostr.html#ab1b5a1ecddfc940a74946e6dd11d8c53',1,'nostr']]],
   ['nostrnoticecallback_6',['NostrNoticeCallback',['../namespacenostr.html#aa33fbe158a46ab4fc7d840c432df7227',1,'nostr']]],
-  ['notificationresponse_7',['NotificationResponse',['../namespacenostr.html#af0f516c7dba0ba6555f320d629da8201',1,'nostr']]],
-  ['nwcdata_8',['NWCData',['../namespacenostr.html#acd41d0899a1d0f921c44a1a91b6c0eed',1,'nostr']]]
+  ['nostrseencallback_7',['NostrSeenCallback',['../namespacenostr.html#a096beb60068c7b64f85721b525450b33',1,'nostr']]],
+  ['notificationresponse_8',['NotificationResponse',['../namespacenostr.html#af0f516c7dba0ba6555f320d629da8201',1,'nostr']]],
+  ['nwcdata_9',['NWCData',['../namespacenostr.html#acd41d0899a1d0f921c44a1a91b6c0eed',1,'nostr']]]
 ];

@@ -6,5 +6,6 @@ var searchData=
   ['closesubscription_3',['closeSubscription',['../classnostr_1_1NostrPool.html#ab862d897213cbb3a7c39387253b2122b',1,'nostr::NostrPool']]],
   ['connect_4',['connect',['../classnostr_1_1Transport.html#a175a60b591baec57d4f492e9eaaa1305',1,'nostr::Transport']]],
   ['connection_5',['Connection',['../classnostr_1_1Connection.html#a25209362646ddc87d77b31aea484e3de',1,'nostr::Connection']]],
-  ['count_6',['count',['../classnostr_1_1NostrEventTags.html#af893816d95d8514db7c99e34110d05fa',1,'nostr::NostrEventTags']]]
+  ['conversationkey_6',['conversationKey',['../classnostr_1_1Nip44.html#a695f52d360a235bcd99247ec0595c066',1,'nostr::Nip44']]],
+  ['count_7',['count',['../classnostr_1_1NostrEventTags.html#af893816d95d8514db7c99e34110d05fa',1,'nostr::NostrEventTags']]]
 ];

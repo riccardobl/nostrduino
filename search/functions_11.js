@@ -1,5 +1,8 @@
 var searchData=
 [
-  ['unixtimeseconds_0',['unixTimeSeconds',['../classnostr_1_1Utils.html#ac3406b5afa052bec36e3fed2d95e33f8',1,'nostr::Utils']]],
-  ['unsignednostrevent_1',['unsignednostrevent',['../classnostr_1_1UnsignedNostrEvent.html#afddaa21707d84bf6b1a9e34576f5e7c9',1,'nostr::UnsignedNostrEvent::UnsignedNostrEvent()'],['../classnostr_1_1UnsignedNostrEvent.html#ace30203c0db0e13db4f949a6bf86ec97',1,'nostr::UnsignedNostrEvent::UnsignedNostrEvent(unsigned int kind, NostrString content, unsigned long int created_at)']]]
+  ['tobase64_0',['toBase64',['../classnostr_1_1Utils.html#ac63b63268f625bce95f10101055d419a',1,'nostr::Utils']]],
+  ['tohex_1',['toHex',['../classnostr_1_1Utils.html#a5187b6a0a702f2c17f2813da555e67a8',1,'nostr::Utils']]],
+  ['tojson_2',['tojson',['../classnostr_1_1NostrEventTags.html#a8b9c8af2dfc40c4523a0aabff4a533c5',1,'nostr::NostrEventTags::toJson()'],['../classnostr_1_1SignedNostrEvent.html#a584d0a4b4a7971b0ae1564f085bd8b00',1,'nostr::SignedNostrEvent::toJson(JsonObject doc) const']]],
+  ['tosendableevent_3',['toSendableEvent',['../classnostr_1_1SignedNostrEvent.html#a651d3b4a88cf616c81147feec9a5cfb1',1,'nostr::SignedNostrEvent']]],
+  ['transport_4',['Transport',['../classnostr_1_1Transport.html#a87434e88eff5bc156ce6ef4a0f9e4d41',1,'nostr::Transport']]]
 ];

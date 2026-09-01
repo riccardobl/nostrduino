@@ -85,8 +85,10 @@ $(function() {
 <code>#include &lt;functional&gt;</code><br />
 <code>#include &lt;initializer_list&gt;</code><br />
 <code>#include &lt;map&gt;</code><br />
+<code>#include &lt;mutex&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
 <code>#include &quot;<a class="el" href="NostrString_8h_source.html">NostrString.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="NostrLimits_8h_source.html">NostrLimits.h</a>&quot;</code><br />
 <code>#include &quot;ArduinoJson.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="NostrEvent_8h_source.html">NostrEvent.h</a>&quot;</code><br />
 </div>
@@ -94,6 +96,8 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Data Structures</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnostr_1_1NostrRelaySubscriptionState.html">nostr::NostrRelaySubscriptionState</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnostr_1_1NostrSubscription.html">nostr::NostrSubscription</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnostr_1_1s__EventStatusCallbackEntry.html">nostr::s_EventStatusCallbackEntry</a></td></tr>
@@ -120,6 +124,8 @@ Typedefs</h2></td></tr>
 <tr class="separator:ab0da4b375d4d7eda0bb0bf1010f381bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a83396304773c199d3c6613e50113ac71" id="r_a83396304773c199d3c6613e50113ac71"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classnostr_1_1Nip47Response.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenostr.html#a83396304773c199d3c6613e50113ac71">nostr::NostrEventStatusCallback</a> = std::function&lt; <a class="el" href="classnostr_1_1Nip47Response.html">void</a>(<a class="el" href="classnostr_1_1Nip47Response.html">const</a> <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> &amp;, <a class="el" href="classnostr_1_1Nip47Response.html">bool</a>, <a class="el" href="classnostr_1_1Nip47Response.html">const</a> <a class="el" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> &amp;)&gt;</td></tr>
 <tr class="separator:a83396304773c199d3c6613e50113ac71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a096beb60068c7b64f85721b525450b33" id="r_a096beb60068c7b64f85721b525450b33"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classnostr_1_1Nip47Response.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenostr.html#a096beb60068c7b64f85721b525450b33">nostr::NostrSeenCallback</a> = std::function&lt; <a class="el" href="classnostr_1_1Nip47Response.html">bool</a>(<a class="el" href="classnostr_1_1Nip47Response.html">const</a> <a class="el" href="classnostr_1_1SignedNostrEvent.html">SignedNostrEvent</a> &amp;)&gt;</td></tr>
+<tr class="separator:a096beb60068c7b64f85721b525450b33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1039ef652375f3083d4a016df66a906c" id="r_a1039ef652375f3083d4a016df66a906c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classnostr_1_1Nip47Response.html">typedef</a> <a class="el" href="classnostr_1_1Nip47Response.html">struct</a> <a class="el" href="structnostr_1_1s__EventStatusCallbackEntry.html">nostr::s_EventStatusCallbackEntry</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenostr.html#a1039ef652375f3083d4a016df66a906c">nostr::EventStatusCallbackEntry</a></td></tr>
 <tr class="separator:a1039ef652375f3083d4a016df66a906c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>

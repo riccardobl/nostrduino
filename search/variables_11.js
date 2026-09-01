@@ -1,4 +1,10 @@
 var searchData=
 [
-  ['value_0',['value',['../structnostr_1_1s__TLVRecords.html#a76997f69bae788ce62355110121c3cca',1,'nostr::s_TLVRecords::value'],['../structnostr_1_1s__NostrEventTag.html#a7be407635f4384230bf90d628dc74148',1,'nostr::s_NostrEventTag::value']]]
+  ['tags_0',['tags',['../classnostr_1_1NostrEventTags.html#a5732417af566a9d62a268aa414153662',1,'nostr::NostrEventTags::tags'],['../classnostr_1_1NostrEvent.html#af3336c27b5d4158c9f20f42de5606bd5',1,'nostr::NostrEvent::tags']]],
+  ['timeoutseconds_1',['timeoutSeconds',['../classnostr_1_1NWCResponseCallbackBase.html#a439a4746e2ad063eb80595ab9a2dbb74',1,'nostr::NWCResponseCallbackBase']]],
+  ['timesecondsprovider_2',['timeSecondsProvider',['../classnostr_1_1Utils.html#a2b6c177c1e6138d0fbce8cf1f9db828a',1,'nostr::Utils']]],
+  ['timestampseconds_3',['timestampseconds',['../structnostr_1_1s__EventStatusCallbackEntry.html#a28d65d5353e527cdc50053bf10561625',1,'nostr::s_EventStatusCallbackEntry::timestampSeconds'],['../classnostr_1_1NWCResponseCallbackBase.html#a9cc13df78749e62d5c2f967bba5e30de',1,'nostr::NWCResponseCallbackBase::timestampSeconds']]],
+  ['tlv_4',['tlv',['../structnostr_1_1s__KeySend.html#a0cba7e32ae77c7e67833bc1258b640c9',1,'nostr::s_KeySend']]],
+  ['transactions_5',['transactions',['../structnostr_1_1s__ListTransactionsResponse.html#a7fd6e179ba28b6f24b589921083e9697',1,'nostr::s_ListTransactionsResponse']]],
+  ['type_6',['type',['../structnostr_1_1s__TLVRecords.html#ac7a7acd6dc29d2c989de59f74061ce53',1,'nostr::s_TLVRecords::type'],['../structnostr_1_1s__MakeInvoiceResponse.html#a1c2af5e4a031832157918c116d282573',1,'nostr::s_MakeInvoiceResponse::type'],['../structnostr_1_1s__LookUpInvoiceResponse.html#a2f09c87cb594d572f34c586b2df46cc6',1,'nostr::s_LookUpInvoiceResponse::type'],['../structnostr_1_1s__Transaction.html#a4d7ee082010c57d95e5916f4b0de0c65',1,'nostr::s_Transaction::type'],['../structnostr_1_1s__Nip47Notification.html#af500583cf81afab73c107ec1a4b426c8',1,'nostr::s_Nip47Notification::type']]]
 ];

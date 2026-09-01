@@ -72,16 +72,17 @@ $(function() {
   <div class="headertitle"><div class="title">Nostrduino </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="md_README"></a> A <a href="https://github.com/nbd-wtf/nostr-tools">nostr-tools</a> inspired library for Arduino (and others).</p>
+<div class="textblock"><p><a class="anchor" id="md_README"></a> A <a href="https://github.com/nbd-wtf/nostr-tools">nostr-tools</a> inspired Nostr library for Arduino ESP32.</p>
 <p>This was created using <a href="https://github.com/lnbits/arduino-nostr">arduino-nostr</a> as starting point, most of the code was rewritten and the library was expanded to include more features.</p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Compatibility</h1>
-<p>This library is compatible with esp32 based boards out of the box. But it can be ported to other boards by reimplementing the platform specific code in the <code>src/esp32</code>.</p>
+<p>This library supports ESP32 boards using the Arduino framework.</p>
 <h1><a class="anchor" id="autotoc_md2"></a>
 Features</h1>
 <ul>
 <li><a href="https://github.com/nostr-protocol/nips/blob/master/01.md">Nip01</a> : Basic protocol flow</li>
 <li><a href="https://github.com/nostr-protocol/nips/blob/master/04.md">Nip04</a> : Encrypted messages</li>
+<li><a href="https://github.com/nostr-protocol/nips/blob/master/44.md">Nip44</a> : Version 2 encrypted messages</li>
 <li><a href="https://github.com/nostr-protocol/nips/blob/master/47.md">Nip47</a> : Nostr Wallet Connect</li>
 <li><a href="https://lightningaddress.com/">(bonus) Lightning Address</a> : Can request invoices from lightning addresses</li>
 <li><a href="src/services/NWC.h">NWC managed service</a> : A managed service to interact with NWC</li>
@@ -95,42 +96,87 @@ Installation</h1>
 <p>Check the <a href="https://registry.platformio.org/libraries/rblb/Nostrduino/installation">platformio registry page</a> for instructions.</p>
 <h2><a class="anchor" id="autotoc_md5"></a>
 ESP32 dependencies</h2>
-<p>This library depends on the following additional libraries for the esp32 platform:</p><ul>
+<p>This library depends on the following libraries for the ESP32 platform:</p><ul>
 <li>ArduinoJson (&gt;=7.1.0)</li>
-<li>uBitcoin (&gt;=0.2.0)</li>
 <li>WebSockets (&gt;=2.4.1)</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md6"></a>
+<p>uBitcoin is the only elliptic-curve backend. Version 0.2.0 is pinned as the <code>src/uBitcoin</code> git submodule.</p>
+<p>When building from a git checkout, initialize the pinned source with:</p>
+<div class="fragment"><div class="line">git submodule update --init src/uBitcoin</div>
+</div><!-- fragment --><p>Registry packages already contain the required submodule sources.</p>
+<h2><a class="anchor" id="autotoc_md6"></a>
+ESP32 entropy modes</h2>
+<p><code>ESP32Platform::initNostr(bool withLogger, bool initializeRngWithoutRadio = false)</code></p>
+<p>when initializing the library, leave the second argument at <code>false</code> when the application uses or will start Wi-Fi or Bluetooth.</p>
+<p>Firmware that does not use and will not start Wi-Fi or Bluetooth must enable the explicit offline mode:</p>
+<div class="fragment"><div class="line">nostr::esp32::ESP32Platform::initNostr(<span class="keyword">true</span>, <span class="keyword">true</span>);</div>
+</div><!-- fragment --><p>With this option, Nostrduino calls <code>bootloader_random_enable()</code> before the normal initialization so <code>esp_fill_random</code> has the offline entropy source needed by cryptographic operations.</p>
+<p><b>This is a radio-free/offline mode only, when using Wi-Fi or Bluetooth the entropy source is provided by the ESP32 radio and the second argument must be <code>false</code>.</b></p>
+<p>Do not start Wi-Fi, Bluetooth, ADC or I2S after enabling it without first calling <code>bootloader_random_disable()</code> and handling the transition required by the installed ESP-IDF; that lifecycle remains the application's responsibility.</p>
+<h2><a class="anchor" id="autotoc_md7"></a>
+TLS configuration</h2>
+<p>The default ESP32 transport accepts TLS connections without certificate validation to keep CA provisioning optional on constrained ESP32 deployments. For certificate validation, provide a PEM CA and require it:</p>
+<div class="fragment"><div class="line">nostr::esp32::ESP32TransportConfig config;</div>
+<div class="line">config.tls.caCertificatePem = MY_ROOT_CA_PEM;</div>
+<div class="line">config.tls.requireCertificateValidation = <span class="keyword">true</span>;</div>
+<div class="line"><a class="code hl_class" href="classnostr_1_1Transport.html">nostr::Transport</a> *transport = nostr::esp32::ESP32Platform::getTransport(config);</div>
+<div class="ttc" id="aclassnostr_1_1Transport_html"><div class="ttname"><a href="classnostr_1_1Transport.html">nostr::Transport</a></div><div class="ttdef"><b>Definition</b> NostrTransport.h:21</div></div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md8"></a>
 Usage</h1>
-<p>See the example scripts in <code>examples/</code> for simple examples of how to use this library.</p>
-<h1><a class="anchor" id="autotoc_md7"></a>
+<p>See the example scripts in <code>examples/</code> for simple examples of how to use this library. </p><blockquote class="doxtable">
+<p>&zwj;[!IMPORTANT] <code>NostrPool</code> deliberately accepts structurally valid relay events without cryptographic verification by default. Applications that use author identity or event contents as a security boundary should enable automatic verification with </p>
+</blockquote>
+<p><code>pool.setVerifyIncomingEvents(true)</code> or call <code>SignedNostrEvent::verify()</code> explicitly. </p><blockquote class="doxtable">
+<p>&zwj; <b>Managed NWC responses are verified explicitly regardless of this pool setting.</b> </p>
+</blockquote>
+<h2><a class="anchor" id="autotoc_md9"></a>
+Event tracking</h2>
+<p><code>NostrPool</code> does not keep a list of received event IDs by default. This avoids reserving memory for an application-specific cache on constrained devices. A relay may therefore deliver the same event more than once, especially when a subscription uses multiple relays.</p>
+<p>Use <code>setSeenTracker()</code> to provide a tracking policy suited to the device. The callback must return <code>true</code> for an event that should be discarded. When it returns <code>false</code>, the pool delivers the event to the subscription callback. Calls to the tracking callback are serialized by the pool.</p>
+<div class="fragment"><div class="line">std::vector&lt;nostr::NostrString&gt; seenIds;</div>
+<div class="line"><span class="keyword">const</span> <span class="keywordtype">size_t</span> maxSeenEvents = 32;</div>
+<div class="line">seenIds.reserve(maxSeenEvents);</div>
+<div class="line"> </div>
+<div class="line">pool.setSeenTracker([&amp;](<span class="keyword">const</span> <a class="code hl_class" href="classnostr_1_1SignedNostrEvent.html">nostr::SignedNostrEvent</a> &amp;event) {</div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keyword">const</span> nostr::NostrString &amp;<span class="keywordtype">id</span> : seenIds) {</div>
+<div class="line">        <span class="keywordflow">if</span> (<span class="keywordtype">id</span> == event.<a class="code hl_function" href="classnostr_1_1SignedNostrEvent.html#ab6fdfaab37e93428fdc0c25bede595e0">getId</a>()) <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="keywordflow">if</span> (seenIds.size() == maxSeenEvents) seenIds.erase(seenIds.begin());</div>
+<div class="line">    seenIds.push_back(event.<a class="code hl_function" href="classnostr_1_1SignedNostrEvent.html#ab6fdfaab37e93428fdc0c25bede595e0">getId</a>());</div>
+<div class="line">    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line">});</div>
+<div class="ttc" id="aclassnostr_1_1SignedNostrEvent_html"><div class="ttname"><a href="classnostr_1_1SignedNostrEvent.html">nostr::SignedNostrEvent</a></div><div class="ttdef"><b>Definition</b> NostrEvent.h:130</div></div>
+<div class="ttc" id="aclassnostr_1_1SignedNostrEvent_html_ab6fdfaab37e93428fdc0c25bede595e0"><div class="ttname"><a href="classnostr_1_1SignedNostrEvent.html#ab6fdfaab37e93428fdc0c25bede595e0">nostr::SignedNostrEvent::getId</a></div><div class="ttdeci">NostrString getId() const</div><div class="ttdef"><b>Definition</b> NostrEvent.h:147</div></div>
+</div><!-- fragment --><p>The application chooses the cache size, lookup strategy and eviction policy. Calling <code>pool.setSeenTracker(nullptr)</code> restores the default pass-through behavior.</p>
+<h1><a class="anchor" id="autotoc_md10"></a>
 Development</h1>
-<h2><a class="anchor" id="autotoc_md8"></a>
+<h2><a class="anchor" id="autotoc_md11"></a>
 Setting up the build environment</h2>
 <div class="fragment"><div class="line"># create venv</div>
 <div class="line">python3 -m venv venv</div>
 <div class="line"># activate venv</div>
 <div class="line">source venv/bin/activate</div>
 <div class="line"># install platformio</div>
-<div class="line">pip install platformio</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md9"></a>
-Compiling Tests</h2>
-<h3><a class="anchor" id="autotoc_md10"></a>
-Test NIP01</h3>
+<div class="line">pip install platformio==6.1.18</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md12"></a>
+Example firmware builds</h2>
+<p>The following commands only build the example firmware; they are not the unit-test gate.</p>
+<h3><a class="anchor" id="autotoc_md13"></a>
+NIP01 example</h3>
 <p>Edit <code>examples/ESP32TestNip01/ESP32TestNip01.cpp</code> and set the <code>WIFI_SSID</code>, <code>WIFI_PASS</code> and <code>WIFI_CHANNEL</code>.</p>
 <p>Then compile with: </p><div class="fragment"><div class="line">pio run -e ESP32TestNip01</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md11"></a>
-Test NIP04</h2>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md14"></a>
+NIP04 example</h2>
 <p>Compile with: </p><div class="fragment"><div class="line">pio run -e ESP32TestNip04</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md12"></a>
-Test NWC</h2>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md15"></a>
+NWC example</h2>
 <p>Edit <code>examples/ESP32TestNWC/ESP32TestNWC.cpp</code> and set the <code>WIFI_SSID</code>, <code>WIFI_PASS</code> , <code>WIFI_CHANNEL</code> and <code>NWC_URL</code>. NB: you can get a nwc url from <a href="https://nwc.getalby.com/">https://nwc.getalby.com/</a> or <a href="https://app.mutinywallet.com/settings/connections">https://app.mutinywallet.com/settings/connections</a>.</p>
 <p>Then compile with: </p><div class="fragment"><div class="line">pio run -e ESP32TestNWC</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md13"></a>
-Running tests</h2>
-<p>You can upload the compiled tests to your ESP32 with: </p><div class="fragment"><div class="line">pio run -e TEST_NAME -t upload</div>
-</div><!-- fragment --><p>or use an emulator like <a href="https://wokwi.com/">wokwi</a>. </p>
-</div></div><!-- PageDoc -->
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md16"></a>
+Running the unit tests</h2>
+<div class="fragment"><div class="line">bash tests/unit/run.sh</div>
+</div><!-- fragment --> </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

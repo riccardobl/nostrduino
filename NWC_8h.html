@@ -76,12 +76,14 @@ $(function() {
   <div class="summary">
 <a href="#nested-classes">Data Structures</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#define-members">Macros</a>  </div>
+<a href="#define-members">Macros</a> &#124;
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle"><div class="title">NWC.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;functional&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 <code>#include &quot;ArduinoJson.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="Nip47_8h_source.html">Nip47.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="NostrEvent_8h_source.html">NostrEvent.h</a>&quot;</code><br />
@@ -108,14 +110,25 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:abaac039bb483d30ad1a018966751d33e" id="r_abaac039bb483d30ad1a018966751d33e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NWC_8h.html#abaac039bb483d30ad1a018966751d33e">NWC_INFO_KIND</a>&#160;&#160;&#160;&quot;13194&quot;</td></tr>
+<tr class="separator:abaac039bb483d30ad1a018966751d33e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a893e709f639b0f41416980664c85a940" id="r_a893e709f639b0f41416980664c85a940"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NWC_8h.html#a893e709f639b0f41416980664c85a940">NWC_RESPONSE_KIND</a>&#160;&#160;&#160;&quot;23195&quot;</td></tr>
 <tr class="separator:a893e709f639b0f41416980664c85a940"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07cfbc093c0619d089fa2497d10d42b4" id="r_a07cfbc093c0619d089fa2497d10d42b4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NWC_8h.html#a07cfbc093c0619d089fa2497d10d42b4">NWC_NOTIFICATION_KIND</a>&#160;&#160;&#160;&quot;23196&quot;</td></tr>
-<tr class="separator:a07cfbc093c0619d089fa2497d10d42b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b62e6d8fe9c27e7fc85082718d9ff41" id="r_a8b62e6d8fe9c27e7fc85082718d9ff41"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NWC_8h.html#a8b62e6d8fe9c27e7fc85082718d9ff41">NWC_NIP04_NOTIFICATION_KIND</a>&#160;&#160;&#160;&quot;23196&quot;</td></tr>
+<tr class="separator:a8b62e6d8fe9c27e7fc85082718d9ff41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a535c71df7e140b64ab543da88aca43cd" id="r_a535c71df7e140b64ab543da88aca43cd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NWC_8h.html#a535c71df7e140b64ab543da88aca43cd">NWC_NIP44_NOTIFICATION_KIND</a>&#160;&#160;&#160;&quot;23197&quot;</td></tr>
+<tr class="separator:a535c71df7e140b64ab543da88aca43cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac52a3da122311a0dac98f80815156279" id="r_ac52a3da122311a0dac98f80815156279"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NWC_8h.html#ac52a3da122311a0dac98f80815156279">NWC_DEFAULT_TIMEOUT</a>&#160;&#160;&#160;(60 * 10)</td></tr>
 <tr class="separator:ac52a3da122311a0dac98f80815156279"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0b5b6c73a29252e21de9a948f7398c5" id="r_ac0b5b6c73a29252e21de9a948f7398c5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NWC_8h.html#ac0b5b6c73a29252e21de9a948f7398c5">NWC_INFINITE_TIMEOUT</a>&#160;&#160;&#160;(0xFFFFFFFF)</td></tr>
 <tr class="separator:ac0b5b6c73a29252e21de9a948f7398c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a1f4e2924cdc7a40c38a070efc9722289" id="r_a1f4e2924cdc7a40c38a070efc9722289"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenostr.html#a1f4e2924cdc7a40c38a070efc9722289">nostr::NWCEncryptionPolicy</a> { <a class="el" href="namespacenostr.html#a1f4e2924cdc7a40c38a070efc9722289a837ddda71f7e5a10fb7c32e95817e2cd">nostr::RequireNip44</a>
+, <a class="el" href="namespacenostr.html#a1f4e2924cdc7a40c38a070efc9722289ad99a1b804944e7b4d9ba1b6e3f0c6dad">nostr::AllowLegacyNip04</a>
+ }</td></tr>
+<tr class="separator:a1f4e2924cdc7a40c38a070efc9722289"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="ac52a3da122311a0dac98f80815156279" name="ac52a3da122311a0dac98f80815156279"></a>
@@ -146,14 +159,42 @@ Macros</h2></td></tr>
 
 </div>
 </div>
-<a id="a07cfbc093c0619d089fa2497d10d42b4" name="a07cfbc093c0619d089fa2497d10d42b4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a07cfbc093c0619d089fa2497d10d42b4">&#9670;&#160;</a></span>NWC_NOTIFICATION_KIND</h2>
+<a id="abaac039bb483d30ad1a018966751d33e" name="abaac039bb483d30ad1a018966751d33e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abaac039bb483d30ad1a018966751d33e">&#9670;&#160;</a></span>NWC_INFO_KIND</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define NWC_NOTIFICATION_KIND&#160;&#160;&#160;&quot;23196&quot;</td>
+          <td class="memname">#define NWC_INFO_KIND&#160;&#160;&#160;&quot;13194&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8b62e6d8fe9c27e7fc85082718d9ff41" name="a8b62e6d8fe9c27e7fc85082718d9ff41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b62e6d8fe9c27e7fc85082718d9ff41">&#9670;&#160;</a></span>NWC_NIP04_NOTIFICATION_KIND</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define NWC_NIP04_NOTIFICATION_KIND&#160;&#160;&#160;&quot;23196&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a535c71df7e140b64ab543da88aca43cd" name="a535c71df7e140b64ab543da88aca43cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a535c71df7e140b64ab543da88aca43cd">&#9670;&#160;</a></span>NWC_NIP44_NOTIFICATION_KIND</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define NWC_NIP44_NOTIFICATION_KIND&#160;&#160;&#160;&quot;23197&quot;</td>
         </tr>
       </table>
 </div><div class="memdoc">

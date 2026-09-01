@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['error_0',['ERROR',['../namespacenostr.html#a9e024483543fd2f2ca5116fd86e38c3cabb1ca97ec761fc37101737ba0aa2e7c5',1,'nostr']]]
+  ['disconnected_0',['DISCONNECTED',['../namespacenostr.html#a9e024483543fd2f2ca5116fd86e38c3ca99c8ce56e7ab246445d3b134724428f3',1,'nostr']]]
 ];

@@ -1,12 +1,13 @@
 var searchData=
 [
-  ['list_0',['Deprecated List',['../deprecated.html',1,'']]],
-  ['listtransactions_1',['listtransactions',['../classnostr_1_1Nip47.html#aa4f00696a8b58ae43ea7582d915147d4',1,'nostr::Nip47::listTransactions()'],['../classnostr_1_1NWC.html#a77246d9ec254155500dfd35a3ed46f87',1,'nostr::NWC::listTransactions()']]],
-  ['listtransactionsresponse_2',['ListTransactionsResponse',['../namespacenostr.html#a5fd7239e7510091c73ba2602f4a6bc3d',1,'nostr']]],
-  ['log_3',['log',['../classnostr_1_1Utils.html#a8d9559590001eff8072c190915a53771',1,'nostr::Utils']]],
-  ['logger_4',['logger',['../classnostr_1_1Utils.html#a30f95a2c1e6b196a7ed1207fa81f424b',1,'nostr::Utils']]],
-  ['lookupinvoice_5',['lookupinvoice',['../classnostr_1_1Nip47.html#a74760efce0406b4ca35811112c4cf1dd',1,'nostr::Nip47::lookUpInvoice()'],['../classnostr_1_1NWC.html#a3e6bf85d69624a302cdce0db89f942b6',1,'nostr::NWC::lookUpInvoice()']]],
-  ['lookupinvoiceresponse_6',['LookUpInvoiceResponse',['../namespacenostr.html#a9357541c46480c78b10dbd47531ce2d7',1,'nostr']]],
-  ['lookuppaymenthash_7',['lookuppaymenthash',['../classnostr_1_1Nip47.html#a500ce5a6edd53194e6ddc035d0f4c50d',1,'nostr::Nip47::lookUpPaymentHash()'],['../classnostr_1_1NWC.html#a8c34f915eae08833ca38ca62f0811cdc',1,'nostr::NWC::lookUpPaymentHash()']]],
-  ['loop_8',['loop',['../classnostr_1_1NostrPool.html#ab396fdccb8964a50e88dc71357682e99',1,'nostr::NostrPool::loop()'],['../classnostr_1_1Connection.html#aee2be02ce75a3bb2a15306212e77b382',1,'nostr::Connection::loop()'],['../classnostr_1_1Transport.html#aa525f98cc51f701ca086112c44f2b5e2',1,'nostr::Transport::loop()'],['../classnostr_1_1NWC.html#a986c7fa8b9480303f19be584b575e611',1,'nostr::NWC::loop()']]]
+  ['limits_0',['limits',['../classnostr_1_1NostrRelay.html#a18640b5dba5b7c7fe48fa12eff5998e4',1,'nostr::NostrRelay']]],
+  ['list_1',['Deprecated List',['../deprecated.html',1,'']]],
+  ['listtransactions_2',['listtransactions',['../classnostr_1_1Nip47.html#aa4f00696a8b58ae43ea7582d915147d4',1,'nostr::Nip47::listTransactions()'],['../classnostr_1_1NWC.html#a77246d9ec254155500dfd35a3ed46f87',1,'nostr::NWC::listTransactions()']]],
+  ['listtransactionsresponse_3',['ListTransactionsResponse',['../namespacenostr.html#a5fd7239e7510091c73ba2602f4a6bc3d',1,'nostr']]],
+  ['log_4',['log',['../classnostr_1_1Utils.html#a8d9559590001eff8072c190915a53771',1,'nostr::Utils']]],
+  ['logger_5',['logger',['../classnostr_1_1Utils.html#a30f95a2c1e6b196a7ed1207fa81f424b',1,'nostr::Utils']]],
+  ['lookupinvoice_6',['lookupinvoice',['../classnostr_1_1Nip47.html#a74760efce0406b4ca35811112c4cf1dd',1,'nostr::Nip47::lookUpInvoice()'],['../classnostr_1_1NWC.html#a3e6bf85d69624a302cdce0db89f942b6',1,'nostr::NWC::lookUpInvoice()']]],
+  ['lookupinvoiceresponse_7',['LookUpInvoiceResponse',['../namespacenostr.html#a9357541c46480c78b10dbd47531ce2d7',1,'nostr']]],
+  ['lookuppaymenthash_8',['lookuppaymenthash',['../classnostr_1_1Nip47.html#a500ce5a6edd53194e6ddc035d0f4c50d',1,'nostr::Nip47::lookUpPaymentHash()'],['../classnostr_1_1NWC.html#a8c34f915eae08833ca38ca62f0811cdc',1,'nostr::NWC::lookUpPaymentHash()']]],
+  ['loop_9',['loop',['../classnostr_1_1NostrPool.html#ab396fdccb8964a50e88dc71357682e99',1,'nostr::NostrPool::loop()'],['../classnostr_1_1Connection.html#aee2be02ce75a3bb2a15306212e77b382',1,'nostr::Connection::loop()'],['../classnostr_1_1Transport.html#aa525f98cc51f701ca086112c44f2b5e2',1,'nostr::Transport::loop()'],['../classnostr_1_1NWC.html#a986c7fa8b9480303f19be584b575e611',1,'nostr::NWC::loop()']]]
 ];

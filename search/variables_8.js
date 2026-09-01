@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['logger_0',['logger',['../classnostr_1_1Utils.html#a30f95a2c1e6b196a7ed1207fa81f424b',1,'nostr::Utils']]]
+  ['key_0',['key',['../structnostr_1_1s__NostrEventTag.html#a95e8590f64380a02483b6f459be3c3ad',1,'nostr::s_NostrEventTag']]],
+  ['kind_1',['kind',['../classnostr_1_1NostrEvent.html#a669166a35df88ee656e39d5360414691',1,'nostr::NostrEvent']]]
 ];

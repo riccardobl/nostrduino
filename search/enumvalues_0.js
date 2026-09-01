@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['connected_0',['CONNECTED',['../namespacenostr.html#a9e024483543fd2f2ca5116fd86e38c3caa5afd6edd5336d91316964e493936858',1,'nostr']]]
+  ['allowlegacynip04_0',['AllowLegacyNip04',['../namespacenostr.html#a1f4e2924cdc7a40c38a070efc9722289ad99a1b804944e7b4d9ba1b6e3f0c6dad',1,'nostr']]]
 ];

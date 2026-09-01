@@ -100,7 +100,7 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keyword">namespace </span>esp32 {</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">namespace </span>ESP32Platform {</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> getUnixTimestamp() {</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">inline</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> getUnixTimestamp() {</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    time_t now;</div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keyword">struct </span>tm timeinfo;</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="keywordflow">while</span> (!getLocalTime(&amp;timeinfo)) {</div>
@@ -111,63 +111,84 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="keywordflow">return</span> now;</div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>}</div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="keywordtype">long</span> <span class="keywordtype">int</span> getRealRandom(<span class="keywordtype">long</span> <span class="keywordtype">int</span> min, <span class="keywordtype">long</span> <span class="keywordtype">int</span> max) {</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    uint32_t rand = esp_random();</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keywordflow">return</span> (rand % (max - min + 1)) + min;</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>}</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="keywordtype">void</span> serialLogger(<span class="keyword">const</span> <a class="code hl_define" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> &amp;str) {</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    Serial.println(str.c_str());</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>}</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="keywordtype">void</span> initWifi(<a class="code hl_define" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> ssid, <a class="code hl_define" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> passphrase, <span class="keywordtype">int</span> unused = 6) {</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    esp_wifi_start();</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    WiFi.persistent(<span class="keyword">false</span>); <span class="comment">// don&#39;t wear out the flash by writing wifi credentials to it (also fixes wifi connection on a159x36&#39;s QEMU for ESP32)</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    WiFi.begin(ssid, passphrase);</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    Serial.println(<span class="stringliteral">&quot;Connecting to &quot;</span> + ssid);</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keywordflow">while</span> (WiFi.status() != WL_CONNECTED) {</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        delay(500);</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        Serial.print(<span class="stringliteral">&quot;.&quot;</span>);</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="keyword">inline</span> <span class="keywordtype">bool</span> fillRandom(uint8_t *output, <span class="keywordtype">size_t</span> outputSize) {</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keywordflow">if</span> (output == <span class="keyword">nullptr</span> &amp;&amp; outputSize != 0) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keywordflow">if</span> (outputSize == 0) <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="comment">// The ESP32 hardware RNG exposes only a 32-bit state register that is</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="comment">// refilled by the physical entropy source at a limited rate; draining it</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="comment">// in one shot (esp_fill_random) can outpace the refill and produce</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="comment">// correlated words, especially when Wi-Fi/BT are off and no RF noise is</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="comment">// mixed in (see Espressif&#39;s esp_random docs). Pull one 32-bit word per</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="comment">// esp_random() call and yield ~1 ms between reads so the source can</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="comment">// refill; the yield also adds scheduler timing jitter. Same mitigation</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="comment">// as Blockstream Jade 1.0.41.</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordtype">size_t</span> offset = 0;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keywordflow">while</span> (offset &lt; outputSize) {</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        uint32_t word = esp_random();</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; <span class="keyword">sizeof</span>(word) &amp;&amp; offset &lt; outputSize; ++i) {</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>            output[offset++] = <span class="keyword">static_cast&lt;</span>uint8_t<span class="keyword">&gt;</span>(word &amp; 0xFF);</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>            word &gt;&gt;= 8;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        }</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        <span class="keywordflow">if</span> (offset &lt; outputSize) delay(1);</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    }</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    Serial.println(<span class="stringliteral">&quot;&quot;</span>);</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    Serial.println(<span class="stringliteral">&quot;WiFi connected&quot;</span>);</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    Serial.println(<span class="stringliteral">&quot;IP address: &quot;</span>);</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    Serial.println(WiFi.localIP());</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>}</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="keyword">inline</span> <span class="keywordtype">void</span> serialLogger(<span class="keyword">const</span> <a class="code hl_define" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> &amp;str) {</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    Serial.println(str.c_str());</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>}</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="keywordtype">void</span> initTime(<span class="keyword">const</span> <span class="keywordtype">char</span> *ntpServer, <span class="keywordtype">long</span> unused1 = 0, <span class="keywordtype">int</span> unused2 = 3600) {</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    configTime(0, 0, ntpServer);</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>}</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="keywordtype">void</span> initNostr(<span class="keywordtype">bool</span> withLogger) {</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    bootloader_random_enable();</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    Utils::init();</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <a class="code hl_function" href="classnostr_1_1Utils.html#a83f238553d8ec7b06e3c9699db0d0dff">nostr::Utils::setUnixTimeSecondsProvider</a>(getUnixTimestamp);</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="keywordflow">if</span> (withLogger)</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        <a class="code hl_function" href="classnostr_1_1Utils.html#af139d4e4f8e5e356215b4e99c838a9cf">nostr::Utils::setLogger</a>(serialLogger);</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <a class="code hl_function" href="classnostr_1_1Utils.html#ad972d6caab44538894e0151c9ce792d4">nostr::Utils::setRealRandom</a>(getRealRandom);</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>}</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="keywordtype">void</span> close() {</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    Utils::close();</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>}</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>ESP32Transport *getTransport() {</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    <span class="keywordflow">return</span> <span class="keyword">new</span> nostr::esp32::ESP32Transport();</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>}</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>} <span class="comment">// namespace ESP32Platform</span></div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>} <span class="comment">// namespace esp32</span></div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>} <span class="comment">// namespace nostr</span></div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="keyword">inline</span> <span class="keywordtype">void</span> initWifi(<a class="code hl_define" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> ssid, <a class="code hl_define" href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a> passphrase, <span class="keywordtype">int</span> unused = 6) {</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    esp_wifi_start();</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    WiFi.persistent(<span class="keyword">false</span>); <span class="comment">// don&#39;t wear out the flash by writing wifi credentials to it (also fixes wifi connection on a159x36&#39;s QEMU for ESP32)</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    WiFi.begin(ssid, passphrase);</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    Serial.println(<span class="stringliteral">&quot;Connecting to &quot;</span> + ssid);</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <span class="keywordflow">while</span> (WiFi.status() != WL_CONNECTED) {</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        delay(500);</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        Serial.print(<span class="stringliteral">&quot;.&quot;</span>);</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    }</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    Serial.println(<span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    Serial.println(<span class="stringliteral">&quot;WiFi connected&quot;</span>);</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    Serial.println(<span class="stringliteral">&quot;IP address: &quot;</span>);</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    Serial.println(WiFi.localIP());</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>}</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="keyword">inline</span> <span class="keywordtype">void</span> initTime(<span class="keyword">const</span> <span class="keywordtype">char</span> *ntpServer, <span class="keywordtype">long</span> unused1 = 0, <span class="keywordtype">int</span> unused2 = 3600) {</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    configTime(0, 0, ntpServer);</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>}</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="keyword">inline</span> <span class="keywordtype">void</span> initNostr(<span class="keywordtype">bool</span> withLogger, <span class="keywordtype">bool</span> initializeRngWithoutRadio = <span class="keyword">false</span>) {</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    <span class="keywordflow">if</span> (initializeRngWithoutRadio) bootloader_random_enable();</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    <a class="code hl_function" href="classnostr_1_1Utils.html#a13546adc6c8380e2c66d29faa757d308">nostr::Utils::setRandomBytesProvider</a>(fillRandom);</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    Utils::init();</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    <a class="code hl_function" href="classnostr_1_1Utils.html#a83f238553d8ec7b06e3c9699db0d0dff">nostr::Utils::setUnixTimeSecondsProvider</a>(getUnixTimestamp);</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    <span class="keywordflow">if</span> (withLogger)</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        <a class="code hl_function" href="classnostr_1_1Utils.html#af139d4e4f8e5e356215b4e99c838a9cf">nostr::Utils::setLogger</a>(serialLogger);</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>}</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="keyword">inline</span> <span class="keywordtype">void</span> close() {</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    Utils::close();</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>}</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="keyword">inline</span> ESP32Transport *getTransport() {</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    <span class="keywordflow">return</span> <span class="keyword">new</span> nostr::esp32::ESP32Transport();</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>}</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="keyword">inline</span> ESP32Transport *getTransport(<span class="keyword">const</span> ESP32TransportConfig &amp;config) {</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    <span class="keywordflow">return</span> <span class="keyword">new</span> nostr::esp32::ESP32Transport(config);</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>}</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>} <span class="comment">// namespace ESP32Platform</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>} <span class="comment">// namespace esp32</span></div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>} <span class="comment">// namespace nostr</span></div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aESP32Transport_8h_html"><div class="ttname"><a href="ESP32Transport_8h.html">ESP32Transport.h</a></div></div>
 <div class="ttc" id="aNostrCommon_8h_html"><div class="ttname"><a href="NostrCommon_8h.html">NostrCommon.h</a></div></div>
 <div class="ttc" id="aNostrString_8h_html"><div class="ttname"><a href="NostrString_8h.html">NostrString.h</a></div></div>
 <div class="ttc" id="aNostrString_8h_html_a51a5cc014ebe5eb0fda73fcf0e09b626"><div class="ttname"><a href="NostrString_8h.html#a51a5cc014ebe5eb0fda73fcf0e09b626">NostrString</a></div><div class="ttdeci">#define NostrString</div><div class="ttdef"><b>Definition</b> NostrString.h:10</div></div>
 <div class="ttc" id="aNostrUtils_8h_html"><div class="ttname"><a href="NostrUtils_8h.html">NostrUtils.h</a></div></div>
-<div class="ttc" id="aclassnostr_1_1Utils_html_a83f238553d8ec7b06e3c9699db0d0dff"><div class="ttname"><a href="classnostr_1_1Utils.html#a83f238553d8ec7b06e3c9699db0d0dff">nostr::Utils::setUnixTimeSecondsProvider</a></div><div class="ttdeci">static void setUnixTimeSecondsProvider(std::function&lt; unsigned long long()&gt; timeSecondsProvider)</div><div class="ttdef"><b>Definition</b> NostrUtils.cpp:12</div></div>
-<div class="ttc" id="aclassnostr_1_1Utils_html_ad972d6caab44538894e0151c9ce792d4"><div class="ttname"><a href="classnostr_1_1Utils.html#ad972d6caab44538894e0151c9ce792d4">nostr::Utils::setRealRandom</a></div><div class="ttdeci">static void setRealRandom(std::function&lt; long int(long int min, long int max)&gt; realRandom)</div><div class="ttdef"><b>Definition</b> NostrUtils.cpp:15</div></div>
-<div class="ttc" id="aclassnostr_1_1Utils_html_af139d4e4f8e5e356215b4e99c838a9cf"><div class="ttname"><a href="classnostr_1_1Utils.html#af139d4e4f8e5e356215b4e99c838a9cf">nostr::Utils::setLogger</a></div><div class="ttdeci">static void setLogger(std::function&lt; void(const NostrString &amp;)&gt; logger)</div><div class="ttdef"><b>Definition</b> NostrUtils.cpp:18</div></div>
-<div class="ttc" id="anamespacenostr_html"><div class="ttname"><a href="namespacenostr.html">nostr</a></div><div class="ttdef"><b>Definition</b> Nip04.h:8</div></div>
+<div class="ttc" id="aclassnostr_1_1Utils_html_a13546adc6c8380e2c66d29faa757d308"><div class="ttname"><a href="classnostr_1_1Utils.html#a13546adc6c8380e2c66d29faa757d308">nostr::Utils::setRandomBytesProvider</a></div><div class="ttdeci">static void setRandomBytesProvider(std::function&lt; bool(uint8_t *, size_t)&gt; randomBytesProvider)</div><div class="ttdef"><b>Definition</b> NostrUtils.cpp:87</div></div>
+<div class="ttc" id="aclassnostr_1_1Utils_html_a83f238553d8ec7b06e3c9699db0d0dff"><div class="ttname"><a href="classnostr_1_1Utils.html#a83f238553d8ec7b06e3c9699db0d0dff">nostr::Utils::setUnixTimeSecondsProvider</a></div><div class="ttdeci">static void setUnixTimeSecondsProvider(std::function&lt; unsigned long long()&gt; timeSecondsProvider)</div><div class="ttdef"><b>Definition</b> NostrUtils.cpp:83</div></div>
+<div class="ttc" id="aclassnostr_1_1Utils_html_af139d4e4f8e5e356215b4e99c838a9cf"><div class="ttname"><a href="classnostr_1_1Utils.html#af139d4e4f8e5e356215b4e99c838a9cf">nostr::Utils::setLogger</a></div><div class="ttdeci">static void setLogger(std::function&lt; void(const NostrString &amp;)&gt; logger)</div><div class="ttdef"><b>Definition</b> NostrUtils.cpp:91</div></div>
+<div class="ttc" id="anamespacenostr_html"><div class="ttname"><a href="namespacenostr.html">nostr</a></div><div class="ttdef"><b>Definition</b> CryptoLock.h:6</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

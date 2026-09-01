@@ -82,6 +82,7 @@ $(function() {
 <div class="contents">
 <div class="textblock"><code>#include &lt;Arduino.h&gt;</code><br />
 <code>#include &quot;ArduinoJson.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="NostrEncoding_8h_source.html">NostrEncoding.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="NostrString_8h_source.html">NostrString.h</a>&quot;</code><br />
 <code>#include &lt;functional&gt;</code><br />
 </div>
@@ -101,8 +102,56 @@ Namespaces</h2></td></tr>
 Macros</h2></td></tr>
 <tr class="memitem:a3f16b02f27bee5698c1e6ad357486214" id="r_a3f16b02f27bee5698c1e6ad357486214"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NostrUtils_8h.html#a3f16b02f27bee5698c1e6ad357486214">NOSTR_DIGEST_SIZE</a>&#160;&#160;&#160;32</td></tr>
 <tr class="separator:a3f16b02f27bee5698c1e6ad357486214"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a586e988fefc55960736f940082a4aa94" id="r_a586e988fefc55960736f940082a4aa94"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NostrUtils_8h.html#a586e988fefc55960736f940082a4aa94">BASE64_STANDARD</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:a586e988fefc55960736f940082a4aa94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a403b3c12361862cb787e0b2eabd9d24a" id="r_a403b3c12361862cb787e0b2eabd9d24a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NostrUtils_8h.html#a403b3c12361862cb787e0b2eabd9d24a">BASE64_NOPADDING</a>&#160;&#160;&#160;1</td></tr>
+<tr class="separator:a403b3c12361862cb787e0b2eabd9d24a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac73ef2147488a8f2e75b211fdb3b26ca" id="r_ac73ef2147488a8f2e75b211fdb3b26ca"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NostrUtils_8h.html#ac73ef2147488a8f2e75b211fdb3b26ca">BASE64_URLSAFE</a>&#160;&#160;&#160;2</td></tr>
+<tr class="separator:ac73ef2147488a8f2e75b211fdb3b26ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a403b3c12361862cb787e0b2eabd9d24a" name="a403b3c12361862cb787e0b2eabd9d24a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a403b3c12361862cb787e0b2eabd9d24a">&#9670;&#160;</a></span>BASE64_NOPADDING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BASE64_NOPADDING&#160;&#160;&#160;1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a586e988fefc55960736f940082a4aa94" name="a586e988fefc55960736f940082a4aa94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a586e988fefc55960736f940082a4aa94">&#9670;&#160;</a></span>BASE64_STANDARD</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BASE64_STANDARD&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac73ef2147488a8f2e75b211fdb3b26ca" name="ac73ef2147488a8f2e75b211fdb3b26ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac73ef2147488a8f2e75b211fdb3b26ca">&#9670;&#160;</a></span>BASE64_URLSAFE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BASE64_URLSAFE&#160;&#160;&#160;2</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a3f16b02f27bee5698c1e6ad357486214" name="a3f16b02f27bee5698c1e6ad357486214"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3f16b02f27bee5698c1e6ad357486214">&#9670;&#160;</a></span>NOSTR_DIGEST_SIZE</h2>
 
