@@ -20,12 +20,13 @@ bool testNwcResponses() {
     size_t requestIndex = fixture.requestCount();
     bool payInvoiceOk = false;
     fixture.client.payInvoice("lnbc-pay", 1, [&](nostr::PayInvoiceResponse result) {
-        payInvoiceOk = result.preimage == payPreimage;
+        payInvoiceOk = result.preimage == payPreimage && result.feesPaid == 12;
     });
     fixture.loop();
     JsonDocument response;
     response["result_type"] = "pay_invoice";
     response["result"]["preimage"] = payPreimage;
+    response["result"]["fees_paid"] = 12;
     CHECK(fixture.queueResponse(requestIndex, response));
     fixture.loop();
     CHECK(payInvoiceOk);
@@ -64,11 +65,14 @@ bool testNwcResponses() {
     requestIndex = fixture.requestCount();
     bool keySendOk = false;
     fixture.client.payKeySend(fixture.servicePublicKey, 3, "", {},
-        [&](nostr::PayKeySendResponse result) { keySendOk = result.preimage == keysendPreimage; });
+        [&](nostr::PayKeySendResponse result) {
+            keySendOk = result.preimage == keysendPreimage && result.feesPaid == 13;
+        });
     fixture.loop();
     response.clear();
     response["result_type"] = "pay_keysend";
     response["result"]["preimage"] = keysendPreimage;
+    response["result"]["fees_paid"] = 13;
     CHECK(fixture.queueResponse(requestIndex, response));
     fixture.loop();
     CHECK(keySendOk);
@@ -90,7 +94,8 @@ bool testNwcResponses() {
     requestIndex = fixture.requestCount();
     bool makeInvoiceOk = false;
     fixture.client.makeInvoice(5, "memo", "", 60, [&](nostr::MakeInvoiceResponse result) {
-        makeInvoiceOk = result.type == "incoming" && result.invoice == "lnbc-created" &&
+        makeInvoiceOk = result.type == "incoming" && result.state == "pending" &&
+                        result.invoice == "lnbc-created" &&
                         result.description == "created invoice" && result.descriptionHash == "desc-hash" &&
                         result.preimage == invoicePreimage && result.paymentHash == "created-hash" &&
                         result.amount == 5000 && result.feesPaid == 50 && result.createdAt == 100 &&
@@ -101,6 +106,7 @@ bool testNwcResponses() {
     response["result_type"] = "make_invoice";
     JsonObject made = response["result"].to<JsonObject>();
     made["type"] = "incoming";
+    made["state"] = "pending";
     made["invoice"] = "lnbc-created";
     made["description"] = "created invoice";
     made["description_hash"] = "desc-hash";
@@ -115,11 +121,31 @@ bool testNwcResponses() {
     fixture.loop();
     CHECK(makeInvoiceOk);
 
+    requestIndex = fixture.requestCount();
+    bool minimalInvoiceOk = false;
+    fixture.client.makeInvoice(6, "", "", 0, [&](nostr::MakeInvoiceResponse result) {
+        minimalInvoiceOk = result.type == "incoming" && result.invoice == "" &&
+                           result.expiresAt == 0 && result.paymentHash == "minimal-hash";
+    });
+    fixture.loop();
+    response.clear();
+    response["result_type"] = "make_invoice";
+    JsonObject minimalInvoice = response["result"].to<JsonObject>();
+    minimalInvoice["type"] = "incoming";
+    minimalInvoice["payment_hash"] = "minimal-hash";
+    minimalInvoice["amount"] = 6000;
+    minimalInvoice["fees_paid"] = 0;
+    minimalInvoice["created_at"] = 101;
+    CHECK(fixture.queueResponse(requestIndex, response));
+    fixture.loop();
+    CHECK(minimalInvoiceOk);
+
     auto fillLookupResponse = [&](JsonDocument &document, const char *invoice, const char *paymentHash) {
         document.clear();
         document["result_type"] = "lookup_invoice";
         JsonObject result = document["result"].to<JsonObject>();
         result["type"] = "outgoing";
+        result["state"] = "settled";
         result["invoice"] = invoice;
         result["description"] = "lookup description";
         result["description_hash"] = "lookup-description-hash";
@@ -136,7 +162,8 @@ bool testNwcResponses() {
     requestIndex = fixture.requestCount();
     bool lookupHashOk = false;
     fixture.client.lookUpPaymentHash("lookup-hash", [&](nostr::LookUpInvoiceResponse result) {
-        lookupHashOk = result.type == "outgoing" && result.invoice == "lnbc-by-hash" &&
+        lookupHashOk = result.type == "outgoing" && result.state == "settled" &&
+                       result.invoice == "lnbc-by-hash" &&
                        result.paymentHash == "lookup-hash" && result.amount == 7000 &&
                        result.settledAt == 350 && result.metadata["lookup"].as<String>() == "yes";
     });
@@ -164,6 +191,7 @@ bool testNwcResponses() {
     fixture.client.listTransactions(0, 0, 0, 0, false, "",
         [&](nostr::ListTransactionsResponse result) {
             listOk = result.transactions.size() == 1 && result.transactions[0].type == "incoming" &&
+                     result.transactions[0].state == "pending" &&
                      result.transactions[0].invoice == "lnbc-list" && result.transactions[0].amount == 8000 &&
                      result.transactions[0].settledAt == 600 &&
                      result.transactions[0].metadata["list"].as<String>() == "yes";
@@ -173,6 +201,7 @@ bool testNwcResponses() {
     response["result_type"] = "list_transactions";
     JsonObject transaction = response["result"]["transactions"].to<JsonArray>().add<JsonObject>();
     transaction["type"] = "incoming";
+    transaction["state"] = "pending";
     transaction["invoice"] = "lnbc-list";
     transaction["description"] = "listed";
     transaction["description_hash"] = "listed-description-hash";
@@ -219,7 +248,8 @@ bool testNwcResponses() {
                  result.pubkey == fixture.servicePublicKey && result.network == "regtest" &&
                  result.blockHeight == 42 && result.blockHash == "block-hash" &&
                  result.methods.size() == 2 && result.methods[0] == "pay_invoice" &&
-                 result.notifications.size() == 1 && result.notifications[0] == "payment_received";
+                 result.notifications.size() == 1 && result.notifications[0] == "payment_received" &&
+                 result.extensions.size() == 1 && result.extensions[0] == "02";
     });
     fixture.loop();
     response.clear();
@@ -234,6 +264,7 @@ bool testNwcResponses() {
     info["methods"].to<JsonArray>().add("pay_invoice");
     info["methods"].as<JsonArray>().add("get_balance");
     info["notifications"].to<JsonArray>().add("payment_received");
+    info["extensions"].to<JsonArray>().add("02");
     CHECK(fixture.queueResponse(requestIndex, response));
     fixture.loop();
     CHECK(infoOk);
@@ -245,7 +276,14 @@ bool testNwcResponses() {
     CHECK(fixture.makeResponseEvent(requestIndex, response, parsedEvent));
     strictParser.parseResponse(&parsedEvent, reusableInfo);
     CHECK(reusableInfo.errorCode == "");
+    CHECK(reusableInfo.resultType == "get_info");
     CHECK(reusableInfo.result.methods.size() == 2);
+    response["result"].remove("notifications");
+    CHECK(fixture.makeResponseEvent(requestIndex, response, parsedEvent));
+    strictParser.parseResponse(&parsedEvent, reusableInfo);
+    CHECK(reusableInfo.errorCode == "");
+    CHECK(reusableInfo.result.notifications.empty());
+    CHECK(reusableInfo.result.extensions.size() == 1);
     response["result"]["methods"].as<JsonArray>().add(7);
     CHECK(fixture.makeResponseEvent(requestIndex, response, parsedEvent));
     strictParser.parseResponse(&parsedEvent, reusableInfo);

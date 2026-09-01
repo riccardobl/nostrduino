@@ -54,6 +54,7 @@ template <typename T> class Nip47Response {
 
 typedef struct s_PayInvoiceResponse {
     NostrString preimage;
+    MilliSats feesPaid;
 } PayInvoiceResponse;
 
 typedef struct s_MultiPayInvoiceResponse {
@@ -63,6 +64,7 @@ typedef struct s_MultiPayInvoiceResponse {
 
 typedef struct s_PayKeySendResponse {
     NostrString preimage;
+    MilliSats feesPaid;
 } PayKeySendResponse;
 
 typedef struct s_MultiPayKeySendResponse {
@@ -73,6 +75,7 @@ typedef struct s_MultiPayKeySendResponse {
 
 typedef struct s_MakeInvoiceResponse {
     NostrString type;
+    NostrString state;
     NostrString invoice;
     NostrString description;
     NostrString descriptionHash;
@@ -87,6 +90,7 @@ typedef struct s_MakeInvoiceResponse {
 
 typedef struct s_LookUpInvoiceResponse {
     NostrString type;
+    NostrString state;
     NostrString invoice;
     NostrString description;
     NostrString descriptionHash;
@@ -103,6 +107,7 @@ typedef struct s_LookUpInvoiceResponse {
 
 typedef struct s_Transaction {
     NostrString type;
+    NostrString state;
     NostrString invoice;
     NostrString description;
     NostrString descriptionHash;
@@ -135,6 +140,7 @@ typedef struct s_GetInfoResponse {
     NostrString blockHash;
     std::vector<NostrString> methods;
     std::vector<NostrString> notifications;
+    std::vector<NostrString> extensions;
 } GetInfoResponse;
 
 typedef struct s_NWCData {
@@ -148,6 +154,7 @@ typedef struct s_NWCData {
 typedef struct s_Nip47Notification {
     NostrString notificationType;
     NostrString type;
+    NostrString state;
     NostrString invoice;
     NostrString description;
     NostrString descriptionHash;
@@ -156,7 +163,9 @@ typedef struct s_Nip47Notification {
     MilliSats amount;
     MilliSats feesPaid;
     unsigned long long createdAt;
+    unsigned long long expiresAt;
     unsigned long long settledAt;
+    JsonDocument metadata;
 } Nip47Notification;
 
 typedef struct s_NotificationResponse {

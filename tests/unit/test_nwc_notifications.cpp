@@ -27,7 +27,9 @@ bool testNwcNotifications() {
                              notification.preimage == notificationPreimage &&
                              notification.paymentHash == "notification-payment-hash" &&
                              notification.amount == 10000 && notification.feesPaid == 100 &&
-                             notification.createdAt == 800 && notification.settledAt == 900;
+                             notification.state == "settled" && notification.createdAt == 800 &&
+                             notification.expiresAt == 850 && notification.settledAt == 900 &&
+                             notification.metadata["source"].as<String>() == "mock";
         },
         [&](String code, String message) {
             errorCode = code;
@@ -41,6 +43,7 @@ bool testNwcNotifications() {
     notification["notification_type"] = "payment_received";
     JsonObject data = notification["notification"].to<JsonObject>();
     data["type"] = "incoming";
+    data["state"] = "settled";
     data["invoice"] = "lnbc-notification";
     data["description"] = "notification description";
     data["description_hash"] = "notification-description-hash";
@@ -49,7 +52,9 @@ bool testNwcNotifications() {
     data["amount"] = 10000;
     data["fees_paid"] = 100;
     data["created_at"] = 800;
+    data["expires_at"] = 850;
     data["settled_at"] = 900;
+    data["metadata"]["source"] = "mock";
 
     CHECK(fixture.queueNotification(notification, fixture.otherPrivateKey));
     CHECK(fixture.queueNotification(notification, "", 1));

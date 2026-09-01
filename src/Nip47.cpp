@@ -68,8 +68,10 @@ bool copyMetadata(JsonVariantConst source, JsonDocument &destination) {
     return true;
 }
 
-bool readStringArray(JsonVariantConst source, std::vector<NostrString> &destination) {
+bool readStringArray(JsonVariantConst source, std::vector<NostrString> &destination,
+                     bool required = true) {
     destination.clear();
+    if (source.isNull()) return !required;
     if (!source.is<JsonArrayConst>()) return false;
     for (JsonVariantConst value : source.as<JsonArrayConst>()) {
         if (!value.is<const char *>()) return false;
@@ -322,8 +324,10 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<PayInvoiceRe
     NostrString preimage;
     if (this->parseResponseEnvelope(response, "pay_invoice", document, result,
                                     out.errorCode, out.errorMessage) &&
-        readPreimage(result, preimage, true)) {
+        readPreimage(result, preimage, true) &&
+        readMilliSats(result["fees_paid"], out.result.feesPaid, false)) {
         out.result.preimage = preimage;
+        out.resultType = "pay_invoice";
         return;
     }
     if (NostrString_length(out.errorCode) == 0) {
@@ -347,6 +351,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MultiPayInvo
         readPreimage(result, preimage, true)) {
         out.result.preimage = preimage;
         out.result.d = dTags[0];
+        out.resultType = "multi_pay_invoice";
         return;
     }
     if (NostrString_length(out.errorCode) == 0) {
@@ -363,8 +368,10 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<PayKeySendRe
     NostrString preimage;
     if (this->parseResponseEnvelope(response, "pay_keysend", document, result,
                                     out.errorCode, out.errorMessage) &&
-        readPreimage(result, preimage, true)) {
+        readPreimage(result, preimage, true) &&
+        readMilliSats(result["fees_paid"], out.result.feesPaid, false)) {
         out.result.preimage = preimage;
+        out.resultType = "pay_keysend";
         return;
     }
     if (NostrString_length(out.errorCode) == 0) {
@@ -388,6 +395,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MultiPayKeyS
         readPreimage(result, preimage, true)) {
         out.result.preimage = preimage;
         out.result.d = dTags[0];
+        out.resultType = "multi_pay_keysend";
         return;
     }
     if (NostrString_length(out.errorCode) == 0) {
@@ -405,7 +413,8 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MakeInvoiceR
     if (this->parseResponseEnvelope(response, "make_invoice", document, result,
                                     out.errorCode, out.errorMessage) &&
         readStringField(result, "type", parsed.type, true) &&
-        readStringField(result, "invoice", parsed.invoice, true) &&
+        readStringField(result, "state", parsed.state) &&
+        readStringField(result, "invoice", parsed.invoice) &&
         readStringField(result, "description", parsed.description) &&
         readStringField(result, "description_hash", parsed.descriptionHash) &&
         readPreimage(result, parsed.preimage, false) &&
@@ -413,9 +422,10 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<MakeInvoiceR
         readMilliSats(result["amount"], parsed.amount) &&
         readMilliSats(result["fees_paid"], parsed.feesPaid, false) &&
         readUnsignedInteger(result["created_at"], parsed.createdAt) &&
-        readUnsignedInteger(result["expires_at"], parsed.expiresAt) &&
+        readUnsignedInteger(result["expires_at"], parsed.expiresAt, false) &&
         copyMetadata(result["metadata"], parsed.metadata)) {
         out.result = parsed;
+        out.resultType = "make_invoice";
         return;
     }
     if (NostrString_length(out.errorCode) == 0) {
@@ -433,6 +443,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<LookUpInvoic
     if (this->parseResponseEnvelope(response, "lookup_invoice", document, result,
                                     out.errorCode, out.errorMessage) &&
         readStringField(result, "type", parsed.type, true) &&
+        readStringField(result, "state", parsed.state) &&
         readStringField(result, "invoice", parsed.invoice) &&
         readStringField(result, "description", parsed.description) &&
         readStringField(result, "description_hash", parsed.descriptionHash) &&
@@ -445,6 +456,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<LookUpInvoic
         readUnsignedInteger(result["settled_at"], parsed.settledAt, false) &&
         copyMetadata(result["metadata"], parsed.metadata)) {
         out.result = parsed;
+        out.resultType = "lookup_invoice";
         return;
     }
     if (NostrString_length(out.errorCode) == 0) {
@@ -471,6 +483,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<ListTransact
             JsonObjectConst transactionJson = value.as<JsonObjectConst>();
             Transaction transaction{};
             if (!readStringField(transactionJson, "type", transaction.type, true) ||
+                !readStringField(transactionJson, "state", transaction.state) ||
                 !readStringField(transactionJson, "invoice", transaction.invoice) ||
                 !readStringField(transactionJson, "description", transaction.description) ||
                 !readStringField(transactionJson, "description_hash", transaction.descriptionHash) ||
@@ -489,6 +502,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<ListTransact
         }
         if (valid) {
             out.result.transactions = parsedTransactions;
+            out.resultType = "list_transactions";
             return;
         }
     }
@@ -508,6 +522,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<GetBalanceRe
                                     out.errorCode, out.errorMessage) &&
         readMilliSats(result["balance"], balance)) {
         out.result.balance = balance;
+        out.resultType = "get_balance";
         return;
     }
     if (NostrString_length(out.errorCode) == 0) {
@@ -531,8 +546,10 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<GetInfoRespo
         readUnsignedInteger(result["block_height"], parsed.blockHeight) &&
         readStringField(result, "block_hash", parsed.blockHash, true) &&
         readStringArray(result["methods"], parsed.methods) &&
-        readStringArray(result["notifications"], parsed.notifications)) {
+        readStringArray(result["notifications"], parsed.notifications, false) &&
+        readStringArray(result["extensions"], parsed.extensions, false)) {
         out.result = parsed;
+        out.resultType = "get_info";
         return;
     }
     if (NostrString_length(out.errorCode) == 0) {
@@ -622,6 +639,7 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<Notification
                 parsed.notificationType = notificationType;
                 if (NostrString_length(notificationType) > 0 &&
                     readStringField(notification, "type", parsed.type, true) &&
+                    readStringField(notification, "state", parsed.state) &&
                     readStringField(notification, "invoice", parsed.invoice) &&
                     readStringField(notification, "description", parsed.description) &&
                     readStringField(notification, "description_hash", parsed.descriptionHash) &&
@@ -630,7 +648,9 @@ void Nip47::parseResponse(SignedNostrEvent *response, Nip47Response<Notification
                     readMilliSats(notification["amount"], parsed.amount) &&
                     readMilliSats(notification["fees_paid"], parsed.feesPaid, false) &&
                     readUnsignedInteger(notification["created_at"], parsed.createdAt) &&
-                    readUnsignedInteger(notification["settled_at"], parsed.settledAt, false)) {
+                    readUnsignedInteger(notification["expires_at"], parsed.expiresAt, false) &&
+                    readUnsignedInteger(notification["settled_at"], parsed.settledAt, false) &&
+                    copyMetadata(notification["metadata"], parsed.metadata)) {
                     out.resultType = notificationType;
                     out.result.notification = parsed;
                     return;
