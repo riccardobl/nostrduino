@@ -101,6 +101,12 @@ namespace nostr {
              this->eventStatusTimeoutSeconds = eventStatusTimeoutSeconds;
              this->limits = limits;
         };
+        ~NostrPool();
+
+        NostrPool(const NostrPool &) = delete;
+        NostrPool &operator=(const NostrPool &) = delete;
+        NostrPool(NostrPool &&) = delete;
+        NostrPool &operator=(NostrPool &&) = delete;
 
         /**
          * Subscribe to events from one or more relays
@@ -205,9 +211,20 @@ namespace nostr {
          * Get all relays that the pool is connected to
          * @return A list of relays
          */
-        std::vector<NostrRelay *> *getConnectedRelays();
+        const std::vector<NostrRelay *> *getConnectedRelays() const;
 
       private:
+        class DispatchGuard {
+          public:
+            explicit DispatchGuard(NostrPool *pool) : pool(pool) { ++pool->dispatchDepth; }
+            ~DispatchGuard() {
+                if (--pool->dispatchDepth == 0) pool->flushDeferredMutations();
+            }
+
+          private:
+            NostrPool *pool;
+        };
+
         NostrNoticeCallback noticeCallback = nullptr;
         long long subs = 0;
         std::map<NostrString, NostrSubscription> subscriptions;
@@ -219,6 +236,12 @@ namespace nostr {
         Transport *transport;
         NostrLimits limits;
         bool verifyIncomingEvents = false;
+        unsigned int dispatchDepth = 0;
+        bool deferredClose = false;
+        std::vector<NostrString> deferredRelayDisconnects;
+        void disconnectRelayNow(const NostrString &url);
+        void performClose();
+        void flushDeferredMutations();
     };
 }  // namespace nostr
 #endif

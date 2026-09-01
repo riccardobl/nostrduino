@@ -4,6 +4,10 @@
 
 using namespace nostr;
 
+NostrPool::~NostrPool() {
+    this->performClose();
+}
+
 bool NostrRelay::send(NostrString message) {
     const long messageLength = NostrString_length(message);
     if (messageLength < 0) return false;
@@ -372,6 +376,17 @@ NostrRelay *NostrPool::ensureRelay(NostrString url) {
 }
 
 void NostrPool::disconnectRelay(NostrString url) {
+    if (this->dispatchDepth > 0) {
+        for (const NostrString &pending : this->deferredRelayDisconnects) {
+            if (NostrString_equals(pending, url)) return;
+        }
+        this->deferredRelayDisconnects.push_back(url);
+        return;
+    }
+    this->disconnectRelayNow(url);
+}
+
+void NostrPool::disconnectRelayNow(const NostrString &url) {
     std::vector<NostrString> affectedSubscriptions;
     for (auto &entry : this->subscriptions) {
         std::map<NostrString, NostrRelaySubscriptionState>::iterator relayState =
@@ -395,12 +410,34 @@ void NostrPool::disconnectRelay(NostrString url) {
 }
 
 void NostrPool::close() {
+    if (this->dispatchDepth > 0) {
+        this->deferredClose = true;
+        return;
+    }
+    this->performClose();
+}
+
+void NostrPool::performClose() {
     Utils::log("Closing NostrPool");
     for (auto &relay : relays) {
         this->transport->disconnect(relay->conn);
         delete relay;
     }
     relays.clear();
+    subscriptions.clear();
+    eventStatusCallbackEntries.clear();
+    deferredRelayDisconnects.clear();
+    deferredClose = false;
+}
+
+void NostrPool::flushDeferredMutations() {
+    if (this->deferredClose) {
+        this->performClose();
+        return;
+    }
+    std::vector<NostrString> pending;
+    pending.swap(this->deferredRelayDisconnects);
+    for (const NostrString &url : pending) this->disconnectRelayNow(url);
 }
 
 bool NostrPool::publish(std::initializer_list<NostrString> rs, SignedNostrEvent *event, NostrEventStatusCallback statusCallback) {
@@ -430,8 +467,12 @@ void NostrPool::loop() {
     if (!this->transport->isReady()) {
         return;
     }
-    for (auto &relay : relays) {
+    DispatchGuard dispatch(this);
+    this->transport->loop();
+    const std::vector<NostrRelay *> relaySnapshot = this->relays;
+    for (NostrRelay *relay : relaySnapshot) {
         relay->conn->loop();
+        if (this->deferredClose) break;
         relay->processQueue();
     }
 
@@ -454,6 +495,6 @@ std::vector<NostrString> NostrPool::getRelays() {
     return urls;
 }
 
-std::vector<NostrRelay *> *NostrPool::getConnectedRelays() {
+const std::vector<NostrRelay *> *NostrPool::getConnectedRelays() const {
     return &this->relays;
 }
