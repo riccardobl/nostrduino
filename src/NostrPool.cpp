@@ -250,6 +250,7 @@ NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, st
 }
 
 NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, JsonArray filters, NostrEventCallback eventCallback, NostrCloseCallback closeCallback, NostrEOSECallback eoseCallback) {
+    if (urls.size() == 0) return "";
     for (JsonVariant filter : filters) {
         if (!filter.is<JsonObject>()) return "";
     }
@@ -281,7 +282,7 @@ NostrString NostrPool::subscribeMany(std::initializer_list<NostrString> urls, Js
         this->subscriptions[subId].relayStates[url] = NostrRelaySubscriptionState();
     }
 
-    bool acceptedByAnyRelay = urls.size() == 0;
+    bool acceptedByAnyRelay = false;
     for (auto url : urls) {
         NostrRelay *r = this->ensureRelay(url);
         Utils::log("Subscribe to " + url + " with " + json);
@@ -450,14 +451,14 @@ void NostrPool::flushDeferredMutations() {
 }
 
 bool NostrPool::publish(std::initializer_list<NostrString> rs, SignedNostrEvent *event, NostrEventStatusCallback statusCallback) {
-    if (event == nullptr || !event->isValid()) return false;
+    if (rs.size() == 0 || event == nullptr || !event->isValid()) return false;
     JsonDocument doc;
     JsonArray ev = doc.add<JsonArray>();
     event->toSendableEvent(ev);
     NostrString evJson;
     Utils::jsonStringify(ev, &evJson);
     doc.clear();
-    bool acceptedByAnyRelay = rs.size() == 0;
+    bool acceptedByAnyRelay = false;
     for (auto &r : rs) {
         NostrRelay *relay = this->ensureRelay(r);
         Utils::log("Sending event to relay: " + r + " with payload: " + evJson);

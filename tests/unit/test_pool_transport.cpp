@@ -120,6 +120,7 @@ bool testPoolQueueAndTransport() {
     nostr::UnsignedNostrEvent unsignedEvent(1, "pool event", 1700000000);
     nostr::SignedNostrEvent event = unsignedEvent.sign(
         "0000000000000000000000000000000000000000000000000000000000000001");
+    CHECK(!pool.publish({}, &event));
     JsonDocument eventDocument;
     JsonArray frame = eventDocument.to<JsonArray>();
     frame.add("EVENT");
@@ -348,18 +349,19 @@ bool testPoolQueueAndTransport() {
     nostr::NostrPool collisionPool(&collisionTransport, 600);
     JsonDocument filtersDocument;
     JsonArray filters = filtersDocument.to<JsonArray>();
-    String firstSubId = collisionPool.subscribeMany({}, filters);
+    String firstSubId = collisionPool.subscribeMany({"ws://collision.example"}, filters);
 
     nostr::Utils::subs = 10;
     nostr::Utils::setRandomBytesProvider([](uint8_t *output, size_t size) {
         for (size_t i = 0; i < size; ++i) output[i] = 0;
         return true;
     });
-    String regeneratedSubId = collisionPool.subscribeMany({}, filters);
+    String regeneratedSubId = collisionPool.subscribeMany({"ws://collision.example"}, filters);
 
     CHECK(firstSubId.startsWith("10"));
     CHECK(regeneratedSubId.startsWith("11"));
     CHECK(regeneratedSubId != firstSubId);
+    CHECK(collisionPool.subscribeMany({}, filters) == "");
 
     MockTransport invalidFilterTransport;
     nostr::NostrPool invalidFilterPool(&invalidFilterTransport, 600);
@@ -393,7 +395,7 @@ bool testPoolQueueAndTransport() {
     CHECK(invalidFilterPool.getRelays().empty());
 
     String boundaryFilterSubId = invalidFilterPool.subscribeMany(
-        {}, {{{"int minimum", {"-9223372036854775808"}},
+        {"ws://invalid.example"}, {{{"int minimum", {"-9223372036854775808"}},
               {"int maximum", {"9223372036854775807"}},
               {"float score", {"1.25"}}}});
     CHECK(boundaryFilterSubId.length() == 64);
