@@ -127,12 +127,21 @@ void NostrPool::onEvent(NostrRelay *relay, NostrString message) {
         SignedNostrEvent event;
         if (!SignedNostrEvent::parseRelayFrame(doc.as<JsonArrayConst>(), event, limits)) return;
         if (verifyIncomingEvents && !event.verify()) return;
+        {
+            std::lock_guard<std::mutex> lock(this->seenMutex);
+            if (this->seen(event)) return;
+        }
         event.stored = !relayState->second.eose;
         if (eventCallback != nullptr) {
             eventCallback(subId, &event);
         }
     }
     doc.clear();
+}
+
+void NostrPool::setSeenTracker(NostrSeenCallback callback) {
+    std::lock_guard<std::mutex> lock(this->seenMutex);
+    this->seen = callback ? callback : NostrSeenCallback([](const SignedNostrEvent &) { return false; });
 }
 
 void NostrPool::recomputeSubscriptionEose(const NostrString &subId) {

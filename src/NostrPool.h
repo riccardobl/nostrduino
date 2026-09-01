@@ -5,6 +5,7 @@
 #include <functional>
 #include <initializer_list>
 #include <map>
+#include <mutex>
 #include <vector>
 #include "NostrString.h"
 #include "NostrLimits.h"
@@ -31,6 +32,7 @@ namespace nostr {
         std::function<void(const NostrString &, SignedNostrEvent *event)>;
     using NostrEventStatusCallback =
         std::function<void(const NostrString &, bool, const NostrString& )>;
+    using NostrSeenCallback = std::function<bool(const SignedNostrEvent &)>;
     struct NostrRelaySubscriptionState {
         bool active = true;
         bool eose = false;
@@ -166,6 +168,16 @@ namespace nostr {
         bool getVerifyIncomingEvents() const { return verifyIncomingEvents; }
 
         /**
+         * Set the event tracking callback. Return true when an event has
+         * already been seen and should be discarded. A null callback restores
+         * the default behavior, which keeps no tracking state and returns
+         * false for every event.
+         *
+         * Calls to the callback are serialized by the pool.
+         */
+        void setSeenTracker(NostrSeenCallback callback);
+
+        /**
          * Close the subscription with the given ID
          * @param subId The subscription ID
          */
@@ -236,6 +248,8 @@ namespace nostr {
         Transport *transport;
         NostrLimits limits;
         bool verifyIncomingEvents = false;
+        NostrSeenCallback seen = [](const SignedNostrEvent &) { return false; };
+        std::mutex seenMutex;
         unsigned int dispatchDepth = 0;
         bool deferredClose = false;
         std::vector<NostrString> deferredRelayDisconnects;

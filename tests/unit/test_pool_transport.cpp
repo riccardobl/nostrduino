@@ -90,6 +90,7 @@ bool testPoolQueueAndTransport() {
     nostr::NostrPool pool(&transport, 600);
     int eoseCount = 0;
     bool eventCalled = false;
+    int eventCount = 0;
     bool storedEvent = false;
     bool statusCalled = false;
     bool statusOk = false;
@@ -97,6 +98,7 @@ bool testPoolQueueAndTransport() {
         {"ws://relay.example"},
         {{{"kinds", {"1"}}, {"int since", {"2"}}, {"string #p", {"abc"}}}},
         [&](const String &, nostr::SignedNostrEvent *event) {
+            ++eventCount;
             eventCalled = event != nullptr;
             if (event != nullptr) storedEvent = event->isStored();
         },
@@ -154,6 +156,29 @@ bool testPoolQueueAndTransport() {
     connection->queue(eventFrame);
     pool.loop();
     CHECK(eventCalled);
+
+    std::vector<String> seenIds;
+    int seenCalls = 0;
+    pool.setSeenTracker([&](const nostr::SignedNostrEvent &received) {
+        ++seenCalls;
+        for (const String &id : seenIds) {
+            if (id == received.getId()) return true;
+        }
+        seenIds.push_back(received.getId());
+        return false;
+    });
+    const int eventCountBeforeTracking = eventCount;
+    connection->queue(eventFrame);
+    connection->queue(eventFrame);
+    pool.loop();
+    CHECK(seenCalls == 2);
+    CHECK(eventCount == eventCountBeforeTracking + 1);
+
+    pool.setSeenTracker(nullptr);
+    connection->queue(eventFrame);
+    connection->queue(eventFrame);
+    pool.loop();
+    CHECK(eventCount == eventCountBeforeTracking + 3);
 
     pool.setVerifyIncomingEvents(false);
     CHECK(!pool.getVerifyIncomingEvents());

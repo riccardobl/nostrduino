@@ -90,6 +90,37 @@ See the example scripts in `examples/` for simple examples of how to use this li
 >
 > **Managed NWC responses are verified explicitly regardless of this pool setting.**
 
+### Event tracking
+
+`NostrPool` does not keep a list of received event IDs by default. This avoids
+reserving memory for an application-specific cache on constrained devices. A
+relay may therefore deliver the same event more than once, especially when a
+subscription uses multiple relays.
+
+Use `setSeenTracker()` to provide a tracking policy suited to the device. The callback
+must return `true` for an event that should be discarded. When it returns
+`false`, the pool delivers the event to the subscription callback. Calls to the
+tracking callback are serialized by the pool.
+
+```cpp
+std::vector<nostr::NostrString> seenIds;
+const size_t maxSeenEvents = 32;
+seenIds.reserve(maxSeenEvents);
+
+pool.setSeenTracker([&](const nostr::SignedNostrEvent &event) {
+    for (const nostr::NostrString &id : seenIds) {
+        if (id == event.getId()) return true;
+    }
+
+    if (seenIds.size() == maxSeenEvents) seenIds.erase(seenIds.begin());
+    seenIds.push_back(event.getId());
+    return false;
+});
+```
+
+The application chooses the cache size, lookup strategy and eviction policy.
+Calling `pool.setSeenTracker(nullptr)` restores the default pass-through behavior.
+
 
 
 ## Development
