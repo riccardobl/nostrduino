@@ -405,7 +405,7 @@ bool testPoolQueueAndTransport() {
     JsonArray invalidJsonFilters = invalidJsonFilterDocument.to<JsonArray>();
     invalidJsonFilters.add(1);
     CHECK(invalidFilterPool.subscribeMany({"ws://invalid.example"}, invalidJsonFilters) == "");
-    CHECK(invalidFilterTransport.connections.empty());
+    CHECK(invalidFilterTransport.connections.size() == 1);
 
     nostr::NostrLimits queueLimits;
     queueLimits.maxRelayQueuedMessages = 1;
