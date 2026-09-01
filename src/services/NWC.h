@@ -50,6 +50,12 @@ class NWCResponseCallbackBase {
     NostrString eventId;
     NostrString subId;
     unsigned int n = 1;
+    bool requiresItemId = false;
+    bool strictItemIds = false;
+    std::vector<NostrString> expectedItemIds;
+    std::vector<NostrString> seenItemIds;
+    std::vector<NostrString> seenEventIds;
+    bool accept(SignedNostrEvent *event);
 };
 
 template <typename T> class NWCResponseCallback : public NWCResponseCallbackBase {

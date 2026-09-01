@@ -20,6 +20,12 @@ enum class Nip47Encryption {
 typedef struct s_Invoice {
     NostrString invoice;
     MilliSats amount;
+    NostrString id;
+
+    s_Invoice() : amount(MILLISATS_UNSPECIFIED) {}
+    s_Invoice(NostrString invoice, MilliSats amount = MILLISATS_UNSPECIFIED,
+              NostrString id = "")
+        : invoice(invoice), amount(amount), id(id) {}
 } Invoice;
 
 typedef struct s_TLVRecords {
@@ -32,6 +38,7 @@ typedef struct s_KeySend {
     MilliSats amount;
     NostrString preimage;
     std::vector<TLVRecords> tlv;
+    NostrString id;
 } KeySend;
 
 template <typename T> class Nip47Response {

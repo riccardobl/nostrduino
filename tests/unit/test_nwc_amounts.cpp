@@ -51,7 +51,7 @@ bool testNwcAmounts() {
     fixture.client.payKeySend(fixture.servicePublicKey, 0, "", {}, nullptr, invalid);
     fixture.client.payKeySend(fixture.servicePublicKey, -1, "", {}, nullptr, invalid);
     fixture.client.payKeySend(fixture.servicePublicKey, -2, "", {}, nullptr, invalid);
-    fixture.client.multiPayInvoice({{"lnbc-invalid", -1}}, nullptr, invalid);
+    fixture.client.multiPayInvoice({{"lnbc-invalid", -2}}, nullptr, invalid);
     fixture.client.multiPayInvoice({{"lnbc-valid", 1}, {"lnbc-invalid", -2}}, nullptr, invalid);
     fixture.client.multiPayKeySend({{fixture.servicePublicKey, 0, "", {}}}, nullptr, invalid);
     fixture.client.multiPayKeySend({{fixture.servicePublicKey, 1, "", {}},
@@ -68,6 +68,17 @@ bool testNwcAmounts() {
 #endif
     CHECK(invalidCode);
     CHECK(fixture.requestCount() == 0);
+
+    int invalidRequestCalls = 0;
+    auto invalidRequest = [&](String code, String) {
+        if (code == "INVALID_REQUEST") ++invalidRequestCalls;
+    };
+    fixture.client.multiPayInvoice({}, nullptr, invalidRequest);
+    fixture.client.multiPayKeySend({}, nullptr, invalidRequest);
+    fixture.client.multiPayInvoice({{"lnbc-a", 1, "same"}, {"lnbc-b", 2, "same"}}, nullptr, invalidRequest);
+    fixture.client.multiPayKeySend({{fixture.servicePublicKey, 1, "", {}},
+                                    {fixture.servicePublicKey, 2, "", {}}}, nullptr, invalidRequest);
+    CHECK(invalidRequestCalls == 4);
     CHECK(fixture.negotiate());
     CHECK(fixture.requestCount() == 0);
 
@@ -135,7 +146,7 @@ bool testNwcAmounts() {
     event = lowLevel.multiPayKeySend(
         {{fixture.servicePublicKey, INT64_C(4294967296), "", {}}});
     CHECK(decryptRequest(event));
-    CHECK(request["params"]["key_sends"][0]["amount"].as<int64_t>() == INT64_C(4294967296));
+    CHECK(request["params"]["keysends"][0]["amount"].as<int64_t>() == INT64_C(4294967296));
 
     fixture.loop();
     CHECK(fixture.requestCount() == 0);
@@ -148,9 +159,11 @@ bool testNwcAmounts() {
     CHECK(!lowLevel.payKeySend(fixture.servicePublicKey, 0).isValid());
     CHECK(!lowLevel.payKeySend(fixture.servicePublicKey, -1).isValid());
     CHECK(!lowLevel.payKeySend(fixture.servicePublicKey, -2).isValid());
-    CHECK(!lowLevel.multiPayInvoice({{"lnbc-valid", 1}, {"lnbc-invalid", 0}}).isValid());
+    CHECK(!lowLevel.multiPayInvoice({{"lnbc-valid", 1}, {"lnbc-invalid", -2}}).isValid());
     CHECK(!lowLevel.multiPayKeySend({{fixture.servicePublicKey, 1, "", {}},
                                      {fixture.servicePublicKey, -1, "", {}}}).isValid());
+    CHECK(!lowLevel.multiPayInvoice({}).isValid());
+    CHECK(!lowLevel.multiPayKeySend({}).isValid());
 #if NOSTRDUINO_ENABLE_AMOUNT_GUARDS
     CHECK(!lowLevel.makeInvoice(nostr::MAX_MILLISATS + 1).isValid());
     CHECK(!lowLevel.makeInvoice(INT64_MAX).isValid());

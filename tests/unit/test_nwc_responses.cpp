@@ -33,7 +33,7 @@ bool testNwcResponses() {
     requestIndex = fixture.requestCount();
     int multiInvoiceCallbacks = 0;
     String multiInvoiceDs;
-    fixture.client.multiPayInvoice({{"lnbc-a", 1}, {"lnbc-b", 2}},
+    fixture.client.multiPayInvoice({{"lnbc-a", 1, "invoice-a"}, {"lnbc-b", 2, "invoice-b"}},
         [&](nostr::MultiPayInvoiceResponse result) {
             ++multiInvoiceCallbacks;
             multiInvoiceDs += result.d;
@@ -48,6 +48,7 @@ bool testNwcResponses() {
     response.clear();
     response["result_type"] = "multi_pay_invoice";
     response["result"]["preimage"] = multiPreimageA;
+    CHECK(fixture.queueResponse(requestIndex, response, "invoice-a"));
     CHECK(fixture.queueResponse(requestIndex, response, "invoice-a"));
     response["result"]["preimage"] = multiPreimageB;
     CHECK(fixture.queueResponse(requestIndex, response, "invoice-b"));
@@ -74,7 +75,7 @@ bool testNwcResponses() {
 
     requestIndex = fixture.requestCount();
     bool multiKeySendOk = false;
-    fixture.client.multiPayKeySend({{fixture.servicePublicKey, 4, "", {}}},
+    fixture.client.multiPayKeySend({{fixture.servicePublicKey, 4, "", {}, "keysend-a"}},
         [&](nostr::MultiPayKeySendResponse result) {
             multiKeySendOk = result.preimage == multiKeysendPreimage && result.d == "keysend-a";
         });

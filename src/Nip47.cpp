@@ -219,16 +219,18 @@ SignedNostrEvent Nip47::multiPayInvoice(std::initializer_list<Invoice> invoices)
 }
 
 SignedNostrEvent Nip47::multiPayInvoice(const std::vector<Invoice> &invoices) {
+    if (invoices.empty()) return SignedNostrEvent();
     for (const Invoice &invoice : invoices) {
-        if (!isRequiredMilliSatsValid(invoice.amount)) return SignedNostrEvent();
+        if (!isOptionalMilliSatsValid(invoice.amount)) return SignedNostrEvent();
     }
     JsonDocument doc;
     JsonObject params = doc["params"].to<JsonObject>();
     JsonArray iv = params["invoices"].to<JsonArray>();
     for (auto invoice : invoices) {
         JsonObject record = iv.add<JsonObject>();
+        if (NostrString_length(invoice.id) > 0) record["id"] = invoice.id;
         record["invoice"] = invoice.invoice;
-        record["amount"] = invoice.amount;
+        if (invoice.amount > 0) record["amount"] = invoice.amount;
     }
     return this->createEvent("multi_pay_invoice", doc);
 }
@@ -263,14 +265,16 @@ SignedNostrEvent Nip47::multiPayKeySend(std::initializer_list<KeySend> keySends)
 }
 
 SignedNostrEvent Nip47::multiPayKeySend(const std::vector<KeySend> &keySends) {
+    if (keySends.empty()) return SignedNostrEvent();
     for (const KeySend &keySend : keySends) {
         if (!isRequiredMilliSatsValid(keySend.amount)) return SignedNostrEvent();
     }
     JsonDocument doc;
     JsonObject params = doc["params"].to<JsonObject>();
-    JsonArray ks = params["key_sends"].to<JsonArray>();
+    JsonArray ks = params["keysends"].to<JsonArray>();
     for (auto keySend : keySends) {
         JsonObject record = ks.add<JsonObject>();
+        if (NostrString_length(keySend.id) > 0) record["id"] = keySend.id;
         record["pubkey"] = keySend.pubkey;
         record["amount"] = keySend.amount;
         if (NostrString_length(keySend.preimage) > 0) {

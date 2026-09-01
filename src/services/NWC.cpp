@@ -16,7 +16,31 @@ bool hasSingleTagValue(const SignedNostrEvent *event, const char *key, const Nos
     return matchingTags == 1;
 }
 
+bool containsString(const std::vector<NostrString> &values, const NostrString &expected) {
+    for (const NostrString &value : values) {
+        if (NostrString_equals(value, expected)) return true;
+    }
+    return false;
+}
+
 } // namespace
+
+bool NWCResponseCallbackBase::accept(SignedNostrEvent *event) {
+    if (event == nullptr || containsString(this->seenEventIds, event->getId())) return false;
+
+    NostrString itemId;
+    if (this->requiresItemId) {
+        const std::vector<NostrString> &dTags = event->getTags()->getTag("d");
+        if (dTags.size() != 1 || NostrString_length(dTags[0]) == 0) return false;
+        itemId = dTags[0];
+        if ((this->strictItemIds && !containsString(this->expectedItemIds, itemId)) ||
+            containsString(this->seenItemIds, itemId)) return false;
+    }
+
+    this->seenEventIds.push_back(event->getId());
+    if (this->requiresItemId) this->seenItemIds.push_back(itemId);
+    return true;
+}
 
 NWC::~NWC() {
     this->close();
@@ -251,7 +275,7 @@ NostrString NWC::sendEvent(SignedNostrEvent *event,
             const std::vector<std::shared_ptr<NWCResponseCallbackBase>> snapshot = this->callbacks;
             for (const std::shared_ptr<NWCResponseCallbackBase> &callback : snapshot) {
                 if (hasSingleTagValue(event, "e", callback->eventId)) {
-                    if (callback->n == 0) break;
+                    if (callback->n == 0 || !callback->accept(event)) break;
                     --callback->n;
                     if (callback->n == 0) {
                         NostrString responseSubId = callback->subId;
@@ -352,10 +376,24 @@ void NWC::multiPayInvoice(const std::vector<Invoice> &invoices, std::function<vo
         if (onErr) onErr("INVALID_CONNECTION", "Invalid NWC connection string");
         return;
     }
+    if (invoices.empty()) {
+        if (onErr) onErr("INVALID_REQUEST", "Invoice batch is empty");
+        return;
+    }
+    std::vector<NostrString> itemIds;
+    bool strictItemIds = true;
     for (const Invoice &invoice : invoices) {
-        if (!isRequiredMilliSatsValid(invoice.amount)) {
+        if (!isOptionalMilliSatsValid(invoice.amount)) {
             if (onErr) onErr("INVALID_AMOUNT", "Invalid millisatoshi amount");
             return;
+        }
+        if (NostrString_length(invoice.id) == 0) {
+            strictItemIds = false;
+        } else if (containsString(itemIds, invoice.id)) {
+            if (onErr) onErr("INVALID_REQUEST", "Invoice batch contains duplicate IDs");
+            return;
+        } else {
+            itemIds.push_back(invoice.id);
         }
     }
     if (this->deferUntilEncryptionReady(
@@ -368,6 +406,9 @@ void NWC::multiPayInvoice(const std::vector<Invoice> &invoices, std::function<vo
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->eventId = ev.getId();
     callback->n = invoices.size();
+    callback->requiresItemId = true;
+    callback->strictItemIds = strictItemIds;
+    callback->expectedItemIds = itemIds;
     callback->subId = this->sendEvent(&ev, onErr);
     if (NostrString_length(callback->subId) == 0) return;
     this->callbacks.push_back(callback);
@@ -416,11 +457,22 @@ void NWC::multiPayKeySend(const std::vector<KeySend> &keySends, std::function<vo
         if (onErr) onErr("INVALID_CONNECTION", "Invalid NWC connection string");
         return;
     }
+    if (keySends.empty()) {
+        if (onErr) onErr("INVALID_REQUEST", "Keysend batch is empty");
+        return;
+    }
+    std::vector<NostrString> itemIds;
     for (const KeySend &keySend : keySends) {
         if (!isRequiredMilliSatsValid(keySend.amount)) {
             if (onErr) onErr("INVALID_AMOUNT", "Invalid millisatoshi amount");
             return;
         }
+        const NostrString itemId = NostrString_length(keySend.id) > 0 ? keySend.id : keySend.pubkey;
+        if (NostrString_length(itemId) == 0 || containsString(itemIds, itemId)) {
+            if (onErr) onErr("INVALID_REQUEST", "Keysend batch contains duplicate IDs");
+            return;
+        }
+        itemIds.push_back(itemId);
     }
     if (this->deferUntilEncryptionReady(
             [this, keySends, onRes, onErr]() { this->multiPayKeySend(keySends, onRes, onErr); }, onErr)) return;
@@ -432,6 +484,9 @@ void NWC::multiPayKeySend(const std::vector<KeySend> &keySends, std::function<vo
     callback->timestampSeconds = Utils::unixTimeSeconds();
     callback->eventId = ev.getId();
     callback->n = keySends.size();
+    callback->requiresItemId = true;
+    callback->strictItemIds = true;
+    callback->expectedItemIds = itemIds;
     callback->subId = this->sendEvent(&ev, onErr);
     if (NostrString_length(callback->subId) == 0) return;
     this->callbacks.push_back(callback);
