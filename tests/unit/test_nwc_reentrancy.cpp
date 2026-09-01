@@ -50,6 +50,28 @@ bool testNwcReentrancy() {
     closeFixture.loop();
     CHECK(closeCalls == 1);
     CHECK(closeFixture.transport.connection == nullptr);
+    int closedErrors = 0;
+    closeFixture.client.getBalance(nullptr, [&](String code, String) {
+        if (code == "CLOSED") ++closedErrors;
+    });
+    closeFixture.client.payInvoice("lnbc-closed", 1, nullptr, [&](String code, String) {
+        if (code == "CLOSED") ++closedErrors;
+    });
+    closeFixture.client.subscribeNotifications(nullptr, [&](String code, String) {
+        if (code == "CLOSED") ++closedErrors;
+    });
+    CHECK(closedErrors == 3);
+
+    Fixture encryptionFailureFixture;
+    CHECK(encryptionFailureFixture.negotiate());
+    const std::function<bool(uint8_t *, size_t)> randomProvider = nostr::Utils::randomBytesProvider;
+    nostr::Utils::setRandomBytesProvider([](uint8_t *, size_t) { return false; });
+    int encryptionErrors = 0;
+    encryptionFailureFixture.client.getBalance(nullptr, [&](String code, String) {
+        if (code == "ENCRYPTION_FAILED") ++encryptionErrors;
+    });
+    nostr::Utils::setRandomBytesProvider(randomProvider);
+    CHECK(encryptionErrors == 1);
 
     Fixture timeoutFixture;
     CHECK(timeoutFixture.negotiate());

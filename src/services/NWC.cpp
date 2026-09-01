@@ -153,6 +153,10 @@ void NWC::selectEncryption(Nip47Encryption selectedEncryption, bool includeEncry
     std::vector<PendingRequest> pending;
     pending.swap(this->pendingRequests);
     for (PendingRequest &request : pending) {
+        if (this->closed) {
+            if (request.onErr) request.onErr("CLOSED", "NWC client is closed");
+            continue;
+        }
         if (request.send) request.send();
     }
 }
@@ -177,6 +181,10 @@ void NWC::failEncryption(NostrString errorCode, NostrString errorMessage) {
 
 bool NWC::deferUntilEncryptionReady(std::function<void()> send,
     std::function<void(NostrString, NostrString)> onErr) {
+    if (this->closed) {
+        if (onErr) onErr("CLOSED", "NWC client is closed");
+        return true;
+    }
     if (!this->validConnection) {
         if (onErr) onErr("INVALID_CONNECTION", "Invalid NWC connection string");
         return true;
@@ -264,6 +272,10 @@ void NWC::loop() {
 
 NostrString NWC::sendEvent(SignedNostrEvent *event,
                            std::function<void(NostrString, NostrString)> onErr) {
+    if (event == nullptr || !event->isValid()) {
+        if (onErr) onErr("ENCRYPTION_FAILED", "Unable to create NWC request event");
+        return "";
+    }
     NostrString subId = this->pool->subscribeMany(
         {this->nwc.relay}, {{{"kinds", {NWC_RESPONSE_KIND}}, {"authors", {this->nwc.pubkey}}, {"#p", {this->accountPubKey}}, {"#e", {event->getId()}}}},
         [&](const String &subId, nostr::SignedNostrEvent *event) {

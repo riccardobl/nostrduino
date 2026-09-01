@@ -154,8 +154,10 @@ SignedNostrEvent Nip47::createEvent(NostrString method, JsonDocument doc) {
     NostrString contentString;
     Utils::jsonStringify(doc, &contentString);
     doc.clear();
-    contentString = this->encryptContent(contentString);
-    UnsignedNostrEvent event(23194, contentString, Utils::unixTimeSeconds());
+    if (NostrString_length(contentString) == 0) return SignedNostrEvent();
+    NostrString encryptedContent = this->encryptContent(contentString);
+    if (NostrString_length(encryptedContent) == 0) return SignedNostrEvent();
+    UnsignedNostrEvent event(23194, encryptedContent, Utils::unixTimeSeconds());
     NostrEventTags *tags = event.getTags();
     if (this->includeEncryptionTag) {
         tags->addTag("encryption", {this->encryption == Nip47Encryption::Nip44V2 ? "nip44_v2" : "nip04"});
