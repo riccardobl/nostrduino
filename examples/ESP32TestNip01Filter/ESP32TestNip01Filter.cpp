@@ -84,7 +84,7 @@ void testNIP01Filter() {
             },
             [&](const String &subId, const String &reason) { Serial.println("Subscription closed: " + reason); }, [&](const String &subId) { Serial.println("Subscription EOSE: " + subId); });
 
-        std::vector<nostr::NostrRelay *> *relays = pool->getConnectedRelays();
+        const std::vector<nostr::NostrRelay *> *relays = pool->getConnectedRelays();
         for (nostr::NostrRelay *relay : *relays) {
             Serial.println("Registering to connection events of: " + relay->getUrl());
             relay->getConnection()->addConnectionStatusListener([&](const nostr::ConnectionStatus &status) {
