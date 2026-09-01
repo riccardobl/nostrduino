@@ -254,6 +254,7 @@ class NWC {
     void failEncryption(NostrString errorCode, NostrString errorMessage);
     bool deferUntilEncryptionReady(std::function<void()> send,
                                    std::function<void(NostrString, NostrString)> onErr);
+    bool flushPendingRequests();
     bool rejectIfCallbackQueueFull(std::function<void(NostrString, NostrString)> onErr);
     void finishInfoSubscription();
     void performClose();

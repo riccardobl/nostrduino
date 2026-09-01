@@ -149,16 +149,6 @@ void NWC::selectEncryption(Nip47Encryption selectedEncryption, bool includeEncry
     this->notificationKind = selectedEncryption == Nip47Encryption::Nip44V2 ? 23197 : 23196;
     this->encryptionReady = true;
     this->finishInfoSubscription();
-
-    std::vector<PendingRequest> pending;
-    pending.swap(this->pendingRequests);
-    for (PendingRequest &request : pending) {
-        if (this->closed) {
-            if (request.onErr) request.onErr("CLOSED", "NWC client is closed");
-            continue;
-        }
-        if (request.send) request.send();
-    }
 }
 
 void NWC::rejectUnsupportedEncryption() {
@@ -189,7 +179,7 @@ bool NWC::deferUntilEncryptionReady(std::function<void()> send,
         if (onErr) onErr("INVALID_CONNECTION", "Invalid NWC connection string");
         return true;
     }
-    if (this->encryptionReady) return false;
+    if (this->encryptionReady && this->poolDispatchDepth == 0) return false;
     if (this->encryptionFailed) {
         if (onErr) onErr(this->encryptionErrorCode, this->encryptionErrorMessage);
         return true;
@@ -199,6 +189,21 @@ bool NWC::deferUntilEncryptionReady(std::function<void()> send,
         return true;
     }
     this->pendingRequests.push_back({send, onErr});
+    return true;
+}
+
+bool NWC::flushPendingRequests() {
+    if (!this->encryptionReady || this->pendingRequests.empty()) return false;
+
+    std::vector<PendingRequest> pending;
+    pending.swap(this->pendingRequests);
+    for (PendingRequest &request : pending) {
+        if (this->closed) {
+            if (request.onErr) request.onErr("CLOSED", "NWC client is closed");
+            continue;
+        }
+        if (request.send) request.send();
+    }
     return true;
 }
 
@@ -240,6 +245,15 @@ void NWC::loop() {
     if (this->deferredClose) {
         this->performClose();
         return;
+    }
+    if (this->flushPendingRequests()) {
+        ++this->poolDispatchDepth;
+        this->pool->loop();
+        --this->poolDispatchDepth;
+        if (this->deferredClose) {
+            this->performClose();
+            return;
+        }
     }
     if (!this->encryptionReady && !this->encryptionFailed &&
         Utils::unixTimeSeconds() - this->discoveryStartedAt > NWC_DEFAULT_TIMEOUT) {
