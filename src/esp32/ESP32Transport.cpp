@@ -7,7 +7,39 @@
 #if defined(_ESP32_BOARD_)
 using namespace nostr;
 
+namespace {
+
+class BoundedStringStream : public Stream {
+  public:
+    BoundedStringStream(NostrString &destination, size_t maximum)
+        : destination(destination), maximum(maximum) {}
+
+    size_t write(uint8_t value) override { return this->write(&value, 1); }
+    size_t write(const uint8_t *buffer, size_t size) override {
+        if (failed || buffer == nullptr || size > maximum || destination.length() > maximum - size ||
+            !NostrString_appendBytes(destination, reinterpret_cast<const char *>(buffer), size, maximum)) {
+            failed = true;
+            setWriteError();
+            return 0;
+        }
+        return size;
+    }
+    int available() override { return 0; }
+    int read() override { return -1; }
+    int peek() override { return -1; }
+    void flush() override {}
+    bool hasFailed() const { return failed; }
+
+  private:
+    NostrString &destination;
+    size_t maximum;
+    bool failed = false;
+};
+
+} // namespace
+
 void esp32::ESP32Transport::httpsGet(NostrString url, std::function<void(NostrString)> cb) {
+    if (!cb) return;
     ParsedUrl parsedUrl;
     if (NostrString_length(url) < 0 || static_cast<size_t>(NostrString_length(url)) > config.limits.maxUrlBytes ||
         !parseHttpsUrl(url, parsedUrl) || !allowTlsConnection()) {
@@ -38,50 +70,22 @@ void esp32::ESP32Transport::httpsGet(NostrString url, std::function<void(NostrSt
         cb("");
         return;
     }
-    WiFiClient *stream = http.getStreamPtr();
     NostrString str;
-    if (stream == nullptr) {
-        http.end();
-        cb("");
-        return;
-    }
     if (responseSize > 0 && !str.reserve(static_cast<unsigned int>(responseSize))) {
         http.end();
         cb("");
         return;
     }
-    uint8_t buffer[512];
-    uint32_t lastProgress = millis();
-    while (http.connected() || stream->available()) {
-        const size_t available = stream->available();
-        if (available == 0) {
-            if (static_cast<uint32_t>(millis() - lastProgress) >= config.readTimeoutMs) {
-                str = "";
-                break;
-            }
-            delay(1);
-            continue;
-        }
-        const size_t toRead = available < sizeof(buffer) ? available : sizeof(buffer);
-        const int readSize = stream->readBytes(reinterpret_cast<char *>(buffer), toRead);
-        if (readSize <= 0 || static_cast<size_t>(readSize) > config.limits.maxHttpResponseBytes ||
-            str.length() > config.limits.maxHttpResponseBytes - static_cast<size_t>(readSize)) {
-            str = "";
-            break;
-        }
-        if (!NostrString_appendBytes(str, reinterpret_cast<const char *>(buffer),
-                                    static_cast<size_t>(readSize), config.limits.maxHttpResponseBytes)) {
-            str = "";
-            break;
-        }
-        lastProgress = millis();
-    }
-    for (size_t i = 0; i < sizeof(buffer); ++i) buffer[i] = 0;
+    BoundedStringStream destination(str, config.limits.maxHttpResponseBytes);
+    const int written = http.writeToStream(&destination);
+    if (written < 0 || destination.hasFailed() ||
+        (responseSize >= 0 && written != responseSize)) str = "";
     http.end();
     cb(str);
 }
 
 void esp32::ESP32Transport::getInvoiceFromLNAddr(NostrString addr, MilliSats amount, NostrString comment, std::function<void(NostrString)> cb) {
+    if (!cb) return;
     if (!isRequiredMilliSatsValid(amount)) {
         if (cb) cb("");
         return;
